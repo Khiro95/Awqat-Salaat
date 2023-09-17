@@ -1,69 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AwqatSalaat.Interop;
+using System;
 using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace AwqatSalaat.UI.Controls
 {
-    internal enum AccentState
-    {
-        ACCENT_DISABLED = 0,
-        ACCENT_ENABLE_GRADIENT = 1,
-        ACCENT_ENABLE_TRANSPARENTGRADIENT = 2,
-        ACCENT_ENABLE_BLURBEHIND = 3,
-        ACCENT_ENABLE_ACRYLICBLURBEHIND = 4,
-        ACCENT_INVALID_STATE = 5
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct AccentPolicy
-    {
-        public AccentState AccentState;
-        public AccentFlags AccentFlags;
-        public uint GradientColor;
-        public uint AnimationId;
-    }
-
-    [Flags]
-    internal enum AccentFlags
-    {
-        // ...
-        DrawLeftBorder = 0x20,
-
-        DrawTopBorder = 0x40,
-        DrawRightBorder = 0x80,
-        DrawBottomBorder = 0x100,
-        DrawAllBorders = DrawLeftBorder | DrawTopBorder | DrawRightBorder | DrawBottomBorder
-
-        // ...
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct WindowCompositionAttributeData
-    {
-        public WindowCompositionAttribute Attribute;
-        public IntPtr Data;
-        public int SizeOfData;
-    }
-
-    internal enum WindowCompositionAttribute
-    {
-        // ...
-        WCA_ACCENT_POLICY = 19
-        // ...
-    }
-
     public partial class AcrylicPopup : Popup
     {
-        [DllImport("user32.dll")]
-        internal static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
-
-        private uint _tintColor = 0x990000; /* BGR color format */
+        private uint _tintColor = 0x2c2c2c; /* BGR color format */
         private uint _tintOpacity;
 
         public Color TintColor
@@ -75,7 +20,7 @@ namespace AwqatSalaat.UI.Controls
         public double TintOpacity
         {
             get => _tintOpacity / 255d;
-            set => _tintOpacity = (uint)(value * 255);
+            set => _tintOpacity = (uint)((value < 0 ? 0 : value > 1 ? 1 : value) * 255);
         }
 
         protected override void OnOpened(EventArgs e)
@@ -88,29 +33,14 @@ namespace AwqatSalaat.UI.Controls
             int res = (int)Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "SystemUsesLightTheme", -1);
         }
 
-        internal void EnableBlur()
+        private void EnableBlur()
         {
-            //var windowHelper = new WindowInteropHelper(this.);
-
             var accent = new AccentPolicy();
-            accent.AccentFlags = AccentFlags.DrawAllBorders;
-            accent.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND;
             accent.GradientColor = (_tintOpacity << 24) | (_tintColor & 0xFFFFFF);
 
-            var accentStructSize = Marshal.SizeOf(accent);
+            IntPtr popupWindowHandle = ((HwndSource)HwndSource.FromVisual(this.Child)).Handle;
 
-            var accentPtr = Marshal.AllocHGlobal(accentStructSize);
-            Marshal.StructureToPtr(accent, accentPtr, false);
-
-            var data = new WindowCompositionAttributeData();
-            data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY;
-            data.SizeOfData = accentStructSize;
-            data.Data = accentPtr;
-
-            //SetWindowCompositionAttribute(windowHelper.Handle, ref data);
-            SetWindowCompositionAttribute(((HwndSource)HwndSource.FromVisual(this.Child)).Handle, ref data);
-
-            Marshal.FreeHGlobal(accentPtr);
+            AcrylicBlur.EnableAcrylicBlur(popupWindowHandle, accent);
         }
     }
 }

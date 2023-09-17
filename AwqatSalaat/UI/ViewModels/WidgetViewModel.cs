@@ -45,7 +45,7 @@ namespace AwqatSalaat.UI.ViewModels
                 item.Elapsed += TimeElapsed;
             }
             Refresh = new RelayCommand(o => RefreshData(), o => !isRefreshing);
-            OpenSettings = new RelayCommand(o => WidgetSettings.IsOpen = true);
+            OpenSettings = new RelayCommand(o => WidgetSettings.IsOpen = true, o => !IsRefreshing);
             WidgetSettings.Updated += SettingsUpdated;
 
             if (WidgetSettings.Settings.IsConfigured)
