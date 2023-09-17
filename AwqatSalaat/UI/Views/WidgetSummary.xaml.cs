@@ -13,7 +13,13 @@ namespace AwqatSalaat.UI.Views
         public WidgetSummary()
         {
             InitializeComponent();
-            popup.Closed += (_, __) => ViewModel.WidgetSettings.IsOpen = !ViewModel.WidgetSettings.Settings.IsConfigured;
+            popup.Closed += (_, __) =>
+            {
+                if (ViewModel.WidgetSettings.IsOpen && ViewModel.WidgetSettings.Settings.IsConfigured)
+                {
+                    ViewModel.WidgetSettings.Cancel.Execute(null);
+                }
+            };
         }
     }
 }

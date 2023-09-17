@@ -29,7 +29,7 @@
                     <MultiDataTrigger.EnterActions>
                         <BeginStoryboard Name="an">
                             <Storyboard RepeatBehavior="Forever">
-                                <ColorAnimation To="DarkGoldenrod" Duration="0:0:2" Storyboard.TargetProperty="(UserControl.Background).(SolidColorBrush.Color)" AutoReverse="True"/>
+                                <ColorAnimation To="Tan" Duration="0:0:2" Storyboard.TargetProperty="(UserControl.Background).(SolidColorBrush.Color)" AutoReverse="True"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </MultiDataTrigger.EnterActions>
