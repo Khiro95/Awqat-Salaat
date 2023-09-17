@@ -1,0 +1,142 @@
+﻿<UserControl x:Class="AwqatSalaat.UI.Views.WidgetSummary"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AwqatSalaat.UI.Views"
+             xmlns:converters="clr-namespace:AwqatSalaat.UI.Converters"
+             xmlns:vm="clr-namespace:AwqatSalaat.UI.ViewModels"
+             xmlns:controls="clr-namespace:AwqatSalaat.UI.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="200" d:Background="#192025" Background="Transparent" FlowDirection="RightToLeft" UseLayoutRounding="True">
+    <UserControl.DataContext>
+        <vm:WidgetViewModel/>
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolVisConverter"/>
+        <converters:BoolToVisibilityInvertedConverter x:Key="BoolVisInvConverter"/>
+        <converters:BoolInverterConverter x:Key="BoolInverterConverter"/>
+    </UserControl.Resources>
+    <UserControl.Style>
+        <Style TargetType="UserControl">
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding Next.IsTimeClose}" Value="True"/>
+                        <Condition Binding="{Binding IsRefreshing}" Value="False"/>
+                        <Condition Binding="{Binding HasError}" Value="False"/>
+                    </MultiDataTrigger.Conditions>
+                    <MultiDataTrigger.EnterActions>
+                        <BeginStoryboard Name="an">
+                            <Storyboard RepeatBehavior="Forever">
+                                <ColorAnimation To="DarkGoldenrod" Duration="0:0:2" Storyboard.TargetProperty="(UserControl.Background).(SolidColorBrush.Color)" AutoReverse="True"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </MultiDataTrigger.EnterActions>
+                    <MultiDataTrigger.ExitActions>
+                        <StopStoryboard BeginStoryboardName="an"/>
+                    </MultiDataTrigger.ExitActions>
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
+    <Grid>
+        <ToggleButton x:Name="toggle" BorderThickness="0" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsEnabled="{Binding ElementName=popup, Path=IsOpen, Converter={StaticResource BoolInverterConverter}}">
+            <ToggleButton.Style>
+                <Style TargetType="ToggleButton">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Border Background="{TemplateBinding Background}">
+                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#16FFFFFF"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" Value="#20FFFFFF"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ToggleButton.Style>
+            <Grid TextBlock.Foreground="White">
+                <Grid Margin="4" d:Visibility="Visible" Visibility="{Binding WidgetSettings.Settings.IsConfigured, Converter={StaticResource BoolVisConverter}}">
+                    <Grid d:Visibility="Visible" Visibility="{Binding HasError, Converter={StaticResource BoolVisInvConverter}}">
+                        <Grid Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisInvConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition>
+                                    <ColumnDefinition.Style>
+                                        <Style TargetType="ColumnDefinition">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding WidgetSettings.Settings.ShowCountdown}" Value="False">
+                                                    <Setter Property="Width" Value="0"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ColumnDefinition.Style>
+                                </ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="{Binding Next.Name, FallbackValue=NAME}" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding Next.Time, StringFormat=HH:mm, FallbackValue=TIME}" HorizontalAlignment="Center" Grid.Row="1"/>
+                            <TextBlock Text="{Binding Next.Countdown, StringFormat=hh\\:mm, FallbackValue=COUNTDOWN}" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
+                            <TextBlock Text="بعد" HorizontalAlignment="Center" Grid.Column="1"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <TextBlock
+                    Text="جاري التحديث..."
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisConverter}}"
+                    d:Visibility="Visible"/>
+                <ProgressBar
+                    IsIndeterminate="True"
+                    Background="Transparent"
+                    Foreground="White"
+                    BorderThickness="0"
+                    Height="2"
+                    VerticalAlignment="Bottom"
+                    Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisConverter}}"
+                    d:Visibility="Visible"/>
+                <StackPanel
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Visibility="{Binding HasError, Converter={StaticResource BoolVisConverter}}"
+                    d:Visibility="Visible">
+                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="Gold"/>
+                    <TextBlock Text="حدث خطأ" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                </StackPanel>
+                <StackPanel
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Visibility="{Binding WidgetSettings.Settings.IsConfigured, Converter={StaticResource BoolVisInvConverter}}"
+                    d:Visibility="Visible">
+                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="Gold"/>
+                    <TextBlock Text="انقر للبدء" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                </StackPanel>
+            </Grid>
+        </ToggleButton>
+        <controls:AcrylicPopup
+            x:Name="popup"
+            TintColor="#2C2C2C"
+            TintOpacity=".8"
+            AllowsTransparency="True"
+            StaysOpen="False"
+            d:IsOpen="True" IsOpen="{Binding ElementName=toggle, Path=IsChecked, Mode=TwoWay}"
+            PopupAnimation="Fade">
+            <local:WidgetPanel Background="#01000000" Width="200" FontSize="14" Foreground="White"/>
+        </controls:AcrylicPopup>
+    </Grid>
+</UserControl>

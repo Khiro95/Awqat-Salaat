@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33027.164
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwqatSalaat", "AwqatSalaat\AwqatSalaat.csproj", "{6F78779E-1B38-4D4C-A8C1-B6B48B21D74E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwqatSalaat.Preview", "AwqatSalaat.Preview\AwqatSalaat.Preview.csproj", "{AC52A14F-6E73-4A86-B2DE-9A48B654374E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6F78779E-1B38-4D4C-A8C1-B6B48B21D74E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F78779E-1B38-4D4C-A8C1-B6B48B21D74E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F78779E-1B38-4D4C-A8C1-B6B48B21D74E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F78779E-1B38-4D4C-A8C1-B6B48B21D74E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC52A14F-6E73-4A86-B2DE-9A48B654374E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC52A14F-6E73-4A86-B2DE-9A48B654374E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC52A14F-6E73-4A86-B2DE-9A48B654374E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC52A14F-6E73-4A86-B2DE-9A48B654374E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CFCE32F5-0559-4535-94FC-0D3F77002CBA}
+	EndGlobalSection
+EndGlobal
