@@ -7,15 +7,26 @@
              xmlns:converters="clr-namespace:AwqatSalaat.UI.Converters"
              xmlns:vm="clr-namespace:AwqatSalaat.UI.ViewModels"
              xmlns:controls="clr-namespace:AwqatSalaat.UI.Controls"
+             xmlns:ui="clr-namespace:AwqatSalaat.UI"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="200" d:Background="#192025" Background="Transparent" FlowDirection="RightToLeft" UseLayoutRounding="True">
     <UserControl.DataContext>
         <vm:WidgetViewModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolVisConverter"/>
-        <converters:BoolToVisibilityInvertedConverter x:Key="BoolVisInvConverter"/>
-        <converters:BoolInverterConverter x:Key="BoolInverterConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemeDictionary>
+                    <d:ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="../Themes/Light.xaml"/>
+                    </d:ResourceDictionary.MergedDictionaries>
+                </ui:ThemeDictionary>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <BooleanToVisibilityConverter x:Key="BoolVisConverter"/>
+            <converters:BoolToVisibilityInvertedConverter x:Key="BoolVisInvConverter"/>
+            <converters:BoolInverterConverter x:Key="BoolInverterConverter"/>
+        </ResourceDictionary>
     </UserControl.Resources>
     <UserControl.Style>
         <Style TargetType="UserControl">
@@ -29,7 +40,7 @@
                     <MultiDataTrigger.EnterActions>
                         <BeginStoryboard Name="an">
                             <Storyboard RepeatBehavior="Forever">
-                                <ColorAnimation To="Tan" Duration="0:0:2" Storyboard.TargetProperty="(UserControl.Background).(SolidColorBrush.Color)" AutoReverse="True"/>
+                                <ColorAnimation To="{StaticResource ThemeColors.AccentColor}" Duration="0:0:2" Storyboard.TargetProperty="(UserControl.Background).(SolidColorBrush.Color)" AutoReverse="True"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </MultiDataTrigger.EnterActions>
@@ -56,15 +67,15 @@
                     </Setter>
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#16FFFFFF"/>
+                            <Setter Property="Background" Value="{DynamicResource ThemeColors.ControlHoverBackgroundBrush}"/>
                         </Trigger>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Background" Value="#20FFFFFF"/>
+                            <Setter Property="Background" Value="{DynamicResource ThemeColors.ControlPressedBackgroundBrush}"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
             </ToggleButton.Style>
-            <Grid TextBlock.Foreground="White">
+            <Grid TextBlock.Foreground="{DynamicResource ThemeColors.TextPrimaryBrush}">
                 <Grid Margin="4" d:Visibility="Visible" Visibility="{Binding WidgetSettings.Settings.IsConfigured, Converter={StaticResource BoolVisConverter}}">
                     <Grid d:Visibility="Visible" Visibility="{Binding HasError, Converter={StaticResource BoolVisInvConverter}}">
                         <Grid Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisInvConverter}}">
@@ -130,13 +141,11 @@
         </ToggleButton>
         <controls:AcrylicPopup
             x:Name="popup"
-            TintColor="#2C2C2C"
-            TintOpacity=".8"
             AllowsTransparency="True"
             StaysOpen="False"
             d:IsOpen="True" IsOpen="{Binding ElementName=toggle, Path=IsChecked, Mode=TwoWay}"
             PopupAnimation="Fade">
-            <local:WidgetPanel Background="#01000000" Width="200" FontSize="14" Foreground="White"/>
+            <local:WidgetPanel Background="#01000000" MinWidth="200" FontSize="14" Foreground="{DynamicResource ThemeColors.TextPrimaryBrush}"/>
         </controls:AcrylicPopup>
     </Grid>
 </UserControl>

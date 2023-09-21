@@ -1,0 +1,95 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ctrl="clr-namespace:AwqatSalaat.UI.Controls">
+    <Style TargetType="{x:Type ctrl:NumericUpDown}">
+        <Style.Resources>
+            <Style TargetType="RepeatButton">
+                <Setter Property="Padding" Value="4"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{DynamicResource ThemeColors.GlyphForegroundBrush}"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="RepeatButton">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter Margin="{TemplateBinding Padding}"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource ThemeColors.ControlHoverBackgroundBrush}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ThemeColors.ControlForegroundBrush}"/>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource ThemeColors.ControlPressedBackgroundBrush}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Style.Resources>
+        
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeColors.ControlBorderBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource ThemeColors.ControlBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource ThemeColors.ControlForegroundBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Minimum" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ctrl:NumericUpDown">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <RepeatButton x:Name="PART_DownButton"
+                                          BorderThickness="0,0,0,0"
+                                          BorderBrush="{TemplateBinding BorderBrush}">
+                                <TextBlock Text="&#xE972;" />
+                            </RepeatButton>
+                            <TextBox
+                                x:Name="PART_ValueTextBox"
+                                Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=350, RelativeSource={RelativeSource TemplatedParent}}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                TextAlignment="Center"
+                                Padding="1"
+                                BorderThickness="0"
+                                Background="Transparent"
+                                Grid.Column="1"/>
+                            <RepeatButton x:Name="PART_UpButton"
+                                          BorderThickness="0,0,0,0"
+                                          BorderBrush="{TemplateBinding BorderBrush}"
+                                          Grid.Column="2">
+                                <TextBlock Text="&#xE971;" />
+                            </RepeatButton>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeColors.ControlHoverBorderBrush}"/>
+            </Trigger>
+            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeColors.ControlHoverBorderBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

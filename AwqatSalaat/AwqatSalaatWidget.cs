@@ -36,5 +36,18 @@ namespace AwqatSalaat
         }
 
         protected override UIElement UIElement => new WidgetSummary(); // Return the main wpf control
+
+        protected override IntPtr HwndSourceHook(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam, ref bool handled)
+        {
+            const int WM_WININICHANGE = 0x001A;
+
+            if (msg == WM_WININICHANGE)
+            {
+                UI.ThemeManager.SyncWithSystemTheme();
+                return IntPtr.Zero;
+            }
+
+            return base.HwndSourceHook(hwnd, msg, wparam, lparam, ref handled);
+        }
     }
 }

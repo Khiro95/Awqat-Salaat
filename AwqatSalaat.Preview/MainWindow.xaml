@@ -3,10 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="clr-namespace:AwqatSalaat.UI;assembly=AwqatSalaat"
         xmlns:lib="clr-namespace:AwqatSalaat.UI.Views;assembly=AwqatSalaat"
         mc:Ignorable="d"
         Title="MainWindow" SizeToContent="WidthAndHeight" ResizeMode="NoResize">
-    <Grid Background="#192025" MinWidth="100" Height="40">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemeDictionary />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid d:Background="#192025" Background="{DynamicResource ThemeColors.DefaultAcrylicTintBrush}" MinWidth="100" Height="40">
         <lib:WidgetSummary/>
     </Grid>
 </Window>

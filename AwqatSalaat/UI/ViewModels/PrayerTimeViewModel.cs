@@ -31,7 +31,7 @@ namespace AwqatSalaat.UI.ViewModels
         {
             Key = key;
             Name = name;
-            DismissNotification = new RelayCommand(o => { isNotificationDismissed = true; TimerTick(null); }, o => IsTimeClose);
+            DismissNotification = new RelayCommand(DismissExecute, o => IsTimeClose);
         }
 
         public void SetTime(DateTime apiTime)
@@ -58,6 +58,12 @@ namespace AwqatSalaat.UI.ViewModels
                 // Call one more time to notify about any changes
                 TimerTick(null);
             }
+        }
+
+        private void DismissExecute(object obj)
+        {
+            isNotificationDismissed = true;
+            TimerTick(null);
         }
 
         private void TimerTick(object state)

@@ -1,0 +1,67 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Colors -->
+
+    <Color x:Key="ThemeColors.AccentColor">#BAA272</Color>
+    <Color x:Key="ThemeColors.AccentLightColor">#D1BA8C</Color>
+    <Color x:Key="ThemeColors.AccentDarkColor">#BC9055</Color>
+
+    <Color x:Key="ThemeColors.TextPrimaryColor">#FFFFFF</Color>
+    <Color x:Key="ThemeColors.TextSecondaryColor">#98FFFFFF</Color>
+    <Color x:Key="ThemeColors.TextTertiaryColor">#78FFFFFF</Color>
+    
+    <Color x:Key="ThemeColors.TextOnAccentColor">#FFFFFF</Color>
+    <Color x:Key="ThemeColors.TextOnAccentDarkColor">#FFFFFF</Color>
+
+    <Color x:Key="ThemeColors.TextHighlightColor">#F2CC80</Color>
+
+    <Color x:Key="ThemeColors.ControlBackgroundColor">#10FFFFFF</Color>
+    <Color x:Key="ThemeColors.ControlForegroundColor">#FFFFFF</Color>
+    <Color x:Key="ThemeColors.ControlBorderColor">#50FFFFFF</Color>
+    
+    <Color x:Key="ThemeColors.ControlHoverBackgroundColor">#16FFFFFF</Color>
+    <Color x:Key="ThemeColors.ControlHoverBorderColor">#D1BA8C</Color>
+
+    <Color x:Key="ThemeColors.ControlPressedBackgroundColor">#20FFFFFF</Color>
+    
+    <Color x:Key="ThemeColors.ControlDisabledBackgroundColor">#20FFFFFF</Color>
+    <Color x:Key="ThemeColors.ControlDisabledForegroundColor">#50FFFFFF</Color>
+
+    <Color x:Key="ThemeColors.GlyphForegroundColor">#A0FFFFFF</Color>
+
+    <Color x:Key="ThemeColors.DefaultAcrylicTintColor">#2C2C2C</Color>
+
+
+    <!-- Brushes -->
+
+    <SolidColorBrush x:Key="ThemeColors.AccentBrush" Color="{StaticResource ThemeColors.AccentColor}"/>
+    <SolidColorBrush x:Key="ThemeColors.AccentLightBrush" Color="{StaticResource ThemeColors.AccentLightColor}"/>
+    <SolidColorBrush x:Key="ThemeColors.AccentDarkBrush" Color="{StaticResource ThemeColors.AccentDarkColor}"/>
+
+    <SolidColorBrush x:Key="ThemeColors.TextPrimaryBrush" Color="{StaticResource ThemeColors.TextPrimaryColor}"/>
+    <SolidColorBrush x:Key="ThemeColors.TextSecondaryBrush" Color="{StaticResource ThemeColors.TextSecondaryColor}"/>
+    <SolidColorBrush x:Key="ThemeColors.TextTertiaryBrush" Color="{StaticResource ThemeColors.TextTertiaryColor}"/>
+    
+    <SolidColorBrush x:Key="ThemeColors.TextOnAccentBrush" Color="{StaticResource ThemeColors.TextOnAccentColor}"/>
+    <SolidColorBrush x:Key="ThemeColors.TextOnAccentDarkBrush" Color="{StaticResource ThemeColors.TextOnAccentDarkColor}"/>
+
+    <SolidColorBrush x:Key="ThemeColors.TextHighlightBrush" Color="{StaticResource ThemeColors.TextHighlightColor}"/>
+
+    <SolidColorBrush x:Key="ThemeColors.ControlBackgroundBrush" Color="{StaticResource ThemeColors.ControlBackgroundColor}"/>
+    <SolidColorBrush x:Key="ThemeColors.ControlForegroundBrush" Color="{StaticResource ThemeColors.ControlForegroundColor}"/>
+    <SolidColorBrush x:Key="ThemeColors.ControlBorderBrush" Color="{StaticResource ThemeColors.ControlBorderColor}"/>
+
+    <SolidColorBrush x:Key="ThemeColors.ControlHoverBackgroundBrush" Color="{StaticResource ThemeColors.ControlHoverBackgroundColor}"/>
+    <SolidColorBrush x:Key="ThemeColors.ControlHoverBorderBrush" Color="{StaticResource ThemeColors.ControlHoverBorderColor}"/>
+
+    <SolidColorBrush x:Key="ThemeColors.ControlPressedBackgroundBrush" Color="{StaticResource ThemeColors.ControlPressedBackgroundColor}"/>
+
+    <SolidColorBrush x:Key="ThemeColors.ControlDisabledBackgroundBrush" Color="{StaticResource ThemeColors.ControlDisabledBackgroundColor}"/>
+    <SolidColorBrush x:Key="ThemeColors.ControlDisabledForegroundBrush" Color="{StaticResource ThemeColors.ControlDisabledForegroundColor}"/>
+
+    <SolidColorBrush x:Key="ThemeColors.GlyphForegroundBrush" Color="{StaticResource ThemeColors.GlyphForegroundColor}"/>
+
+    <SolidColorBrush x:Key="ThemeColors.DefaultAcrylicTintBrush" Color="{StaticResource ThemeColors.DefaultAcrylicTintColor}"/>
+
+</ResourceDictionary>

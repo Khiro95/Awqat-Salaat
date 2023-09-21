@@ -14,14 +14,8 @@ namespace AwqatSalaat.UI.Controls
         private const string PartDownButton = "PART_DownButton";
         private const string PartUpButton = "PART_UpButton";
 
-        //private TextBox valueTextBox;
         private RepeatButton upButton;
         private RepeatButton downButton;
-
-        static NumericUpDown()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(NumericUpDown), new FrameworkPropertyMetadata(typeof(NumericUpDown)));
-        }
 
         public int Maximum
         {
@@ -85,7 +79,6 @@ namespace AwqatSalaat.UI.Controls
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            //valueTextBox = GetTemplateChild(PartValueTextBox) as TextBox;
             upButton = GetTemplateChild(PartUpButton) as RepeatButton;
             downButton = GetTemplateChild(PartDownButton) as RepeatButton;
             upButton.Click += btup_Click;
