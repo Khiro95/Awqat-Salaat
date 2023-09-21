@@ -1,5 +1,7 @@
 ﻿using AwqatSalaat.UI.ViewModels;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace AwqatSalaat.UI.Views
 {
@@ -9,6 +11,30 @@ namespace AwqatSalaat.UI.Views
     public partial class WidgetSummary : UserControl
     {
         private WidgetViewModel ViewModel => DataContext as WidgetViewModel;
+
+        public static DependencyProperty PanelPlacementProperty = DependencyProperty.Register(
+            nameof(PanelPlacement),
+            typeof(PlacementMode),
+            typeof(WidgetSummary),
+            new FrameworkPropertyMetadata(PlacementMode.Bottom));
+
+        public PlacementMode PanelPlacement
+        {
+            get => (PlacementMode)GetValue(PanelPlacementProperty);
+            set => SetValue(PanelPlacementProperty, value);
+        }
+
+        public bool RemovePopupBorderAtPlacement
+        {
+            get => popup?.RemoveBorderAtPlacement ?? false;
+            set
+            {
+                if (popup != null)
+                {
+                    popup.RemoveBorderAtPlacement = value;
+                }
+            }
+        }
 
         public WidgetSummary()
         {

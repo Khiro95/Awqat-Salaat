@@ -144,7 +144,8 @@
             AllowsTransparency="True"
             StaysOpen="False"
             d:IsOpen="True" IsOpen="{Binding ElementName=toggle, Path=IsChecked, Mode=TwoWay}"
-            PopupAnimation="Fade">
+            PopupAnimation="Fade"
+            Placement="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WidgetSummary}, Path=PanelPlacement}">
             <local:WidgetPanel Background="#01000000" MinWidth="200" FontSize="14" Foreground="{DynamicResource ThemeColors.TextPrimaryBrush}"/>
         </controls:AcrylicPopup>
     </Grid>

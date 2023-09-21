@@ -113,8 +113,11 @@ namespace AwqatSalaat.UI.ViewModels
                 next.IsNext = false;
             }
             // Sorting doesn't hurt here, we only have 5 items :)
-            Next = Items.Where(i => !i.IsElapsed).OrderBy(i => i.Countdown.TotalSeconds).First();
-            Next.IsNext = true;
+            Next = Items.Where(i => !i.IsElapsed).OrderBy(i => i.Countdown.TotalSeconds).FirstOrDefault();
+            if (next != null)
+            {
+                next.IsNext = true;
+            }
         }
 
         private bool OnDataLoaded(EntireMonthResponse response)

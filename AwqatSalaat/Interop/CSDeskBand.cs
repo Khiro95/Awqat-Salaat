@@ -1117,7 +1117,7 @@ namespace CSDeskBand
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message + '\n' + ex.InnerException?.Message, RegistrationHelper.GetToolbarName(this.GetType()));
+                        MessageBox.Show(ex.ToString(), RegistrationHelper.GetToolbarName(this.GetType()));
                     }
                 }
 

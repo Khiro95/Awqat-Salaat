@@ -40,6 +40,8 @@ namespace AwqatSalaat.UI.Controls
             acrylicPopup.EnableBlur();
         }
 
+        public bool RemoveBorderAtPlacement { get; set; }
+
         public Color TintColor
         {
             get => (Color)GetValue(TintColorProperty);
@@ -64,6 +66,26 @@ namespace AwqatSalaat.UI.Controls
             {
                 var accent = new AccentPolicy();
                 accent.GradientColor = (_tintOpacity << 24) | (_tintColor & 0xFFFFFF);
+                accent.AccentFlags = AccentFlags.DrawAllBorders;
+
+                if (RemoveBorderAtPlacement)
+                {
+                    switch (Placement)
+                    {
+                        case PlacementMode.Left:
+                            accent.AccentFlags &= ~AccentFlags.DrawRightBorder;
+                            break;
+                        case PlacementMode.Top:
+                            accent.AccentFlags &= ~AccentFlags.DrawBottomBorder;
+                            break;
+                        case PlacementMode.Right:
+                            accent.AccentFlags &= ~AccentFlags.DrawLeftBorder;
+                            break;
+                        case PlacementMode.Bottom:
+                            accent.AccentFlags &= ~AccentFlags.DrawTopBorder;
+                            break;
+                    }
+                }
 
                 IntPtr popupWindowHandle = ((HwndSource)HwndSource.FromVisual(this.Child)).Handle;
 

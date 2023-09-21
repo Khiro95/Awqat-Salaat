@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 
 namespace AwqatSalaat
 {
@@ -16,26 +17,56 @@ namespace AwqatSalaat
     public class AwqatSalaatWidget : CSDeskBandWpf
     {
         private const string WidgetName = "Awqat Salaat";
-        public static AwqatSalaatWidget Instance { get; private set; }
+
+        private WidgetSummary uiElement;
+
         public AwqatSalaatWidget()
         {
+            uiElement = new WidgetSummary
+            {
+                PanelPlacement = GetPlacement(TaskbarInfo.Edge),
+                RemovePopupBorderAtPlacement = true
+            };
+
             Options.MinHorizontalSize = new Size(100, 40);
-            Instance = this;
             System.Windows.Threading.Dispatcher.CurrentDispatcher.UnhandledException += (s, e) =>
             {
                 try
                 {
                     MessageBox.Show(e.Exception.Message + '\n' + e.Exception.InnerException?.Message, WidgetName);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                     throw;
                 }
             };
+
+            TaskbarInfo.TaskbarEdgeChanged += TaskbarInfo_TaskbarEdgeChanged;
         }
 
-        protected override UIElement UIElement => new WidgetSummary(); // Return the main wpf control
+        private void TaskbarInfo_TaskbarEdgeChanged(object sender, TaskbarEdgeChangedEventArgs e)
+        {
+            uiElement.PanelPlacement = GetPlacement(e.Edge);
+        }
+
+        private PlacementMode GetPlacement(Edge edge)
+        {
+            switch (edge)
+            {
+                case Edge.Left:
+                    return PlacementMode.Right;
+                case Edge.Top:
+                    return PlacementMode.Bottom;
+                case Edge.Right:
+                    return PlacementMode.Left;
+                case Edge.Bottom:
+                    return PlacementMode.Top;
+            }
+            return PlacementMode.Bottom;
+        }
+
+        protected override UIElement UIElement => uiElement; // Return the main wpf control
 
         protected override IntPtr HwndSourceHook(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam, ref bool handled)
         {

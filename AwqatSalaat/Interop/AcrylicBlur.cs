@@ -30,8 +30,8 @@ namespace AwqatSalaat.Interop
     public enum AccentFlags
     {
         // ...
-        DrawLeftBorder = 0x20,
 
+        DrawLeftBorder = 0x20,
         DrawTopBorder = 0x40,
         DrawRightBorder = 0x80,
         DrawBottomBorder = 0x100,
@@ -62,7 +62,6 @@ namespace AwqatSalaat.Interop
 
         public static void EnableAcrylicBlur(IntPtr hwnd, AccentPolicy accentPolicy)
         {
-            accentPolicy.AccentFlags = AccentFlags.DrawAllBorders;
             accentPolicy.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND;
 
             var accentStructSize = Marshal.SizeOf(accentPolicy);
