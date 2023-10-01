@@ -55,8 +55,8 @@ namespace AwqatSalaat.UI.ViewModels
             {
                 timer.Dispose();
                 timer = null;
-                // Call one more time to notify about any changes
-                TimerTick(null);
+                // Call one more time to notify about any changes, pass false to avoid infinite loop
+                TimerTick(false);
             }
         }
 
@@ -70,7 +70,10 @@ namespace AwqatSalaat.UI.ViewModels
         {
             if (Countdown.TotalSeconds < 0)
             {
-                Elapsed?.Invoke(this, EventArgs.Empty);
+                if (!(state is bool raiseEvent) || raiseEvent)
+                {
+                    Elapsed?.Invoke(this, EventArgs.Empty);
+                }
                 isNotificationDismissed = false;
             }
             OnPropertyChanged(nameof(Countdown));

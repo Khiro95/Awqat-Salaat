@@ -29,17 +29,16 @@ namespace AwqatSalaat
             };
 
             Options.MinHorizontalSize = new Size(100, 40);
-            System.Windows.Threading.Dispatcher.CurrentDispatcher.UnhandledException += (s, e) =>
+
+            uiElement.Dispatcher.UnhandledException += (s, e) =>
             {
-                try
-                {
-                    MessageBox.Show(e.Exception.Message + '\n' + e.Exception.InnerException?.Message, WidgetName);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    throw;
-                }
+                MessageBox.Show(e.Exception.Message + '\n' + e.Exception.InnerException?.Message, WidgetName);
+            };
+
+            uiElement.Dispatcher.UnhandledExceptionFilter += (s, e) =>
+            {
+                e.RequestCatch = false;
+                MessageBox.Show(e.Exception.Message + '\n' + e.Exception.InnerException?.Message, WidgetName);
             };
 
             TaskbarInfo.TaskbarEdgeChanged += TaskbarInfo_TaskbarEdgeChanged;
@@ -75,6 +74,7 @@ namespace AwqatSalaat
             if (msg == WM_WININICHANGE)
             {
                 UI.ThemeManager.SyncWithSystemTheme();
+                handled = true;
                 return IntPtr.Zero;
             }
 
