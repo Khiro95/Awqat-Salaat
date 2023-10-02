@@ -51,7 +51,7 @@
             <StackPanel Orientation="Horizontal" Grid.Column="1">
                 <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE713;" Command="{Binding OpenSettings}" ToolTip="إعدادات" d:IsEnabled="False"/>
                 <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE72C;" Command="{Binding Refresh}" ToolTip="تحديث"/>
-                <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE793;" Click="Button_Click"/>
+                <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE793;" x:Name="themeBtn"/>
             </StackPanel>
             <Grid Grid.Row="1" Grid.ColumnSpan="2" Visibility="{Binding HasError, Converter={StaticResource BoolVisInvConverter}}">
                 <Grid Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisInvConverter}}">

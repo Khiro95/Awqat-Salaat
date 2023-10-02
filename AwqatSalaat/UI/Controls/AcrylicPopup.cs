@@ -1,13 +1,11 @@
 ﻿using AwqatSalaat.Interop;
-using System;
 using System.Windows;
 using System.Windows.Controls.Primitives;
-using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace AwqatSalaat.UI.Controls
 {
-    public class AcrylicPopup : Popup
+    public class AcrylicPopup : AnimatedPopup
     {
         private uint _tintColor = 0x2c2c2c; /* BGR color format */
         private uint _tintOpacity;
@@ -29,7 +27,10 @@ namespace AwqatSalaat.UI.Controls
             AcrylicPopup acrylicPopup = (AcrylicPopup)d;
             Color value = (Color)e.NewValue;
             acrylicPopup._tintColor = value.R | ((uint)value.G << 8) | ((uint)value.B << 16);
-            acrylicPopup.EnableBlur();
+            if (acrylicPopup.IsOpen)
+            {
+                acrylicPopup.EnableBlur(true);
+            }
         }
 
         private static void OnTintOpacityChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -37,10 +38,15 @@ namespace AwqatSalaat.UI.Controls
             AcrylicPopup acrylicPopup = (AcrylicPopup)d;
             double value = (double)e.NewValue;
             acrylicPopup._tintOpacity = (uint)((value < 0 ? 0 : value > 1 ? 1 : value) * 255);
-            acrylicPopup.EnableBlur();
+            if (acrylicPopup.IsOpen)
+            {
+                acrylicPopup.EnableBlur(true);
+            }
         }
 
         public bool RemoveBorderAtPlacement { get; set; }
+        public override bool AnimateSizeOnOpening => false;
+        public override bool AnimateSizeOnClosing => false;
 
         public Color TintColor
         {
@@ -54,42 +60,53 @@ namespace AwqatSalaat.UI.Controls
             set => SetValue(TintOpacityProperty, value);
         }
 
-        protected override void OnOpened(EventArgs e)
+        protected override void OnOpeningAnimationStarting()
         {
-            base.OnOpened(e);
-            EnableBlur();
+            EnableBlur(false);
         }
 
-        private void EnableBlur()
+        protected override void OnOpeningAnimationCompleted()
         {
-            if (IsOpen)
+            EnableBlur(true);
+        }
+
+        protected override void OnClosingAnimationStarting()
+        {
+            EnableBlur(false);
+        }
+
+        private void EnableBlur(bool showBorders)
+        {
+            if (HwndSource != null)
             {
                 var accent = new AccentPolicy();
                 accent.GradientColor = (_tintOpacity << 24) | (_tintColor & 0xFFFFFF);
-                accent.AccentFlags = AccentFlags.DrawAllBorders;
 
-                if (RemoveBorderAtPlacement)
+                if (showBorders)
                 {
-                    switch (Placement)
+                    accent.AccentFlags = AccentFlags.DrawAllBorders;
+
+                    if (RemoveBorderAtPlacement)
                     {
-                        case PlacementMode.Left:
-                            accent.AccentFlags &= ~AccentFlags.DrawRightBorder;
-                            break;
-                        case PlacementMode.Top:
-                            accent.AccentFlags &= ~AccentFlags.DrawBottomBorder;
-                            break;
-                        case PlacementMode.Right:
-                            accent.AccentFlags &= ~AccentFlags.DrawLeftBorder;
-                            break;
-                        case PlacementMode.Bottom:
-                            accent.AccentFlags &= ~AccentFlags.DrawTopBorder;
-                            break;
+                        switch (Placement)
+                        {
+                            case PlacementMode.Left:
+                                accent.AccentFlags &= ~AccentFlags.DrawRightBorder;
+                                break;
+                            case PlacementMode.Top:
+                                accent.AccentFlags &= ~AccentFlags.DrawBottomBorder;
+                                break;
+                            case PlacementMode.Right:
+                                accent.AccentFlags &= ~AccentFlags.DrawLeftBorder;
+                                break;
+                            case PlacementMode.Bottom:
+                                accent.AccentFlags &= ~AccentFlags.DrawTopBorder;
+                                break;
+                        }
                     }
                 }
 
-                IntPtr popupWindowHandle = ((HwndSource)HwndSource.FromVisual(this.Child)).Handle;
-
-                AcrylicBlur.EnableAcrylicBlur(popupWindowHandle, accent);
+                AcrylicBlur.EnableAcrylicBlur(Handle, accent);
             }
         }
     }

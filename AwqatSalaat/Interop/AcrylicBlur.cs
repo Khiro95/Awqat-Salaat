@@ -78,5 +78,27 @@ namespace AwqatSalaat.Interop
 
             Marshal.FreeHGlobal(accentPtr);
         }
+
+        public static void DisableAcrylicBlur(IntPtr hwnd)
+        {
+            AccentPolicy accentPolicy = new AccentPolicy
+            {
+                AccentState = AccentState.ACCENT_DISABLED
+            };
+
+            var accentStructSize = Marshal.SizeOf(accentPolicy);
+
+            var accentPtr = Marshal.AllocHGlobal(accentStructSize);
+            Marshal.StructureToPtr(accentPolicy, accentPtr, false);
+
+            var data = new WindowCompositionAttributeData();
+            data.Attribute = WindowCompositionAttribute.WCA_ACCENT_POLICY;
+            data.SizeOfData = accentStructSize;
+            data.Data = accentPtr;
+
+            SetWindowCompositionAttribute(hwnd, ref data);
+
+            Marshal.FreeHGlobal(accentPtr);
+        }
     }
 }
