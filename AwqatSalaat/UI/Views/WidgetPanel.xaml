@@ -5,12 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:api="clr-namespace:AwqatSalaat.DataModel.IslamicFinderApi"
+             xmlns:ui="clr-namespace:AwqatSalaat.UI"
              xmlns:vm="clr-namespace:AwqatSalaat.UI.ViewModels"
              xmlns:controls="clr-namespace:AwqatSalaat.UI.Controls"
              xmlns:converters="clr-namespace:AwqatSalaat.UI.Converters"
-             xmlns:ui="clr-namespace:AwqatSalaat.UI"
+             xmlns:mk="clr-namespace:AwqatSalaat.Markup"
              mc:Ignorable="d" 
-             d:MinWidth="200" d:Background="#444" d:FlowDirection="RightToLeft" d:TextElement.Foreground="White" d:TextElement.FontSize="14">
+             d:MinWidth="200" d:Background="#444" d:TextElement.Foreground="White" d:TextElement.FontSize="14">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -47,10 +48,10 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="أوقات الصلاة" VerticalAlignment="Center"/>
+            <TextBlock Text="{mk:L11n Data.AppName}" VerticalAlignment="Center"/>
             <StackPanel Orientation="Horizontal" Grid.Column="1">
-                <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE713;" Command="{Binding OpenSettings}" ToolTip="إعدادات" d:IsEnabled="False"/>
-                <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE72C;" Command="{Binding Refresh}" ToolTip="تحديث"/>
+                <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE713;" Command="{Binding OpenSettings}" ToolTip="{mk:L11n UI.Panel.Settings}" d:IsEnabled="False"/>
+                <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE72C;" Command="{Binding Refresh}" ToolTip="{mk:L11n UI.Panel.Refresh}"/>
                 <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE793;" x:Name="themeBtn"/>
             </StackPanel>
             <Grid Grid.Row="1" Grid.ColumnSpan="2" Visibility="{Binding HasError, Converter={StaticResource BoolVisInvConverter}}">
@@ -65,9 +66,12 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" Grid.Row="0" Grid.ColumnSpan="2">
-                        <TextBlock Text="{Binding DisplayedDate, StringFormat='dddd'}" d:Language="en" Language="ar" Margin="0,4" HorizontalAlignment="Center"/>
-                        <TextBlock Text="{Binding DisplayedDate, StringFormat='dd MMMM yyyy'}" d:Text="28 صفر 1445" d:Language="en" Language="ar" Margin="0,4" HorizontalAlignment="Center"/>
-                        <TextBlock Text="{Binding DisplayedDate, StringFormat='الموافق لـ \{0:yyyy/MM/d\}'}" Margin="0,4" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding DisplayedDate, StringFormat='dddd'}" Margin="0,4" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding DisplayedDate, StringFormat='dd MMMM yyyy'}" d:Text="28 صفر 1445" Language="ar" FlowDirection="RightToLeft" Margin="0,4" HorizontalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center">
+                            <TextBlock Text="{mk:L11n UI.Panel.CorrespondTo}"/>
+                            <TextBlock Text="{Binding DisplayedDate, StringFormat=dd/MM/yyyy}" Language="en" Margin="4,0,0,0"/>
+                        </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" Margin="0,4" HorizontalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="2" FlowDirection="LeftToRight">
                         <TextBlock d:Text="City" Text="{Binding City}"/>
@@ -123,7 +127,7 @@
                                             </TextBlock.Style>
                                         </TextBlock>
                                         <TextBlock Text="{Binding Name}" Grid.Column="1"/>
-                                        <Button Style="{DynamicResource ButtonAltStyle}" Content="تجاهل" Command="{Binding DismissNotification}" Foreground="{DynamicResource ThemeColors.TextOnAccentBrush}" Margin="8,0,16,0" Grid.Column="2" d:Visibility="Visible" Visibility="{Binding IsTimeClose, Converter={StaticResource BoolVisConverter}}"/>
+                                        <Button Style="{DynamicResource ButtonAltStyle}" Content="{mk:L11n UI.Panel.Dismiss}" Command="{Binding DismissNotification}" Foreground="{DynamicResource ThemeColors.TextOnAccentBrush}" Margin="8,0,16,0" Grid.Column="2" d:Visibility="Visible" Visibility="{Binding IsTimeClose, Converter={StaticResource BoolVisConverter}}"/>
                                         <TextBlock Text="{Binding Time, StringFormat=HH:mm}" Grid.Column="3" HorizontalAlignment="Center"/>
                                     </Grid>
                                 </Border>
@@ -133,7 +137,7 @@
                 </Grid>
             </Grid>
             <TextBlock
-                Text="جاري التحديث..."
+                Text="{mk:L11n UI.Panel.Refreshing}"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Grid.Row="1"
@@ -146,7 +150,7 @@
                 Grid.ColumnSpan="2"
                 Visibility="{Binding HasError, Converter={StaticResource BoolVisConverter}}"
                 d:Visibility="Hidden">
-                <TextBlock Text="خطأ" HorizontalAlignment="Center" Foreground="Gray"/>
+                <TextBlock Text="{mk:L11n UI.Panel.Error}" HorizontalAlignment="Center" Foreground="Gray"/>
                 <TextBlock Text="{Binding ErrorMessage}" d:Text="Something wrong happened, please check the settings and try again" TextAlignment="Center" TextWrapping="Wrap" Margin="8"/>
             </StackPanel>
         </Grid>
@@ -160,10 +164,10 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="إعدادات" VerticalAlignment="Center"/>
+            <TextBlock Text="{mk:L11n UI.Panel.Settings}" VerticalAlignment="Center"/>
             <StackPanel Orientation="Horizontal" Grid.Column="1">
-                <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE711;" Command="{Binding Cancel}" ToolTip="إلغاء"/>
-                <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE8FB;" Command="{Binding Save}" ToolTip="تأكيد"/>
+                <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE711;" Command="{Binding Cancel}" ToolTip="{mk:L11n UI.Settings.Cancel}"/>
+                <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE8FB;" Command="{Binding Save}" ToolTip="{mk:L11n UI.Settings.Confirm}"/>
             </StackPanel>
             <StackPanel DataContext="{Binding Settings}" Grid.Row="2" Grid.ColumnSpan="2">
                 <StackPanel.Resources>
@@ -171,19 +175,25 @@
                         <Setter Property="Margin" Value="0,16,0,0"/>
                     </Style>
                 </StackPanel.Resources>
-                <controls:SettingsItem Header="اظهار العد التنازلي" Description="تحديد ما اذا كان العد التنازلي يظهر جنب وقت الصلاة القادمة على شريط المهام" Margin="0">
+                <controls:SettingsItem Header="{mk:L11n UI.Settings.Language}" Description="{mk:L11n UI.Settings.LanguageDescription}" Margin="0">
+                    <StackPanel Orientation="Horizontal" DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.WidgetSettings}" FlowDirection="LeftToRight" HorizontalAlignment="Left">
+                        <RadioButton Content="English" IsChecked="{Binding UseEnglish}" Margin="0,0,64,0"/>
+                        <RadioButton Content="العربية" IsChecked="{Binding UseArabic}" FlowDirection="RightToLeft"/>
+                    </StackPanel>
+                </controls:SettingsItem>
+                <controls:SettingsItem Header="{mk:L11n UI.Settings.ShowCountdown}" Description="{mk:L11n UI.Settings.ShowCountdownDescription}">
                     <CheckBox IsChecked="{Binding ShowCountdown}"/>
                 </controls:SettingsItem>
-                <controls:SettingsItem Header="توقيت الاشعار" Description="عدد الدقائق التي تسبق دخول الوقت ويبدأ عندها الاشعار. القيمة 0 تعني تعطيل الاشعار">
+                <controls:SettingsItem Header="{mk:L11n UI.Settings.RemainderOffset}" Description="{mk:L11n UI.Settings.RemainderOffsetDescription}">
                     <controls:NumericUpDown Value="{Binding NotificationDistance}" Maximum="720" Width="100" HorizontalAlignment="Left"/>
                 </controls:SettingsItem>
-                <controls:SettingsItem Header="رمز البلد" Description="الرمز مكون من حرفين باللاتينية. (مثال: الرمز DZ يدل على الجزائر)">
+                <controls:SettingsItem Header="{mk:L11n UI.Settings.CountryCode}" Description="{mk:L11n UI.Settings.CountryCodeDescription}">
                     <TextBox Text="{Binding CountryCode}" MaxLength="2" Width="50" HorizontalAlignment="Left"/>
                 </controls:SettingsItem>
-                <controls:SettingsItem Header="الرمز البريدي" Description="هذا الرمز يستخدم لتحديد المدينة ويختلف شكله من بلد لآخر">
+                <controls:SettingsItem Header="{mk:L11n UI.Settings.ZipCode}" Description="{mk:L11n UI.Settings.ZipCodeDescription}">
                     <TextBox Text="{Binding ZipCode}" Width="100" HorizontalAlignment="Left"/>
                 </controls:SettingsItem>
-                <controls:SettingsItem Header="الطريقة" Description="طريقة حساب الوقت باستخدام خطوط الطول والعرض وميل الشمس ومعطيات أخرى">
+                <controls:SettingsItem Header="{mk:L11n UI.Settings.Method}" Description="{mk:L11n UI.Settings.MethodDescription}">
                     <ComboBox ItemsSource="{Binding Source={StaticResource ApiMethodEnum}}" SelectedItem="{Binding Method}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>

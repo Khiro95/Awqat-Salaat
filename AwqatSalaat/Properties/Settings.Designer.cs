@@ -106,5 +106,17 @@ namespace AwqatSalaat.Properties {
                 this["ApiCache"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DisplayLanguage {
+            get {
+                return ((string)(this["DisplayLanguage"]));
+            }
+            set {
+                this["DisplayLanguage"] = value;
+            }
+        }
     }
 }

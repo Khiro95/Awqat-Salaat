@@ -28,11 +28,11 @@ namespace AwqatSalaat.UI.ViewModels
         public string City { get => city; private set => SetProperty(ref city, value); }
         public ObservableCollection<PrayerTimeViewModel> Items { get; } = new ObservableCollection<PrayerTimeViewModel>()
         {
-            new PrayerTimeViewModel(nameof(PrayerTimes.Fajr), "الفجر"),
-            new PrayerTimeViewModel(nameof(PrayerTimes.Dhuhr), "الظهر"),
-            new PrayerTimeViewModel(nameof(PrayerTimes.Asr), "العصر"),
-            new PrayerTimeViewModel(nameof(PrayerTimes.Maghrib), "المغرب"),
-            new PrayerTimeViewModel(nameof(PrayerTimes.Isha), "العشاء"),
+            new PrayerTimeViewModel(nameof(PrayerTimes.Fajr)),
+            new PrayerTimeViewModel(nameof(PrayerTimes.Dhuhr)),
+            new PrayerTimeViewModel(nameof(PrayerTimes.Asr)),
+            new PrayerTimeViewModel(nameof(PrayerTimes.Maghrib)),
+            new PrayerTimeViewModel(nameof(PrayerTimes.Isha)),
         };
         public WidgetSettingsViewModel WidgetSettings { get; } = new WidgetSettingsViewModel();
         public ICommand Refresh { get; }

@@ -15,6 +15,8 @@ namespace AwqatSalaat.UI.ViewModels
         private (string countryCode, string zipCode, DataModel.IslamicFinderApi.Method method)? _backup;
 
         public bool IsOpen { get => isOpen; set => Open(value); }
+        public bool UseArabic { get => Settings.DisplayLanguage == "ar"; set => SetLanguage("ar"); }
+        public bool UseEnglish { get => Settings.DisplayLanguage == "en"; set => SetLanguage("en"); }
         public Settings Settings => Settings.Default;
         public ICommand Save { get; }
         public ICommand Cancel { get; }
@@ -25,6 +27,14 @@ namespace AwqatSalaat.UI.ViewModels
         {
             Save = new RelayCommand(SaveExecute);
             Cancel = new RelayCommand(CancelExecute, o => Settings.IsConfigured);
+            Settings.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(Settings.DisplayLanguage))
+                {
+                    OnPropertyChanged(nameof(UseArabic));
+                    OnPropertyChanged(nameof(UseEnglish));
+                }
+            };
         }
 
         private void SaveExecute(object obj)
@@ -39,6 +49,7 @@ namespace AwqatSalaat.UI.ViewModels
         private void CancelExecute(object obj)
         {
             Settings.Reload();
+            SetLanguage(Settings.DisplayLanguage);
             IsOpen = false;
         }
 
@@ -53,6 +64,11 @@ namespace AwqatSalaat.UI.ViewModels
             {
                 _backup = null;
             }
+        }
+
+        private void SetLanguage(string lang)
+        {
+            LocaleManager.Current = lang;
         }
     }
 }

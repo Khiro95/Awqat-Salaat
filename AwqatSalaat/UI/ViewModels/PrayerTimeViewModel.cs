@@ -15,7 +15,7 @@ namespace AwqatSalaat.UI.ViewModels
         private bool isNext, isNotificationDismissed;
         private Timer timer;
 
-        public string Name { get; }
+        public string Name => LocaleManager.Get($"Data.Salaat.{Key}");
         public string Key { get; }
         public DateTime Time { get => time; private set => SetProperty(ref time, value); }
         public bool IsNext { get => isNext; set { SetProperty(ref isNext, value); Activate(value); } }
@@ -27,11 +27,11 @@ namespace AwqatSalaat.UI.ViewModels
 
         public event EventHandler Elapsed;
 
-        public PrayerTimeViewModel(string key, string name)
+        public PrayerTimeViewModel(string key)
         {
             Key = key;
-            Name = name;
             DismissNotification = new RelayCommand(DismissExecute, o => IsTimeClose);
+            LocaleManager.CurrentChanged += (_, __) => OnPropertyChanged(nameof(Name));
         }
 
         public void SetTime(DateTime apiTime)
@@ -55,7 +55,7 @@ namespace AwqatSalaat.UI.ViewModels
             {
                 timer.Dispose();
                 timer = null;
-                // Call one more time to notify about any changes, pass false to avoid infinite loop
+                // Call one more time to notify about any changes, pass false to avoid recursive calls
                 TimerTick(false);
             }
         }
