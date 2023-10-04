@@ -122,6 +122,19 @@
                                                         <DataTrigger Binding="{Binding IsTimeClose}" Value="True">
                                                             <Setter Property="Text" Value="&#xE7BA;"/>
                                                         </DataTrigger>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding IsNext}" Value="True"/>
+                                                                <Condition Binding="{Binding IsTimeClose}" Value="False"/>
+                                                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=FlowDirection}" Value="LeftToRight"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="RenderTransform">
+                                                                <Setter.Value>
+                                                                    <ScaleTransform ScaleX="-1"/>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                            <Setter Property="RenderTransformOrigin" Value=".5,.5"/>
+                                                        </MultiDataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
                                             </TextBlock.Style>
@@ -177,7 +190,7 @@
                 </StackPanel.Resources>
                 <controls:SettingsItem Header="{mk:L11n UI.Settings.Language}" Description="{mk:L11n UI.Settings.LanguageDescription}" Margin="0">
                     <StackPanel Orientation="Horizontal" DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.WidgetSettings}" FlowDirection="LeftToRight" HorizontalAlignment="Left">
-                        <RadioButton Content="English" IsChecked="{Binding UseEnglish}" Margin="0,0,64,0"/>
+                        <RadioButton Content="English" IsChecked="{Binding UseEnglish}" d:IsChecked="True" Margin="0,0,64,0"/>
                         <RadioButton Content="العربية" IsChecked="{Binding UseArabic}" FlowDirection="RightToLeft"/>
                     </StackPanel>
                 </controls:SettingsItem>

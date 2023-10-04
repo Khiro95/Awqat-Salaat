@@ -13,5 +13,6 @@
         <ResourceDictionary Source="../Styles/SettingsItem.xaml"/>
         <ResourceDictionary Source="../Styles/TextBox.xaml"/>
         <ResourceDictionary Source="../Styles/Toggle.xaml"/>
+        <ResourceDictionary Source="../Styles/RadioButton.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
