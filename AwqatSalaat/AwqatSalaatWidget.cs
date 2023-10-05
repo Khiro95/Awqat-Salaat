@@ -1,11 +1,7 @@
 ﻿using AwqatSalaat.UI.Views;
 using CSDeskBand;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 
@@ -18,7 +14,7 @@ namespace AwqatSalaat
     {
         private const string WidgetName = "Awqat Salaat";
 
-        private WidgetSummary uiElement;
+        private readonly WidgetSummary uiElement;
 
         public AwqatSalaatWidget()
         {
@@ -42,11 +38,20 @@ namespace AwqatSalaat
             };
 
             TaskbarInfo.TaskbarEdgeChanged += TaskbarInfo_TaskbarEdgeChanged;
+            TaskbarInfo.TaskbarOrientationChanged += TaskbarInfo_TaskbarOrientationChanged;
         }
 
         private void TaskbarInfo_TaskbarEdgeChanged(object sender, TaskbarEdgeChangedEventArgs e)
         {
             uiElement.PanelPlacement = GetPlacement(e.Edge);
+        }
+
+        private void TaskbarInfo_TaskbarOrientationChanged(object sender, TaskbarOrientationChangedEventArgs e)
+        {
+            uiElement.Orientation =
+                e.Orientation == TaskbarOrientation.Vertical
+                ? System.Windows.Controls.Orientation.Vertical
+                : System.Windows.Controls.Orientation.Horizontal;
         }
 
         private PlacementMode GetPlacement(Edge edge)

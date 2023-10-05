@@ -21,10 +21,22 @@ namespace AwqatSalaat.UI.Views
             typeof(WidgetSummary),
             new FrameworkPropertyMetadata(PlacementMode.Bottom));
 
+        public static DependencyProperty OrientationProperty = DependencyProperty.Register(
+            nameof(Orientation),
+            typeof(Orientation),
+            typeof(WidgetSummary),
+            new FrameworkPropertyMetadata(Orientation.Horizontal));
+
         public PlacementMode PanelPlacement
         {
             get => (PlacementMode)GetValue(PanelPlacementProperty);
             set => SetValue(PanelPlacementProperty, value);
+        }
+
+        public Orientation Orientation
+        {
+            get => (Orientation)GetValue(OrientationProperty);
+            set => SetValue(OrientationProperty, value);
         }
 
         public bool RemovePopupBorderAtPlacement
@@ -56,6 +68,7 @@ namespace AwqatSalaat.UI.Views
         private void UpdateDirection()
         {
             this.FlowDirection = Properties.Resources.Culture.TextInfo.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+            this.Language = System.Windows.Markup.XmlLanguage.GetLanguage(Properties.Resources.Culture.IetfLanguageTag);
         }
     }
 }

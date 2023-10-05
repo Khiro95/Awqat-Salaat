@@ -121,7 +121,7 @@ namespace AwqatSalaat.UI.Controls
         private const int animationDelay = 50;
 
         // (in px) This is used as the distance for translation animation
-        private const int animationPosOffset = 50;
+        private const int animationPosOffset = 40;
 
         static AnimatedPopup()
         {
