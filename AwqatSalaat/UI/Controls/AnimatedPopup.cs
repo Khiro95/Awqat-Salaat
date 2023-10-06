@@ -1,5 +1,6 @@
 ﻿using AwqatSalaat.Interop;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -438,11 +439,17 @@ namespace AwqatSalaat.UI.Controls
 
         private RelativePlacement GetRelativePlacement(RECT popupRect)
         {
-            var positionInParent = TransformToAncestor(VisualParent as Visual).Transform(new Point());
-            var parentWndHandle = ((HwndSource)HwndSource.FromVisual(VisualParent as Visual)).Handle;
-            User32.GetWindowRect(parentWndHandle, out RECT parentRect);
-            parentRect.left += Convert.ToInt32(positionInParent.X);
-            parentRect.top += Convert.ToInt32(positionInParent.Y);
+            var visualParent = (FrameworkElement)VisualParent;
+            var rootVisual = ((HwndSource)HwndSource.FromVisual(visualParent)).RootVisual;
+            var positionInParent = visualParent.TransformToAncestor(rootVisual).Transform(new Point());
+            var pointInScreen = rootVisual.PointToScreen(positionInParent);
+            var parentRect = new RECT
+            {
+                left = Convert.ToInt32(pointInScreen.X - (visualParent.FlowDirection == FlowDirection.RightToLeft ? visualParent.ActualWidth : 0)),
+                top = Convert.ToInt32(pointInScreen.Y),
+                right = Convert.ToInt32(pointInScreen.X + (visualParent.FlowDirection == FlowDirection.RightToLeft ? 0 : visualParent.ActualWidth)),
+                bottom = Convert.ToInt32(pointInScreen.Y + visualParent.ActualHeight)
+            };
 
             int topToBottom = Math.Abs(popupRect.top - parentRect.bottom);
             int leftToRight = Math.Abs(popupRect.left - parentRect.right);
