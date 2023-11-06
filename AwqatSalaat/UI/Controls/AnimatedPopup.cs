@@ -142,6 +142,18 @@ namespace AwqatSalaat.UI.Controls
             bool isShow = (bool)e.NewValue;
             if (isShow)
             {
+                // Workaround to fix a bug for auto-size
+                if (double.IsNaN(popup.Width))
+                {
+                    popup.Width = 0;
+                    popup.Width = double.NaN;
+                }
+                if (double.IsNaN(popup.Height))
+                {
+                    popup.Height = 0;
+                    popup.Height = double.NaN;
+                }
+
                 if (popup.UseNativeAnimation)
                 {
                     // Disable popuproot animation if exist
