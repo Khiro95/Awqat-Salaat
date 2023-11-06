@@ -145,10 +145,10 @@
   <data name="UI.Settings.ShowCountdownDescription" xml:space="preserve">
     <value>Select whether to show the countdown near the time of the next salaat on the taskbar</value>
   </data>
-  <data name="UI.Settings.RemainderOffset" xml:space="preserve">
-    <value>Remainder offset</value>
+  <data name="UI.Settings.ReminderOffset" xml:space="preserve">
+    <value>Reminder offset</value>
   </data>
-  <data name="UI.Settings.RemainderOffsetDescription" xml:space="preserve">
+  <data name="UI.Settings.ReminderOffsetDescription" xml:space="preserve">
     <value>The amount of minutes before the time of the next salaat at which notification start. Value 0 disables the notifications.</value>
   </data>
   <data name="UI.Settings.CountryCode" xml:space="preserve">

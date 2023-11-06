@@ -259,20 +259,20 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remainder offset.
+        ///   Looks up a localized string similar to Reminder offset.
         /// </summary>
-        public static string UI_Settings_RemainderOffset {
+        public static string UI_Settings_ReminderOffset {
             get {
-                return ResourceManager.GetString("UI.Settings.RemainderOffset", resourceCulture);
+                return ResourceManager.GetString("UI.Settings.ReminderOffset", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to The amount of minutes before the time of the next salaat at which notification start. Value 0 disables the notifications..
         /// </summary>
-        public static string UI_Settings_RemainderOffsetDescription {
+        public static string UI_Settings_ReminderOffsetDescription {
             get {
-                return ResourceManager.GetString("UI.Settings.RemainderOffsetDescription", resourceCulture);
+                return ResourceManager.GetString("UI.Settings.ReminderOffsetDescription", resourceCulture);
             }
         }
         

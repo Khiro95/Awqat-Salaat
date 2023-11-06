@@ -135,7 +135,7 @@
   <data name="UI.Settings.ShowCountdownDescription" xml:space="preserve">
     <value>تحديد ما اذا كان العد التنازلي يظهر جنب وقت الصلاة القادمة على شريط المهام</value>
   </data>
-  <data name="UI.Settings.RemainderOffset" xml:space="preserve">
+  <data name="UI.Settings.ReminderOffset" xml:space="preserve">
     <value>وقت التنبيه</value>
   </data>
   <data name="UI.Summary.Refreshing" xml:space="preserve">
@@ -186,7 +186,7 @@
   <data name="UI.Settings.CountryCodeDescription" xml:space="preserve">
     <value>الرمز مكون من حرفين باللاتينية. (مثال: الرمز DZ يدل على الجزائر)</value>
   </data>
-  <data name="UI.Settings.RemainderOffsetDescription" xml:space="preserve">
+  <data name="UI.Settings.ReminderOffsetDescription" xml:space="preserve">
     <value>عدد الدقائق التي تسبق دخول الوقت ويبدأ عندها الاشعار. القيمة 0 تعني تعطيل الاشعار</value>
   </data>
   <data name="UI.Controls.Toggle.On" xml:space="preserve">

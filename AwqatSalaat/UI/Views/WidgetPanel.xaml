@@ -197,7 +197,7 @@
                 <controls:SettingsItem Header="{mk:L11n UI.Settings.ShowCountdown}" Description="{mk:L11n UI.Settings.ShowCountdownDescription}">
                     <CheckBox IsChecked="{Binding ShowCountdown}"/>
                 </controls:SettingsItem>
-                <controls:SettingsItem Header="{mk:L11n UI.Settings.RemainderOffset}" Description="{mk:L11n UI.Settings.RemainderOffsetDescription}">
+                <controls:SettingsItem Header="{mk:L11n UI.Settings.ReminderOffset}" Description="{mk:L11n UI.Settings.ReminderOffsetDescription}">
                     <controls:NumericUpDown Value="{Binding NotificationDistance}" Maximum="720" Width="100" HorizontalAlignment="Left"/>
                 </controls:SettingsItem>
                 <controls:SettingsItem Header="{mk:L11n UI.Settings.CountryCode}" Description="{mk:L11n UI.Settings.CountryCodeDescription}">
