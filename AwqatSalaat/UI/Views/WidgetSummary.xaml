@@ -89,6 +89,9 @@
                                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WidgetSummary}, Path=Orientation}" Value="Vertical">
                                             <Setter Property="Columns" Value="1"/>
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding WidgetSettings.Settings.ShowCountdown}" Value="False">
+                                            <Setter Property="Columns" Value="1"/>
+                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </UniformGrid.Style>
@@ -100,7 +103,7 @@
                                 <TextBlock Text="{Binding Next.Name, FallbackValue=NAME}" HorizontalAlignment="Center"/>
                                 <TextBlock Text="{Binding Next.Time, StringFormat=HH:mm, FallbackValue=TIME}" HorizontalAlignment="Center" Grid.Row="1"/>
                             </Grid>
-                            <Grid>
+                            <Grid Visibility="{Binding WidgetSettings.Settings.ShowCountdown, Converter={StaticResource BoolVisConverter}}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
