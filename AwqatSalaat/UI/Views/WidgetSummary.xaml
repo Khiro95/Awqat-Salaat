@@ -135,7 +135,7 @@
                     HorizontalAlignment="Center"
                     Visibility="{Binding HasError, Converter={StaticResource BoolVisConverter}}"
                     d:Visibility="Visible">
-                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="Gold"/>
+                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{DynamicResource ThemeColors.TextHighlightBrush}"/>
                     <TextBlock Text="{mk:L11n UI.Summary.ErrorOccured}" VerticalAlignment="Center" Margin="8,0,0,0"/>
                 </StackPanel>
                 <StackPanel
@@ -144,7 +144,7 @@
                     HorizontalAlignment="Center"
                     Visibility="{Binding WidgetSettings.Settings.IsConfigured, Converter={StaticResource BoolVisInvConverter}}"
                     d:Visibility="Visible">
-                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="Gold"/>
+                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{DynamicResource ThemeColors.TextHighlightBrush}"/>
                     <TextBlock Text="{mk:L11n UI.Summary.TapToStart}" VerticalAlignment="Center" Margin="8,0,0,0"/>
                 </StackPanel>
             </Grid>

@@ -157,13 +157,14 @@
                 Grid.ColumnSpan="2"
                 Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisConverter}}"/>
             <StackPanel
+                Width="180"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Grid.Row="1"
                 Grid.ColumnSpan="2"
                 Visibility="{Binding HasError, Converter={StaticResource BoolVisConverter}}"
                 d:Visibility="Hidden">
-                <TextBlock Text="{mk:L11n UI.Panel.Error}" HorizontalAlignment="Center" Foreground="Gray"/>
+                <TextBlock Text="{mk:L11n UI.Panel.Error}" HorizontalAlignment="Center" Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}"/>
                 <TextBlock Text="{Binding ErrorMessage}" d:Text="Something wrong happened, please check the settings and try again" TextAlignment="Center" TextWrapping="Wrap" Margin="8"/>
             </StackPanel>
         </Grid>
