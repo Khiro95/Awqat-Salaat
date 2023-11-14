@@ -100,8 +100,8 @@
                                     <RowDefinition/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="{Binding Next.Name, FallbackValue=NAME}" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding Next.Time, StringFormat=HH:mm, FallbackValue=TIME}" HorizontalAlignment="Center" Grid.Row="1"/>
+                                <TextBlock Text="{Binding Next.Name, FallbackValue=NAME}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Next.Time, StringFormat=HH:mm, FallbackValue=TIME}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
                             </Grid>
                             <Grid Visibility="{Binding WidgetSettings.Settings.ShowCountdown, Converter={StaticResource BoolVisConverter}}">
                                 <Grid.RowDefinitions>
@@ -129,24 +129,24 @@
                     VerticalAlignment="Bottom"
                     Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisConverter}}"
                     d:Visibility="Visible"/>
-                <StackPanel
+                <WrapPanel
                     Orientation="Horizontal"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Visibility="{Binding HasError, Converter={StaticResource BoolVisConverter}}"
                     d:Visibility="Visible">
-                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{DynamicResource ThemeColors.TextHighlightBrush}"/>
-                    <TextBlock Text="{mk:L11n UI.Summary.ErrorOccured}" VerticalAlignment="Center" Margin="8,0,0,0"/>
-                </StackPanel>
-                <StackPanel
+                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{DynamicResource ThemeColors.TextHighlightBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{mk:L11n UI.Summary.ErrorOccured}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                </WrapPanel>
+                <WrapPanel
                     Orientation="Horizontal"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Visibility="{Binding WidgetSettings.Settings.IsConfigured, Converter={StaticResource BoolVisInvConverter}}"
                     d:Visibility="Visible">
-                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{DynamicResource ThemeColors.TextHighlightBrush}"/>
-                    <TextBlock Text="{mk:L11n UI.Summary.TapToStart}" VerticalAlignment="Center" Margin="8,0,0,0"/>
-                </StackPanel>
+                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{DynamicResource ThemeColors.TextHighlightBrush}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{mk:L11n UI.Summary.TapToStart}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="8,0,0,0"/>
+                </WrapPanel>
             </Grid>
         </ToggleButton>
         <controls:AcrylicPopup
