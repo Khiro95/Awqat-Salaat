@@ -55,6 +55,8 @@ namespace AwqatSalaat.DataModel.IslamicFinderApi
 
     public abstract class Response
     {
+        protected TimeZoneInfo timeZone;
+
         public bool Success;
         public string Message;
         public Settings Settings;
@@ -64,11 +66,24 @@ namespace AwqatSalaat.DataModel.IslamicFinderApi
         {
             if (Success)
             {
+                string tzID = TimeZoneConverter.TZConvert.IanaToWindows(Settings.TimeZone);
+                timeZone = TimeZoneInfo.FindSystemTimeZoneById(tzID);
                 ParseImpl();
             }
         }
 
         protected abstract void ParseImpl();
+
+        protected DateTime ParseTimeToLocal(string time)
+        {
+            var dt = DateTime.Parse(time, System.Globalization.CultureInfo.InvariantCulture);
+            if (timeZone.BaseUtcOffset != TimeZoneInfo.Local.BaseUtcOffset)
+            {
+                dt = TimeZoneInfo.ConvertTimeToUtc(dt, timeZone);
+                dt = TimeZoneInfo.ConvertTimeFromUtc(dt, TimeZoneInfo.Local);
+            }
+            return dt;
+        }
     }
 
     public class SingleDayResponse : Response
@@ -83,7 +98,7 @@ namespace AwqatSalaat.DataModel.IslamicFinderApi
             {
                 if (time.Key != "Duha")
                 {
-                    dayTimes.Add(time.Key, DateTime.Parse(time.Value));
+                    dayTimes.Add(time.Key, ParseTimeToLocal(time.Value));
                 }
             }
             Times = new PrayerTimes(dayTimes);
@@ -106,7 +121,7 @@ namespace AwqatSalaat.DataModel.IslamicFinderApi
                 {
                     if (time.Key != "Duha")
                     {
-                        dayTimes.Add(time.Key, date + DateTime.Parse(time.Value).TimeOfDay);
+                        dayTimes.Add(time.Key, date + ParseTimeToLocal(time.Value).TimeOfDay);
                     }
                 }
                 Times.Add(date, new PrayerTimes(dayTimes));
