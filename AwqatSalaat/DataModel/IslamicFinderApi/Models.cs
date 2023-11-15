@@ -66,18 +66,20 @@ namespace AwqatSalaat.DataModel.IslamicFinderApi
         {
             if (Success)
             {
-                string tzID = TimeZoneConverter.TZConvert.IanaToWindows(Settings.TimeZone);
-                timeZone = TimeZoneInfo.FindSystemTimeZoneById(tzID);
+                if (TimeZoneConverter.TZConvert.TryIanaToWindows(Settings.TimeZone, out string tzID))
+                {
+                    timeZone = TimeZoneInfo.FindSystemTimeZoneById(tzID);
+                }
                 ParseImpl();
             }
         }
 
         protected abstract void ParseImpl();
 
-        protected DateTime ParseTimeToLocal(string time)
+        protected DateTime ParseTimeToLocal(string time, DateTime baseDate)
         {
-            var dt = DateTime.Parse(time, System.Globalization.CultureInfo.InvariantCulture);
-            if (timeZone.BaseUtcOffset != TimeZoneInfo.Local.BaseUtcOffset)
+            var dt = baseDate + DateTime.Parse(time, System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
+            if (timeZone != null && timeZone.BaseUtcOffset != TimeZoneInfo.Local.BaseUtcOffset)
             {
                 dt = TimeZoneInfo.ConvertTimeToUtc(dt, timeZone);
                 dt = TimeZoneInfo.ConvertTimeFromUtc(dt, TimeZoneInfo.Local);
@@ -93,12 +95,14 @@ namespace AwqatSalaat.DataModel.IslamicFinderApi
 
         protected sealed override void ParseImpl()
         {
+            DateTime today = DateTime.Today;
+            DateTime date = new DateTime(today.Year, today.Month, today.Day, 0, 0, 0, DateTimeKind.Unspecified);
             Dictionary<string, DateTime> dayTimes = new Dictionary<string, DateTime>(5);
             foreach (var time in Results)
             {
                 if (time.Key != "Duha")
                 {
-                    dayTimes.Add(time.Key, ParseTimeToLocal(time.Value));
+                    dayTimes.Add(time.Key, ParseTimeToLocal(time.Value, date));
                 }
             }
             Times = new PrayerTimes(dayTimes);
@@ -115,13 +119,13 @@ namespace AwqatSalaat.DataModel.IslamicFinderApi
             Times = new Dictionary<DateTime, PrayerTimes>(Results.Count);
             foreach (var day in Results)
             {
-                DateTime date = DateTime.Parse(day.Key);
+                DateTime date = DateTime.Parse(day.Key, System.Globalization.CultureInfo.InvariantCulture);
                 Dictionary<string, DateTime> dayTimes = new Dictionary<string, DateTime>(5);
                 foreach (var time in day.Value)
                 {
                     if (time.Key != "Duha")
                     {
-                        dayTimes.Add(time.Key, date + ParseTimeToLocal(time.Value).TimeOfDay);
+                        dayTimes.Add(time.Key, ParseTimeToLocal(time.Value, date));
                     }
                 }
                 Times.Add(date, new PrayerTimes(dayTimes));
