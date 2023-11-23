@@ -22,6 +22,7 @@
                         <ResourceDictionary Source="../Themes/Styles.xaml" />
                     </d:ResourceDictionary.MergedDictionaries>
                 </ui:ThemeDictionary>
+                <ResourceDictionary Source="../Assets/Vectors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <ObjectDataProvider x:Key="ApiMethodEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
@@ -60,12 +61,9 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" Grid.Row="0" Grid.ColumnSpan="2">
+                    <StackPanel TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" Grid.Row="0">
                         <TextBlock Text="{Binding DisplayedDate, StringFormat='dddd'}" Margin="0,4" HorizontalAlignment="Center"/>
                         <TextBlock Text="{Binding DisplayedDate, StringFormat='dd MMMM yyyy'}" d:Text="28 صفر 1445" Language="ar" FlowDirection="RightToLeft" Margin="0,4" HorizontalAlignment="Center"/>
                         <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center">
@@ -73,12 +71,12 @@
                             <TextBlock Text="{Binding DisplayedDate, StringFormat=dd/MM/yyyy}" Language="en" Margin="4,0,0,0"/>
                         </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" Margin="0,4" HorizontalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="2" FlowDirection="LeftToRight">
+                    <StackPanel Orientation="Horizontal" TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" Margin="0,4" HorizontalAlignment="Center" Grid.Row="1" FlowDirection="LeftToRight">
                         <TextBlock d:Text="City" Text="{Binding City}"/>
                         <TextBlock Text="-" Margin="4,0"/>
                         <TextBlock d:Text="Country" Text="{Binding Country}"/>
                     </StackPanel>
-                    <ItemsControl ItemsSource="{Binding Items}" Grid.Row="2" Grid.ColumnSpan="2" Grid.IsSharedSizeScope="True">
+                    <ItemsControl ItemsSource="{Binding Items}" Grid.Row="2" Grid.IsSharedSizeScope="True">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border>
@@ -147,6 +145,7 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+                    <Path Data="{StaticResource Ayah}" Fill="{DynamicResource ThemeColors.TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,4,0,0" Grid.Row="3"/>
                 </Grid>
             </Grid>
             <TextBlock
