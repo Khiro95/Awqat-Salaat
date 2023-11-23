@@ -145,7 +145,7 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                    <Path Data="{StaticResource Ayah}" Fill="{DynamicResource ThemeColors.TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,4,0,0" Grid.Row="3"/>
+                    <Path Data="{StaticResource Ayah}" Fill="{DynamicResource ThemeColors.TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,4,0,0" Grid.Row="3" FlowDirection="LeftToRight"/>
                 </Grid>
             </Grid>
             <TextBlock
