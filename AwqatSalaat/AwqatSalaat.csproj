@@ -7,7 +7,7 @@
     <FileVersion>1.0.0.0</FileVersion>
     <Company />
     <Authors>Khiro</Authors>
-    <RepositoryUrl>https://github.com/Khiro95/Awqat-Salaat</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Khiro95/Awqat-Salaat.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://github.com/Khiro95/Awqat-Salaat</PackageProjectUrl>
   </PropertyGroup>

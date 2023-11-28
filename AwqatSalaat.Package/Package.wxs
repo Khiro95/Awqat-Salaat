@@ -6,9 +6,6 @@
         <MediaTemplate EmbedCab="true"/>
 
         <Feature Id="Main">
-            <!--<ComponentGroupRef Id="AwqatSalaat.Binaries" />
-            <ComponentGroupRef Id="AwqatSalaat.Satellites" />
-            <ComponentGroupRef Id="AwqatSalaat.COM" />-->
             <ComponentGroupRef Id="AwqatSalaat.Components" />
         </Feature>
     </Package>
