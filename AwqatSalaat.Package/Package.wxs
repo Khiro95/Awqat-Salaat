@@ -1,0 +1,15 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+    <Package Name="AwqatSalaat" Manufacturer="Khiro" Version="!(bind.fileVersion.AwqatSalaat.dll)" UpgradeCode="63e5c1de-dd06-4808-9fa1-235510ac232b">
+
+        <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
+
+        <MediaTemplate EmbedCab="true"/>
+
+        <Feature Id="Main">
+            <!--<ComponentGroupRef Id="AwqatSalaat.Binaries" />
+            <ComponentGroupRef Id="AwqatSalaat.Satellites" />
+            <ComponentGroupRef Id="AwqatSalaat.COM" />-->
+            <ComponentGroupRef Id="AwqatSalaat.Components" />
+        </Feature>
+    </Package>
+</Wix>

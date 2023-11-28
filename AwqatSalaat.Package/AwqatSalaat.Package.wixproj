@@ -1,0 +1,33 @@
+﻿<Project Sdk="WixToolset.Sdk/4.0.3" InitialTargets="HarvestAppFiles">
+    <PropertyGroup>
+        <AwqatSalaatProject>..\AwqatSalaat\AwqatSalaat.csproj</AwqatSalaatProject>
+        <EnableProjectHarvesting>false</EnableProjectHarvesting>
+        <HarvestDirectorySuppressUniqueIds>true</HarvestDirectorySuppressUniqueIds>
+        <HarvestDirectoryTransforms>RemovePdbTransform.xslt</HarvestDirectoryTransforms>
+        <OutputName>AwqatSalaat_$(Configuration)-$(Platform)</OutputName>
+    </PropertyGroup>
+    <Target Name="HarvestAppFiles">
+        <!-- This task allow us to get the directory and the full path of the compiled dll -->
+        <MSBuild Projects="$(AwqatSalaatProject)" Targets="GetTargetPath" Properties="Platform=AnyCPU">
+            <Output TaskParameter="TargetOutputs" ItemName="DllOutput" />
+        </MSBuild>
+        <Message Text="Harvesting files in: %(DllOutput.RelativeDir)" Importance="high" />
+        <ItemGroup>
+            <HarvestDirectory Include="%(DllOutput.RelativeDir)">
+                <ComponentGroupName>AwqatSalaat.Components</ComponentGroupName>
+                <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
+                <PreprocessorVariable>AwqatSalaat.TargetDir</PreprocessorVariable>
+                <SuppressRootDirectory>true</SuppressRootDirectory>
+            </HarvestDirectory>
+        </ItemGroup>
+    </Target>
+    <ItemGroup>
+        <None Include="RemovePdbTransform.xslt" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="WixToolset.Heat" Version="4.0.3" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="$(AwqatSalaatProject)" />
+    </ItemGroup>
+</Project>
