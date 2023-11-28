@@ -25,7 +25,7 @@ namespace AwqatSalaat.UI.Views
             nameof(Orientation),
             typeof(Orientation),
             typeof(WidgetSummary),
-            new FrameworkPropertyMetadata(Orientation.Horizontal));
+            new FrameworkPropertyMetadata(SystemInfos.IsTaskBarHorizontal() ? Orientation.Horizontal : Orientation.Vertical));
 
         public PlacementMode PanelPlacement
         {

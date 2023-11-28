@@ -129,24 +129,32 @@
                     VerticalAlignment="Bottom"
                     Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisConverter}}"
                     d:Visibility="Visible"/>
-                <WrapPanel
-                    Orientation="Horizontal"
+                <StackPanel
+                    Orientation="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WidgetSummary}, Path=Orientation}"
+                    d:Orientation="Horizontal"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
+                    Margin="3,0"
                     Visibility="{Binding HasError, Converter={StaticResource BoolVisConverter}}"
                     d:Visibility="Visible">
                     <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{DynamicResource ThemeColors.TextHighlightBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <TextBlock Text="{mk:L11n UI.Summary.ErrorOccured}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="8,0,0,0"/>
-                </WrapPanel>
-                <WrapPanel
-                    Orientation="Horizontal"
+                    <!-- gutter -->
+                    <Control Margin="3,4" Height="0" Width="0"/>
+                    <TextBlock Text="{mk:L11n UI.Summary.ErrorOccured}" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel
+                    Orientation="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WidgetSummary}, Path=Orientation}"
+                    d:Orientation="Horizontal"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
+                    Margin="4,0"
                     Visibility="{Binding WidgetSettings.Settings.IsConfigured, Converter={StaticResource BoolVisInvConverter}}"
                     d:Visibility="Visible">
-                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{DynamicResource ThemeColors.TextHighlightBrush}" VerticalAlignment="Center"/>
-                    <TextBlock Text="{mk:L11n UI.Summary.TapToStart}" VerticalAlignment="Center" TextWrapping="Wrap" Margin="8,0,0,0"/>
-                </WrapPanel>
+                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{DynamicResource ThemeColors.TextHighlightBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <!-- gutter -->
+                    <Control Margin="4" Height="0" Width="0"/>
+                    <TextBlock Text="{mk:L11n UI.Summary.TapToStart}" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
             </Grid>
         </ToggleButton>
         <controls:AcrylicPopup

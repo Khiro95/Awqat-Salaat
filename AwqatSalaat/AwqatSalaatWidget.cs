@@ -25,6 +25,7 @@ namespace AwqatSalaat
             };
 
             Options.MinHorizontalSize = new Size(100, 40);
+            Options.MinVerticalSize = new Size(CSDeskBandOptions.TaskbarVerticalWidth, 100);
 
             uiElement.Dispatcher.UnhandledException += (s, e) =>
             {

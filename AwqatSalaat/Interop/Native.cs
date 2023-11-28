@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AwqatSalaat.Interop
 {
@@ -17,6 +13,23 @@ namespace AwqatSalaat.Interop
 
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessage([In] IntPtr hWnd, [In] uint Msg, [In] uint wParam, [In] uint lParam);
+    }
+
+    public static class Shell32
+    {
+        [DllImport("shell32.dll")]
+        public static extern UIntPtr SHAppBarMessage([In] AppBarMessage msg, [In, Out] ref APPBARDATA data);
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct APPBARDATA
+    {
+        public int cbSize;
+        public IntPtr hWnd;
+        public int uCallbackMessage;
+        public int uEdge;
+        public RECT rc;
+        public IntPtr lParam;
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -57,6 +70,11 @@ namespace AwqatSalaat.Interop
     {
         public int cx;
         public int cy;
+    }
+
+    public enum AppBarMessage : uint
+    {
+        ABM_GETTASKBARPOS = 0x00000005
     }
 
     public enum BlendOperation : byte
