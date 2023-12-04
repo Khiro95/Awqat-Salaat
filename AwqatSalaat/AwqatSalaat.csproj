@@ -10,6 +10,7 @@
     <RepositoryUrl>https://github.com/Khiro95/Awqat-Salaat.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://github.com/Khiro95/Awqat-Salaat</PackageProjectUrl>
+    <PackageLicenseExpression>MIT License</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
