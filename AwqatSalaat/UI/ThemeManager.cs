@@ -41,12 +41,8 @@ namespace AwqatSalaat.UI
 
         public static void SyncWithSystemTheme()
         {
-            object keyValue = Microsoft.Win32.Registry.GetValue("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", "SystemUsesLightTheme", 0);
-            if (keyValue is int value)
-            {
-                ThemeKey theme = value == 1 ? ThemeKey.Light : ThemeKey.Dark;
-                SetTheme(theme);
-            }
+            ThemeKey theme = Helpers.SystemInfos.IsLightThemeUsed() == true ? ThemeKey.Light : ThemeKey.Dark;
+            SetTheme(theme);
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using AwqatSalaat.Interop;
+using System;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
@@ -60,6 +63,28 @@ namespace AwqatSalaat.UI.Controls
             set => SetValue(TintOpacityProperty, value);
         }
 
+        public AcrylicPopup() : base()
+        {
+            // Need this to make sure the background render properly when showing for the first time
+            if (Helpers.SystemInfos.IsWindows81_OrEarlier)
+            {
+                this.Loaded += (_, __) =>
+                {
+                    // Win 7 doesn't support tinting the blur behind for specific window so we use the child background instead.
+                    // Win 8/8.1 doesn't support blur behind at all.
+                    SolidColorBrush brush = new SolidColorBrush() { Color = TintColor, Opacity = 0.95 /*TintOpacity*/ }; ;
+                    if (this.Child is Control ctrl)
+                    {
+                        ctrl.Background = brush;
+                    }
+                    else if (this.Child is Border border)
+                    {
+                        border.Background = brush;
+                    }
+                };
+            }
+        }
+
         protected override void OnOpeningAnimationStarting()
         {
             EnableBlur(false);
@@ -79,34 +104,90 @@ namespace AwqatSalaat.UI.Controls
         {
             if (HwndSource != null)
             {
-                var accent = new AccentPolicy();
-                accent.GradientColor = (_tintOpacity << 24) | (_tintColor & 0xFFFFFF);
-
-                if (showBorders)
+                if (Helpers.SystemInfos.IsWindows10)
                 {
-                    accent.AccentFlags = AccentFlags.DrawAllBorders;
+                    var accent = new AccentPolicy();
+                    accent.GradientColor = (_tintOpacity << 24) | (_tintColor & 0xFFFFFF);
 
-                    if (RemoveBorderAtPlacement)
+                    if (showBorders)
                     {
-                        switch (Placement)
+                        accent.AccentFlags = AccentFlags.DrawAllBorders;
+
+                        if (RemoveBorderAtPlacement)
                         {
-                            case PlacementMode.Left:
-                                accent.AccentFlags &= ~AccentFlags.DrawRightBorder;
-                                break;
-                            case PlacementMode.Top:
-                                accent.AccentFlags &= ~AccentFlags.DrawBottomBorder;
-                                break;
-                            case PlacementMode.Right:
-                                accent.AccentFlags &= ~AccentFlags.DrawLeftBorder;
-                                break;
-                            case PlacementMode.Bottom:
-                                accent.AccentFlags &= ~AccentFlags.DrawTopBorder;
-                                break;
+                            switch (Placement)
+                            {
+                                case PlacementMode.Left:
+                                    accent.AccentFlags &= ~AccentFlags.DrawRightBorder;
+                                    break;
+                                case PlacementMode.Top:
+                                    accent.AccentFlags &= ~AccentFlags.DrawBottomBorder;
+                                    break;
+                                case PlacementMode.Right:
+                                    accent.AccentFlags &= ~AccentFlags.DrawLeftBorder;
+                                    break;
+                                case PlacementMode.Bottom:
+                                    accent.AccentFlags &= ~AccentFlags.DrawTopBorder;
+                                    break;
+                            }
                         }
                     }
-                }
 
-                AcrylicBlur.EnableAcrylicBlur(Handle, accent);
+                    AcrylicBlur.EnableAcrylicBlur(Handle, accent);
+                }
+                else if (Helpers.SystemInfos.IsWindows81_OrEarlier)
+                {
+                    // Win 8/8.1 doesn't support blur behind
+                    if (Helpers.SystemInfos.IsWindows7)
+                    {
+                        AcrylicBlur.EnableBlurBehindWin7(Handle, true);
+                    }
+
+                    int attr;
+                    if (showBorders)
+                    {
+                        const int defaultMargin = 1;
+                        MARGINS margins = new MARGINS
+                        {
+                            cxLeftWidth = defaultMargin,
+                            cxRightWidth = defaultMargin,
+                            cyBottomHeight = defaultMargin,
+                            cyTopHeight = defaultMargin
+                        };
+                        if (RemoveBorderAtPlacement)
+                        {
+                            switch (Placement)
+                            {
+                                case PlacementMode.Left:
+                                    margins.cxRightWidth = 0;
+                                    break;
+                                case PlacementMode.Top:
+                                    margins.cyBottomHeight = 0;
+                                    break;
+                                case PlacementMode.Right:
+                                    margins.cxLeftWidth = 0;
+                                    break;
+                                case PlacementMode.Bottom:
+                                    margins.cyTopHeight = 0;
+                                    break;
+                            }
+                        }
+
+                        Dwmapi.DwmExtendFrameIntoClientArea(Handle, ref margins);
+
+                        attr = (int)DWMNCRENDERINGPOLICY.DWMNCRP_ENABLED;
+                    }
+                    else
+                    {
+                        attr = (int)DWMNCRENDERINGPOLICY.DWMNCRP_DISABLED;
+                    }
+
+                    int attrSize = Marshal.SizeOf(attr);
+                    var ptr = Marshal.AllocHGlobal(attrSize);
+                    Marshal.StructureToPtr(attr, ptr, false);
+                    Dwmapi.DwmSetWindowAttribute(Handle, DWMWINDOWATTRIBUTE.DWMWA_NCRENDERING_POLICY, ptr, attrSize);
+                    Marshal.FreeHGlobal(ptr);
+                }
             }
         }
     }

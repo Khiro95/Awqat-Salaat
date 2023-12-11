@@ -1,68 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using AwqatSalaat.Helpers;
+using System;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AwqatSalaat.Interop
 {
-    public enum AccentState
-    {
-        ACCENT_DISABLED = 0,
-        ACCENT_ENABLE_GRADIENT = 1,
-        ACCENT_ENABLE_TRANSPARENTGRADIENT = 2,
-        ACCENT_ENABLE_BLURBEHIND = 3,
-        ACCENT_ENABLE_ACRYLICBLURBEHIND = 4,
-        ACCENT_INVALID_STATE = 5
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct AccentPolicy
-    {
-        public AccentState AccentState;
-        public AccentFlags AccentFlags;
-        public uint GradientColor;
-        public uint AnimationId;
-    }
-
-    [Flags]
-    public enum AccentFlags
-    {
-        // ...
-
-        DrawLeftBorder = 0x20,
-        DrawTopBorder = 0x40,
-        DrawRightBorder = 0x80,
-        DrawBottomBorder = 0x100,
-        DrawAllBorders = DrawLeftBorder | DrawTopBorder | DrawRightBorder | DrawBottomBorder
-
-        // ...
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct WindowCompositionAttributeData
-    {
-        public WindowCompositionAttribute Attribute;
-        public IntPtr Data;
-        public int SizeOfData;
-    }
-
-    public enum WindowCompositionAttribute
-    {
-        // ...
-        WCA_ACCENT_POLICY = 19
-        // ...
-    }
-
     public class AcrylicBlur
     {
-        [DllImport("user32.dll")]
-        private static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
-
         public static void EnableAcrylicBlur(IntPtr hwnd, AccentPolicy accentPolicy)
         {
-            accentPolicy.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND;
+            if (SystemInfos.IsWindows10_Redstone4_OrLater)
+            {
+                accentPolicy.AccentState = AccentState.ACCENT_ENABLE_ACRYLICBLURBEHIND;
+            }
+            else
+            {
+                accentPolicy.AccentState = AccentState.ACCENT_ENABLE_BLURBEHIND;
+            }
 
             var accentStructSize = Marshal.SizeOf(accentPolicy);
 
@@ -74,9 +27,21 @@ namespace AwqatSalaat.Interop
             data.SizeOfData = accentStructSize;
             data.Data = accentPtr;
 
-            SetWindowCompositionAttribute(hwnd, ref data);
+            User32.SetWindowCompositionAttribute(hwnd, ref data);
 
             Marshal.FreeHGlobal(accentPtr);
+        }
+
+        // For Windows 7 we have to use DWM, no Acrylic blur available
+        public static void EnableBlurBehindWin7(IntPtr hwnd, bool isEnable)
+        {
+            var data = new DWM_BLURBEHIND()
+            {
+                dwFlags = DWM_BLURBEHIND_FLAGS.DWM_BB_ENABLE,
+                fEnable = isEnable
+            };
+
+            Dwmapi.DwmEnableBlurBehindWindow(hwnd, ref data);
         }
 
         public static void DisableAcrylicBlur(IntPtr hwnd)
@@ -96,7 +61,7 @@ namespace AwqatSalaat.Interop
             data.SizeOfData = accentStructSize;
             data.Data = accentPtr;
 
-            SetWindowCompositionAttribute(hwnd, ref data);
+            User32.SetWindowCompositionAttribute(hwnd, ref data);
 
             Marshal.FreeHGlobal(accentPtr);
         }
