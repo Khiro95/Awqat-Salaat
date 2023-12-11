@@ -17,9 +17,12 @@ So **DON'T** rely on the widget to get the exact time, especially for performing
 
 Awqat Salaat is a *Windows* widget that takes advantage of a feature called *Desk Band*.
 That's an old feature which has been deprecated and removed completely from Windows 11, thus Windows 11 is not supported.
-However, the older vesions (Windows 7, 8, 8.1 and 10) are supported in theory but the widget was designed specifically for Windows 10 and not tested on older versions.
+However, the older vesions (Windows 7, 8, 8.1 and 10) are supported in theory but the widget was designed specifically for Windows 10.
 
-Also note that if you choose to use the widget on Windows 7/8/8.1 then make sure to install the font [Segoe MDL2 Assets](https://aka.ms/SegoeFonts).
+The widget had been tested on Windows 7 Ultimate x64 and it's made compatible with it. Although there are some subtle visual differences, it's fully functional.
+The release (v1.1), which addressed compatibility issues with Windows 7, should make the widget compatible with Windows 8, 8.1 and all versions of Windows 10.
+
+Also note that if you choose to use the widget on Windows 7/8/8.1 then make sure to install [.NET Framework 4.7.2 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net472) and the font [Segoe MDL2 Assets](https://aka.ms/SegoeFonts).
 
 ## Installation
 
