@@ -49,6 +49,10 @@ namespace AwqatSalaat.DataModel.IslamicFinderApi
                 if (httpResponse.IsSuccessStatusCode)
                 {
                     string responseBody = await httpResponse.Content.ReadAsStringAsync();
+                    if (string.IsNullOrEmpty(responseBody))
+                    {
+                        throw new IslamicFinderApiException("Islamic Finder service did not respond with data.");
+                    }
                     T apiResponse = JsonConvert.DeserializeObject<T>(responseBody);
                     if (!apiResponse.Success)
                     {
