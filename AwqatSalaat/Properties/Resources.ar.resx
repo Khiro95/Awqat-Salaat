@@ -225,4 +225,7 @@
   <data name="UI.Settings.CityDescription" xml:space="preserve">
     <value>اسم المدينة</value>
   </data>
+  <data name="UI.Settings.Tabs.General" xml:space="preserve">
+    <value>عامة</value>
+  </data>
 </root>

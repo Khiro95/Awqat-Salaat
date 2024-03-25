@@ -331,6 +331,15 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        public static string UI_Settings_Tabs_General {
+            get {
+                return ResourceManager.GetString("UI.Settings.Tabs.General", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zip code.
         /// </summary>
         public static string UI_Settings_ZipCode {

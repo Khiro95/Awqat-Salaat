@@ -53,7 +53,7 @@
     </UserControl.Resources>
     <Grid>
         <TabControl x:Name="tabControl">
-            <TabItem Header="General">
+            <TabItem Header="{mk:L11n UI.Settings.Tabs.General}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel DataContext="{Binding Settings}" Margin="0,16,0,0">
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.Language}" Description="{mk:L11n UI.Settings.LanguageDescription}" Margin="0">
