@@ -213,4 +213,16 @@
   <data name="UI.Settings.LanguageDescription" xml:space="preserve">
     <value>اللغة المستعملة للعرض</value>
   </data>
+  <data name="UI.Settings.ServiceProvider" xml:space="preserve">
+    <value>مزود الخدمة</value>
+  </data>
+  <data name="UI.Settings.ServiceProviderDescription" xml:space="preserve">
+    <value>الخدمة التي توفر بيانات أوقات الصلوات</value>
+  </data>
+  <data name="UI.Settings.City" xml:space="preserve">
+    <value>المدينة</value>
+  </data>
+  <data name="UI.Settings.CityDescription" xml:space="preserve">
+    <value>اسم المدينة</value>
+  </data>
 </root>

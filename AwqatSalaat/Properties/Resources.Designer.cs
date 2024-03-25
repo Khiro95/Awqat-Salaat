@@ -19,7 +19,7 @@ namespace AwqatSalaat.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -196,6 +196,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to City.
+        /// </summary>
+        public static string UI_Settings_City {
+            get {
+                return ResourceManager.GetString("UI.Settings.City", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The name of the city.
+        /// </summary>
+        public static string UI_Settings_CityDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.CityDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string UI_Settings_Confirm {
@@ -273,6 +291,24 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_ReminderOffsetDescription {
             get {
                 return ResourceManager.GetString("UI.Settings.ReminderOffsetDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service provider.
+        /// </summary>
+        public static string UI_Settings_ServiceProvider {
+            get {
+                return ResourceManager.GetString("UI.Settings.ServiceProvider", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The service which provides data of prayer times.
+        /// </summary>
+        public static string UI_Settings_ServiceProviderDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.ServiceProviderDescription", resourceCulture);
             }
         }
         

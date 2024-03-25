@@ -193,4 +193,16 @@
   <data name="UI.Settings.LanguageDescription" xml:space="preserve">
     <value>The language used for display</value>
   </data>
+  <data name="UI.Settings.ServiceProvider" xml:space="preserve">
+    <value>Service provider</value>
+  </data>
+  <data name="UI.Settings.ServiceProviderDescription" xml:space="preserve">
+    <value>The service which provides data of prayer times</value>
+  </data>
+  <data name="UI.Settings.City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="UI.Settings.CityDescription" xml:space="preserve">
+    <value>The name of the city</value>
+  </data>
 </root>

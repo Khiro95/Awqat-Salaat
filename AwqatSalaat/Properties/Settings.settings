@@ -26,5 +26,14 @@
     <Setting Name="DisplayLanguage" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="City" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Method2" Type="AwqatSalaat.DataModel.AlAdhanApi.Method" Scope="User">
+      <Value Profile="(Default)">MWL</Value>
+    </Setting>
+    <Setting Name="Service" Type="AwqatSalaat.DataModel.PrayerTimesService" Scope="User">
+      <Value Profile="(Default)">IslamicFinder</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

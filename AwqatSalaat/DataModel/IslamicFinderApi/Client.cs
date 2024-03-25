@@ -1,68 +1,73 @@
-﻿using AwqatSalaat.Helpers;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AwqatSalaat.DataModel.IslamicFinderApi
 {
-    public static class Client
+    public class Client : IServiceClient
     {
-        public static async Task<SingleDayResponse> GetSingleDayDataAsync(string countryCode, string zipCode, Method method, DateTime? date = null)
+        public async Task<ServiceData> GetDataAsync(IRequest request)
         {
-            Request request = new Request()
+            var req = (Request)request;
+
+            if (req.GetEntireMonth)
             {
-                CountryCode = countryCode,
-                ZipCode = zipCode,
-                Method = (byte)method,
-                Date = date ?? TimeStamp.Date,
-                ShowEntireMonth = false
-            };
-            var res = await GetDataAsync<SingleDayResponse>(request);
-            res.Times.Adjust(request.Date);
-            return res;
+                var res = await GetDataAsync<EntireMonthResponse>(request);
+
+                return new ServiceData
+                {
+                    Times = res.Times,
+                    Location = res.Settings.Location
+                };
+            }
+            else
+            {
+                var res = await GetDataAsync<SingleDayResponse>(request);
+                res.Times.Adjust(request.Date);
+                var dict = new Dictionary<DateTime, PrayerTimes>
+                {
+                    [request.Date] = res.Times,
+                };
+
+                return new ServiceData
+                {
+                    Times = dict,
+                    Location = res.Settings.Location
+                };
+            }
         }
 
-        public static async Task<EntireMonthResponse> GetEntireMonthDataAsync(string countryCode, string zipCode, Method method, DateTime? date = null)
-        {
-            Request request = new Request()
-            {
-                CountryCode = countryCode,
-                ZipCode = zipCode,
-                Method = (byte)method,
-                Date = date ?? TimeStamp.Date,
-                ShowEntireMonth = true
-            };
-            var res = await GetDataAsync<EntireMonthResponse>(request);
-            return res;
-        }
-
-        private static async Task<T> GetDataAsync<T>(Request request) where T : Response
+        private static async Task<T> GetDataAsync<T>(IRequest request) where T : Response
         {
             try
             {
-                HttpClient client = new HttpClient();
-                var httpResponse = await client.GetAsync(request.ToUrl());
-                if (httpResponse.IsSuccessStatusCode)
+                using (HttpClient client = new HttpClient())
                 {
-                    string responseBody = await httpResponse.Content.ReadAsStringAsync();
-                    if (string.IsNullOrEmpty(responseBody))
+                    var httpResponse = await client.GetAsync(request.GetUrl());
+                    if (httpResponse.IsSuccessStatusCode)
                     {
-                        throw new IslamicFinderApiException("Islamic Finder service did not respond with data.");
+                        string responseBody = await httpResponse.Content.ReadAsStringAsync();
+
+                        if (string.IsNullOrEmpty(responseBody))
+                        {
+                            throw new IslamicFinderApiException("Islamic Finder service did not respond with data.");
+                        }
+
+                        T apiResponse = JsonConvert.DeserializeObject<T>(responseBody);
+
+                        if (!apiResponse.Success)
+                        {
+                            throw new IslamicFinderApiException(apiResponse.Message);
+                        }
+
+                        return apiResponse;
                     }
-                    T apiResponse = JsonConvert.DeserializeObject<T>(responseBody);
-                    if (!apiResponse.Success)
+                    else
                     {
-                        throw new IslamicFinderApiException(apiResponse.Message);
+                        throw new IslamicFinderApiException($"Something went wrong: {httpResponse.ReasonPhrase} (StatusCode={httpResponse.StatusCode})");
                     }
-                    return apiResponse;
-                }
-                else
-                {
-                    throw new IslamicFinderApiException($"Something went wrong: {httpResponse.ReasonPhrase} (StatusCode={httpResponse.StatusCode})");
                 }
             }
             catch (HttpRequestException hre)

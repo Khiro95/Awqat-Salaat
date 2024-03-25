@@ -6,8 +6,8 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:api="clr-namespace:AwqatSalaat.DataModel.IslamicFinderApi"
              xmlns:ui="clr-namespace:AwqatSalaat.UI"
+             xmlns:view="clr-namespace:AwqatSalaat.UI.Views"
              xmlns:vm="clr-namespace:AwqatSalaat.UI.ViewModels"
-             xmlns:controls="clr-namespace:AwqatSalaat.UI.Controls"
              xmlns:converters="clr-namespace:AwqatSalaat.UI.Converters"
              xmlns:mk="clr-namespace:AwqatSalaat.Markup"
              mc:Ignorable="d" 
@@ -25,15 +25,8 @@
                 <ResourceDictionary Source="../Assets/Vectors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <ObjectDataProvider x:Key="ApiMethodEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
-                <ObjectDataProvider.MethodParameters>
-                    <x:Type Type="{x:Type api:Method}"/>
-                </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>
-
             <BooleanToVisibilityConverter x:Key="BoolVisConverter"/>
             <converters:BoolToVisibilityInvertedConverter x:Key="BoolVisInvConverter"/>
-            <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <d:UserControl.DataContext>
@@ -167,54 +160,16 @@
                 <TextBlock Text="{Binding ErrorMessage}" d:Text="Something wrong happened, please check the settings and try again" TextAlignment="Center" TextWrapping="Wrap" Margin="8"/>
             </StackPanel>
         </Grid>
-        <Grid DataContext="{Binding WidgetSettings}" d:Visibility="Visible" Visibility="{Binding IsOpen, Converter={StaticResource BoolVisConverter}}" MinWidth="300">
+        <Grid DataContext="{Binding WidgetSettings}" d:Visibility="Visible" Visibility="{Binding IsOpen, Converter={StaticResource BoolVisConverter}}" MinWidth="300" MaxWidth="760">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="8"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="{mk:L11n UI.Panel.Settings}" VerticalAlignment="Center"/>
-            <StackPanel Orientation="Horizontal" Grid.Column="1">
+            <view:SettingsPanel Margin="0,-0,0,0" Grid.RowSpan="2"/>
+            <TextBlock Text="{mk:L11n UI.Panel.Settings}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE711;" Command="{Binding Cancel}" ToolTip="{mk:L11n UI.Settings.Cancel}"/>
                 <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE8FB;" Command="{Binding Save}" ToolTip="{mk:L11n UI.Settings.Confirm}"/>
-            </StackPanel>
-            <StackPanel DataContext="{Binding Settings}" Grid.Row="2" Grid.ColumnSpan="2">
-                <StackPanel.Resources>
-                    <Style TargetType="controls:SettingsItem" BasedOn="{StaticResource DefaultSettingsItemStyle}">
-                        <Setter Property="Margin" Value="0,16,0,0"/>
-                    </Style>
-                </StackPanel.Resources>
-                <controls:SettingsItem Header="{mk:L11n UI.Settings.Language}" Description="{mk:L11n UI.Settings.LanguageDescription}" Margin="0">
-                    <StackPanel Orientation="Horizontal" DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.WidgetSettings}" FlowDirection="LeftToRight" HorizontalAlignment="Left">
-                        <RadioButton Content="English" IsChecked="{Binding UseEnglish}" d:IsChecked="True" Margin="0,0,64,0"/>
-                        <RadioButton Content="العربية" IsChecked="{Binding UseArabic}" FlowDirection="RightToLeft"/>
-                    </StackPanel>
-                </controls:SettingsItem>
-                <controls:SettingsItem Header="{mk:L11n UI.Settings.ShowCountdown}" Description="{mk:L11n UI.Settings.ShowCountdownDescription}">
-                    <CheckBox IsChecked="{Binding ShowCountdown}"/>
-                </controls:SettingsItem>
-                <controls:SettingsItem Header="{mk:L11n UI.Settings.ReminderOffset}" Description="{mk:L11n UI.Settings.ReminderOffsetDescription}">
-                    <controls:NumericUpDown Value="{Binding NotificationDistance}" Maximum="720" Width="100" HorizontalAlignment="Left"/>
-                </controls:SettingsItem>
-                <controls:SettingsItem Header="{mk:L11n UI.Settings.CountryCode}" Description="{mk:L11n UI.Settings.CountryCodeDescription}">
-                    <TextBox Text="{Binding CountryCode}" MaxLength="2" Width="50" HorizontalAlignment="Left"/>
-                </controls:SettingsItem>
-                <controls:SettingsItem Header="{mk:L11n UI.Settings.ZipCode}" Description="{mk:L11n UI.Settings.ZipCodeDescription}">
-                    <TextBox Text="{Binding ZipCode}" Width="100" HorizontalAlignment="Left"/>
-                </controls:SettingsItem>
-                <controls:SettingsItem Header="{mk:L11n UI.Settings.Method}" Description="{mk:L11n UI.Settings.MethodDescription}">
-                    <ComboBox ItemsSource="{Binding Source={StaticResource ApiMethodEnum}}" SelectedItem="{Binding Method}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding ., Converter={StaticResource EnumDescriptionConverter}}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </controls:SettingsItem>
             </StackPanel>
         </Grid>
     </StackPanel>
