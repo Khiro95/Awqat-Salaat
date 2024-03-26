@@ -30,7 +30,7 @@ Also note that if you choose to use the widget on Windows 7/8/8.1 then make sure
 
 ## Installation
 
-Go to [Releases](https://github.com/Khiro95/Awqat-Salaat/releases/latest) page and download the installer that matches your OS architecture.
+Go to [Releases](https://github.com/Khiro95/Awqat-Salaat/releases) page and download the installer that matches your OS architecture.
 
 > [!warning]
 > If you choose the `x86` version of the installer while your OS is `x64`, then the widget won't install correctly.
@@ -46,6 +46,7 @@ It's expected that the widget will not appear after the installation finish, so 
 
   ![Right-click on taskbar again and this time Awqat Salaat name will appear under Toolbars](images/installation_step2.png)
 - Now the widget should appear on the taskbar. Click on it to show settings panel then enter the necessary inputs and click on ✔️ to save changes.
+  Note that you only need to configure the service you wish to use, unless you want both.
   
   ![The widget appear on the taskbar and settings panel open](images/installation_step3_1_en.png)
   ![The settings panel show Islamic Finder service settings](images/installation_step3_2_en.png)
@@ -74,6 +75,24 @@ To build Awqat Salaat widget and the preview app, the following is needed:
 
 In addition, to build the installer the following SDK is needed:
 - Wix Toolset Sdk v4.0.3
+
+## Changelog
+
+### v2.0
+
+- Add Al-Adhan's Prayer Times API.
+
+### v1.1.3
+
+- Show clearer error message when Islamic Finder's Prayer Times API is down.
+
+### v1.1
+
+- Fix compatibility issues with Windows 7.
+
+### v1.0
+
+- Initial release.
 
 ## Notes
 
