@@ -53,7 +53,7 @@
     </UserControl.Resources>
     <Grid>
         <TabControl x:Name="tabControl">
-            <TabItem Header="{mk:L11n UI.Settings.Tabs.General}">
+            <controls:TabItemEx Header="{mk:L11n UI.Settings.Tabs.General}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel DataContext="{Binding Settings}" Margin="0,16,0,0">
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.Language}" Description="{mk:L11n UI.Settings.LanguageDescription}" Margin="0">
@@ -79,8 +79,8 @@
                         </controls:SettingsItem>
                     </StackPanel>
                 </ScrollViewer>
-            </TabItem>
-            <TabItem Header="Islamic Finder">
+            </controls:TabItemEx>
+            <controls:TabItemEx Header="Islamic Finder">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel DataContext="{Binding Settings}" Margin="0,16,0,0">
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.CountryCode}" Description="{mk:L11n UI.Settings.CountryCodeDescription}" Margin="0">
@@ -100,8 +100,8 @@
                         </controls:SettingsItem>
                     </StackPanel>
                 </ScrollViewer>
-            </TabItem>
-            <TabItem Header="Al Adhan">
+            </controls:TabItemEx>
+            <controls:TabItemEx Header="Al Adhan">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel DataContext="{Binding Settings}" Margin="0,16,0,0">
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.CountryCode}" Description="{mk:L11n UI.Settings.CountryCodeDescription}" Margin="0">
@@ -121,7 +121,7 @@
                         </controls:SettingsItem>
                     </StackPanel>
                 </ScrollViewer>
-            </TabItem>
+            </controls:TabItemEx>
         </TabControl>
     </Grid>
 </UserControl>
