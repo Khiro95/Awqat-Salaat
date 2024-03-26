@@ -1,10 +1,7 @@
-﻿using AwqatSalaat.Helpers;
+﻿using AwqatSalaat.DataModel;
+using AwqatSalaat.Helpers;
 using AwqatSalaat.Properties;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace AwqatSalaat.UI.ViewModels
@@ -12,7 +9,9 @@ namespace AwqatSalaat.UI.ViewModels
     public class WidgetSettingsViewModel : ObservableObject
     {
         private bool isOpen = !Settings.Default.IsConfigured;
-        private (string countryCode, string zipCode, DataModel.IslamicFinderApi.Method method)? _backup;
+        private PrayerTimesService? _serviceBackup;
+        private (string countryCode, string zipCode, DataModel.IslamicFinderApi.Method method)? _islamicFinderBackup;
+        private (string countryCode, string city, DataModel.AlAdhanApi.Method method)? _alAdhanBackup;
 
         public bool IsOpen { get => isOpen; set => Open(value); }
         public bool UseArabic { get => Settings.DisplayLanguage == "ar"; set => SetLanguage("ar"); }
@@ -35,11 +34,17 @@ namespace AwqatSalaat.UI.ViewModels
                     OnPropertyChanged(nameof(UseEnglish));
                 }
             };
+            if (Settings.IsConfigured)
+            {
+                Settings.Upgrade();
+            }
         }
 
         private void SaveExecute(object obj)
         {
-            bool apiSettingsChanged = (Settings.CountryCode, Settings.ZipCode, Settings.Method) != _backup;
+            bool apiSettingsChanged = Settings.Service != _serviceBackup;
+            apiSettingsChanged |= (Settings.CountryCode, Settings.ZipCode, Settings.Method) != _islamicFinderBackup;
+            apiSettingsChanged |= (Settings.CountryCode, Settings.City, Settings.Method2) != _alAdhanBackup;
             Settings.IsConfigured = true;
             Settings.Save();
             IsOpen = false;
@@ -58,11 +63,15 @@ namespace AwqatSalaat.UI.ViewModels
             SetProperty(ref isOpen, value, nameof(IsOpen));
             if (value)
             {
-                _backup = (Settings.CountryCode, Settings.ZipCode, Settings.Method);
+                _serviceBackup = Settings.Service;
+                _islamicFinderBackup = (Settings.CountryCode, Settings.ZipCode, Settings.Method);
+                _alAdhanBackup = (Settings.CountryCode, Settings.City, Settings.Method2);
             }
             else
             {
-                _backup = null;
+                _serviceBackup = null;
+                _islamicFinderBackup = null;
+                _alAdhanBackup = null;
             }
         }
 

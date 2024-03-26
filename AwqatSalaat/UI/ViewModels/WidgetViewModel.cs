@@ -1,11 +1,10 @@
-﻿using AwqatSalaat.DataModel.IslamicFinderApi;
+﻿using AwqatSalaat.DataModel;
 using AwqatSalaat.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -18,6 +17,7 @@ namespace AwqatSalaat.UI.ViewModels
         private DateTime displayedDate = TimeStamp.Date;
         private string error, city, country;
         private Dictionary<DateTime, PrayerTimes> latestData;
+        private IServiceClient serviceClient;
 
         public PrayerTimeViewModel Next { get => next; private set => SetProperty(ref next, value); }
         public bool IsRefreshing { get => isRefreshing; private set => SetProperty(ref isRefreshing, value); }
@@ -44,6 +44,7 @@ namespace AwqatSalaat.UI.ViewModels
             {
                 item.Elapsed += TimeElapsed;
             }
+
             Refresh = new RelayCommand(o => RefreshData(), o => !isRefreshing);
             OpenSettings = new RelayCommand(o => WidgetSettings.IsOpen = true, o => !IsRefreshing);
             WidgetSettings.Updated += SettingsUpdated;
@@ -51,11 +52,15 @@ namespace AwqatSalaat.UI.ViewModels
             if (WidgetSettings.Settings.IsConfigured)
             {
                 SettingsUpdated(false);
-                var cached = JsonConvert.DeserializeObject<EntireMonthResponse>(WidgetSettings.Settings.ApiCache);
+                UpdateServiceClient();
+
+                var cached = JsonConvert.DeserializeObject<ServiceData>(WidgetSettings.Settings.ApiCache);
+
                 if (cached != null)
                 {
                     OnDataLoaded(cached);
                 }
+
                 RefreshData();
             }
         }
@@ -66,8 +71,11 @@ namespace AwqatSalaat.UI.ViewModels
             {
                 time.Distance = WidgetSettings.Settings.NotificationDistance;
             }
+
             if (hasApiSettingsChanged)
             {
+                UpdateServiceClient();
+
                 latestData = null;
                 WidgetSettings.Settings.ApiCache = null;
                 WidgetSettings.Settings.Save();
@@ -78,9 +86,11 @@ namespace AwqatSalaat.UI.ViewModels
         private void TimeElapsed(object sender, EventArgs e)
         {
             PrayerTimeViewModel prayerTime = (PrayerTimeViewModel)sender;
+
             if (prayerTime.Key == nameof(PrayerTimes.Isha))
             {
                 DisplayedDate = TimeStamp.NextDate;
+
                 if (!Update())
                 {
                     RefreshData();
@@ -100,9 +110,11 @@ namespace AwqatSalaat.UI.ViewModels
                 {
                     Items.Single(i => i.Key == time.Key).SetTime(time.Value);
                 }
+
                 UpdateNext();
                 return true;
             }
+
             return false;
         }
 
@@ -112,19 +124,21 @@ namespace AwqatSalaat.UI.ViewModels
             {
                 next.IsNext = false;
             }
+
             // Sorting doesn't hurt here, we only have 5 items :)
             Next = Items.Where(i => !i.IsElapsed).OrderBy(i => i.Countdown.TotalSeconds).FirstOrDefault();
+
             if (next != null)
             {
                 next.IsNext = true;
             }
         }
 
-        private bool OnDataLoaded(EntireMonthResponse response)
+        private bool OnDataLoaded(ServiceData response)
         {
             latestData = response.Times;
-            Country = response.Settings.Location.Country;
-            City = response.Settings.Location.City;
+            Country = response.Location?.Country;
+            City = response.Location?.City;
             return Update();
         }
 
@@ -134,35 +148,27 @@ namespace AwqatSalaat.UI.ViewModels
             {
                 ErrorMessage = null;
                 IsRefreshing = true;
-                var apiResponse = await Client.GetEntireMonthDataAsync(
-                    WidgetSettings.Settings.CountryCode,
-                    WidgetSettings.Settings.ZipCode,
-                    WidgetSettings.Settings.Method,
-                    DisplayedDate);
+
+                IRequest request = BuildRequest(DisplayedDate, true);
+
+                var apiResponse = await serviceClient.GetDataAsync(request);
+
                 // If Isha has passed, then we look for the next day
                 if (DisplayedDate == TimeStamp.Date && TimeStamp.Now > apiResponse.Times[TimeStamp.Date].Max(t => t.Value))
                 {
                     DisplayedDate = TimeStamp.NextDate;
+
                     if (TimeStamp.Date.Month != TimeStamp.NextDate.Month)
                     {
-                        latestData = null;
-                        apiResponse = await Client.GetEntireMonthDataAsync(
-                            WidgetSettings.Settings.CountryCode,
-                            WidgetSettings.Settings.ZipCode,
-                            WidgetSettings.Settings.Method,
-                            TimeStamp.NextDate);
+                        request = BuildRequest(TimeStamp.NextDate, true);
+                        apiResponse = await serviceClient.GetDataAsync(request);
                     }
                 }
+
                 OnDataLoaded(apiResponse);
 
                 // Cache the result for offline use, just in case
-                var cache = new
-                {
-                    apiResponse.Results,
-                    apiResponse.Settings,
-                    apiResponse.Success
-                };
-                WidgetSettings.Settings.ApiCache = JsonConvert.SerializeObject(cache);
+                WidgetSettings.Settings.ApiCache = JsonConvert.SerializeObject(apiResponse);
                 WidgetSettings.Settings.Save();
             }
             catch (NetworkException nex)
@@ -179,9 +185,53 @@ namespace AwqatSalaat.UI.ViewModels
                     next.IsNext = false;
                     next = null;
                 }
+
                 ErrorMessage = ex.Message;
             }
+
             IsRefreshing = false;
+        }
+
+        private void UpdateServiceClient()
+        {
+            switch (WidgetSettings.Settings.Service)
+            {
+                case PrayerTimesService.IslamicFinder:
+                    serviceClient = new DataModel.IslamicFinderApi.Client();
+                    break;
+                case PrayerTimesService.AlAdhan:
+                    serviceClient = new DataModel.AlAdhanApi.Client();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private IRequest BuildRequest(DateTime date, bool getEntireMonth)
+        {
+            switch (WidgetSettings.Settings.Service)
+            {
+                case PrayerTimesService.IslamicFinder:
+                    return new DataModel.IslamicFinderApi.Request
+                    {
+                        CountryCode = WidgetSettings.Settings.CountryCode,
+                        ZipCode = WidgetSettings.Settings.ZipCode,
+                        Method = WidgetSettings.Settings.Method,
+                        Date = date,
+                        GetEntireMonth = getEntireMonth
+                    };
+                case PrayerTimesService.AlAdhan:
+                    return new DataModel.AlAdhanApi.Request
+                    {
+                        Country = WidgetSettings.Settings.CountryCode,
+                        City = WidgetSettings.Settings.City,
+                        Method = WidgetSettings.Settings.Method2,
+                        Date = date,
+                        GetEntireMonth = getEntireMonth
+                    };
+                default:
+                    return null;
+            }
         }
     }
 }

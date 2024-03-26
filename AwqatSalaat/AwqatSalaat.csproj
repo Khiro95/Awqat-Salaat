@@ -4,7 +4,6 @@
     <TargetFramework>net472</TargetFramework>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64;x86</Platforms>
-    <FileVersion>1.0.0.0</FileVersion>
     <Company />
     <Authors>Khiro</Authors>
     <RepositoryUrl>https://github.com/Khiro95/Awqat-Salaat.git</RepositoryUrl>
