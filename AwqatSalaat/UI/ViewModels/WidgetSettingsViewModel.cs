@@ -34,10 +34,6 @@ namespace AwqatSalaat.UI.ViewModels
                     OnPropertyChanged(nameof(UseEnglish));
                 }
             };
-            if (Settings.IsConfigured)
-            {
-                Settings.Upgrade();
-            }
         }
 
         private void SaveExecute(object obj)
