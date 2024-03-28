@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AwqatSalaat.DataModel.IslamicFinderApi
+namespace AwqatSalaat.Services.IslamicFinder
 {
     public class IslamicFinderApiException : Exception
     {

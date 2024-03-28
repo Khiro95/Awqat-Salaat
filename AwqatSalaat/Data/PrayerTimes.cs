@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AwqatSalaat.DataModel
+namespace AwqatSalaat.Data
 {
     public class PrayerTimes : IEnumerable<KeyValuePair<string, DateTime>>
     {

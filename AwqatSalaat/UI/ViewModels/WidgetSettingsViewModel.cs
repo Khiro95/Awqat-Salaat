@@ -1,8 +1,11 @@
-﻿using AwqatSalaat.DataModel;
+﻿using AwqatSalaat.Data;
 using AwqatSalaat.Helpers;
-using AwqatSalaat.Properties;
+using AwqatSalaat.Services.AlAdhan;
+using AwqatSalaat.Services.IslamicFinder;
 using System;
 using System.Windows.Input;
+
+using Settings = AwqatSalaat.Properties.Settings;
 
 namespace AwqatSalaat.UI.ViewModels
 {
@@ -10,8 +13,8 @@ namespace AwqatSalaat.UI.ViewModels
     {
         private bool isOpen = !Settings.Default.IsConfigured;
         private PrayerTimesService? _serviceBackup;
-        private (string countryCode, string zipCode, DataModel.IslamicFinderApi.Method method)? _islamicFinderBackup;
-        private (string countryCode, string city, DataModel.AlAdhanApi.Method method)? _alAdhanBackup;
+        private (string countryCode, string zipCode, IslamicFinderMethod method)? _islamicFinderBackup;
+        private (string countryCode, string city, AlAdhanMethod method)? _alAdhanBackup;
 
         public bool IsOpen { get => isOpen; set => Open(value); }
         public bool UseArabic { get => Settings.DisplayLanguage == "ar"; set => SetLanguage("ar"); }

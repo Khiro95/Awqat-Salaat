@@ -1,5 +1,8 @@
-﻿using AwqatSalaat.DataModel;
+﻿using AwqatSalaat.Data;
 using AwqatSalaat.Helpers;
+using AwqatSalaat.Services;
+using AwqatSalaat.Services.AlAdhan;
+using AwqatSalaat.Services.IslamicFinder;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -197,10 +200,10 @@ namespace AwqatSalaat.UI.ViewModels
             switch (WidgetSettings.Settings.Service)
             {
                 case PrayerTimesService.IslamicFinder:
-                    serviceClient = new DataModel.IslamicFinderApi.Client();
+                    serviceClient = new IslamicFinderClient();
                     break;
                 case PrayerTimesService.AlAdhan:
-                    serviceClient = new DataModel.AlAdhanApi.Client();
+                    serviceClient = new AlAdhanClient();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -212,7 +215,7 @@ namespace AwqatSalaat.UI.ViewModels
             switch (WidgetSettings.Settings.Service)
             {
                 case PrayerTimesService.IslamicFinder:
-                    return new DataModel.IslamicFinderApi.Request
+                    return new IslamicFinderRequest
                     {
                         CountryCode = WidgetSettings.Settings.CountryCode,
                         ZipCode = WidgetSettings.Settings.ZipCode,
@@ -221,7 +224,7 @@ namespace AwqatSalaat.UI.ViewModels
                         GetEntireMonth = getEntireMonth
                     };
                 case PrayerTimesService.AlAdhan:
-                    return new DataModel.AlAdhanApi.Request
+                    return new AlAdhanRequest
                     {
                         Country = WidgetSettings.Settings.CountryCode,
                         City = WidgetSettings.Settings.City,

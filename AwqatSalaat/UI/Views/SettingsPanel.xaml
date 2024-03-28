@@ -10,9 +10,9 @@
              xmlns:converters="clr-namespace:AwqatSalaat.UI.Converters"
              xmlns:mk="clr-namespace:AwqatSalaat.Markup"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:data="clr-namespace:AwqatSalaat.DataModel"
-             xmlns:api="clr-namespace:AwqatSalaat.DataModel.IslamicFinderApi"
-             xmlns:api2="clr-namespace:AwqatSalaat.DataModel.AlAdhanApi"
+             xmlns:data="clr-namespace:AwqatSalaat.Data"
+             xmlns:api1="clr-namespace:AwqatSalaat.Services.IslamicFinder"
+             xmlns:api2="clr-namespace:AwqatSalaat.Services.AlAdhan"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="800" d:Background="#192025">
     <d:UserControl.DataContext>
@@ -30,12 +30,12 @@
 
             <ObjectDataProvider x:Key="IslamicFinderMethodEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
                 <ObjectDataProvider.MethodParameters>
-                    <x:Type Type="{x:Type api:Method}"/>
+                    <x:Type Type="{x:Type api1:IslamicFinderMethod}"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
             <ObjectDataProvider x:Key="AlAdhanMethodEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
                 <ObjectDataProvider.MethodParameters>
-                    <x:Type Type="{x:Type api2:Method}"/>
+                    <x:Type Type="{x:Type api2:AlAdhanMethod}"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
             <ObjectDataProvider x:Key="PrayerTimesServiceEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">

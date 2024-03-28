@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AwqatSalaat.DataModel.AlAdhanApi
+namespace AwqatSalaat.Services.AlAdhan
 {
     internal class AlAdhanApiException : Exception
     {

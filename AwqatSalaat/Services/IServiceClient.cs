@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace AwqatSalaat.DataModel
+namespace AwqatSalaat.Services
 {
     public interface IServiceClient
     {

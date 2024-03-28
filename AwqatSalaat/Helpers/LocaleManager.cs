@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 
 namespace AwqatSalaat.Helpers
@@ -13,15 +12,16 @@ namespace AwqatSalaat.Helpers
         public static string Current { get => _current; set => SetLocale(value); }
 
         public static event EventHandler CurrentChanged;
-        //public static event PropertyChangedEventHandler StaticPropertyChanged;
 
         static LocaleManager()
         {
             var lang = Properties.Settings.Default.DisplayLanguage;
+
             if (string.IsNullOrEmpty(lang))
             {
                 lang = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
             }
+
             SetLocale(lang);
         }
 
@@ -46,8 +46,6 @@ namespace AwqatSalaat.Helpers
 
             if (!AvailableLocales.Contains(locale))
             {
-                //throw new ArgumentOutOfRangeException($"The locale {locale} is not recognized.");
-
                 if (_current == "en")
                 {
                     return;
@@ -62,7 +60,6 @@ namespace AwqatSalaat.Helpers
             Properties.Resources.Culture = new System.Globalization.CultureInfo(locale);
             Properties.Settings.Default.DisplayLanguage = locale;
             CurrentChanged?.Invoke(null, EventArgs.Empty);
-            //StaticPropertyChanged?.Invoke(null, new PropertyChangedEventArgs(nameof(Current)));
         }
     }
 }

@@ -1,16 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using AwqatSalaat.Data;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace AwqatSalaat.DataModel.IslamicFinderApi
+namespace AwqatSalaat.Services.IslamicFinder
 {
-    public class Client : IServiceClient
+    internal class IslamicFinderClient : IServiceClient
     {
         public async Task<ServiceData> GetDataAsync(IRequest request)
         {
-            var req = (Request)request;
+            var req = (IslamicFinderRequest)request;
 
             if (req.GetEntireMonth)
             {

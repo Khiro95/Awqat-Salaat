@@ -1,4 +1,4 @@
-﻿namespace AwqatSalaat.DataModel
+﻿namespace AwqatSalaat.Data
 {
     public class Location
     {

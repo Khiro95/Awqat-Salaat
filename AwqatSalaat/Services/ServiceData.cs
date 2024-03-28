@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using AwqatSalaat.Data;
 
-namespace AwqatSalaat.DataModel
+namespace AwqatSalaat.Services
 {
     public class ServiceData
     {

@@ -1,15 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using AwqatSalaat.Data;
+using Newtonsoft.Json;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace AwqatSalaat.DataModel.AlAdhanApi
+namespace AwqatSalaat.Services.AlAdhan
 {
-    internal class Client : IServiceClient
+    internal class AlAdhanClient : IServiceClient
     {
         public async Task<ServiceData> GetDataAsync(IRequest request)
         {
-            var req = (Request)request;
+            var req = (AlAdhanRequest)request;
 
             if (req.GetEntireMonth)
             {

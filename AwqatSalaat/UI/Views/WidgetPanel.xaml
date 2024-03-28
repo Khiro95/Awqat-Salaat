@@ -3,8 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:api="clr-namespace:AwqatSalaat.DataModel.IslamicFinderApi"
              xmlns:ui="clr-namespace:AwqatSalaat.UI"
              xmlns:view="clr-namespace:AwqatSalaat.UI.Views"
              xmlns:vm="clr-namespace:AwqatSalaat.UI.ViewModels"

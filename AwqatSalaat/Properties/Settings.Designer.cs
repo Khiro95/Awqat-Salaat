@@ -62,9 +62,9 @@ namespace AwqatSalaat.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("MWL")]
-        public global::AwqatSalaat.DataModel.IslamicFinderApi.Method Method {
+        public global::AwqatSalaat.Services.IslamicFinder.IslamicFinderMethod Method {
             get {
-                return ((global::AwqatSalaat.DataModel.IslamicFinderApi.Method)(this["Method"]));
+                return ((global::AwqatSalaat.Services.IslamicFinder.IslamicFinderMethod)(this["Method"]));
             }
             set {
                 this["Method"] = value;
@@ -134,9 +134,9 @@ namespace AwqatSalaat.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("MWL")]
-        public global::AwqatSalaat.DataModel.AlAdhanApi.Method Method2 {
+        public global::AwqatSalaat.Services.AlAdhan.AlAdhanMethod Method2 {
             get {
-                return ((global::AwqatSalaat.DataModel.AlAdhanApi.Method)(this["Method2"]));
+                return ((global::AwqatSalaat.Services.AlAdhan.AlAdhanMethod)(this["Method2"]));
             }
             set {
                 this["Method2"] = value;
@@ -146,9 +146,9 @@ namespace AwqatSalaat.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("IslamicFinder")]
-        public global::AwqatSalaat.DataModel.PrayerTimesService Service {
+        public global::AwqatSalaat.Data.PrayerTimesService Service {
             get {
-                return ((global::AwqatSalaat.DataModel.PrayerTimesService)(this["Service"]));
+                return ((global::AwqatSalaat.Data.PrayerTimesService)(this["Service"]));
             }
             set {
                 this["Service"] = value;

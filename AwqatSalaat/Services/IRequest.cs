@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AwqatSalaat.DataModel
+namespace AwqatSalaat.Services
 {
     public interface IRequest
     {
