@@ -88,7 +88,7 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Farjr.
+        ///   Looks up a localized string similar to Fajr.
         /// </summary>
         public static string Data_Salaat_Fajr {
             get {

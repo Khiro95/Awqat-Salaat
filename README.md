@@ -78,6 +78,11 @@ In addition, to build the installer the following SDK is needed:
 
 ## Changelog
 
+### v2.0.1
+
+- Fix a typo in **Fajr** prayer English name.
+- Stabilize version numbers calculation
+
 ### v2.0
 
 - Add Al-Adhan's Prayer Times API.
