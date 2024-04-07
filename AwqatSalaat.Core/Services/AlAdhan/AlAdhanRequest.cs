@@ -2,7 +2,7 @@
 
 namespace AwqatSalaat.Services.AlAdhan
 {
-    internal class AlAdhanRequest : IRequest
+    public class AlAdhanRequest : IRequest
     {
         public DateTime Date { get; set; }
         public string Country { get; set; }

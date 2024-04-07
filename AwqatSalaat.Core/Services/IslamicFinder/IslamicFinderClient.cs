@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AwqatSalaat.Services.IslamicFinder
 {
-    internal class IslamicFinderClient : IServiceClient
+    public class IslamicFinderClient : IServiceClient
     {
         public async Task<ServiceData> GetDataAsync(IRequest request)
         {

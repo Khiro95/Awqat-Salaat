@@ -1,5 +1,5 @@
 ﻿using AwqatSalaat.Helpers;
-using AwqatSalaat.UI.ViewModels;
+using AwqatSalaat.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;

@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.33027.164
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwqatSalaat", "AwqatSalaat\AwqatSalaat.csproj", "{6F78779E-1B38-4D4C-A8C1-B6B48B21D74E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwqatSalaat.Preview", "AwqatSalaat.Preview\AwqatSalaat.Preview.csproj", "{AC52A14F-6E73-4A86-B2DE-9A48B654374E}"
 EndProject
 Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "AwqatSalaat.Package", "AwqatSalaat.Package\AwqatSalaat.Package.wixproj", "{BCCB0ECD-B46C-4BBF-A358-2DEB28D533FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwqatSalaat.Core", "AwqatSalaat.Core\AwqatSalaat.Core.csproj", "{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,22 @@ Global
 		{BCCB0ECD-B46C-4BBF-A358-2DEB28D533FA}.Release|x64.Build.0 = Release|x64
 		{BCCB0ECD-B46C-4BBF-A358-2DEB28D533FA}.Release|x86.ActiveCfg = Release|x86
 		{BCCB0ECD-B46C-4BBF-A358-2DEB28D533FA}.Release|x86.Build.0 = Release|x86
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Debug|x64.Build.0 = Debug|Any CPU
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Debug|x86.Build.0 = Debug|Any CPU
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Release|ARM64.Build.0 = Release|Any CPU
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Release|x64.ActiveCfg = Release|Any CPU
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Release|x64.Build.0 = Release|Any CPU
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Release|x86.ActiveCfg = Release|Any CPU
+		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

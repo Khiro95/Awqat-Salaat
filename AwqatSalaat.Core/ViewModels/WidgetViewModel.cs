@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace AwqatSalaat.UI.ViewModels
+namespace AwqatSalaat.ViewModels
 {
     public class WidgetViewModel : ObservableObject
     {
@@ -23,7 +23,16 @@ namespace AwqatSalaat.UI.ViewModels
         private IServiceClient serviceClient;
 
         public PrayerTimeViewModel Next { get => next; private set => SetProperty(ref next, value); }
-        public bool IsRefreshing { get => isRefreshing; private set => SetProperty(ref isRefreshing, value); }
+        public bool IsRefreshing
+        {
+            get => isRefreshing;
+            private set
+            {
+                SetProperty(ref isRefreshing, value);
+                Refresh.RaiseCanExecuteChanged();
+                OpenSettings.RaiseCanExecuteChanged();
+            }
+        }
         public string ErrorMessage { get => error; private set { SetProperty(ref error, value); OnPropertyChanged(nameof(HasError)); } }
         public bool HasError => !string.IsNullOrEmpty(error);
         public DateTime DisplayedDate { get => displayedDate; private set => SetProperty(ref displayedDate, value); }
@@ -38,8 +47,8 @@ namespace AwqatSalaat.UI.ViewModels
             new PrayerTimeViewModel(nameof(PrayerTimes.Isha)),
         };
         public WidgetSettingsViewModel WidgetSettings { get; } = new WidgetSettingsViewModel();
-        public ICommand Refresh { get; }
-        public ICommand OpenSettings { get; }
+        public RelayCommand Refresh { get; }
+        public RelayCommand OpenSettings { get; }
 
         public WidgetViewModel()
         {
@@ -49,7 +58,7 @@ namespace AwqatSalaat.UI.ViewModels
             }
 
             Refresh = new RelayCommand(o => RefreshData(), o => !isRefreshing);
-            OpenSettings = new RelayCommand(o => WidgetSettings.IsOpen = true, o => !IsRefreshing);
+            OpenSettings = new RelayCommand(o => WidgetSettings.IsOpen = true, o => !isRefreshing);
             WidgetSettings.Updated += SettingsUpdated;
 
             if (WidgetSettings.Settings.IsConfigured)

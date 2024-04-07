@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AwqatSalaat.Services.AlAdhan
 {
-    internal class AlAdhanClient : IServiceClient
+    public class AlAdhanClient : IServiceClient
     {
         public async Task<ServiceData> GetDataAsync(IRequest request)
         {
