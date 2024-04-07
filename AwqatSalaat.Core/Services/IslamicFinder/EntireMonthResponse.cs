@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AwqatSalaat.Services.IslamicFinder
 {
-    internal class EntireMonthResponse : Response
+    public class EntireMonthResponse : Response
     {
         public Dictionary<string, Dictionary<string, string>> Results { get; set; }
         public Dictionary<DateTime, PrayerTimes> Times { get; set; }

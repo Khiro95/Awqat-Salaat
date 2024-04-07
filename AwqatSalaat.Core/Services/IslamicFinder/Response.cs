@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace AwqatSalaat.Services.IslamicFinder
 {
-    internal abstract class Response
+    public abstract class Response
     {
         protected TimeZoneInfo timeZone;
 

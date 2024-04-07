@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 using Settings = AwqatSalaat.Properties.Settings;
 
-namespace AwqatSalaat.UI.ViewModels
+namespace AwqatSalaat.ViewModels
 {
     public class WidgetSettingsViewModel : ObservableObject
     {

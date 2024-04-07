@@ -2,7 +2,7 @@
 
 namespace AwqatSalaat.Services.IslamicFinder
 {
-    internal class IslamicFinderRequest : IRequest
+    public class IslamicFinderRequest : IRequest
     {
         public string CountryCode { get; set; }
         public string ZipCode { get; set; }

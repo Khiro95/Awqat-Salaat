@@ -117,32 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="UI.Settings.ZipCode" xml:space="preserve">
-    <value>الرمز البريدي</value>
+  <data name="Data.Salaat.Fajr" xml:space="preserve">
+    <value>الفجر</value>
   </data>
-  <data name="UI.Settings.MethodDescription" xml:space="preserve">
-    <value>طريقة حساب الوقت باستخدام خطوط الطول والعرض وميل الشمس ومعطيات أخرى</value>
+  <data name="Data.Salaat.Dhuhr" xml:space="preserve">
+    <value>الظهر</value>
   </data>
-  <data name="UI.Summary.TapToStart" xml:space="preserve">
-    <value>انقر للبدء</value>
-  </data>
-  <data name="UI.Settings.ShowCountdown" xml:space="preserve">
-    <value>اظهار العد التنازلي</value>
-  </data>
-  <data name="UI.Panel.Settings" xml:space="preserve">
-    <value>إعدادات</value>
-  </data>
-  <data name="UI.Settings.ShowCountdownDescription" xml:space="preserve">
-    <value>تحديد ما اذا كان العد التنازلي يظهر جنب وقت الصلاة القادمة على شريط المهام</value>
-  </data>
-  <data name="UI.Settings.ReminderOffset" xml:space="preserve">
-    <value>وقت التنبيه</value>
-  </data>
-  <data name="UI.Summary.Refreshing" xml:space="preserve">
-    <value>جاري التحديث...</value>
-  </data>
-  <data name="UI.Panel.Refresh" xml:space="preserve">
-    <value>تحديث</value>
+  <data name="Data.Salaat.Asr" xml:space="preserve">
+    <value>العصر</value>
   </data>
   <data name="Data.Salaat.Maghrib" xml:space="preserve">
     <value>المغرب</value>
@@ -150,53 +132,71 @@
   <data name="Data.Salaat.Isha" xml:space="preserve">
     <value>العشاء</value>
   </data>
-  <data name="Data.Salaat.Fajr" xml:space="preserve">
-    <value>الفجر</value>
+  <data name="UI.Summary.TapToStart" xml:space="preserve">
+    <value>انقر للبدء</value>
+  </data>
+  <data name="UI.Summary.Refreshing" xml:space="preserve">
+    <value>جاري التحديث...</value>
   </data>
   <data name="UI.Summary.ErrorOccured" xml:space="preserve">
     <value>حدث خطأ</value>
   </data>
-  <data name="UI.Settings.Confirm" xml:space="preserve">
-    <value>تأكيد</value>
-  </data>
   <data name="UI.Summary.After" xml:space="preserve">
     <value>بعد</value>
   </data>
-  <data name="Data.Salaat.Asr" xml:space="preserve">
-    <value>العصر</value>
+  <data name="UI.Panel.Refresh" xml:space="preserve">
+    <value>تحديث</value>
   </data>
-  <data name="Data.AppName" xml:space="preserve">
-    <value>أوقات الصلاة</value>
-  </data>
-  <data name="Data.Salaat.Dhuhr" xml:space="preserve">
-    <value>الظهر</value>
+  <data name="UI.Panel.Settings" xml:space="preserve">
+    <value>إعدادات</value>
   </data>
   <data name="UI.Panel.CorrespondTo" xml:space="preserve">
     <value>الموافق لـ</value>
   </data>
+  <data name="UI.Settings.Confirm" xml:space="preserve">
+    <value>تأكيد</value>
+  </data>
   <data name="UI.Settings.Cancel" xml:space="preserve">
     <value>إلغاء</value>
+  </data>
+  <data name="UI.Settings.ShowCountdown" xml:space="preserve">
+    <value>اظهار العد التنازلي</value>
+  </data>
+  <data name="UI.Settings.ShowCountdownDescription" xml:space="preserve">
+    <value>تحديد ما اذا كان العد التنازلي يظهر جنب وقت الصلاة القادمة على شريط المهام</value>
+  </data>
+  <data name="UI.Settings.ReminderOffset" xml:space="preserve">
+    <value>وقت التنبيه</value>
+  </data>
+  <data name="UI.Settings.ReminderOffsetDescription" xml:space="preserve">
+    <value>عدد الدقائق التي تسبق دخول الوقت ويبدأ عندها الاشعار. القيمة 0 تعني تعطيل الاشعار</value>
   </data>
   <data name="UI.Settings.CountryCode" xml:space="preserve">
     <value>رمز الدولة</value>
   </data>
-  <data name="UI.Settings.Method" xml:space="preserve">
-    <value>طريقة الحساب</value>
-  </data>
   <data name="UI.Settings.CountryCodeDescription" xml:space="preserve">
     <value>الرمز مكون من حرفين باللاتينية. (مثال: الرمز DZ يدل على الجزائر)</value>
   </data>
-  <data name="UI.Settings.ReminderOffsetDescription" xml:space="preserve">
-    <value>عدد الدقائق التي تسبق دخول الوقت ويبدأ عندها الاشعار. القيمة 0 تعني تعطيل الاشعار</value>
+  <data name="UI.Settings.ZipCode" xml:space="preserve">
+    <value>الرمز البريدي</value>
+  </data>
+  <data name="UI.Settings.ZipCodeDescription" xml:space="preserve">
+    <value>هذا الرمز يستخدم لتحديد المدينة ويختلف شكله من بلد لآخر</value>
+  </data>
+  <data name="UI.Settings.Method" xml:space="preserve">
+    <value>طريقة الحساب</value>
+  </data>
+  <data name="UI.Settings.MethodDescription" xml:space="preserve">
+    <value>طريقة حساب الوقت باستخدام خطوط الطول والعرض وميل الشمس ومعطيات أخرى</value>
+  </data>
+  <data name="Data.AppName" xml:space="preserve">
+    <value>أوقات الصلاة</value>
   </data>
   <data name="UI.Controls.Toggle.On" xml:space="preserve">
     <value>تشغيل</value>
   </data>
   <data name="UI.Controls.Toggle.Off" xml:space="preserve">
     <value>إيقاف التشغيل</value>
-  </data>
-  <data name="UI.Settings.ZipCodeDescription" xml:space="preserve">
-    <value>هذا الرمز يستخدم لتحديد المدينة ويختلف شكله من بلد لآخر</value>
   </data>
   <data name="UI.Panel.Dismiss" xml:space="preserve">
     <value>تجاهل</value>

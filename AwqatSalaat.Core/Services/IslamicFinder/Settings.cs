@@ -2,7 +2,7 @@
 
 namespace AwqatSalaat.Services.IslamicFinder
 {
-    internal class Settings
+    public class Settings
     {
         public IslamicFinderMethod Method { get; set; }
         public string TimeZone { get; set; }
