@@ -9,6 +9,7 @@ namespace AwqatSalaat.ViewModels
     {
         private DateTime time;
         private bool isNext, isNotificationDismissed;
+        private PrayerTimeState state;
         private Timer timer;
 
         public string Name => LocaleManager.Get($"Data.Salaat.{Key}");
@@ -19,6 +20,7 @@ namespace AwqatSalaat.ViewModels
         public TimeSpan Countdown => time - TimeStamp.Now;
         public bool IsElapsed => time < TimeStamp.Now;
         public bool IsTimeClose => isNext && Distance > 0 && !isNotificationDismissed && !IsElapsed && Countdown.TotalMinutes <= Distance;
+        public PrayerTimeState State { get => state; set => SetProperty(ref state, value); }
         public ICommand DismissNotification { get; }
 
         public event EventHandler Elapsed;
@@ -39,6 +41,7 @@ namespace AwqatSalaat.ViewModels
             }
             OnPropertyChanged(nameof(IsElapsed));
             OnPropertyChanged(nameof(IsTimeClose));
+            UpdateState();
         }
 
         private void Activate(bool active)
@@ -75,6 +78,35 @@ namespace AwqatSalaat.ViewModels
             OnPropertyChanged(nameof(Countdown));
             OnPropertyChanged(nameof(IsElapsed));
             OnPropertyChanged(nameof(IsTimeClose));
+            UpdateState();
         }
+
+        private void UpdateState()
+        {
+            if (IsElapsed)
+            {
+                State = PrayerTimeState.Elapsed;
+            }
+            else if (IsTimeClose)
+            {
+                State = PrayerTimeState.Near;
+            }
+            else if (IsNext)
+            {
+                State = PrayerTimeState.Next;
+            }
+            else
+            {
+                State = PrayerTimeState.Coming;
+            }
+        }
+    }
+
+    public enum PrayerTimeState
+    {
+        Coming,
+        Next,
+        Near,
+        Elapsed
     }
 }
