@@ -195,7 +195,7 @@ namespace AwqatSalaat.ViewModels
                 if (next != null)
                 {
                     next.IsNext = false;
-                    next = null;
+                    Next = null;
                 }
 
                 ErrorMessage = ex.Message;
