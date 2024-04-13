@@ -3,7 +3,6 @@ using AwqatSalaat.Helpers;
 using AwqatSalaat.Services.AlAdhan;
 using AwqatSalaat.Services.IslamicFinder;
 using System;
-using System.Windows.Input;
 
 using Settings = AwqatSalaat.Properties.Settings;
 
@@ -33,8 +32,14 @@ namespace AwqatSalaat.ViewModels
             {
                 if (e.PropertyName == nameof(Settings.DisplayLanguage))
                 {
-                    OnPropertyChanged(nameof(UseArabic));
-                    OnPropertyChanged(nameof(UseEnglish));
+                    if (UseArabic)
+                    {
+                        OnPropertyChanged(nameof(UseArabic));
+                    }
+                    else
+                    {
+                        OnPropertyChanged(nameof(UseEnglish));
+                    }
                 }
             };
         }
@@ -78,7 +83,7 @@ namespace AwqatSalaat.ViewModels
 
         private void SetLanguage(string lang)
         {
-            LocaleManager.Current = lang;
+            LocaleManager.Default.Current = lang;
         }
     }
 }

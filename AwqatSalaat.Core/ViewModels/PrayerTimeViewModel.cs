@@ -12,7 +12,7 @@ namespace AwqatSalaat.ViewModels
         private PrayerTimeState state;
         private Timer timer;
 
-        public string Name => LocaleManager.Get($"Data.Salaat.{Key}");
+        public string Name => LocaleManager.Default.Get($"Data.Salaat.{Key}");
         public string Key { get; }
         public DateTime Time { get => time; private set => SetProperty(ref time, value); }
         public bool IsNext { get => isNext; set { SetProperty(ref isNext, value); Activate(value); } }
@@ -29,7 +29,7 @@ namespace AwqatSalaat.ViewModels
         {
             Key = key;
             DismissNotification = new RelayCommand(DismissExecute, o => IsTimeClose);
-            LocaleManager.CurrentChanged += (_, __) => OnPropertyChanged(nameof(Name));
+            LocaleManager.Default.CurrentChanged += (_, __) => OnPropertyChanged(nameof(Name));
         }
 
         public void SetTime(DateTime apiTime)

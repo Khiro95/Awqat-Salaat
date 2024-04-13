@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace AwqatSalaat.Helpers
 {
-    public static class LocaleManager
+    public class LocaleManager : INotifyPropertyChanged
     {
         private static readonly List<string> AvailableLocales = new List<string>() { "ar", "en" };
-        private static string _current;
 
-        public static string Current { get => _current; set => SetLocale(value); }
+        public static LocaleManager Default { get; } = new LocaleManager();
 
-        public static event EventHandler CurrentChanged;
 
-        static LocaleManager()
+        private string _current;
+
+        public string Current { get => _current; set => SetLocale(value); }
+
+        public event EventHandler CurrentChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private LocaleManager()
         {
             var lang = Properties.Settings.Default.DisplayLanguage;
 
@@ -25,9 +31,9 @@ namespace AwqatSalaat.Helpers
             SetLocale(lang);
         }
 
-        public static string Get(string key) => Properties.Resources.ResourceManager.GetString(key, Properties.Resources.Culture);
+        public string Get(string key) => Properties.Resources.ResourceManager.GetString(key, Properties.Resources.Culture);
 
-        private static void SetLocale(string locale)
+        private void SetLocale(string locale)
         {
             if (locale == _current)
             {
@@ -59,7 +65,8 @@ namespace AwqatSalaat.Helpers
             _current = locale;
             Properties.Resources.Culture = new System.Globalization.CultureInfo(locale);
             Properties.Settings.Default.DisplayLanguage = locale;
-            CurrentChanged?.Invoke(null, EventArgs.Empty);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Current)));
+            CurrentChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

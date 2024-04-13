@@ -59,7 +59,7 @@ namespace AwqatSalaat.UI.Views
                     ViewModel.WidgetSettings.Cancel.Execute(null);
                 }
             };
-            LocaleManager.CurrentChanged += (_, __) => UpdateDirection();
+            LocaleManager.Default.CurrentChanged += (_, __) => UpdateDirection();
             UpdateDirection();
         }
 
