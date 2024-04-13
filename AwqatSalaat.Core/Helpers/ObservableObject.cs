@@ -28,7 +28,14 @@ namespace AwqatSalaat.Helpers
             add
             {
                 propertyChanged += value;
-                synchronizationContext = synchronizationContext ?? SynchronizationContext.Current;
+
+                if (synchronizationContext is null && !(SynchronizationContext.Current is null))
+                {
+                    if (SynchronizationContext.Current.GetType().FullName.StartsWith("Microsoft.UI"))
+                    {
+                        synchronizationContext = synchronizationContext ?? SynchronizationContext.Current;
+                    }
+                }
             }
             remove
             {

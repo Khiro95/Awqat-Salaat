@@ -20,8 +20,8 @@ namespace AwqatSalaat.ViewModels
         public bool UseArabic { get => Settings.DisplayLanguage == "ar"; set => SetLanguage("ar"); }
         public bool UseEnglish { get => Settings.DisplayLanguage == "en"; set => SetLanguage("en"); }
         public Settings Settings => Settings.Default;
-        public ICommand Save { get; }
-        public ICommand Cancel { get; }
+        public RelayCommand Save { get; }
+        public RelayCommand Cancel { get; }
 
         public event Action<bool> Updated;
 
@@ -47,6 +47,7 @@ namespace AwqatSalaat.ViewModels
             Settings.IsConfigured = true;
             Settings.Save();
             IsOpen = false;
+            Cancel.RaiseCanExecuteChanged();
             Updated?.Invoke(apiSettingsChanged);
         }
 
@@ -55,6 +56,7 @@ namespace AwqatSalaat.ViewModels
             Settings.Reload();
             SetLanguage(Settings.DisplayLanguage);
             IsOpen = false;
+            Cancel.RaiseCanExecuteChanged();
         }
 
         private void Open(bool value)
