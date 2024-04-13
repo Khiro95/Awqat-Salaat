@@ -15,7 +15,7 @@ namespace AwqatSalaat.Markup
             {
                 if (parameter is string key)
                 {
-                    return LocaleManager.Get(key);
+                    return LocaleManager.Default.Get(key);
                 }
 
                 return null;
@@ -43,6 +43,7 @@ namespace AwqatSalaat.Markup
             Binding binding = new Binding
             {
                 Path = new PropertyPath(propInfo),
+                Source = LocaleManager.Default,
                 Converter = new LocaleKeyConverter(),
                 ConverterParameter = ResKey
             };
