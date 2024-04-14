@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "AwqatSalaat.WinUI (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "AwqatSalaat.WinUI (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

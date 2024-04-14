@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="AwqatSalaat.WinUI.Views.SettingsPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="using:System"
+    xmlns:dt="using:AwqatSalaat.Data"
+    xmlns:api1="using:AwqatSalaat.Services.IslamicFinder"
+    xmlns:api2="using:AwqatSalaat.Services.AlAdhan"
+    xmlns:mk="using:AwqatSalaat.WinUI.Markup"
+    xmlns:converters="using:AwqatSalaat.WinUI.Converters"
+    xmlns:local="using:AwqatSalaat.WinUI.Views"
+    xmlns:ctrl="using:AwqatSalaat.WinUI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:DefaultBindMode="TwoWay">
+    <UserControl.Resources>
+        <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
+
+        <Style TargetType="ctrl:SettingsItem" x:Key="DefaultSettingsItemStyle">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ctrl:SettingsItem">
+                        <StackPanel>
+                            <ContentPresenter Content="{TemplateBinding Header}"/>
+                            <TextBlock Text="{TemplateBinding Description}"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               TextWrapping="Wrap"
+                               Margin="0,8"/>
+                            <ContentPresenter/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--<Style TargetType="ctrl:SettingsItem" BasedOn="{StaticResource DefaultSettingsItemStyle}"/>-->
+        <Style TargetType="ctrl:SettingsItem" BasedOn="{StaticResource DefaultSettingsItemStyle}">
+            <Setter Property="Margin" Value="0,16,0,0"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <NavigationView x:Name="nav" PaneDisplayMode="Top" IsPaneOpen="True" IsTitleBarAutoPaddingEnabled="False" IsSettingsVisible="False" IsBackButtonVisible="Collapsed">
+            <NavigationView.PaneHeader>
+                <TextBlock Text="{mk:L11n Key=UI.Panel.Settings}" VerticalAlignment="Center" Margin="8,0"/>
+            </NavigationView.PaneHeader>
+            <NavigationView.PaneFooter>
+                <StackPanel Orientation="Horizontal" x:DefaultBindMode="OneWay">
+                    <AppBarButton Icon="Cancel" Width="32" Margin="0" Command="{x:Bind ViewModel.Cancel}" ToolTipService.ToolTip="{mk:L11n Key=UI.Settings.Cancel}"/>
+                    <AppBarButton Icon="Accept" Width="32" Margin="0" Command="{x:Bind ViewModel.Save}" ToolTipService.ToolTip="{mk:L11n Key=UI.Settings.Confirm}"/>
+                </StackPanel>
+            </NavigationView.PaneFooter>
+            <NavigationView.MenuItems>
+                <NavigationViewItem x:Name="generalTab" Content="{mk:L11n Key=UI.Settings.Tabs.General}" IsSelected="True"/>
+                <NavigationViewItem x:Name="islamicfinderTab" Content="Islamic Finder"/>
+                <NavigationViewItem x:Name="aladhanTab" Content="Al Adhan"/>
+            </NavigationView.MenuItems>
+            <Grid Margin="8">
+                <StackPanel Visibility="{x:Bind generalTab.IsSelected, Mode=OneWay}">
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Language}" Description="{mk:L11n Key=UI.Settings.LanguageDescription}">
+                        <RadioButtons MaxColumns="2">
+                            <RadioButton Content="English" IsChecked="{x:Bind ViewModel.UseEnglish}"/>
+                            <RadioButton Content="العربية" IsChecked="{x:Bind ViewModel.UseArabic}" FlowDirection="RightToLeft"/>
+                        </RadioButtons>
+                    </ctrl:SettingsItem>
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowCountdown}" Description="{mk:L11n Key=UI.Settings.ShowCountdownDescription}">
+                        <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.ShowCountdown}"/>
+                    </ctrl:SettingsItem>
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ReminderOffset}" Description="{mk:L11n Key=UI.Settings.ReminderOffsetDescription}">
+                        <NumberBox SpinButtonPlacementMode="Inline"
+                                   Value="{x:Bind ViewModel.Settings.NotificationDistance}"
+                                   Maximum="720"
+                                   HorizontalAlignment="Left"/>
+                    </ctrl:SettingsItem>
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ServiceProvider}" Description="{mk:L11n Key=UI.Settings.ServiceProviderDescription}">
+                        <ComboBox PlaceholderText="Pick a service"
+                                  ItemsSource="{mk:Enums Type=dt:PrayerTimesService}"
+                                  SelectedItem="{Binding Settings.Service, Mode=TwoWay}"
+                                  Width="150">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </ctrl:SettingsItem>
+                </StackPanel>
+                <StackPanel Visibility="{x:Bind islamicfinderTab.IsSelected, Mode=OneWay}">
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.CountryCode}" Description="{mk:L11n Key=UI.Settings.CountryCodeDescription}">
+                        <TextBox Text="{x:Bind ViewModel.Settings.CountryCode, UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Width="50" HorizontalAlignment="Left"/>
+                    </ctrl:SettingsItem>
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ZipCode}" Description="{mk:L11n Key=UI.Settings.ZipCodeDescription}">
+                        <TextBox Text="{x:Bind ViewModel.Settings.ZipCode, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left"/>
+                    </ctrl:SettingsItem>
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Method}" Description="{mk:L11n Key=UI.Settings.MethodDescription}">
+                        <ComboBox PlaceholderText="Pick a method"
+                                  ItemsSource="{mk:Enums Type=api1:IslamicFinderMethod}"
+                                  SelectedItem="{Binding Settings.Method, Mode=TwoWay}"
+                                  HorizontalAlignment="Stretch">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </ctrl:SettingsItem>
+                </StackPanel>
+                <StackPanel Visibility="{x:Bind aladhanTab.IsSelected, Mode=OneWay}">
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.CountryCode}" Description="{mk:L11n Key=UI.Settings.CountryCodeDescription}">
+                        <TextBox Text="{x:Bind ViewModel.Settings.CountryCode, UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Width="50" HorizontalAlignment="Left"/>
+                    </ctrl:SettingsItem>
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.City}" Description="{mk:L11n Key=UI.Settings.CityDescription}">
+                        <TextBox Text="{x:Bind ViewModel.Settings.City, UpdateSourceTrigger=PropertyChanged}" Width="250" HorizontalAlignment="Left"/>
+                    </ctrl:SettingsItem>
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Method}" Description="{mk:L11n Key=UI.Settings.MethodDescription}">
+                        <ComboBox PlaceholderText="Pick a method"
+                                  ItemsSource="{mk:Enums Type=api2:AlAdhanMethod}"
+                                  SelectedItem="{Binding Settings.Method2, Mode=TwoWay}"
+                                  HorizontalAlignment="Stretch">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </ctrl:SettingsItem>
+                </StackPanel>
+            </Grid>
+        </NavigationView>
+    </Grid>
+</UserControl>

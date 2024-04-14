@@ -11,6 +11,8 @@ Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "AwqatSalaat.Package", "Awqa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwqatSalaat.Core", "AwqatSalaat.Core\AwqatSalaat.Core.csproj", "{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwqatSalaat.WinUI", "AwqatSalaat.WinUI\AwqatSalaat.WinUI.csproj", "{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,30 @@ Global
 		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Release|x64.Build.0 = Release|Any CPU
 		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Release|x86.ActiveCfg = Release|Any CPU
 		{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}.Release|x86.Build.0 = Release|Any CPU
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Debug|Any CPU.Build.0 = Debug|x64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Debug|Any CPU.Deploy.0 = Debug|x64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Debug|ARM64.Build.0 = Debug|ARM64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Debug|ARM64.Deploy.0 = Debug|ARM64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Debug|x64.ActiveCfg = Debug|x64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Debug|x64.Build.0 = Debug|x64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Debug|x64.Deploy.0 = Debug|x64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Debug|x86.ActiveCfg = Debug|x86
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Debug|x86.Build.0 = Debug|x86
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Debug|x86.Deploy.0 = Debug|x86
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Release|Any CPU.ActiveCfg = Release|x64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Release|Any CPU.Build.0 = Release|x64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Release|Any CPU.Deploy.0 = Release|x64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Release|ARM64.ActiveCfg = Release|ARM64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Release|ARM64.Build.0 = Release|ARM64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Release|ARM64.Deploy.0 = Release|ARM64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Release|x64.ActiveCfg = Release|x64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Release|x64.Build.0 = Release|x64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Release|x64.Deploy.0 = Release|x64
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Release|x86.ActiveCfg = Release|x86
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Release|x86.Build.0 = Release|x86
+		{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
