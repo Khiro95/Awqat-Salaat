@@ -16,28 +16,30 @@
     mc:Ignorable="d"
     x:DefaultBindMode="TwoWay">
     <UserControl.Resources>
-        <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <x:Double x:Key="ToggleSwitchPreContentMargin">5</x:Double>
+                    <x:Double x:Key="ToggleSwitchPostContentMargin">5</x:Double>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <x:Double x:Key="ToggleSwitchPreContentMargin">5</x:Double>
+                    <x:Double x:Key="ToggleSwitchPostContentMargin">5</x:Double>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
 
-        <Style TargetType="ctrl:SettingsItem" x:Key="DefaultSettingsItemStyle">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ctrl:SettingsItem">
-                        <StackPanel>
-                            <ContentPresenter Content="{TemplateBinding Header}"/>
-                            <TextBlock Text="{TemplateBinding Description}"
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                               TextWrapping="Wrap"
-                               Margin="0,8"/>
-                            <ContentPresenter/>
-                        </StackPanel>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <!--<Style TargetType="ctrl:SettingsItem" BasedOn="{StaticResource DefaultSettingsItemStyle}"/>-->
-        <Style TargetType="ctrl:SettingsItem" BasedOn="{StaticResource DefaultSettingsItemStyle}">
-            <Setter Property="Margin" Value="0,16,0,0"/>
-        </Style>
+            <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
+
+            <!-- This doesn't work at the moment, binding in style setters isn't supported yet :( -->
+            <Style TargetType="ToggleSwitch" BasedOn="{StaticResource DefaultToggleSwitchStyle}">
+                <Setter Property="OnContent" Value="{mk:L11n Key=UI.Controls.Toggle.On}"/>
+                <Setter Property="OffContent" Value="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+            </Style>
+
+            <Style TargetType="ctrl:SettingsItem">
+                <Setter Property="Margin" Value="0,16,0,0"/>
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <NavigationView x:Name="nav" PaneDisplayMode="Top" IsPaneOpen="True" IsTitleBarAutoPaddingEnabled="False" IsSettingsVisible="False" IsBackButtonVisible="Collapsed">
@@ -57,14 +59,17 @@
             </NavigationView.MenuItems>
             <Grid Margin="8">
                 <StackPanel Visibility="{x:Bind generalTab.IsSelected, Mode=OneWay}">
-                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Language}" Description="{mk:L11n Key=UI.Settings.LanguageDescription}">
-                        <RadioButtons MaxColumns="2">
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Language}" Description="{mk:L11n Key=UI.Settings.LanguageDescription}" Margin="0,8,0,0">
+                        <RadioButtons MaxColumns="2" Margin="0,-8,0,0">
                             <RadioButton Content="English" IsChecked="{x:Bind ViewModel.UseEnglish}"/>
                             <RadioButton Content="العربية" IsChecked="{x:Bind ViewModel.UseArabic}" FlowDirection="RightToLeft"/>
                         </RadioButtons>
                     </ctrl:SettingsItem>
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartup}" Description="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartupDescription}">
+                        <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.LaunchOnWindowsStartup}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                    </ctrl:SettingsItem>
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowCountdown}" Description="{mk:L11n Key=UI.Settings.ShowCountdownDescription}">
-                        <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.ShowCountdown}"/>
+                        <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.ShowCountdown}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
                     </ctrl:SettingsItem>
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ReminderOffset}" Description="{mk:L11n Key=UI.Settings.ReminderOffsetDescription}">
                         <NumberBox SpinButtonPlacementMode="Inline"
@@ -86,7 +91,7 @@
                     </ctrl:SettingsItem>
                 </StackPanel>
                 <StackPanel Visibility="{x:Bind islamicfinderTab.IsSelected, Mode=OneWay}">
-                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.CountryCode}" Description="{mk:L11n Key=UI.Settings.CountryCodeDescription}">
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.CountryCode}" Description="{mk:L11n Key=UI.Settings.CountryCodeDescription}" Margin="0,8,0,0">
                         <TextBox Text="{x:Bind ViewModel.Settings.CountryCode, UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Width="50" HorizontalAlignment="Left"/>
                     </ctrl:SettingsItem>
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ZipCode}" Description="{mk:L11n Key=UI.Settings.ZipCodeDescription}">
@@ -106,7 +111,7 @@
                     </ctrl:SettingsItem>
                 </StackPanel>
                 <StackPanel Visibility="{x:Bind aladhanTab.IsSelected, Mode=OneWay}">
-                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.CountryCode}" Description="{mk:L11n Key=UI.Settings.CountryCodeDescription}">
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.CountryCode}" Description="{mk:L11n Key=UI.Settings.CountryCodeDescription}" Margin="0,8,0,0">
                         <TextBox Text="{x:Bind ViewModel.Settings.CountryCode, UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Width="50" HorizontalAlignment="Left"/>
                     </ctrl:SettingsItem>
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.City}" Description="{mk:L11n Key=UI.Settings.CityDescription}">

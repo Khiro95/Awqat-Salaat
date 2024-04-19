@@ -228,4 +228,22 @@
   <data name="UI.Settings.Tabs.General" xml:space="preserve">
     <value>عامة</value>
   </data>
+  <data name="UI.ContextMenu.Show" xml:space="preserve">
+    <value>إظهار</value>
+  </data>
+  <data name="UI.ContextMenu.Hide" xml:space="preserve">
+    <value>إخفاء</value>
+  </data>
+  <data name="UI.ContextMenu.Reposition" xml:space="preserve">
+    <value>إعادة التموقع</value>
+  </data>
+  <data name="UI.ContextMenu.Quit" xml:space="preserve">
+    <value>إنهاء</value>
+  </data>
+  <data name="UI.Settings.LaunchOnWindowsStartup" xml:space="preserve">
+    <value>البدء عند تشغيل ويندوز</value>
+  </data>
+  <data name="UI.Settings.LaunchOnWindowsStartupDescription" xml:space="preserve">
+    <value>السماح للأداة بالبدء عند تشغيل النظام</value>
+  </data>
 </root>

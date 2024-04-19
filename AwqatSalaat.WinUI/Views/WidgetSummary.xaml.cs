@@ -25,8 +25,14 @@ namespace AwqatSalaat.WinUI.Views
 #endif
             this.InitializeComponent();
             widgetPanel.Loaded += WidgetPanel_Loaded;
+            ViewModel.WidgetSettings.Updated += WidgetSettings_Updated;
             LocaleManager.Default.CurrentChanged += (_, __) => UpdateDirection();
             UpdateDirection();
+        }
+
+        private void WidgetSettings_Updated(bool apiSettingsUpdated)
+        {
+            App.SetLaunchOnWindowsStartup(ViewModel.WidgetSettings.Settings.LaunchOnWindowsStartup);
         }
 
         private void WidgetPanel_Loaded(object sender, RoutedEventArgs e)
@@ -34,7 +40,7 @@ namespace AwqatSalaat.WinUI.Views
             widgetPanel.Loaded -= WidgetPanel_Loaded;
             var presenter = widgetPanel.Parent as FlyoutPresenter;
             var popup = presenter.Parent as Popup;
-            popup.GettingFocus += (s, a) => a.Cancel = true;
+            //popup.GettingFocus += (s, a) => a.Cancel = true;
         }
 
         private void Flyout_Opened(object sender, object e)
@@ -44,6 +50,8 @@ namespace AwqatSalaat.WinUI.Views
 
         private void Flyout_Closed(object sender, object e)
         {
+            toggle.IsChecked = false;
+
             if (ViewModel.WidgetSettings.IsOpen && ViewModel.WidgetSettings.Settings.IsConfigured)
             {
                 ViewModel.WidgetSettings.Cancel.Execute(null);
@@ -52,7 +60,14 @@ namespace AwqatSalaat.WinUI.Views
 
         private void UpdateDirection()
         {
-            this.FlowDirection = Properties.Resources.Culture.TextInfo.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+            var dir = Properties.Resources.Culture.TextInfo.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+            btngrid.FlowDirection = dir;
+            widgetPanel.FlowDirection = dir;
+        }
+
+        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }
     }
 }

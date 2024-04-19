@@ -208,4 +208,22 @@
   <data name="UI.Settings.Tabs.General" xml:space="preserve">
     <value>General</value>
   </data>
+  <data name="UI.ContextMenu.Show" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="UI.ContextMenu.Hide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="UI.ContextMenu.Reposition" xml:space="preserve">
+    <value>Re-position</value>
+  </data>
+  <data name="UI.ContextMenu.Quit" xml:space="preserve">
+    <value>Quit</value>
+  </data>
+  <data name="UI.Settings.LaunchOnWindowsStartup" xml:space="preserve">
+    <value>Launch on Windows startup</value>
+  </data>
+  <data name="UI.Settings.LaunchOnWindowsStartupDescription" xml:space="preserve">
+    <value>Allow the widget to start running when Windows start</value>
+  </data>
 </root>

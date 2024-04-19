@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:sys="using:System"
+    xmlns:app="using:AwqatSalaat.WinUI"
     xmlns:local="using:AwqatSalaat.WinUI.Views"
     xmlns:helpers="using:AwqatSalaat.WinUI.Helpers"
     xmlns:converters="using:AwqatSalaat.WinUI.Converters"
@@ -32,6 +33,31 @@
                     <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
                     <StaticResource x:Key="ButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush" />
 
+                    <StaticResource x:Key="ToggleButtonBackground" ResourceKey="ControlFillColorTransparentBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundPointerOver" ResourceKey="ControlFillColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundPressed" ResourceKey="ControlFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundChecked" ResourceKey="ControlFillColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedPointerOver" ResourceKey="ControlFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedPressed" ResourceKey="ControlFillColorTertiaryBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedDisabled" ResourceKey="AccentFillColorDisabledBrush" />
+                    <StaticResource x:Key="ToggleButtonForeground" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundPressed" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundDisabled" ResourceKey="TextFillColorDisabledBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundChecked" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedPressed" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedDisabled" ResourceKey="TextOnAccentFillColorDisabled" />
+                    <StaticResource x:Key="ToggleButtonBorderBrush" ResourceKey="ControlFillColorTransparentBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushPointerOver" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushChecked" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPointerOver" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedDisabled" ResourceKey="ControlFillColorTransparentBrush" />
+
                     <StaticResource x:Key="NotificationFillColor" ResourceKey="SystemAccentColorDark1"/>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
@@ -48,12 +74,53 @@
                     <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
                     <StaticResource x:Key="ButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush" />
 
+                    <StaticResource x:Key="ToggleButtonBackground" ResourceKey="ControlFillColorTransparentBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundPointerOver" ResourceKey="ControlFillColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundPressed" ResourceKey="ControlFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundChecked" ResourceKey="ControlFillColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedPointerOver" ResourceKey="ControlFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedPressed" ResourceKey="ControlFillColorTertiaryBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedDisabled" ResourceKey="AccentFillColorDisabledBrush" />
+                    <StaticResource x:Key="ToggleButtonForeground" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundPressed" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundDisabled" ResourceKey="TextFillColorDisabledBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundChecked" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedPressed" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedDisabled" ResourceKey="TextOnAccentFillColorDisabled" />
+                    <StaticResource x:Key="ToggleButtonBorderBrush" ResourceKey="ControlFillColorTransparentBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushPointerOver" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushChecked" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPointerOver" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedDisabled" ResourceKey="ControlFillColorTransparentBrush" />
+
                     <StaticResource x:Key="NotificationFillColor" ResourceKey="SystemAccentColorLight2"/>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
             <converters:BooleanToVisibilityInvertedConverter x:Key="BooleanToVisibilityInvertedConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
+    <UserControl.Transitions>
+        <EdgeUIThemeTransition Edge="Bottom"/>
+    </UserControl.Transitions>
+    <UserControl.ContextFlyout>
+        <MenuFlyout ShouldConstrainToRootBounds="False" SystemBackdrop="{StaticResource AcrylicBackgroundFillColorDefaultBackdrop}">
+            <MenuFlyout.MenuFlyoutPresenterStyle>
+                <Style TargetType="MenuFlyoutPresenter" BasedOn="{StaticResource DefaultMenuFlyoutPresenterStyle}">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </MenuFlyout.MenuFlyoutPresenterStyle>
+            <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Hide}" Command="{x:Bind app:TaskBarManager.HideWidget, Mode=OneTime}"/>
+            <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Reposition}" Command="{x:Bind app:TaskBarManager.RepositionWidget, Mode=OneTime}"/>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Quit}" Command="{x:Bind app:App.Quit, Mode=OneTime}"/>
+        </MenuFlyout>
+    </UserControl.ContextFlyout>
     <Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="BackgroundStates">
@@ -79,8 +146,8 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        <Button Padding="0" FontSize="12" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
-            <Grid>
+        <ToggleButton x:Name="toggle" IsChecked="{x:Bind flyout.IsOpen}" IsThreeState="False" Checked="ToggleButton_Checked" Padding="0" FontSize="12" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <Grid x:Name="btngrid">
                 <Border x:Name="alert" Background="Transparent" CornerRadius="{ThemeResource ControlCornerRadius}"/>
                 <Grid Margin="4" Visibility="{x:Bind ViewModel.WidgetSettings.Settings.IsConfigured}">
                     <Grid Visibility="{x:Bind ViewModel.IsRefreshing, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
@@ -136,8 +203,8 @@
                     <TextBlock Text="{mk:L11n Key=UI.Summary.TapToStart}" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
             </Grid>
-            <Button.Flyout>
-                <Flyout ShouldConstrainToRootBounds="False" Opened="Flyout_Opened" Closed="Flyout_Closed">
+            <FlyoutBase.AttachedFlyout>
+                <Flyout x:Name="flyout" ShouldConstrainToRootBounds="False" SystemBackdrop="{StaticResource AcrylicBackgroundFillColorDefaultBackdrop}" Opened="Flyout_Opened" Closed="Flyout_Closed">
                     <Flyout.FlyoutPresenterStyle>
                         <Style TargetType="FlyoutPresenter" BasedOn="{StaticResource DefaultFlyoutPresenterStyle}">
                             <Setter Property="Background" Value="Transparent"/>
@@ -145,12 +212,9 @@
                             <Setter Property="MaxWidth" Value="1000" />
                         </Style>
                     </Flyout.FlyoutPresenterStyle>
-                    <Flyout.SystemBackdrop>
-                        <DesktopAcrylicBackdrop/>
-                    </Flyout.SystemBackdrop>
                     <local:WidgetPanel x:Name="widgetPanel" MinWidth="200"/>
                 </Flyout>
-            </Button.Flyout>
-        </Button>
+            </FlyoutBase.AttachedFlyout>
+        </ToggleButton>
     </Grid>
 </UserControl>
