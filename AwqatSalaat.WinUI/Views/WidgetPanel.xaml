@@ -51,7 +51,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0">
                         <TextBlock Text="{x:Bind converters:CustomDateConverter.Format(ViewModel.DisplayedDate, 'dddd', ash:LocaleManager.Default.Current)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" Margin="0,4" HorizontalAlignment="Center"/>
-                        <TextBlock Text="{x:Bind converters:CustomDateConverter.FormatHijri(ViewModel.DisplayedDate, 'dd MMMM yyyy', ash:LocaleManager.Default.Current)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" FlowDirection="RightToLeft" Margin="0,4" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{x:Bind ash:HijriDateHelper.Format(ViewModel.DisplayedDate, 'dd MMMM yyyy', ash:LocaleManager.Default.Current)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" FlowDirection="RightToLeft" Margin="0,4" HorizontalAlignment="Center"/>
                         <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center">
                             <TextBlock Text="{mk:L11n Key=UI.Panel.CorrespondTo}" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                             <TextBlock Text="{x:Bind ViewModel.DisplayedDate.ToString('dd/MM/yyyy', x:Null)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" Margin="4,0,0,0"/>

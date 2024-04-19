@@ -27,6 +27,8 @@ namespace AwqatSalaat.Markup
             }
         }
 
+        private static readonly LocaleKeyConverter localeKeyConverter = new LocaleKeyConverter();
+
         public string ResKey { get; }
 
         public L11nExtension() : base() { }
@@ -38,13 +40,11 @@ namespace AwqatSalaat.Markup
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            var propInfo = typeof(LocaleManager).GetProperty(nameof(LocaleManager.Current));
-
             Binding binding = new Binding
             {
-                Path = new PropertyPath(propInfo),
+                Path = new PropertyPath(nameof(LocaleManager.Current)),
                 Source = LocaleManager.Default,
-                Converter = new LocaleKeyConverter(),
+                Converter = localeKeyConverter,
                 ConverterParameter = ResKey
             };
 
