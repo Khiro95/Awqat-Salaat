@@ -25,6 +25,7 @@
 
             <BooleanToVisibilityConverter x:Key="BoolVisConverter"/>
             <converters:BoolToVisibilityInvertedConverter x:Key="BoolVisInvConverter"/>
+            <converters:HijriDateConverter x:Key="HijriDateConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <d:UserControl.DataContext>
@@ -56,7 +57,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" Grid.Row="0">
                         <TextBlock Text="{Binding DisplayedDate, StringFormat='dddd'}" Margin="0,4" HorizontalAlignment="Center"/>
-                        <TextBlock Text="{Binding DisplayedDate, StringFormat='dd MMMM yyyy'}" d:Text="28 صفر 1445" Language="ar" FlowDirection="RightToLeft" Margin="0,4" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding DisplayedDate, Converter={StaticResource HijriDateConverter}, ConverterParameter='dd MMMM yyyy'}" d:Text="28 صفر 1445" d:FlowDirection="RightToLeft" Margin="0,4" HorizontalAlignment="Center"/>
                         <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center">
                             <TextBlock Text="{mk:L11n UI.Panel.CorrespondTo}"/>
                             <TextBlock Text="{Binding DisplayedDate, StringFormat=dd/MM/yyyy}" Language="en" Margin="4,0,0,0"/>
