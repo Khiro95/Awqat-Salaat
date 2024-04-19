@@ -3,8 +3,17 @@ using System.Runtime.InteropServices;
 
 namespace AwqatSalaat.Interop
 {
+    public delegate IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+
     public static class User32
     {
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern int MessageBox(IntPtr HWND, string lpText, string lpCaption, uint uType);
+        public static int MessageBox(IntPtr HWND, string lpText, string lpCaption, MessageBoxButtons buttons)
+            => MessageBox(HWND, lpText, lpCaption, (uint)buttons);
+        public static int MessageBox(IntPtr HWND, string lpText, string lpCaption, MessageBoxButtons buttons, MessageBoxIcon icon)
+            => MessageBox(HWND, lpText, lpCaption, (uint)buttons | (uint)icon);
+
         [DllImport("user32.dll")]
         public static extern bool GetWindowRect([In] IntPtr hWnd, [Out] out RECT lpRect);
 
@@ -16,6 +25,38 @@ namespace AwqatSalaat.Interop
 
         [DllImport("user32.dll")]
         public static extern int SetWindowCompositionAttribute(IntPtr hwnd, ref WindowCompositionAttributeData data);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr DefWindowProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        public static extern ushort RegisterClassEx([In] ref WNDCLASSEX lpwcx);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetParent([In] IntPtr hWndChild, [In] IntPtr hWndNewParent);
+
+        [DllImport("User32.dll", CharSet = CharSet.Unicode)]
+        public static extern IntPtr FindWindow([In, MarshalAs(UnmanagedType.LPWStr)] string lpClassName, [In, MarshalAs(UnmanagedType.LPWStr)] string lpWindowName);
+
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        public static extern IntPtr CreateWindowEx(
+           WindowStylesExtended dwExStyle,
+           [In, MarshalAs(UnmanagedType.LPWStr)]
+           string lpClassName,
+           [In, MarshalAs(UnmanagedType.LPWStr)]
+           string lpWindowName,
+           WindowStyles dwStyle,
+           int x,
+           int y,
+           int nWidth,
+           int nHeight,
+           IntPtr hWndParent,
+           IntPtr hMenu,
+           IntPtr hInstance,
+           IntPtr lpParam);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern bool DestroyWindow(IntPtr hwnd);
     }
 
     public static class Dwmapi
@@ -34,6 +75,72 @@ namespace AwqatSalaat.Interop
     {
         [DllImport("shell32.dll")]
         public static extern UIntPtr SHAppBarMessage([In] AppBarMessage msg, [In, Out] ref APPBARDATA data);
+    }
+
+    public static class Kernel32
+    {
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr GetModuleHandle(string module);
+    }
+
+    [Flags]
+    public enum WindowStylesExtended
+    {
+        Default = 0,
+        WS_EX_LEFT = 0,
+        WS_EX_LAYERED = 0x80000,
+    }
+
+    [Flags]
+    public enum WindowStyles : uint
+    {
+        Default = 0,
+        WS_OVERLAPPED = 0,
+        WS_CHILD = 0x40000000,
+        WS_POPUP = 0x80000000,
+        WS_VISIBLE = 0x10000000,
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct WNDCLASSEX
+    {
+        public uint cbSize;
+        public uint style;
+        [MarshalAs(UnmanagedType.FunctionPtr)]
+        public WndProc lpfnWndProc;
+        public int cbClsExtra;
+        public int cbWndExtra;
+        public IntPtr hInstance;
+        public IntPtr hIcon;
+        public IntPtr hCursor;
+        public IntPtr hbrBackground;
+        public string lpszMenuName;
+        public string lpszClassName;
+        public IntPtr hIconSm;
+    }
+
+    public enum MessageBoxButtons : uint
+    {
+        MB_OK = 0x00000000,
+        MB_OKCANCEL = 0x00000001,
+        MB_ABORTRETRYIGNORE = 0x00000002,
+        MB_YESNOCANCEL = 0x00000003,
+        MB_YESNO = 0x00000004,
+        MB_RETRYCANCEL = 0x00000005,
+        MB_CANCELTRYCONTINUE = 0x00000006,
+    }
+
+    public enum MessageBoxIcon : uint
+    {
+        MB_ICONHAND = 0x00000010,
+        MB_ICONQUESTION = 0x00000020,
+        MB_ICONEXCLAMATION = 0x00000030,
+        MB_ICONASTERISK = 0x00000040,
+        MB_USERICON = 0x00000080,
+        MB_ICONWARNING = MB_ICONEXCLAMATION,
+        MB_ICONERROR = MB_ICONHAND,
+        MB_ICONINFORMATION = MB_ICONASTERISK,
+        MB_ICONSTOP = MB_ICONHAND,
     }
 
     public enum AccentState

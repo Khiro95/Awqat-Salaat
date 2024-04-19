@@ -154,5 +154,17 @@ namespace AwqatSalaat.Properties {
                 this["Service"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool LaunchOnWindowsStartup {
+            get {
+                return ((bool)(this["LaunchOnWindowsStartup"]));
+            }
+            set {
+                this["LaunchOnWindowsStartup"] = value;
+            }
+        }
     }
 }

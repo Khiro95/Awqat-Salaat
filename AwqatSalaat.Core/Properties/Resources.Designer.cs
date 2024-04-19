@@ -115,6 +115,42 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide.
+        /// </summary>
+        public static string UI_ContextMenu_Hide {
+            get {
+                return ResourceManager.GetString("UI.ContextMenu.Hide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quit.
+        /// </summary>
+        public static string UI_ContextMenu_Quit {
+            get {
+                return ResourceManager.GetString("UI.ContextMenu.Quit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Re-position.
+        /// </summary>
+        public static string UI_ContextMenu_Reposition {
+            get {
+                return ResourceManager.GetString("UI.ContextMenu.Reposition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show.
+        /// </summary>
+        public static string UI_ContextMenu_Show {
+            get {
+                return ResourceManager.GetString("UI.ContextMenu.Show", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Off.
         /// </summary>
         public static string UI_Controls_Toggle_Off {
@@ -255,6 +291,24 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_LanguageDescription {
             get {
                 return ResourceManager.GetString("UI.Settings.LanguageDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch on Windows startup.
+        /// </summary>
+        public static string UI_Settings_LaunchOnWindowsStartup {
+            get {
+                return ResourceManager.GetString("UI.Settings.LaunchOnWindowsStartup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allow the widget to start running when Windows start.
+        /// </summary>
+        public static string UI_Settings_LaunchOnWindowsStartupDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.LaunchOnWindowsStartupDescription", resourceCulture);
             }
         }
         

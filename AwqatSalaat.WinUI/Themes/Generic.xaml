@@ -105,4 +105,22 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="controls:SettingsItem" x:Key="DefaultSettingsItemStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:SettingsItem">
+                    <StackPanel>
+                        <ContentPresenter Content="{TemplateBinding Header}"/>
+                        <TextBlock Text="{TemplateBinding Description}"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                       TextWrapping="Wrap"
+                       Margin="0,8"/>
+                        <ContentPresenter/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="controls:SettingsItem" BasedOn="{StaticResource DefaultSettingsItemStyle}"/>
 </ResourceDictionary>

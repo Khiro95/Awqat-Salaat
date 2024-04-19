@@ -19,5 +19,10 @@ namespace AwqatSalaat.WinUI.Controls
 
         public string Description { get => (string)GetValue(DescriptionProperty); set => SetValue(DescriptionProperty, value); }
         public string Header { get => (string)GetValue(HeaderProperty); set => SetValue(HeaderProperty, value); }
+
+        public SettingsItem()
+        {
+            DefaultStyleKey = typeof(SettingsItem);
+        }
     }
 }

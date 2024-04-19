@@ -1,41 +1,42 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-    <Profiles>
-        <Profile Name="(Default)" />
-    </Profiles>
-    <Settings>
-        <Setting Name="IsConfigured" Type="System.Boolean" Scope="User">
-            <Value Profile="(Default)">False</Value>
-        </Setting>
-        <Setting Name="CountryCode" Type="System.String" Scope="User">
-            <Value Profile="(Default)" />
-        </Setting>
-        <Setting Name="ZipCode" Type="System.String" Scope="User">
-            <Value Profile="(Default)" />
-        </Setting>
-        <Setting Name="Method" Type="AwqatSalaat.Services.IslamicFinder.IslamicFinderMethod" Scope="User">
-            <Value Profile="(Default)">MWL</Value>
-        </Setting>
-        <Setting Name="ShowCountdown" Type="System.Boolean" Scope="User">
-            <Value Profile="(Default)">True</Value>
-        </Setting>
-        <Setting Name="NotificationDistance" Type="System.UInt16" Scope="User">
-            <Value Profile="(Default)">10</Value>
-        </Setting>
-        <Setting Name="ApiCache" Type="System.String" Scope="User">
-            <Value Profile="(Default)" />
-        </Setting>
-        <Setting Name="DisplayLanguage" Type="System.String" Scope="User">
-            <Value Profile="(Default)" />
-        </Setting>
-        <Setting Name="City" Type="System.String" Scope="User">
-            <Value Profile="(Default)" />
-        </Setting>
-        <Setting Name="Method2" Type="AwqatSalaat.Services.AlAdhan.AlAdhanMethod" Scope="User">
-            <Value Profile="(Default)">MWL</Value>
-        </Setting>
-        <Setting Name="Service" Type="AwqatSalaat.Data.PrayerTimesService" Scope="User">
-            <Value Profile="(Default)">IslamicFinder</Value>
-        </Setting>
-    </Settings>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AwqatSalaat.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="IsConfigured" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="CountryCode" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ZipCode" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Method" Type="AwqatSalaat.Services.IslamicFinder.IslamicFinderMethod" Scope="User">
+      <Value Profile="(Default)">MWL</Value>
+    </Setting>
+    <Setting Name="ShowCountdown" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="NotificationDistance" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="ApiCache" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DisplayLanguage" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="City" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Method2" Type="AwqatSalaat.Services.AlAdhan.AlAdhanMethod" Scope="User">
+      <Value Profile="(Default)">MWL</Value>
+    </Setting>
+    <Setting Name="Service" Type="AwqatSalaat.Data.PrayerTimesService" Scope="User">
+      <Value Profile="(Default)">IslamicFinder</Value>
+    </Setting>
+    <Setting Name="LaunchOnWindowsStartup" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>
