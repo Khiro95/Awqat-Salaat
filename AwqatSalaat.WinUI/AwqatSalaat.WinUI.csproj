@@ -15,15 +15,33 @@
         <SelfContained>false</SelfContained>
         <AppContainerApplication>true</AppContainerApplication>
 
-        <Authors>Khiro</Authors>
         <Product>Awqat Salaat WinUI</Product>
-        <RepositoryUrl>https://github.com/Khiro95/Awqat-Salaat.git</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageProjectUrl>https://github.com/Khiro95/Awqat-Salaat</PackageProjectUrl>
-        <PackageLicenseExpression>MIT License</PackageLicenseExpression>
     </PropertyGroup>
     <ItemGroup>
+      <Content Remove="Assets\as_ico_win11.ico" />
+    </ItemGroup>
+    <ItemGroup>
       <None Remove="Themes\Generic.xaml" />
+    </ItemGroup>
+    <ItemGroup>
+      <COMReference Include="UIAutomationClient">
+        <WrapperTool>tlbimp</WrapperTool>
+        <VersionMinor>0</VersionMinor>
+        <VersionMajor>1</VersionMajor>
+        <Guid>944de083-8fb8-45cf-bcb7-c477acb2f897</Guid>
+        <Lcid>0</Lcid>
+        <Isolated>false</Isolated>
+        <EmbedInteropTypes>true</EmbedInteropTypes>
+      </COMReference>
+      <COMReference Include="IWshRuntimeLibrary">
+        <WrapperTool>tlbimp</WrapperTool>
+        <VersionMinor>0</VersionMinor>
+        <VersionMajor>1</VersionMajor>
+        <Guid>f935dc20-1cf0-11d0-adb9-00c04fd58a0b</Guid>
+        <Lcid>0</Lcid>
+        <Isolated>false</Isolated>
+        <EmbedInteropTypes>true</EmbedInteropTypes>
+      </COMReference>
     </ItemGroup>
 
     <ItemGroup>
@@ -37,8 +55,14 @@
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="Assets\as_ico_win11.ico" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="H.NotifyIcon" Version="2.0.124" />
         <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240311000" />
         <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
+        <PackageReference Include="System.Management" Version="8.0.0" />
         <Manifest Include="$(ApplicationManifest)" />
     </ItemGroup>
 
@@ -67,10 +91,4 @@
     <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
         <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
     </PropertyGroup>
-
-    <!--<PropertyGroup Label="Globals">
-        <WindowsPackageType>None</WindowsPackageType>
-        <SelfContained>false</SelfContained>
-        <AppContainerApplication>true</AppContainerApplication>
-    </PropertyGroup>-->
 </Project>
