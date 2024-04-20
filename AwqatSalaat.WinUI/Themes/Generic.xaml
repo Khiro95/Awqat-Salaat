@@ -113,9 +113,9 @@
                     <StackPanel>
                         <ContentPresenter Content="{TemplateBinding Header}"/>
                         <TextBlock Text="{TemplateBinding Description}"
-                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                       TextWrapping="Wrap"
-                       Margin="0,8"/>
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                   TextWrapping="Wrap"
+                                   Margin="0,8"/>
                         <ContentPresenter/>
                     </StackPanel>
                 </ControlTemplate>

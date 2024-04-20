@@ -9,7 +9,7 @@
         <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
         <PublishProfile>win10-$(Platform).pubxml</PublishProfile>
         <UseWinUI>true</UseWinUI>
-        <EnableMsixTooling>false</EnableMsixTooling>
+        <EnableMsixTooling>true</EnableMsixTooling>
         <ApplicationIcon>Assets/as_ico_win11.ico</ApplicationIcon>
 
         <WindowsPackageType>None</WindowsPackageType>
@@ -41,16 +41,6 @@
         <Isolated>false</Isolated>
         <EmbedInteropTypes>true</EmbedInteropTypes>
       </COMReference>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="Assets\SplashScreen.scale-200.png" />
-        <Content Include="Assets\LockScreenLogo.scale-200.png" />
-        <Content Include="Assets\Square150x150Logo.scale-200.png" />
-        <Content Include="Assets\Square44x44Logo.scale-200.png" />
-        <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-        <Content Include="Assets\StoreLogo.png" />
-        <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     </ItemGroup>
 
     <ItemGroup>

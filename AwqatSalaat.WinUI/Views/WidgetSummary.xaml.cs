@@ -24,7 +24,7 @@ namespace AwqatSalaat.WinUI.Views
             Properties.Settings.Default.IsConfigured = false;
 #endif
             this.InitializeComponent();
-            widgetPanel.Loaded += WidgetPanel_Loaded;
+            //widgetPanel.Loaded += WidgetPanel_Loaded;
             ViewModel.WidgetSettings.Updated += WidgetSettings_Updated;
             LocaleManager.Default.CurrentChanged += (_, __) => UpdateDirection();
             UpdateDirection();

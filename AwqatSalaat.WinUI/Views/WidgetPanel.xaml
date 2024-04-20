@@ -15,7 +15,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Vectors.xaml"/>
+                <ResourceDictionary Source="../Assets/Vectors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <converters:BooleanToVisibilityInvertedConverter x:Key="BooleanToVisibilityInvertedConverter"/>
@@ -41,7 +41,7 @@
                     </AppBarButton.Icon>
                 </AppBarButton>
             </CommandBar>
-            <Grid x:Name="gr" Grid.Row="1" Grid.ColumnSpan="2" Visibility="{x:Bind ViewModel.IsRefreshing, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
+            <Grid Grid.Row="1" Grid.ColumnSpan="2" Visibility="{x:Bind ViewModel.IsRefreshing, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
                 <Grid Visibility="{x:Bind ViewModel.HasError, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -58,9 +58,9 @@
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center" Grid.Row="1" FlowDirection="LeftToRight">
-                        <TextBlock d:Text="City" Text="{Binding City}" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                        <TextBlock Text="{Binding City}" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                         <TextBlock Text="-" Margin="4,0" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
-                        <TextBlock d:Text="Country" Text="{Binding Country}" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                        <TextBlock Text="{Binding Country}" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                     </StackPanel>
                     <ItemsControl ItemsSource="{Binding Items}" Grid.Row="2">
                         <ItemsControl.ItemTemplate>

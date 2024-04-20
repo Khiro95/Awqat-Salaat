@@ -20,19 +20,6 @@
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
-                    <StaticResource x:Key="ButtonBackground" ResourceKey="ControlFillColorTransparentBrush" />
-                    <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="ControlFillColorDefaultBrush" />
-                    <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="ControlFillColorSecondaryBrush" />
-                    <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush" />
-                    <StaticResource x:Key="ButtonForeground" ResourceKey="TextFillColorPrimaryBrush" />
-                    <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
-                    <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="TextFillColorSecondaryBrush" />
-                    <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="TextFillColorDisabledBrush" />
-                    <StaticResource x:Key="ButtonBorderBrush" ResourceKey="ControlFillColorTransparentBrush" />
-                    <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="ControlStrokeColorDefaultBrush" />
-                    <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
-                    <StaticResource x:Key="ButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush" />
-
                     <StaticResource x:Key="ToggleButtonBackground" ResourceKey="ControlFillColorTransparentBrush" />
                     <StaticResource x:Key="ToggleButtonBackgroundPointerOver" ResourceKey="ControlFillColorDefaultBrush" />
                     <StaticResource x:Key="ToggleButtonBackgroundPressed" ResourceKey="ControlFillColorSecondaryBrush" />
@@ -61,19 +48,6 @@
                     <StaticResource x:Key="NotificationFillColor" ResourceKey="SystemAccentColorDark1"/>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
-                    <StaticResource x:Key="ButtonBackground" ResourceKey="ControlFillColorTransparentBrush" />
-                    <StaticResource x:Key="ButtonBackgroundPointerOver" ResourceKey="ControlFillColorDefaultBrush" />
-                    <StaticResource x:Key="ButtonBackgroundPressed" ResourceKey="ControlFillColorSecondaryBrush" />
-                    <StaticResource x:Key="ButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush" />
-                    <StaticResource x:Key="ButtonForeground" ResourceKey="TextFillColorPrimaryBrush" />
-                    <StaticResource x:Key="ButtonForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
-                    <StaticResource x:Key="ButtonForegroundPressed" ResourceKey="TextFillColorSecondaryBrush" />
-                    <StaticResource x:Key="ButtonForegroundDisabled" ResourceKey="TextFillColorDisabledBrush" />
-                    <StaticResource x:Key="ButtonBorderBrush" ResourceKey="ControlFillColorTransparentBrush" />
-                    <StaticResource x:Key="ButtonBorderBrushPointerOver" ResourceKey="ControlStrokeColorDefaultBrush" />
-                    <StaticResource x:Key="ButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
-                    <StaticResource x:Key="ButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush" />
-
                     <StaticResource x:Key="ToggleButtonBackground" ResourceKey="ControlFillColorTransparentBrush" />
                     <StaticResource x:Key="ToggleButtonBackgroundPointerOver" ResourceKey="ControlFillColorDefaultBrush" />
                     <StaticResource x:Key="ToggleButtonBackgroundPressed" ResourceKey="ControlFillColorSecondaryBrush" />
@@ -188,7 +162,7 @@
                     Visibility="{x:Bind ViewModel.HasError}">
                     <FontIcon Glyph="&#xE7BA;" FontSize="20" Foreground="{ThemeResource TextHighlightBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <!-- gutter -->
-                    <Border Margin="3,4" Height="0" Width="0"/>
+                    <Rectangle Margin="3,4" Height="0" Width="0"/>
                     <TextBlock Text="{mk:L11n Key=UI.Summary.ErrorOccured}" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel
@@ -199,7 +173,7 @@
                     Visibility="{x:Bind ViewModel.WidgetSettings.Settings.IsConfigured, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
                     <FontIcon Glyph="&#xE7BA;" FontSize="20" Foreground="{ThemeResource TextHighlightBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <!-- gutter -->
-                    <Border Margin="4" Height="0" Width="0"/>
+                    <Rectangle Margin="4" Height="0" Width="0"/>
                     <TextBlock Text="{mk:L11n Key=UI.Summary.TapToStart}" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
                 </StackPanel>
             </Grid>
