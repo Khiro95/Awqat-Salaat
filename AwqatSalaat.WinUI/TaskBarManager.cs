@@ -2,15 +2,12 @@
 using H.NotifyIcon.Core;
 using Microsoft.UI.Dispatching;
 using System;
-using System.IO;
 using System.Windows.Input;
 
 namespace AwqatSalaat.WinUI
 {
     internal static class TaskBarManager
     {
-        private const string IconResourceName = "AwqatSalaat.WinUI.Assets.as_ico_win11.ico";
-
         private static TrayIconWithContextMenu trayIcon;
         private static TaskBarWidget taskBarWidget;
         private static DispatcherQueue dispatcher;
@@ -55,14 +52,9 @@ namespace AwqatSalaat.WinUI
                         new PopupMenuSeparator(),
                         quitItem,
                     }
-                }
+                },
+                Icon = System.Drawing.Icon.ExtractAssociatedIcon(Environment.ProcessPath).Handle,
             };
-
-            using (Stream stream = typeof(TaskBarManager).Assembly.GetManifestResourceStream(IconResourceName))
-            {
-                var ico = new System.Drawing.Icon(stream);
-                trayIcon.Icon = ico.Handle;
-            }
 
             UpdateTrayIconStrings();
             trayIcon.MessageWindow.TaskbarCreated += (_, _) => dispatcher.TryEnqueue(OnTaskbarCreated);

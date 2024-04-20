@@ -10,6 +10,7 @@
         <PublishProfile>win10-$(Platform).pubxml</PublishProfile>
         <UseWinUI>true</UseWinUI>
         <EnableMsixTooling>false</EnableMsixTooling>
+        <ApplicationIcon>Assets/as_ico_win11.ico</ApplicationIcon>
 
         <WindowsPackageType>None</WindowsPackageType>
         <SelfContained>false</SelfContained>
@@ -17,9 +18,7 @@
 
         <Product>Awqat Salaat WinUI</Product>
     </PropertyGroup>
-    <ItemGroup>
-      <Content Remove="Assets\as_ico_win11.ico" />
-    </ItemGroup>
+    
     <ItemGroup>
       <None Remove="Themes\Generic.xaml" />
     </ItemGroup>
@@ -52,10 +51,6 @@
         <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
         <Content Include="Assets\StoreLogo.png" />
         <Content Include="Assets\Wide310x150Logo.scale-200.png" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Include="Assets\as_ico_win11.ico" />
     </ItemGroup>
 
     <ItemGroup>
