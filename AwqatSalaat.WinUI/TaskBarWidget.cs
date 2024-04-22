@@ -17,12 +17,14 @@ namespace AwqatSalaat.WinUI
     {
         private const string WidgetClassName = "AwqatSalaatWidgetWinRT";
         private const string TaskBarClassName = "Shell_TrayWnd";
+        private const string NotificationAreaClassName = "TrayNotifyWnd";
         private const string WidgetsButtonAutomationId = "WidgetsButton";
-        private const string SystemTrayIconAutomationIdWin10 = "1502";
-        private const string SystemTrayIconAutomationIdWin11 = "SystemTrayIcon";
         private const int WidgetHostWidth = 118; // 110 for the button + 4 for left margin + 4 for right margin
 
         private static IntPtr hwndShell;
+        private static IntPtr hwndTrayNotify;
+        private static RECT taskbarRect;
+        private static RECT trayNotifyRect;
 
         private IntPtr hwnd;
         private AppWindow appWindow;
@@ -38,6 +40,7 @@ namespace AwqatSalaat.WinUI
         public TaskBarWidget()
         {
             hwndShell = User32.FindWindow(TaskBarClassName, null);
+            hwndTrayNotify = User32.FindWindowEx(hwndShell, IntPtr.Zero, NotificationAreaClassName , null);
         }
 
         public void Initialize()
@@ -52,8 +55,10 @@ namespace AwqatSalaat.WinUI
             appWindow.IsShownInSwitchers = false;
             appWindow.Destroying += AppWindow_Destroying;
 
-            var bounds = SystemInfos.GetTaskBarBounds();
-            appWindow.ResizeClient(new SizeInt32(WidgetHostWidth, bounds.bottom - bounds.top));
+            taskbarRect = SystemInfos.GetTaskBarBounds();
+            appWindow.ResizeClient(new SizeInt32(WidgetHostWidth, taskbarRect.bottom - taskbarRect.top));
+
+            User32.GetWindowRect(hwndTrayNotify, out trayNotifyRect);
             UpdatePosition();
 
             host.Initialize(id);
@@ -82,14 +87,31 @@ namespace AwqatSalaat.WinUI
             if (forceUpdate || (isCentered != isTaskBarCentered) || (isWidgetsEnabled != isTaskBarWidgetsEnabled))
             {
                 int offsetX = 0;
+                bool osRTL = System.Globalization.CultureInfo.InstalledUICulture.TextInfo.IsRightToLeft;
 
                 if (isCentered)
                 {
-                    offsetX = isWidgetsEnabled ? GetWin11WidgetsButtonRightEdge() : 0;
+                    var widgetsButton = isWidgetsEnabled ? GetAutomationElement(WidgetsButtonAutomationId) : null;
+
+                    if (osRTL)
+                    {
+                        offsetX = (widgetsButton?.CurrentBoundingRectangle.left ?? taskbarRect.right) - WidgetHostWidth;
+                    }
+                    else
+                    {
+                        offsetX = widgetsButton?.CurrentBoundingRectangle.right ?? 0;
+                    }
                 }
                 else
                 {
-                    offsetX = GetSystemTrayIconLeftEdge() - WidgetHostWidth;
+                    if (osRTL)
+                    {
+                        offsetX = trayNotifyRect.right;
+                    }
+                    else
+                    {
+                        offsetX = trayNotifyRect.left - WidgetHostWidth;
+                    }
                 }
 
                 appWindow.Move(new PointInt32(offsetX, 0));
@@ -150,27 +172,6 @@ namespace AwqatSalaat.WinUI
         {
             // Taskbar alignment may have been changed or Widgets button is enabled/disabled, try to update position
             UpdatePosition();
-        }
-
-        private static int GetWin11WidgetsButtonRightEdge()
-        {
-            var element = GetAutomationElement(WidgetsButtonAutomationId);
-
-            return element?.CurrentBoundingRectangle.right ?? 0;
-        }
-
-        private static int GetSystemTrayIconLeftEdge()
-        {
-            var element = SystemInfos.IsWindows11_OrLater
-                ? GetAutomationElement(SystemTrayIconAutomationIdWin11)
-                : GetAutomationElement(SystemTrayIconAutomationIdWin10);
-
-            if (element is null)
-            {
-                throw new Exception("Could not get system tray icon element");
-            }
-
-            return element.CurrentBoundingRectangle.left;
         }
 
         private static IUIAutomationElement GetAutomationElement(string automationId)

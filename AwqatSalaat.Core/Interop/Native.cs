@@ -38,6 +38,9 @@ namespace AwqatSalaat.Interop
         [DllImport("User32.dll", CharSet = CharSet.Unicode)]
         public static extern IntPtr FindWindow([In, MarshalAs(UnmanagedType.LPWStr)] string lpClassName, [In, MarshalAs(UnmanagedType.LPWStr)] string lpWindowName);
 
+        [DllImport("User32.dll", CharSet = CharSet.Unicode)]
+        public static extern IntPtr FindWindowEx([In] IntPtr hwndParent, [In] IntPtr hwndChildAfter, [In, MarshalAs(UnmanagedType.LPWStr)] string lpClassName, [In, MarshalAs(UnmanagedType.LPWStr)] string lpWindowName);
+
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern IntPtr CreateWindowEx(
            WindowStylesExtended dwExStyle,
