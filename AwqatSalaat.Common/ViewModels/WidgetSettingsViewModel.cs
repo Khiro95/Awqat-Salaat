@@ -42,6 +42,11 @@ namespace AwqatSalaat.ViewModels
                     }
                 }
             };
+
+            if (!Settings.IsConfigured)
+            {
+                Settings.Upgrade();
+            }
         }
 
         private void SaveExecute(object obj)

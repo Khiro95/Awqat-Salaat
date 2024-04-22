@@ -19,11 +19,11 @@ namespace AwqatSalaat.WinUI.Views
 
         public WidgetSummary()
         {
+            this.InitializeComponent();
 #if DEBUG
             Current = this;
             Properties.Settings.Default.IsConfigured = false;
 #endif
-            this.InitializeComponent();
             //widgetPanel.Loaded += WidgetPanel_Loaded;
             ViewModel.WidgetSettings.Updated += WidgetSettings_Updated;
             LocaleManager.Default.CurrentChanged += (_, __) => UpdateDirection();
