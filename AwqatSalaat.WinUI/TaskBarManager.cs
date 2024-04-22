@@ -8,6 +8,7 @@ namespace AwqatSalaat.WinUI
 {
     internal static class TaskBarManager
     {
+        private static readonly System.Drawing.Icon AppIcon;
         private static TrayIconWithContextMenu trayIcon;
         private static TaskBarWidget taskBarWidget;
         private static DispatcherQueue dispatcher;
@@ -29,6 +30,8 @@ namespace AwqatSalaat.WinUI
 
             App.Quitting += App_Quitting;
             LocaleManager.Default.CurrentChanged += (_, _) => UpdateTrayIconStrings();
+
+            AppIcon = System.Drawing.Icon.ExtractAssociatedIcon(Environment.ProcessPath);
         }
 
         public static void Initialize(DispatcherQueue dispatcherQueue)
@@ -53,7 +56,7 @@ namespace AwqatSalaat.WinUI
                         quitItem,
                     }
                 },
-                Icon = System.Drawing.Icon.ExtractAssociatedIcon(Environment.ProcessPath).Handle,
+                Icon = AppIcon.Handle,
             };
 
             UpdateTrayIconStrings();
