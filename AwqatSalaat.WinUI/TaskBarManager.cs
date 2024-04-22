@@ -40,7 +40,7 @@ namespace AwqatSalaat.WinUI
 
             showItem = new PopupMenuItem("Show", (_, _) => dispatcher.TryEnqueue(ShowWidgetExecute));
             hideItem = new PopupMenuItem("Hide", (_, _) => dispatcher.TryEnqueue(HideWidgetExecute));
-            repositionItem = new PopupMenuItem("Re-position", (_, _) => dispatcher.TryEnqueue(() => taskBarWidget?.UpdatePosition(true)));
+            repositionItem = new PopupMenuItem("Re-position", (_, _) => taskBarWidget?.UpdatePosition(true));
             quitItem = new PopupMenuItem("Quit", (_, _) => dispatcher.TryEnqueue(() => App.Quit.Execute(null)));
 
             trayIcon = new TrayIconWithContextMenu()

@@ -8,6 +8,7 @@ using System;
 using System.Management;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
+using System.Threading.Tasks;
 using UIAutomationClient;
 using Windows.Graphics;
 
@@ -59,7 +60,7 @@ namespace AwqatSalaat.WinUI
             appWindow.ResizeClient(new SizeInt32(WidgetHostWidth, taskbarRect.bottom - taskbarRect.top));
 
             User32.GetWindowRect(hwndTrayNotify, out trayNotifyRect);
-            UpdatePosition();
+            UpdatePositionImpl();
 
             host.Initialize(id);
             host.Content = new WidgetSummary() { MaxWidth = 110, MaxHeight = 40 };
@@ -80,6 +81,11 @@ namespace AwqatSalaat.WinUI
         public void Destroy() => appWindow.Destroy();
 
         public void UpdatePosition(bool forceUpdate = false)
+        {
+            Task.Run(() => UpdatePositionImpl(forceUpdate));
+        }
+
+        private void UpdatePositionImpl(bool forceUpdate = false)
         {
             bool isCentered = SystemInfos.IsTaskBarCentered();
             bool isWidgetsEnabled = SystemInfos.IsTaskBarWidgetsEnabled();
