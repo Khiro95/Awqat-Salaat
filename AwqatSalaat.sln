@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwqatSalaat.Preview", "Awqa
 EndProject
 Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "AwqatSalaat.Package", "AwqatSalaat.Package\AwqatSalaat.Package.wixproj", "{BCCB0ECD-B46C-4BBF-A358-2DEB28D533FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwqatSalaat.Core", "AwqatSalaat.Core\AwqatSalaat.Core.csproj", "{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwqatSalaat.Common", "AwqatSalaat.Common\AwqatSalaat.Common.csproj", "{5FC8AD4F-836C-455A-9AB8-7D6310A54AE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AwqatSalaat.WinUI", "AwqatSalaat.WinUI\AwqatSalaat.WinUI.csproj", "{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AwqatSalaat.WinUI", "AwqatSalaat.WinUI\AwqatSalaat.WinUI.csproj", "{BEEF89CE-AD38-4CE5-BC26-25F366668FE2}"
 EndProject
 Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "AwqatSalaat.WinUI.Package", "AwqatSalaat.WinUI.Package\AwqatSalaat.WinUI.Package.wixproj", "{3FDFB185-02FE-40BA-A264-C97536B1C51C}"
 EndProject

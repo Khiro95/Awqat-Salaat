@@ -60,7 +60,7 @@
         <ProjectCapability Include="Msix" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\AwqatSalaat.Core\AwqatSalaat.Core.csproj" />
+        <ProjectReference Include="..\AwqatSalaat.Common\AwqatSalaat.Common.csproj" />
     </ItemGroup>
     <ItemGroup>
       <Page Update="Themes\Generic.xaml">
