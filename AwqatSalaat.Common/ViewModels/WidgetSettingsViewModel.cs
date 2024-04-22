@@ -28,6 +28,17 @@ namespace AwqatSalaat.ViewModels
         {
             Save = new RelayCommand(SaveExecute);
             Cancel = new RelayCommand(CancelExecute, o => Settings.IsConfigured);
+
+            if (!Settings.IsConfigured)
+            {
+                Settings.Upgrade();
+            }
+
+            if (string.IsNullOrEmpty(Settings.DisplayLanguage))
+            {
+                Settings.DisplayLanguage = LocaleManager.Default.Current;
+            }
+
             Settings.PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName == nameof(Settings.DisplayLanguage))
@@ -42,11 +53,6 @@ namespace AwqatSalaat.ViewModels
                     }
                 }
             };
-
-            if (!Settings.IsConfigured)
-            {
-                Settings.Upgrade();
-            }
         }
 
         private void SaveExecute(object obj)
