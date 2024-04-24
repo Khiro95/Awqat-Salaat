@@ -10,7 +10,7 @@
     <PropertyGroup>
       <ProjectPublishDir>$(ProjectDir)$(IntermediateOutputPath)publish</ProjectPublishDir>
     </PropertyGroup>
-    <!-- This task allow us to get the directory and the full path of the compiled dll -->
+    <!-- This task allow us to publish the project in order to get the files needed for deployment -->
     <MSBuild Projects="$(AwqatSalaatProject)" Targets="Publish" Properties="Platform=$(Platform);PublishDir=$(ProjectPublishDir)" />
     <Message Text="Harvesting files in: $(ProjectPublishDir)" Importance="high" />
     <ItemGroup>

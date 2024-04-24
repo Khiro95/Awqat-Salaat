@@ -2,8 +2,10 @@
 using CSDeskBand;
 using System;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using System.Windows.Threading;
 
 namespace AwqatSalaat
 {
@@ -18,6 +20,8 @@ namespace AwqatSalaat
 
         public AwqatSalaatWidget()
         {
+            var ctx = new DispatcherSynchronizationContext();
+            SynchronizationContext.SetSynchronizationContext(ctx);
             uiElement = new WidgetSummary
             {
                 PanelPlacement = GetPlacement(TaskbarInfo.Edge),
