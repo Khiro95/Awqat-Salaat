@@ -47,7 +47,7 @@ namespace AwqatSalaat.WinUI
 
         private static void ExitIfOtherInstanceIsRunning()
         {
-            const string mutexId = @"Global\C790179C-7492-4CCE-B377-5F48F394B2CB";
+            const string mutexId = @"C790179C-7492-4CCE-B377-5F48F394B2CB";
 
             appMutex = new Mutex(true, mutexId, out bool created);
 
