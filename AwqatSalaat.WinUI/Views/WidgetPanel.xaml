@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="AwqatSalaat.WinUI.Views.WidgetPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AwqatSalaat.WinUI.Views"
+    xmlns:converters="using:AwqatSalaat.WinUI.Converters"
+    xmlns:controls="using:AwqatSalaat.WinUI.Controls"
+    xmlns:mk="using:AwqatSalaat.WinUI.Markup"
+    xmlns:vm="using:AwqatSalaat.ViewModels"
+    xmlns:ash="using:AwqatSalaat.Helpers"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" x:DefaultBindMode="OneWay">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Assets/Vectors.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:BooleanToVisibilityInvertedConverter x:Key="BooleanToVisibilityInvertedConverter"/>
+            <converters:CustomDateConverter x:Key="CustomDateConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <d:UserControl.DataContext>
+        <vm:WidgetViewModel />
+    </d:UserControl.DataContext>
+    <StackPanel>
+        <Grid ColumnDefinitions="*,Auto" Visibility="{x:Bind ViewModel.WidgetSettings.IsOpen, Converter={StaticResource BooleanToVisibilityInvertedConverter}}" Margin="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition MinHeight="294"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="{mk:L11n Key=Data.AppName}" VerticalAlignment="Center"/>
+            <CommandBar x:Name="commandBar" Grid.Column="1" OverflowButtonVisibility="Collapsed" Padding="0" Margin="-8">
+                <AppBarButton IsCompact="True" Icon="Setting" Width="32" Margin="0" Command="{Binding OpenSettings}" ToolTipService.ToolTip="{mk:L11n Key=UI.Panel.Settings}"/>
+                <AppBarButton IsCompact="True" Icon="Refresh" Width="32" Margin="0" Command="{Binding Refresh}" ToolTipService.ToolTip="{mk:L11n Key=UI.Panel.Refresh}"/>
+                <AppBarButton IsCompact="True" Width="32" Margin="0" x:Name="themeBtn">
+                    <AppBarButton.Icon>
+                        <FontIcon FontSize="16" Glyph="&#xE793;" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar>
+            <Grid Grid.Row="1" Grid.ColumnSpan="2" Visibility="{x:Bind ViewModel.IsRefreshing, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
+                <Grid Visibility="{x:Bind ViewModel.HasError, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0">
+                        <TextBlock Text="{x:Bind converters:CustomDateConverter.Format(ViewModel.DisplayedDate, 'dddd', ash:LocaleManager.Default.Current)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" Margin="0,4" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{x:Bind ash:HijriDateHelper.Format(ViewModel.DisplayedDate, 'dd MMMM yyyy', ash:LocaleManager.Default.Current)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" FlowDirection="RightToLeft" Margin="0,4" HorizontalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center">
+                            <TextBlock Text="{mk:L11n Key=UI.Panel.CorrespondTo}" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                            <TextBlock Text="{x:Bind ViewModel.DisplayedDate.ToString('dd/MM/yyyy', x:Null)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" Margin="4,0,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center" Grid.Row="1" FlowDirection="LeftToRight">
+                        <TextBlock Text="{Binding City}" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                        <TextBlock Text="-" Margin="4,0" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                        <TextBlock Text="{Binding Country}" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                    </StackPanel>
+                    <ItemsControl ItemsSource="{Binding Items}" Grid.Row="2">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:PrayerTimeViewModel">
+                                <controls:PrayerTimeItem State="{x:Bind State}" Time="{x:Bind Time}" PrayerName="{x:Bind Name}" DismissCommand="{x:Bind DismissNotification}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Path Data="{StaticResource Ayah}" Fill="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,4,0,0" Grid.Row="3" FlowDirection="LeftToRight"/>
+                </Grid>
+            </Grid>
+            <TextBlock
+                Text="{mk:L11n Key=UI.Panel.Refreshing}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                Visibility="{x:Bind ViewModel.IsRefreshing}"/>
+            <StackPanel
+                Width="180"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                Visibility="{x:Bind ViewModel.HasError}">
+                <TextBlock Text="{mk:L11n Key=UI.Panel.Error}" HorizontalAlignment="Center" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                <TextBlock Text="{x:Bind ViewModel.ErrorMessage}" TextAlignment="Center" TextWrapping="Wrap" Margin="8"/>
+            </StackPanel>
+        </Grid>
+        <local:SettingsPanel DataContext="{x:Bind ViewModel.WidgetSettings}"
+                             MinWidth="300"
+                             MaxWidth="760"
+                             Visibility="{x:Bind ViewModel.WidgetSettings.IsOpen}"/>
+    </StackPanel>
+</UserControl>

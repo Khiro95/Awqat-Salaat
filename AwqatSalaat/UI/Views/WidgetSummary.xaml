@@ -6,7 +6,7 @@
              xmlns:ui="clr-namespace:AwqatSalaat.UI"
              xmlns:local="clr-namespace:AwqatSalaat.UI.Views"
              xmlns:converters="clr-namespace:AwqatSalaat.UI.Converters"
-             xmlns:vm="clr-namespace:AwqatSalaat.UI.ViewModels"
+             xmlns:vm="clr-namespace:AwqatSalaat.ViewModels;assembly=AwqatSalaat.Common"
              xmlns:controls="clr-namespace:AwqatSalaat.UI.Controls"
              xmlns:mk="clr-namespace:AwqatSalaat.Markup"
              mc:Ignorable="d" 

@@ -1,7 +1,7 @@
 ﻿النسخة العربية متوفرة [هنا](README.ar.md)
 # Awqat Salaat Widget [![GitHub Release](https://img.shields.io/github/v/release/Khiro95/Awqat-Salaat?include_prereleases&label=Release)](https://github.com/Khiro95/Awqat-Salaat/releases)
 
-This is a simple Islamic Windows widget that shows the time of the next prayer alongside a countdown, on the taskbar, in order to help the user keep tracking of prayers times.
+This is a simple Islamic Windows widget that shows the time of the next prayer, alongside a countdown, on the taskbar in order to help the user keep tracking of prayers times.
 
 The widget can show the prayers times of the whole day and update automatically, to show times of the next day, when the time of last prayer (Isha) has entered.
 
@@ -18,15 +18,41 @@ So **DON'T** rely on the widget to get the exact time, especially for performing
 
 ## Supported Platforms
 
-Awqat Salaat is a *Windows* widget that takes advantage of a feature called *Desk Band*.
-That's an old feature which has been deprecated and removed completely from Windows 11, thus Windows 11 is not supported.
-However, the older vesions (Windows 7, 8, 8.1 and 10) are supported in theory but the widget was designed specifically for Windows 10.
+Awqat Salaat is a *Windows* widget that is available in two forms:
 
-The widget had been tested on Windows 7 Ultimate x64 and it's made compatible with it. Although there are some subtle visual differences, it's fully functional.
+### Awqat Salaat (Deskband)
 
-Starting from version 1.1, the widget is compatible with Windows 7/8/8.1 and all versions of Windows 10.
+This widget takes advantage of a feature called *Desk Band* which is an old feature and has been deprecated and removed completely from Windows 11.
+However, the older vesions (Windows 7, 8, 8.1 and 10) still support this feature.
+
+Although the widget was designed specifically for Windows 10, starting from version 1.1 the widget is compatible with Windows 7/8/8.1 and all versions of Windows 10 with some subtle visual differences on Windows 7/8/8.1.
 
 Also note that if you choose to use the widget on Windows 7/8/8.1 then make sure to install [.NET Framework 4.7.2 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net472) and the font [Segoe MDL2 Assets](https://aka.ms/SegoeFonts).
+
+### Awqat Salaat WinUI ![Awqat Salaat WinUI Icon](images/as_win11_16.png)
+
+This widget is a regular app that can run on Windows 11 and on Windows 10 1809 or later.
+This app bring Awqat Salaat to Windows 11 which wasn't supported in earlier versions of the widget.
+
+> [!note]
+> Although this app can run on Windows 10, it's *not recommended* due to the limitiations listed below, use deskband widget instead.
+
+#### Requirements:
+
+- [.NET Desktop Runtime 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
+- [Windows App Runtime 1.5](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/downloads)
+> [!note]
+> If you get an error about missing Windows App Runtime after installing it, go to the download page and download *Redistributable* instead of Installer, open the zip
+> and install the package `MSIX\win10-x64 (or x86)\Microsoft.WindowsAppRuntime.DDLM.1.5.msix`
+
+#### Limitations & known issues
+
+- The widget is *injected* into the taskbar, thus it's not a part of it.
+- The widget overlap the taskbar content which can lead to overlapping issue when the taskbar become full.
+- The widget may not respond to all changes in the taskbar to update its position (can be re-positioned manually).
+- The widget cannot be shown/hidden from the taskbar itself. However, a context-menu and a system tray icon are available to control the widget.
+- Explorer will not manage the widget so it has to be launched externally at Windows startup. This can be configured in Settings.
+- The blurred background effect doesn't work, for some reason, even though it works when the widget is not injected into the taskbar.
 
 ## Installation
 
@@ -37,15 +63,19 @@ Go to [Releases](https://github.com/Khiro95/Awqat-Salaat/releases) page and down
 
 After downloading the installer, double-click on it to install the widget.
 
+***If you choose Awqat Salaat WinUI, launch the app and jump directly to step 3.***
+
 It's expected that the widget will not appear after the installation finish, so you need to activate it manually. Here are the steps:
 
-- Right-click on the taskbar then move the mouse over **Toolbars**. For unknown reasons, the widget name will be absent in the list of toolbars so you have to repeat this step again.
+1. Right-click on the taskbar then move the mouse over **Toolbars**. For unknown reasons, the widget name will be absent in the list of toolbars so you have to repeat this step again.
 
   ![Right-click on taskbar and hover over Toolbars item](images/installation_step1.png)
-- In the second time, the widget name **Awqat Salaat** will appear so click on it to activate the widget.
+
+2. In the second time, the widget name **Awqat Salaat** will appear so click on it to activate the widget.
 
   ![Right-click on taskbar again and this time Awqat Salaat name will appear under Toolbars](images/installation_step2.png)
-- Now the widget should appear on the taskbar. Click on it to show settings panel then enter the necessary inputs and click on ✔️ to save changes.
+
+3. Now the widget should appear on the taskbar. Click on it to show settings panel then enter the necessary inputs and click on ✔️ to save changes.
   Note that you only need to configure the service you wish to use, unless you want both.
   
   ![The widget appear on the taskbar and settings panel open](images/installation_step3_1_en.png)
@@ -58,6 +88,8 @@ It's expected that the widget will not appear after the installation finish, so 
 > Actually, each service provide its own set of built-in calculation methods. In future versions, these methods may be unified.
 ## Showcase
 
+### Windows 10 (Deskband)
+
 Here some screenshots of Awqat Salaat widget for both dark and light theme.
 > [!note]
 > The theme always match system theme on Windows 10.
@@ -68,15 +100,36 @@ Here some screenshots of Awqat Salaat widget for both dark and light theme.
 
 ![Awqat Salaat widget notification for near prayer time](images/showcase_3_en.gif)
 
+### Windows 11 (WinUI)
+
+![Awqat Salaat WinUI widget showing next prayer time on center-aligned taskbar](images/showcase_win11_1_en.png)
+
+![Awqat Salaat WinUI widget showing next prayer time on left-aligned taskbar](images/showcase_win11_2_en.png)
+
+![Awqat Salaat WinUI widget showing prayers times for the whole day](images/showcase_win11_3_en.png)
+
+![Quick tutorial for using Awqat Salaat WinUI](images/showcase_win11_4_en.gif)
+
 ## Build
 
-To build Awqat Salaat widget and the preview app, the following is needed:
+To build Awqat Salaat (Deskband) widget and the preview app, the following is needed:
 - .NET Framework 4.7.2 development tools
 
-In addition, to build the installer the following SDK is needed:
+To Build Awqat Salaat WinUI widget, the following is needed:
+- .NET SDK
+- Windows App SDK
+
+In addition, to build the installers the following SDK is needed:
 - Wix Toolset Sdk v4.0.3
 
 ## Changelog
+
+### v3.0
+
+- Add Awqat Salaat WinUI app to support Windows 11.
+- Fix a critical error in date serialization on systems that use different calendars other than Gregorian.
+- Fix settings loss after the installation of Windows Updates (such as cumulative updates).
+- Show Hijri date in English when Display language is not set to Arabic.
 
 ### v2.0.1
 
@@ -103,10 +156,11 @@ In addition, to build the installer the following SDK is needed:
 
 - The widget cache all the times of the current month, obtained from the API, so that it can work in offline mode.
 - The preview app is used for development purposes only.
-- The Hijri date shown in the widget is provided by the runtime (.NET Framework) and is based on *Um Al Qura* calendar, thus it may not match the exact date everywhere.
+- The Hijri date shown in the widget is provided by the runtime (.NET Framework/.NET) and is based on *Um Al Qura* calendar, thus it may not match the exact date everywhere.
 
 ## Credits
 
 - [CSDeskBand:](https://github.com/dsafa/CSDeskBand) A library that simplifies the creation of DeskBands using WinForms or WPF.
+- [H.NotifyIcon:](https://github.com/HavenDV/H.NotifyIcon) A library that simplifies the creation of system tray icons.
 - [Islamic Finder:](http://www.islamicfinder.us/index.php/api) They provide a simple API for getting the prayers times.
 - [Al-Adhan:](https://aladhan.com/prayer-times-api) They provide a flexible API for getting the prayers times.

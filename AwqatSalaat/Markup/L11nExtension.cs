@@ -15,7 +15,7 @@ namespace AwqatSalaat.Markup
             {
                 if (parameter is string key)
                 {
-                    return LocaleManager.Get(key);
+                    return LocaleManager.Default.Get(key);
                 }
 
                 return null;
@@ -26,6 +26,8 @@ namespace AwqatSalaat.Markup
                 throw new NotImplementedException();
             }
         }
+
+        private static readonly LocaleKeyConverter localeKeyConverter = new LocaleKeyConverter();
 
         public string ResKey { get; }
 
@@ -38,12 +40,11 @@ namespace AwqatSalaat.Markup
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            var propInfo = typeof(LocaleManager).GetProperty(nameof(LocaleManager.Current));
-
             Binding binding = new Binding
             {
-                Path = new PropertyPath(propInfo),
-                Converter = new LocaleKeyConverter(),
+                Path = new PropertyPath(nameof(LocaleManager.Current)),
+                Source = LocaleManager.Default,
+                Converter = localeKeyConverter,
                 ConverterParameter = ResKey
             };
 

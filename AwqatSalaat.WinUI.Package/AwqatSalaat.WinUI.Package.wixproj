@@ -1,0 +1,35 @@
+﻿<Project Sdk="WixToolset.Sdk/4.0.3" InitialTargets="HarvestAppFiles">
+  <PropertyGroup>
+    <AwqatSalaatProject>..\AwqatSalaat.WinUI\AwqatSalaat.WinUI.csproj</AwqatSalaatProject>
+    <EnableProjectHarvesting>false</EnableProjectHarvesting>
+    <HarvestDirectorySuppressUniqueIds>true</HarvestDirectorySuppressUniqueIds>
+    <HarvestDirectoryTransforms>..\AwqatSalaat.Package\RemovePdbTransform.xslt</HarvestDirectoryTransforms>
+    <OutputName>AwqatSalaat.WinUI_$(Configuration)-$(Platform)</OutputName>
+  </PropertyGroup>
+  <Target Name="HarvestAppFiles">
+    <PropertyGroup>
+      <ProjectPublishDir>$(ProjectDir)$(IntermediateOutputPath)publish</ProjectPublishDir>
+    </PropertyGroup>
+    <!-- This task allow us to publish the project in order to get the files needed for deployment -->
+    <MSBuild Projects="$(AwqatSalaatProject)" Targets="Publish" Properties="Platform=$(Platform);PublishDir=$(ProjectPublishDir)" />
+    <Message Text="Harvesting files in: $(ProjectPublishDir)" Importance="high" />
+    <ItemGroup>
+      <HarvestDirectory Include="$(ProjectPublishDir)">
+        <ComponentGroupName>AwqatSalaat.WinUI.Components</ComponentGroupName>
+        <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
+        <PreprocessorVariable>AwqatSalaat.WinUI.TargetDir</PreprocessorVariable>
+        <SuppressCom>true</SuppressCom>
+        <SuppressRegistry>true</SuppressRegistry>
+        <SuppressRootDirectory>true</SuppressRootDirectory>
+      </HarvestDirectory>
+    </ItemGroup>
+  </Target>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Heat" Version="4.0.3" />
+    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.3" />
+    <PackageReference Include="WixToolset.Util.wixext" Version="4.0.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(AwqatSalaatProject)" />
+  </ItemGroup>
+</Project>

@@ -1,5 +1,5 @@
 ﻿using AwqatSalaat.Helpers;
-using AwqatSalaat.UI.ViewModels;
+using AwqatSalaat.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -59,7 +59,7 @@ namespace AwqatSalaat.UI.Views
                     ViewModel.WidgetSettings.Cancel.Execute(null);
                 }
             };
-            LocaleManager.CurrentChanged += (_, __) => UpdateDirection();
+            LocaleManager.Default.CurrentChanged += (_, __) => UpdateDirection();
             UpdateDirection();
         }
 

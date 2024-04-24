@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="AwqatSalaat.WinUI.Views.WidgetSummary"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="using:System"
+    xmlns:app="using:AwqatSalaat.WinUI"
+    xmlns:local="using:AwqatSalaat.WinUI.Views"
+    xmlns:helpers="using:AwqatSalaat.WinUI.Helpers"
+    xmlns:converters="using:AwqatSalaat.WinUI.Converters"
+    xmlns:mk="using:AwqatSalaat.WinUI.Markup"
+    xmlns:vm="using:AwqatSalaat.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" x:DefaultBindMode="OneWay">
+    <UserControl.DataContext>
+        <vm:WidgetViewModel />
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <StaticResource x:Key="ToggleButtonBackground" ResourceKey="ControlFillColorTransparentBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundPointerOver" ResourceKey="ControlFillColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundPressed" ResourceKey="ControlFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundChecked" ResourceKey="ControlFillColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedPointerOver" ResourceKey="ControlFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedPressed" ResourceKey="ControlFillColorTertiaryBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedDisabled" ResourceKey="AccentFillColorDisabledBrush" />
+                    <StaticResource x:Key="ToggleButtonForeground" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundPressed" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundDisabled" ResourceKey="TextFillColorDisabledBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundChecked" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedPressed" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedDisabled" ResourceKey="TextOnAccentFillColorDisabled" />
+                    <StaticResource x:Key="ToggleButtonBorderBrush" ResourceKey="ControlFillColorTransparentBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushPointerOver" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushChecked" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPointerOver" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedDisabled" ResourceKey="ControlFillColorTransparentBrush" />
+
+                    <StaticResource x:Key="NotificationFillColor" ResourceKey="SystemAccentColorDark1"/>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <StaticResource x:Key="ToggleButtonBackground" ResourceKey="ControlFillColorTransparentBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundPointerOver" ResourceKey="ControlFillColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundPressed" ResourceKey="ControlFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundDisabled" ResourceKey="ControlFillColorDisabledBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundChecked" ResourceKey="ControlFillColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedPointerOver" ResourceKey="ControlFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedPressed" ResourceKey="ControlFillColorTertiaryBrush" />
+                    <StaticResource x:Key="ToggleButtonBackgroundCheckedDisabled" ResourceKey="AccentFillColorDisabledBrush" />
+                    <StaticResource x:Key="ToggleButtonForeground" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundPressed" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundDisabled" ResourceKey="TextFillColorDisabledBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundChecked" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedPointerOver" ResourceKey="TextFillColorPrimaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedPressed" ResourceKey="TextFillColorSecondaryBrush" />
+                    <StaticResource x:Key="ToggleButtonForegroundCheckedDisabled" ResourceKey="TextOnAccentFillColorDisabled" />
+                    <StaticResource x:Key="ToggleButtonBorderBrush" ResourceKey="ControlFillColorTransparentBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushPointerOver" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushDisabled" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushChecked" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPointerOver" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedPressed" ResourceKey="ControlStrokeColorDefaultBrush" />
+                    <StaticResource x:Key="ToggleButtonBorderBrushCheckedDisabled" ResourceKey="ControlFillColorTransparentBrush" />
+
+                    <StaticResource x:Key="NotificationFillColor" ResourceKey="SystemAccentColorLight2"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+            <converters:BooleanToVisibilityInvertedConverter x:Key="BooleanToVisibilityInvertedConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <UserControl.Transitions>
+        <EdgeUIThemeTransition Edge="Bottom"/>
+    </UserControl.Transitions>
+    <UserControl.ContextFlyout>
+        <MenuFlyout ShouldConstrainToRootBounds="False" SystemBackdrop="{StaticResource AcrylicBackgroundFillColorDefaultBackdrop}">
+            <MenuFlyout.MenuFlyoutPresenterStyle>
+                <Style TargetType="MenuFlyoutPresenter" BasedOn="{StaticResource DefaultMenuFlyoutPresenterStyle}">
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </MenuFlyout.MenuFlyoutPresenterStyle>
+            <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Hide}" Command="{x:Bind app:TaskBarManager.HideWidget, Mode=OneTime}"/>
+            <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Reposition}" Command="{x:Bind app:TaskBarManager.RepositionWidget, Mode=OneTime}"/>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Quit}" Command="{x:Bind app:App.Quit, Mode=OneTime}"/>
+        </MenuFlyout>
+    </UserControl.ContextFlyout>
+    <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="BackgroundStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="Notification">
+                    <VisualState.StateTriggers>
+                        <StateTrigger IsActive="{x:Bind ViewModel.Next.IsTimeClose}"/>
+                    </VisualState.StateTriggers>
+                    <Storyboard RepeatBehavior="Forever">
+                        <ColorAnimation To="{ThemeResource NotificationFillColor}" Duration="0:0:2" Storyboard.TargetName="alert" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" AutoReverse="True"/>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+            <VisualStateGroup x:Name="LayoutStates">
+                <VisualState x:Name="Single"/>
+                <VisualState x:Name="Duo">
+                    <VisualState.StateTriggers>
+                        <StateTrigger IsActive="{x:Bind ViewModel.WidgetSettings.Settings.ShowCountdown}"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="uniformgrid.MaximumRowsOrColumns" Value="2"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <ToggleButton x:Name="toggle" IsChecked="{x:Bind flyout.IsOpen}" IsThreeState="False" Checked="ToggleButton_Checked" Padding="0" FontSize="12" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <Grid x:Name="btngrid">
+                <Border x:Name="alert" Background="Transparent" CornerRadius="{ThemeResource ControlCornerRadius}"/>
+                <Grid Margin="4" Visibility="{x:Bind ViewModel.WidgetSettings.Settings.IsConfigured}">
+                    <Grid Visibility="{x:Bind ViewModel.IsRefreshing, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
+                        <ItemsRepeater Visibility="{x:Bind ViewModel.HasError, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
+                            <ItemsRepeater.Layout>
+                                <UniformGridLayout x:Name="uniformgrid" MaximumRowsOrColumns="1" Orientation="Horizontal" ItemsStretch="Fill"/>
+                            </ItemsRepeater.Layout>
+                            <ItemsRepeater.ItemsSource>
+                                <helpers:XamlList>
+                                    <Grid RowDefinitions="*,*">
+                                        <TextBlock Text="{x:Bind ViewModel.Next.Name, FallbackValue=NAME}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{x:Bind ViewModel.Next.Time.ToString('HH:mm', x:Null), FallbackValue=TIME}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
+                                    </Grid>
+                                    <Grid RowDefinitions="*,*" Visibility="{x:Bind ViewModel.WidgetSettings.Settings.ShowCountdown}">
+                                        <TextBlock Text="{mk:L11n Key=UI.Summary.After}" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{x:Bind sys:String.Format('{0:hh\\\\:mm}', ViewModel.Next.Countdown), FallbackValue=COUNTDOWN}" HorizontalAlignment="Center" Grid.Row="1"/>
+                                    </Grid>
+                                </helpers:XamlList>
+                            </ItemsRepeater.ItemsSource>
+                        </ItemsRepeater>
+                    </Grid>
+                </Grid>
+                <TextBlock
+                    Text="{mk:L11n Key=UI.Summary.Refreshing}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Visibility="{x:Bind ViewModel.IsRefreshing}"/>
+                <ProgressBar
+                    IsIndeterminate="True"
+                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                    VerticalAlignment="Bottom"
+                    Visibility="{x:Bind ViewModel.IsRefreshing}"/>
+                <StackPanel
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Margin="3,0"
+                    Visibility="{x:Bind ViewModel.HasError}">
+                    <FontIcon Glyph="&#xE7BA;" FontSize="20" Foreground="{ThemeResource TextHighlightBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <!-- gutter -->
+                    <Rectangle Margin="3,4" Height="0" Width="0"/>
+                    <TextBlock Text="{mk:L11n Key=UI.Summary.ErrorOccured}" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Margin="4,0"
+                    Visibility="{x:Bind ViewModel.WidgetSettings.Settings.IsConfigured, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
+                    <FontIcon Glyph="&#xE7BA;" FontSize="20" Foreground="{ThemeResource TextHighlightBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <!-- gutter -->
+                    <Rectangle Margin="4" Height="0" Width="0"/>
+                    <TextBlock Text="{mk:L11n Key=UI.Summary.TapToStart}" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Grid>
+            <FlyoutBase.AttachedFlyout>
+                <Flyout x:Name="flyout" ShouldConstrainToRootBounds="False" SystemBackdrop="{StaticResource AcrylicBackgroundFillColorDefaultBackdrop}" Opened="Flyout_Opened" Closed="Flyout_Closed">
+                    <Flyout.FlyoutPresenterStyle>
+                        <Style TargetType="FlyoutPresenter" BasedOn="{StaticResource DefaultFlyoutPresenterStyle}">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="MaxWidth" Value="1000" />
+                        </Style>
+                    </Flyout.FlyoutPresenterStyle>
+                    <local:WidgetPanel x:Name="widgetPanel" MinWidth="200"/>
+                </Flyout>
+            </FlyoutBase.AttachedFlyout>
+        </ToggleButton>
+    </Grid>
+</UserControl>

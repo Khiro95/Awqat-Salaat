@@ -1,0 +1,79 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+        <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+        <RootNamespace>AwqatSalaat.WinUI</RootNamespace>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <Platforms>x86;x64;ARM64</Platforms>
+        <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
+        <PublishProfile>win10-$(Platform).pubxml</PublishProfile>
+        <UseWinUI>true</UseWinUI>
+        <EnableMsixTooling>true</EnableMsixTooling>
+        <ApplicationIcon>Assets/as_ico_win11.ico</ApplicationIcon>
+
+        <WindowsPackageType>None</WindowsPackageType>
+        <SelfContained>false</SelfContained>
+        <AppContainerApplication>true</AppContainerApplication>
+
+        <Product>Awqat Salaat WinUI</Product>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <None Remove="Themes\Generic.xaml" />
+    </ItemGroup>
+    <ItemGroup>
+      <COMReference Include="UIAutomationClient">
+        <WrapperTool>tlbimp</WrapperTool>
+        <VersionMinor>0</VersionMinor>
+        <VersionMajor>1</VersionMajor>
+        <Guid>944de083-8fb8-45cf-bcb7-c477acb2f897</Guid>
+        <Lcid>0</Lcid>
+        <Isolated>false</Isolated>
+        <EmbedInteropTypes>true</EmbedInteropTypes>
+      </COMReference>
+      <COMReference Include="IWshRuntimeLibrary">
+        <WrapperTool>tlbimp</WrapperTool>
+        <VersionMinor>0</VersionMinor>
+        <VersionMajor>1</VersionMajor>
+        <Guid>f935dc20-1cf0-11d0-adb9-00c04fd58a0b</Guid>
+        <Lcid>0</Lcid>
+        <Isolated>false</Isolated>
+        <EmbedInteropTypes>true</EmbedInteropTypes>
+      </COMReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="H.NotifyIcon" Version="2.0.124" />
+        <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240311000" />
+        <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
+        <PackageReference Include="System.Management" Version="8.0.0" />
+        <Manifest Include="$(ApplicationManifest)" />
+    </ItemGroup>
+
+    <!-- 
+      Defining the "Msix" ProjectCapability here allows the Single-project MSIX Packaging
+      Tools extension to be activated for this project even if the Windows App SDK Nuget
+      package has not yet been restored.
+    -->
+    <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
+        <ProjectCapability Include="Msix" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\AwqatSalaat.Common\AwqatSalaat.Common.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Page Update="Themes\Generic.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Page>
+    </ItemGroup>
+
+    <!-- 
+      Defining the "HasPackageAndPublishMenuAddedByProject" property here allows the Solution 
+      Explorer "Package and Publish" context menu entry to be enabled for this project even if 
+      the Windows App SDK Nuget package has not yet been restored.
+    -->
+    <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
+        <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
+    </PropertyGroup>
+</Project>

@@ -1,0 +1,6 @@
+<Project>
+  <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
+  <PropertyGroup>
+    <!-- Just a dummy file to exclude this project from the root Directory.Build.props -->
+  </PropertyGroup>
+</Project>
