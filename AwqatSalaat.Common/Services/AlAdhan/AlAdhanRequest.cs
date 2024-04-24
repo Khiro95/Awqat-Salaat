@@ -13,7 +13,7 @@ namespace AwqatSalaat.Services.AlAdhan
         public string GetUrl()
             => (GetEntireMonth
                 ? $"http://api.aladhan.com/v1/calendarByCity/{Date.Year}/{Date.Month}"
-                : $"http://api.aladhan.com/v1/timingsByCity/{Date:dd-MM-yyyy}")
+                : $"http://api.aladhan.com/v1/timingsByCity/{Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture)}")
             + $"?country={Country}"
             + $"&city={City}"
             + $"&method={(byte)Method}";

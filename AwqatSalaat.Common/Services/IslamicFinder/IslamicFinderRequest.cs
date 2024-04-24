@@ -16,7 +16,7 @@ namespace AwqatSalaat.Services.IslamicFinder
             + $"&zipcode={ZipCode}"
             + $"&method={(byte)Method}"
             + $"&show_entire_month={GetEntireMonth}"
-            + $"&date={Date:yyyy-MM-dd}"
+            + $"&date={Date.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}"
             + $"&time_format=0";
     }
 }
