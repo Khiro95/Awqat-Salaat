@@ -82,19 +82,6 @@
     <UserControl.Transitions>
         <EdgeUIThemeTransition Edge="Bottom"/>
     </UserControl.Transitions>
-    <UserControl.ContextFlyout>
-        <MenuFlyout ShouldConstrainToRootBounds="False" SystemBackdrop="{StaticResource AcrylicBackgroundFillColorDefaultBackdrop}">
-            <MenuFlyout.MenuFlyoutPresenterStyle>
-                <Style TargetType="MenuFlyoutPresenter" BasedOn="{StaticResource DefaultMenuFlyoutPresenterStyle}">
-                    <Setter Property="Background" Value="Transparent"/>
-                </Style>
-            </MenuFlyout.MenuFlyoutPresenterStyle>
-            <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Hide}" Command="{x:Bind app:TaskBarManager.HideWidget, Mode=OneTime}"/>
-            <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Reposition}" Command="{x:Bind app:TaskBarManager.RepositionWidget, Mode=OneTime}"/>
-            <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Quit}" Command="{x:Bind app:App.Quit, Mode=OneTime}"/>
-        </MenuFlyout>
-    </UserControl.ContextFlyout>
     <Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="BackgroundStates">
@@ -122,6 +109,19 @@
         </VisualStateManager.VisualStateGroups>
         <ToggleButton x:Name="toggle" IsChecked="{x:Bind flyout.IsOpen}" IsThreeState="False" Checked="ToggleButton_Checked" Padding="0" FontSize="12" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
             <Grid x:Name="btngrid">
+                <Grid.ContextFlyout>
+                    <MenuFlyout ShouldConstrainToRootBounds="False" SystemBackdrop="{StaticResource AcrylicBackgroundFillColorDefaultBackdrop}">
+                        <MenuFlyout.MenuFlyoutPresenterStyle>
+                            <Style TargetType="MenuFlyoutPresenter" BasedOn="{StaticResource DefaultMenuFlyoutPresenterStyle}">
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Style>
+                        </MenuFlyout.MenuFlyoutPresenterStyle>
+                        <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Hide}" Command="{x:Bind app:TaskBarManager.HideWidget, Mode=OneTime}"/>
+                        <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Reposition}" Command="{x:Bind app:TaskBarManager.RepositionWidget, Mode=OneTime}"/>
+                        <MenuFlyoutSeparator/>
+                        <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Quit}" Command="{x:Bind app:App.Quit, Mode=OneTime}"/>
+                    </MenuFlyout>
+                </Grid.ContextFlyout>
                 <Border x:Name="alert" Background="Transparent" CornerRadius="{ThemeResource ControlCornerRadius}"/>
                 <Grid Margin="4" Visibility="{x:Bind ViewModel.WidgetSettings.Settings.IsConfigured}">
                     <Grid Visibility="{x:Bind ViewModel.IsRefreshing, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
