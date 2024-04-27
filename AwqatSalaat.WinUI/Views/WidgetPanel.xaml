@@ -19,7 +19,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <converters:BooleanToVisibilityInvertedConverter x:Key="BooleanToVisibilityInvertedConverter"/>
-            <converters:CustomDateConverter x:Key="CustomDateConverter"/>
+            <converters:CustomDateTimeConverter x:Key="CustomDateConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <d:UserControl.DataContext>
@@ -50,7 +50,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0">
-                        <TextBlock Text="{x:Bind converters:CustomDateConverter.Format(ViewModel.DisplayedDate, 'dddd', ash:LocaleManager.Default.Current)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" Margin="0,4" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{x:Bind converters:CustomDateTimeConverter.Format(ViewModel.DisplayedDate, 'dddd', ash:LocaleManager.Default.Current)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" Margin="0,4" HorizontalAlignment="Center"/>
                         <TextBlock Text="{x:Bind ash:HijriDateHelper.Format(ViewModel.DisplayedDate, 'dd MMMM yyyy', ash:LocaleManager.Default.Current)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" FlowDirection="RightToLeft" Margin="0,4" HorizontalAlignment="Center"/>
                         <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center">
                             <TextBlock Text="{mk:L11n Key=UI.Panel.CorrespondTo}" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
@@ -65,7 +65,12 @@
                     <ItemsControl ItemsSource="{Binding Items}" Grid.Row="2">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="vm:PrayerTimeViewModel">
-                                <controls:PrayerTimeItem State="{x:Bind State}" Time="{x:Bind Time}" PrayerName="{x:Bind Name}" DismissCommand="{x:Bind DismissNotification}"/>
+                                <controls:PrayerTimeItem
+                                    State="{x:Bind State}"
+                                    Time="{x:Bind Time}"
+                                    TimeString="{x:Bind converters:CustomDateTimeConverter.FormatShortTime(Time, ash:LocaleManager.Default.CurrentCulture)}"
+                                    PrayerName="{x:Bind Name}"
+                                    DismissCommand="{x:Bind DismissNotification}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

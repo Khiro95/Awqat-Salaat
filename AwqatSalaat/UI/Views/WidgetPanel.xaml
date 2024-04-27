@@ -26,6 +26,7 @@
             <BooleanToVisibilityConverter x:Key="BoolVisConverter"/>
             <converters:BoolToVisibilityInvertedConverter x:Key="BoolVisInvConverter"/>
             <converters:HijriDateConverter x:Key="HijriDateConverter"/>
+            <converters:ShortTimeConverter x:Key="ShortTimeConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <d:UserControl.DataContext>
@@ -129,8 +130,8 @@
                                             </TextBlock.Style>
                                         </TextBlock>
                                         <TextBlock Text="{Binding Name}" Grid.Column="1"/>
-                                        <Button Style="{DynamicResource ButtonAltStyle}" Content="{mk:L11n UI.Panel.Dismiss}" Command="{Binding DismissNotification}" Foreground="{DynamicResource ThemeColors.TextOnAccentBrush}" Margin="8,0,16,0" Grid.Column="2" d:Visibility="Visible" Visibility="{Binding IsTimeClose, Converter={StaticResource BoolVisConverter}}"/>
-                                        <TextBlock Text="{Binding Time, StringFormat=HH:mm}" Grid.Column="3" HorizontalAlignment="Center"/>
+                                        <Button Style="{DynamicResource ButtonAltStyle}" Content="{mk:L11n UI.Panel.Dismiss}" Command="{Binding DismissNotification}" Foreground="{DynamicResource ThemeColors.TextOnAccentBrush}" Margin="16,0" Grid.Column="2" d:Visibility="Visible" Visibility="{Binding IsTimeClose, Converter={StaticResource BoolVisConverter}}"/>
+                                        <TextBlock Text="{Binding Time, Converter={StaticResource ShortTimeConverter}}" Grid.Column="3" HorizontalAlignment="Center"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>

@@ -10,6 +10,7 @@
     xmlns:converters="using:AwqatSalaat.WinUI.Converters"
     xmlns:mk="using:AwqatSalaat.WinUI.Markup"
     xmlns:vm="using:AwqatSalaat.ViewModels"
+    xmlns:ash="using:AwqatSalaat.Helpers"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" x:DefaultBindMode="OneWay">
@@ -76,6 +77,7 @@
                     <StaticResource x:Key="NotificationFillColor" ResourceKey="SystemAccentColorLight2"/>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
+
             <converters:BooleanToVisibilityInvertedConverter x:Key="BooleanToVisibilityInvertedConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -133,7 +135,7 @@
                                 <helpers:XamlList>
                                     <Grid RowDefinitions="*,*">
                                         <TextBlock Text="{x:Bind ViewModel.Next.Name, FallbackValue=NAME}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        <TextBlock Text="{x:Bind ViewModel.Next.Time.ToString('HH:mm', x:Null), FallbackValue=TIME}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
+                                        <TextBlock Text="{x:Bind converters:CustomDateTimeConverter.FormatShortTime(ViewModel.Next.Time, ash:LocaleManager.Default.CurrentCulture), FallbackValue=TIME}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
                                     </Grid>
                                     <Grid RowDefinitions="*,*" Visibility="{x:Bind ViewModel.WidgetSettings.Settings.ShowCountdown}">
                                         <TextBlock Text="{mk:L11n Key=UI.Summary.After}" HorizontalAlignment="Center"/>

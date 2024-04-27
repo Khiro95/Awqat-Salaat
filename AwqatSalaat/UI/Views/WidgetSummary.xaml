@@ -27,6 +27,7 @@
             <BooleanToVisibilityConverter x:Key="BoolVisConverter"/>
             <converters:BoolToVisibilityInvertedConverter x:Key="BoolVisInvConverter"/>
             <converters:BoolInverterConverter x:Key="BoolInverterConverter"/>
+            <converters:ShortTimeConverter x:Key="ShortTimeConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <UserControl.Style>
@@ -101,7 +102,7 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="{Binding Next.Name, FallbackValue=NAME}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <TextBlock Text="{Binding Next.Time, StringFormat=HH:mm, FallbackValue=TIME}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
+                                <TextBlock Text="{Binding Next.Time, Converter={StaticResource ShortTimeConverter}, FallbackValue=TIME}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
                             </Grid>
                             <Grid Visibility="{Binding WidgetSettings.Settings.ShowCountdown, Converter={StaticResource BoolVisConverter}}">
                                 <Grid.RowDefinitions>
