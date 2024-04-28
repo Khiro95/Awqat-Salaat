@@ -5,9 +5,11 @@ using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml.Hosting;
 using System;
+using System.Collections.Generic;
 using System.Management;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
+using System.Text;
 using System.Threading.Tasks;
 using UIAutomationClient;
 using Windows.Graphics;
@@ -126,6 +128,36 @@ namespace AwqatSalaat.WinUI
                     }
                 }
 
+                try
+                {
+                    List<IntPtr> wnds = GetOtherInjectedWindows();
+
+                    foreach (var wnd in wnds)
+                    {
+                        User32.GetWindowRect(wnd, out var bounds);
+
+                        if (bounds.right < offsetX ||  bounds.left > (offsetX + WidgetHostWidth))
+                        {
+                            continue;
+                        }
+
+                        if (isCentered == osRTL)
+                        {
+                            offsetX = bounds.left - WidgetHostWidth;
+                        }
+                        else
+                        {
+                            offsetX = bounds.right;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+#if DEBUG
+                    throw;
+#endif
+                }
+
                 appWindow.Move(new PointInt32(offsetX, 0));
 
                 isTaskBarCentered = isCentered;
@@ -184,6 +216,54 @@ namespace AwqatSalaat.WinUI
         {
             // Taskbar alignment may have been changed or Widgets button is enabled/disabled, try to update position
             UpdatePosition();
+        }
+
+        // https://stackoverflow.com/a/28055461/4644774
+        private List<IntPtr> GetOtherInjectedWindows()
+        {
+            List<IntPtr> childHandles = new List<IntPtr>();
+
+            GCHandle gcChildhandlesList = GCHandle.Alloc(childHandles);
+            IntPtr pointerChildHandlesList = GCHandle.ToIntPtr(gcChildhandlesList);
+
+            EnumWindowProc childProc = new EnumWindowProc(EnumWindow);
+            User32.EnumChildWindows(hwndShell, childProc, pointerChildHandlesList);
+
+            return childHandles;
+        }
+
+        private bool EnumWindow(IntPtr hWnd, IntPtr lParam)
+        {
+            if (hWnd != this.hwnd && User32.GetAncestor(hWnd, GetAncestorFlags.GA_PARENT) == hwndShell)
+            {
+                StringBuilder builder = new StringBuilder(256);
+                User32.GetClassName(hWnd, builder, builder.MaxCapacity);
+
+                if (!IsSystemWindow(builder.ToString()))
+                {
+                    GCHandle gcChildhandlesList = GCHandle.FromIntPtr(lParam);
+                    List<IntPtr> childHandles = gcChildhandlesList.Target as List<IntPtr>;
+                    childHandles.Add(hWnd);
+                }
+            }
+
+            return true;
+
+            static bool IsSystemWindow(string className)
+            {
+                return className
+                    // Common
+                    is "Start"
+                    or "TrayDummySearchControl"
+                    or "ReBarWindow32"
+                    or "TrayNotifyWnd"
+                    // Windows 10 only
+                    or "TrayButton"
+                    or "DynamicContent2"
+                    // Windows 11 only
+                    or "Windows.UI.Core.CoreWindow"
+                    or "Windows.UI.Composition.DesktopWindowContentBridge";
+            }
         }
 
         private static IUIAutomationElement GetAutomationElement(string automationId)
