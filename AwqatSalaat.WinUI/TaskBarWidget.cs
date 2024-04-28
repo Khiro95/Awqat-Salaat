@@ -20,13 +20,15 @@ namespace AwqatSalaat.WinUI
         private const string TaskBarClassName = "Shell_TrayWnd";
         private const string NotificationAreaClassName = "TrayNotifyWnd";
         private const string WidgetsButtonAutomationId = "WidgetsButton";
-        private const int WidgetHostWidth = 118; // 110 for the button + 4 for left margin + 4 for right margin
+        private const int DefaultWidgetHostWidth = 118; // 110 for the button + 4 for left margin + 4 for right margin
 
         private static IntPtr hwndShell;
         private static IntPtr hwndTrayNotify;
         private static RECT taskbarRect;
         private static RECT trayNotifyRect;
 
+        private readonly int WidgetHostWidth;
+        
         private IntPtr hwnd;
         private AppWindow appWindow;
         private DesktopWindowXamlSource host;
@@ -42,6 +44,10 @@ namespace AwqatSalaat.WinUI
         {
             hwndShell = User32.FindWindow(TaskBarClassName, null);
             hwndTrayNotify = User32.FindWindowEx(hwndShell, IntPtr.Zero, NotificationAreaClassName , null);
+
+            var dpi = User32.GetDpiForWindow(hwndShell);
+            var scale = dpi / 96d;
+            WidgetHostWidth = (int)Math.Ceiling(scale * DefaultWidgetHostWidth);
         }
 
         public void Initialize()

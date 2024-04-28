@@ -15,6 +15,9 @@ namespace AwqatSalaat.Interop
             => MessageBox(HWND, lpText, lpCaption, (uint)buttons | (uint)icon);
 
         [DllImport("user32.dll")]
+        public static extern uint GetDpiForWindow([In] IntPtr hWnd);
+
+        [DllImport("user32.dll")]
         public static extern bool GetWindowRect([In] IntPtr hWnd, [Out] out RECT lpRect);
 
         [DllImport("user32.dll")]
