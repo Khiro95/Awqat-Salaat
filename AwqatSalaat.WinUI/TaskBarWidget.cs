@@ -226,8 +226,15 @@ namespace AwqatSalaat.WinUI
             GCHandle gcChildhandlesList = GCHandle.Alloc(childHandles);
             IntPtr pointerChildHandlesList = GCHandle.ToIntPtr(gcChildhandlesList);
 
-            EnumWindowProc childProc = new EnumWindowProc(EnumWindow);
-            User32.EnumChildWindows(hwndShell, childProc, pointerChildHandlesList);
+            try
+            {
+                EnumWindowProc childProc = new EnumWindowProc(EnumWindow);
+                User32.EnumChildWindows(hwndShell, childProc, pointerChildHandlesList);
+            }
+            finally
+            {
+                gcChildhandlesList.Free();
+            }
 
             return childHandles;
         }
