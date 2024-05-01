@@ -5,8 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:sys="using:System"
     xmlns:dt="using:AwqatSalaat.Data"
-    xmlns:api1="using:AwqatSalaat.Services.IslamicFinder"
-    xmlns:api2="using:AwqatSalaat.Services.AlAdhan"
+    xmlns:methods="using:AwqatSalaat.Services.Methods"
     xmlns:mk="using:AwqatSalaat.WinUI.Markup"
     xmlns:converters="using:AwqatSalaat.WinUI.Converters"
     xmlns:local="using:AwqatSalaat.WinUI.Views"
@@ -39,6 +38,55 @@
             <Style TargetType="ctrl:SettingsItem">
                 <Setter Property="Margin" Value="0,16,0,0"/>
             </Style>
+
+            <Style TargetType="ctrl:CalculationMethodParameterPresenter">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ctrl:CalculationMethodParameterPresenter">
+                            <StackPanel Orientation="Horizontal">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup>
+                                        <VisualState x:Name="Angle"/>
+                                        <VisualState x:Name="FixedMinutes">
+                                            <VisualState.Setters>
+                                                <Setter Target="unit.Text" Value="{mk:L11n Key=UI.Settings.MinutesShort}"/>
+                                                <Setter Target="unit.Margin" Value="4,0,0,0"/>
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <TextBlock Text="{Binding Parameter.Value, RelativeSource={RelativeSource TemplatedParent}}" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                                <TextBlock x:Name="unit" Text="°" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <DataTemplate x:Key="CalculationMethodTemplate" x:DataType="methods:CalculationMethod" x:DefaultBindMode="OneWay">
+                <StackPanel>
+                    <TextBlock Text="{x:Bind Name}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="{ThemeResource TextFillColorTertiaryBrush}"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <TextBlock Text="{mk:L11n Key=Data.Salaat.Fajr}"/>
+                        <ctrl:CalculationMethodParameterPresenter Parameter="{x:Bind Fajr}" Margin="8,0,0,0"/>
+                        <TextBlock Text="-" Margin="8,0"/>
+                        <TextBlock Text="{mk:L11n Key=Data.Salaat.Maghrib}"/>
+                        <ctrl:CalculationMethodParameterPresenter Parameter="{Binding Maghrib}" Margin="8,0,0,0"/>
+                        <TextBlock Text="-" Margin="8,0"/>
+                        <TextBlock Text="{mk:L11n Key=Data.Salaat.Isha}"/>
+                        <ctrl:CalculationMethodParameterPresenter Parameter="{x:Bind Isha}" Margin="8,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="CalculationMethodDisplayTemplate" x:DataType="methods:CalculationMethod">
+                <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -99,12 +147,13 @@
                     </ctrl:SettingsItem>
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Method}" Description="{mk:L11n Key=UI.Settings.MethodDescription}">
                         <ComboBox PlaceholderText="Pick a method"
-                                  ItemsSource="{mk:Enums Type=api1:IslamicFinderMethod}"
-                                  SelectedItem="{Binding Settings.Method, Mode=TwoWay}"
+                                  ItemsSource="{x:Bind methods:CalculationMethod.AvailableMethods, Mode=OneTime}"
+                                  SelectedItem="{Binding Settings.CalculationMethod, Mode=TwoWay}"
                                   HorizontalAlignment="Stretch">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                                    <ctrl:ComboBoxItemPresenter PopupItemTemplate="{StaticResource CalculationMethodTemplate}"
+                                                                SelectedItemTemplate="{StaticResource CalculationMethodDisplayTemplate}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
@@ -119,12 +168,13 @@
                     </ctrl:SettingsItem>
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Method}" Description="{mk:L11n Key=UI.Settings.MethodDescription}">
                         <ComboBox PlaceholderText="Pick a method"
-                                  ItemsSource="{mk:Enums Type=api2:AlAdhanMethod}"
-                                  SelectedItem="{Binding Settings.Method2, Mode=TwoWay}"
+                                  ItemsSource="{x:Bind methods:CalculationMethod.AvailableMethods, Mode=OneTime}"
+                                  SelectedItem="{Binding Settings.CalculationMethod, Mode=TwoWay}"
                                   HorizontalAlignment="Stretch">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                                    <ctrl:ComboBoxItemPresenter PopupItemTemplate="{StaticResource CalculationMethodTemplate}"
+                                                                SelectedItemTemplate="{StaticResource CalculationMethodDisplayTemplate}"/>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>

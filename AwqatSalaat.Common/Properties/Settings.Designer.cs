@@ -166,5 +166,17 @@ namespace AwqatSalaat.Properties {
                 this["LaunchOnWindowsStartup"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MethodString {
+            get {
+                return ((string)(this["MethodString"]));
+            }
+            set {
+                this["MethodString"] = value;
+            }
+        }
     }
 }

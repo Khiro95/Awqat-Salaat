@@ -12,6 +12,7 @@ namespace AwqatSalaat.ViewModels
     {
         private bool isOpen = !Settings.Default.IsConfigured;
         private PrayerTimesService? _serviceBackup;
+        private string _methodBackup;
         private (string countryCode, string zipCode, IslamicFinderMethod method)? _islamicFinderBackup;
         private (string countryCode, string city, AlAdhanMethod method)? _alAdhanBackup;
 
@@ -58,6 +59,7 @@ namespace AwqatSalaat.ViewModels
         private void SaveExecute(object obj)
         {
             bool apiSettingsChanged = Settings.Service != _serviceBackup;
+            apiSettingsChanged |= Settings.MethodString != _methodBackup;
             apiSettingsChanged |= (Settings.CountryCode, Settings.ZipCode, Settings.Method) != _islamicFinderBackup;
             apiSettingsChanged |= (Settings.CountryCode, Settings.City, Settings.Method2) != _alAdhanBackup;
             Settings.IsConfigured = true;
@@ -81,12 +83,14 @@ namespace AwqatSalaat.ViewModels
             if (value)
             {
                 _serviceBackup = Settings.Service;
+                _methodBackup = Settings.MethodString;
                 _islamicFinderBackup = (Settings.CountryCode, Settings.ZipCode, Settings.Method);
                 _alAdhanBackup = (Settings.CountryCode, Settings.City, Settings.Method2);
             }
             else
             {
                 _serviceBackup = null;
+                _methodBackup = null;
                 _islamicFinderBackup = null;
                 _alAdhanBackup = null;
             }

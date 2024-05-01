@@ -226,4 +226,7 @@
   <data name="UI.Settings.LaunchOnWindowsStartupDescription" xml:space="preserve">
     <value>Allow the widget to start running when Windows start</value>
   </data>
+  <data name="UI.Settings.MinutesShort" xml:space="preserve">
+    <value>min</value>
+  </data>
 </root>

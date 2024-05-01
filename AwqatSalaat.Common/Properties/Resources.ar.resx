@@ -246,4 +246,7 @@
   <data name="UI.Settings.LaunchOnWindowsStartupDescription" xml:space="preserve">
     <value>السماح للأداة بالبدء عند تشغيل النظام</value>
   </data>
+  <data name="UI.Settings.MinutesShort" xml:space="preserve">
+    <value>د</value>
+  </data>
 </root>

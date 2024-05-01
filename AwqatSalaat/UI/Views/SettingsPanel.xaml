@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AwqatSalaat.UI.Views"
              xmlns:vm="clr-namespace:AwqatSalaat.ViewModels;assembly=AwqatSalaat.Common"
+             xmlns:methods="clr-namespace:AwqatSalaat.Services.Methods;assembly=AwqatSalaat.Common"
              xmlns:ui="clr-namespace:AwqatSalaat.UI"
              xmlns:controls="clr-namespace:AwqatSalaat.UI.Controls"
              xmlns:converters="clr-namespace:AwqatSalaat.UI.Converters"
@@ -49,6 +50,42 @@
             <Style TargetType="controls:SettingsItem" BasedOn="{StaticResource DefaultSettingsItemStyle}">
                 <Setter Property="Margin" Value="0,16,0,0"/>
             </Style>
+
+            <DataTemplate x:Key="MethodParameterValueTemplate" DataType="methods:CalculationMethodParameter">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Value}"/>
+                    <TextBlock x:Name="unit"/>
+                </StackPanel>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Type}" Value="Angle">
+                        <Setter TargetName="unit" Property="Text" Value="°"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Type}" Value="FixedMinutes">
+                        <Setter TargetName="unit" Property="Text" Value="{mk:L11n UI.Settings.MinutesShort}"/>
+                        <Setter TargetName="unit" Property="Margin" Value="4,0,0,0"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+
+            <DataTemplate x:Key="CalculationMethodTemplate" DataType="methods:CalculationMethod">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}"/>
+                    <StackPanel Orientation="Horizontal" TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}">
+                        <TextBlock Text="{mk:L11n Data.Salaat.Fajr}"/>
+                        <ContentPresenter Content="{Binding Fajr}" ContentTemplate="{StaticResource MethodParameterValueTemplate}" Margin="8,0,0,0"/>
+                        <TextBlock Text="-" Margin="8,0"/>
+                        <TextBlock Text="{mk:L11n Data.Salaat.Maghrib}"/>
+                        <ContentPresenter Content="{Binding Maghrib}" ContentTemplate="{StaticResource MethodParameterValueTemplate}" Margin="8,0,0,0"/>
+                        <TextBlock Text="-" Margin="8,0"/>
+                        <TextBlock Text="{mk:L11n Data.Salaat.Isha}"/>
+                        <ContentPresenter Content="{Binding Isha}" ContentTemplate="{StaticResource MethodParameterValueTemplate}" Margin="8,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="CalculationMethodDisplayTemplate" DataType="methods:CalculationMethod">
+                <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -90,10 +127,15 @@
                             <TextBox Text="{Binding ZipCode}" Width="100" HorizontalAlignment="Left"/>
                         </controls:SettingsItem>
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.Method}" Description="{mk:L11n UI.Settings.MethodDescription}">
-                            <ComboBox ItemsSource="{Binding Source={StaticResource IslamicFinderMethodEnum}}" SelectedItem="{Binding Method}">
+                            <ComboBox ItemsSource="{Binding Source={x:Static methods:CalculationMethod.AvailableMethods}}" SelectedItem="{Binding CalculationMethod}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding ., Converter={StaticResource EnumDescriptionConverter}}"/>
+                                        <ContentPresenter x:Name="presenter" Content="{Binding}" ContentTemplate="{StaticResource CalculationMethodTemplate}"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBoxItem, AncestorLevel=1}}" Value="{x:Null}">
+                                                <Setter TargetName="presenter" Property="ContentTemplate" Value="{StaticResource CalculationMethodDisplayTemplate}" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
@@ -111,10 +153,15 @@
                             <TextBox Text="{Binding City}" Width="200" HorizontalAlignment="Left"/>
                         </controls:SettingsItem>
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.Method}" Description="{mk:L11n UI.Settings.MethodDescription}">
-                            <ComboBox ItemsSource="{Binding Source={StaticResource AlAdhanMethodEnum}}" SelectedItem="{Binding Method2}">
+                            <ComboBox ItemsSource="{Binding Source={x:Static methods:CalculationMethod.AvailableMethods}}" SelectedItem="{Binding CalculationMethod}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding ., Converter={StaticResource EnumDescriptionConverter}}"/>
+                                        <ContentPresenter x:Name="presenter" Content="{Binding}" ContentTemplate="{StaticResource CalculationMethodTemplate}"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBoxItem, AncestorLevel=1}}" Value="{x:Null}">
+                                                <Setter TargetName="presenter" Property="ContentTemplate" Value="{StaticResource CalculationMethodDisplayTemplate}" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>

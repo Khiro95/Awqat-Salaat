@@ -228,7 +228,7 @@ namespace AwqatSalaat.ViewModels
                     {
                         CountryCode = WidgetSettings.Settings.CountryCode,
                         ZipCode = WidgetSettings.Settings.ZipCode,
-                        Method = WidgetSettings.Settings.Method,
+                        Method = WidgetSettings.Settings.CalculationMethod,
                         Date = date,
                         GetEntireMonth = getEntireMonth
                     };
@@ -237,7 +237,7 @@ namespace AwqatSalaat.ViewModels
                     {
                         Country = WidgetSettings.Settings.CountryCode,
                         City = WidgetSettings.Settings.City,
-                        Method = WidgetSettings.Settings.Method2,
+                        Method = WidgetSettings.Settings.CalculationMethod,
                         Date = date,
                         GetEntireMonth = getEntireMonth
                     };

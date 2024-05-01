@@ -331,6 +331,15 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to min.
+        /// </summary>
+        public static string UI_Settings_MinutesShort {
+            get {
+                return ResourceManager.GetString("UI.Settings.MinutesShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reminder offset.
         /// </summary>
         public static string UI_Settings_ReminderOffset {
