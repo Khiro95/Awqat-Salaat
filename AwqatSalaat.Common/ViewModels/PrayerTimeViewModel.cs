@@ -52,7 +52,7 @@ namespace AwqatSalaat.ViewModels
             }
             else
             {
-                timer.Dispose();
+                timer?.Dispose();
                 timer = null;
                 // Call one more time to notify about any changes, pass false to avoid recursive calls
                 TimerTick(false);
