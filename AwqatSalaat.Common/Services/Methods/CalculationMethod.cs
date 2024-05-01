@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace AwqatSalaat.Services.Methods
 {
@@ -13,28 +14,30 @@ namespace AwqatSalaat.Services.Methods
 
         public static ReadOnlyCollection<CalculationMethod> AvailableMethods { get; } = new List<CalculationMethod>
         {
-            new MwlMethod(),
-            new IsnaMethod(),
-            new EgyptMethod(),
-            new MakkahMethod(),
-            new KarachiMethod(),
-            new GulfMethod(),
-            new KuwaitMethod(),
-            new QatarMethod(),
-            new SingaporeMethod(),
-            new FranceMethod(),
-            new TurkeyMethod(),
-            new RussiaMethod(),
-            new DubaiMethod(),
-            new JakimMethod(),
-            new TunisiaMethod(),
             new AlgeriaMethod(),
-            new KemenagMethod(),
-            new MoroccoMethod(),
-            new PortugalMethod(),
-            new JordanMethod(),
+            new DubaiMethod(),
+            new EgyptMethod(),
+            new FranceMethod(),
             new GermanyMethod(),
+            new GulfMethod(),
+            new IsnaMethod(),
+            new JakimMethod(),
+            new JordanMethod(),
+            new KarachiMethod(),
+            new KemenagMethod(),
+            new KuwaitMethod(),
+            new MakkahMethod(),
+            new MoroccoMethod(),
+            new MwlMethod(),
+            new PortugalMethod(),
+            new QatarMethod(),
+            new RussiaMethod(),
+            new SingaporeMethod(),
+            new TunisiaMethod(),
+            new TurkeyMethod(),
         }
+        .OrderBy(m => m.Name)
+        .ToList()
         .AsReadOnly();
 
         protected CalculationMethod(string id, string name)

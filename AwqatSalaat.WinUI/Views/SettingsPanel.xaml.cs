@@ -15,6 +15,21 @@ namespace AwqatSalaat.WinUI.Views
         {
             this.InitializeComponent();
             this.RegisterPropertyChangedCallback(VisibilityProperty, OnVisibilityChanged);
+
+            // Workaround for a bug https://github.com/microsoft/microsoft-ui-xaml/issues/4035
+            countryComboBox.RegisterPropertyChangedCallback(ComboBox.ItemsSourceProperty, OnItemsSourceChanged);
+            countryComboBox2.RegisterPropertyChangedCallback(ComboBox.ItemsSourceProperty, OnItemsSourceChanged);
+        }
+
+        // Workaround for a bug https://github.com/microsoft/microsoft-ui-xaml/issues/4035
+        private static void OnItemsSourceChanged(DependencyObject sender, DependencyProperty dp)
+        {
+            ComboBox comboBox = sender as ComboBox;
+            if (comboBox.ItemsSource is not null)
+            {
+                comboBox.SelectedValuePath = null;
+                comboBox.SelectedValuePath = "Code";
+            }
         }
 
         private void OnVisibilityChanged(DependencyObject sender, DependencyProperty dp)

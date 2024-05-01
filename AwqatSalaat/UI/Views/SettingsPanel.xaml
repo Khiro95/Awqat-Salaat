@@ -121,7 +121,16 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel DataContext="{Binding Settings}" Margin="0,16,0,0">
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.CountryCode}" Description="{mk:L11n UI.Settings.CountryCodeDescription}" Margin="0">
-                            <TextBox Text="{Binding CountryCode}" MaxLength="2" Width="50" HorizontalAlignment="Left"/>
+                            <ComboBox ItemsSource="{Binding Source={x:Static vm:WidgetSettingsViewModel.AvailableCountries}}" SelectedValue="{Binding CountryCode}" SelectedValuePath="Code">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Code}" Foreground="{DynamicResource ThemeColors.TextSecondaryBrush}" Width="24"/>
+                                            <TextBlock Text="{Binding Name}" Margin="8,0,0,0"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </controls:SettingsItem>
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.ZipCode}" Description="{mk:L11n UI.Settings.ZipCodeDescription}">
                             <TextBox Text="{Binding ZipCode}" Width="100" HorizontalAlignment="Left"/>
@@ -147,7 +156,16 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel DataContext="{Binding Settings}" Margin="0,16,0,0">
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.CountryCode}" Description="{mk:L11n UI.Settings.CountryCodeDescription}" Margin="0">
-                            <TextBox Text="{Binding CountryCode}" MaxLength="2" Width="50" HorizontalAlignment="Left"/>
+                            <ComboBox ItemsSource="{Binding Source={x:Static vm:WidgetSettingsViewModel.AvailableCountries}}" SelectedValue="{Binding CountryCode}" SelectedValuePath="Code">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Code}" Foreground="{DynamicResource ThemeColors.TextSecondaryBrush}" Width="24"/>
+                                            <TextBlock Text="{Binding Name}" Margin="8,0,0,0"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
                         </controls:SettingsItem>
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.City}" Description="{mk:L11n UI.Settings.CityDescription}">
                             <TextBox Text="{Binding City}" Width="200" HorizontalAlignment="Left"/>

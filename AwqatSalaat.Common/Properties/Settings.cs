@@ -29,6 +29,13 @@ namespace AwqatSalaat.Properties
             }
         }
 
+        protected override void OnSettingChanging(object sender, SettingChangingEventArgs e)
+        {
+            e.Cancel = this[e.SettingName] == e.NewValue;
+
+            base.OnSettingChanging(sender, e);
+        }
+
         protected override void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(sender, e);
@@ -60,6 +67,12 @@ namespace AwqatSalaat.Properties
             else
             {
                 CalculationMethod = CalculationMethod.AvailableMethods.SingleOrDefault(m => m.Id == MethodString);
+            }
+
+            // Countries code preset is added in v3.1, so we have to make sure the old value is uppercase to avoid confusion
+            if (!string.IsNullOrEmpty(CountryCode))
+            {
+                CountryCode = CountryCode.ToUpper();
             }
 
             base.OnSettingsLoaded(sender, e);

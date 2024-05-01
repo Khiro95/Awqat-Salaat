@@ -16,6 +16,8 @@ namespace AwqatSalaat.ViewModels
         private (string countryCode, string zipCode, IslamicFinderMethod method)? _islamicFinderBackup;
         private (string countryCode, string city, AlAdhanMethod method)? _alAdhanBackup;
 
+        public static Country[] AvailableCountries => CountriesProvider.GetCountries();
+
         public bool IsOpen { get => isOpen; set => Open(value); }
         public bool UseArabic { get => Settings.DisplayLanguage == "ar"; set => SetLanguage("ar"); }
         public bool UseEnglish { get => Settings.DisplayLanguage == "en"; set => SetLanguage("en"); }

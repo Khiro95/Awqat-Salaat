@@ -6,6 +6,7 @@
     xmlns:sys="using:System"
     xmlns:dt="using:AwqatSalaat.Data"
     xmlns:methods="using:AwqatSalaat.Services.Methods"
+    xmlns:vm="using:AwqatSalaat.ViewModels"
     xmlns:mk="using:AwqatSalaat.WinUI.Markup"
     xmlns:converters="using:AwqatSalaat.WinUI.Converters"
     xmlns:local="using:AwqatSalaat.WinUI.Views"
@@ -140,7 +141,21 @@
                 </StackPanel>
                 <StackPanel Visibility="{x:Bind islamicfinderTab.IsSelected, Mode=OneWay}">
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.CountryCode}" Description="{mk:L11n Key=UI.Settings.CountryCodeDescription}" Margin="0,8,0,0">
-                        <TextBox Text="{x:Bind ViewModel.Settings.CountryCode, UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Width="50" HorizontalAlignment="Left"/>
+                        <!--<TextBox Text="{x:Bind ViewModel.Settings.CountryCode, UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Width="50" HorizontalAlignment="Left"/>-->
+                        <ComboBox x:Name="countryComboBox"
+                                  ItemsSource="{x:Bind vm:WidgetSettingsViewModel.AvailableCountries, Mode=OneTime}"
+                                  SelectedValuePath="Code"
+                                  SelectedValue="{x:Bind ViewModel.Settings.CountryCode, Mode=TwoWay}"
+                                  HorizontalAlignment="Stretch">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Code}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Width="24"/>
+                                        <TextBlock Text="{Binding Name}" Margin="8,0,0,0"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                     </ctrl:SettingsItem>
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ZipCode}" Description="{mk:L11n Key=UI.Settings.ZipCodeDescription}">
                         <TextBox Text="{x:Bind ViewModel.Settings.ZipCode, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left"/>
@@ -161,7 +176,21 @@
                 </StackPanel>
                 <StackPanel Visibility="{x:Bind aladhanTab.IsSelected, Mode=OneWay}">
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.CountryCode}" Description="{mk:L11n Key=UI.Settings.CountryCodeDescription}" Margin="0,8,0,0">
-                        <TextBox Text="{x:Bind ViewModel.Settings.CountryCode, UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Width="50" HorizontalAlignment="Left"/>
+                        <!--<TextBox Text="{x:Bind ViewModel.Settings.CountryCode, UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Width="50" HorizontalAlignment="Left"/>-->
+                        <ComboBox x:Name="countryComboBox2"
+                                  ItemsSource="{x:Bind vm:WidgetSettingsViewModel.AvailableCountries, Mode=OneTime}"
+                                  SelectedValuePath="Code"
+                                  SelectedValue="{x:Bind ViewModel.Settings.CountryCode, Mode=TwoWay}"
+                                  HorizontalAlignment="Stretch">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Code}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Width="24"/>
+                                        <TextBlock Text="{Binding Name}" Margin="8,0,0,0"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                     </ctrl:SettingsItem>
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.City}" Description="{mk:L11n Key=UI.Settings.CityDescription}">
                         <TextBox Text="{x:Bind ViewModel.Settings.City, UpdateSourceTrigger=PropertyChanged}" Width="250" HorizontalAlignment="Left"/>
