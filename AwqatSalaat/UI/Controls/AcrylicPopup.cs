@@ -85,6 +85,14 @@ namespace AwqatSalaat.UI.Controls
             }
         }
 
+        protected override void OnOpenedOverride(EventArgs e)
+        {
+            if (!UseNativeAnimation)
+            {
+                EnableBlur(true);
+            }
+        }
+
         protected override void OnOpeningAnimationStarting()
         {
             EnableBlur(false);
