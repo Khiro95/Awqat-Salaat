@@ -31,6 +31,7 @@ namespace AwqatSalaat.UI.Controls
         private class AnimationContext : IDisposable
         {
             private bool disposedValue;
+            private readonly TaskCompletionSource<bool> taskCompletionSource = new TaskCompletionSource<bool>();
 
             public AnimationNativeData NativeData { get; } = new AnimationNativeData();
             public DateTime StartTime { get; }
@@ -40,6 +41,7 @@ namespace AwqatSalaat.UI.Controls
             public IEasingFunction EasingFunction { get; }
             public RelativePlacement Placement { get; }
             public double Progress => (DateTime.Now - StartTime).TotalMilliseconds / Duration.TotalMilliseconds;
+            public Task Task => taskCompletionSource.Task;
 
             public AnimationContext(TimeSpan duration, RECT originRect, RelativePlacement placement, IEasingFunction easingFunction, bool delay)
             {
@@ -56,8 +58,10 @@ namespace AwqatSalaat.UI.Controls
                 {
                     if (disposing)
                     {
-                        NativeData.Dispose();
+                        taskCompletionSource.TrySetResult(Progress >= 1d);
                     }
+
+                    NativeData.Dispose();
 
                     disposedValue = true;
                 }
@@ -67,6 +71,11 @@ namespace AwqatSalaat.UI.Controls
             {
                 Dispose(disposing: true);
                 GC.SuppressFinalize(this);
+            }
+
+            ~AnimationContext()
+            {
+                Dispose(disposing: false);
             }
         }
 
@@ -145,13 +154,30 @@ namespace AwqatSalaat.UI.Controls
             s_updateWindowSettings = Convert.ToUInt32(f.GetValue(null));
         }
 
-        private static void OnIsOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static async void OnIsOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             AnimatedPopup popup = (AnimatedPopup)d;
             bool isShow = (bool)e.NewValue;
 
             if (isShow)
             {
+                if (popup.isClosingAnimationRunning)
+                {
+                    // Disable popuproot animation if exist to avoid animation delay
+                    popup.SetCurrentValue(PopupAnimationProperty, PopupAnimation.None);
+                    
+                    // Force animation to stop and close the popup
+                    popup.EndNativeClosingAnimation();
+
+                    // This is necessary to "await" closing animation task because the continuation is queued with Normal priority.
+                    // Without this, we would need to replace "await nativeAnimationTask" by "ContinueWith(..., TaskContinuationOptions.ExecuteSynchronously)"
+                    await Dispatcher.Yield(DispatcherPriority.Normal);
+
+                    // There is a DispatcherTimer that will hide the window when it fire
+                    // so we need to give it the chance to run before we continue
+                    await Dispatcher.Yield(DispatcherPriority.Input);
+                }
+
                 // Workaround to fix a bug for auto-size
                 if (double.IsNaN(popup.Width))
                 {
@@ -176,23 +202,15 @@ namespace AwqatSalaat.UI.Controls
             }
             else
             {
-                popup.OnCloseRequested();
+                // This will be null if native animation is disabled
+                var nativeAnimationTask = popup.OnCloseRequested();
 
-                if (popup.UseNativeAnimation && popup.hwndSource.CompositionTarget != null)
+                if (nativeAnimationTask != null)
                 {
-                    DispatcherTimer timer = new DispatcherTimer();
-                    timer.Tick += (s, ea) =>
-                    {
-                        timer.Stop();
-                        baseIsOpenMetadata.PropertyChangedCallback.Invoke(d, e);
-                    };
-                    timer.Interval = popup.DefaultNativeAnimationDuration;
-                    timer.Start();
+                    await nativeAnimationTask;
                 }
-                else
-                {
-                    baseIsOpenMetadata.PropertyChangedCallback.Invoke(d, e);
-                }
+                
+                baseIsOpenMetadata.PropertyChangedCallback.Invoke(d, e);
             }
         }
 
@@ -210,7 +228,7 @@ namespace AwqatSalaat.UI.Controls
 
         public virtual IEasingFunction OpeningEasingFunction { get; } = new ExponentialEase() { Exponent = 4, EasingMode = EasingMode.EaseOut };
         public virtual IEasingFunction ClosingEasingFunction { get; } = new ExponentialEase() { Exponent = 4, EasingMode = EasingMode.EaseOut };
-        public virtual TimeSpan DefaultNativeAnimationDuration { get; } = TimeSpan.FromMilliseconds(250);
+        public virtual TimeSpan DefaultNativeAnimationDuration { get; } = TimeSpan.FromMilliseconds(150);
         public virtual bool AnimateSizeOnOpening { get; } = true;
         public virtual bool AnimateOpacityOnOpening { get; } = true;
         public virtual bool AnimatePositionOnOpening { get; } = true;
@@ -241,7 +259,7 @@ namespace AwqatSalaat.UI.Controls
             closingAnimationTimer.Tick += NativeClosingAnimation;
             closingAnimationTimer.Interval = TimeSpan.FromMilliseconds(10);
         }
-
+        
         protected sealed override void OnOpened(EventArgs e)
         {
             hwndSource = (HwndSource)HwndSource.FromVisual(this.Child);
@@ -275,25 +293,27 @@ namespace AwqatSalaat.UI.Controls
             {
                 EndNativeClosingAnimation();
             }
-
+            
             hwndSource = null;
 
             OnClosedOverride(e);
 
             base.OnClosed(e);
         }
-        
-        private void OnCloseRequested()
+
+        private Task OnCloseRequested()
         {
             openingAnimationTimer?.Stop();
 
             if (UseNativeAnimation && hwndSource.CompositionTarget != null)
             {
-                BeginNativeClosingAnimation(DefaultNativeAnimationDuration);
+                return BeginNativeClosingAnimation(DefaultNativeAnimationDuration);
             }
+
+            return null;
         }
         
-        private void BeginNativeClosingAnimation(TimeSpan duration)
+        private Task BeginNativeClosingAnimation(TimeSpan duration)
         {
             Child.SetCurrentValue(IsHitTestVisibleProperty, false);
             OnClosingAnimationStarting();
@@ -301,12 +321,12 @@ namespace AwqatSalaat.UI.Controls
             User32.GetWindowRect(Handle, out RECT orgRect);
 
             var placement = relativePlacement;
-
+            
             try
             {
                 // Popup size and placement may change while it's open so we try to get updated value.
                 // However, if a parent popup is closed before this one then we get NullReferenceException
-                // In theory, native animation will not run if parent popup is already closed but who knows
+                // An other case is when the visual parent is detached from the parent window then we also get NullReferenceException
                 placement = GetRelativePlacement(orgRect, (FrameworkElement)VisualParent);
             }
             catch (NullReferenceException) { }
@@ -319,18 +339,23 @@ namespace AwqatSalaat.UI.Controls
 
             // passing false will disable rendering
             methodUpdateWindowSettings.Invoke(hwndSource.CompositionTarget, falseParam);
-
+            
             OnClosingAnimationStarted();
+
+            return animationCtx.Task;
         }
 
         private void EndNativeClosingAnimation()
         {
-            closingAnimationTimer.Stop();
-            isClosingAnimationRunning = false;
+            // make sure the window won't be redrawn
+            User32.SendMessage(Handle, (uint)WindowMessage.WM_SETREDRAW, 0, 0);
 
+            closingAnimationTimer.Stop();
+            
             animationCtx.Dispose();
             animationCtx = null;
-
+            isClosingAnimationRunning = false;
+            
             OnClosingAnimationCompleted();
             Child.ClearValue(IsHitTestVisibleProperty);
         }
@@ -368,7 +393,7 @@ namespace AwqatSalaat.UI.Controls
 
             animationCtx.Dispose();
             animationCtx = null;
-
+            
             // enable rendering
             methodUpdateWindowSettings.Invoke(hwndSource.CompositionTarget, trueParam);
 
@@ -407,7 +432,7 @@ namespace AwqatSalaat.UI.Controls
 
                 var effectiveOffset = animationPosOffset * (1 - ease);
 
-                if ((animationCtx.OriginRect.bottom -  animationCtx.OriginRect.top) < (animationPosOffset * 2))
+                if ((animationCtx.OriginRect.bottom - animationCtx.OriginRect.top) < (animationPosOffset * 2))
                 {
                     effectiveOffset /= 2;
                 }
@@ -477,7 +502,7 @@ namespace AwqatSalaat.UI.Controls
                 double progress = animationCtx.Progress;
                 double ease = animationCtx.EasingFunction.Ease(progress);
                 byte alpha = (byte)((1 - ease) * 255);
-
+                
                 BLENDFUNCTION pblend = new BLENDFUNCTION(BlendOperation.AC_SRC_OVER, 0, alpha, AlphaFormat.AC_SRC_ALPHA);
                 POINT ppoint = new POINT() { x = animationCtx.OriginRect.left, y = animationCtx.OriginRect.top };
 
@@ -520,7 +545,7 @@ namespace AwqatSalaat.UI.Controls
                 {
                     Marshal.StructureToPtr(psize, animationCtx.NativeData.SizePtr, false);
                 }
-                
+
                 User32.UpdateLayeredWindow(
                     hwndSource.Handle,
                     IntPtr.Zero,
