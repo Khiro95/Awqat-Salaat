@@ -249,4 +249,70 @@
   <data name="UI.Settings.MinutesShort" xml:space="preserve">
     <value>د</value>
   </data>
+  <data name="UI.Settings.JuristicSchool" xml:space="preserve">
+    <value>المذهب الفقهي</value>
+  </data>
+  <data name="UI.Settings.JuristicSchoolDescription" xml:space="preserve">
+    <value>الطريقة الفقهية المتبعة بالنسبة لوقت العصر</value>
+  </data>
+  <data name="Data.JuristicSchool.Standard" xml:space="preserve">
+    <value>قياسي (الشافعي، الحنبلي، المالكي)</value>
+  </data>
+  <data name="Data.JuristicSchool.Hanafi" xml:space="preserve">
+    <value>الحنفي</value>
+  </data>
+  <data name="UI.Settings.Tabs.Service" xml:space="preserve">
+    <value>الخدمة</value>
+  </data>
+  <data name="UI.Settings.Tabs.Location" xml:space="preserve">
+    <value>الموقع</value>
+  </data>
+  <data name="UI.Settings.Latitude" xml:space="preserve">
+    <value>خط العرض</value>
+  </data>
+  <data name="UI.Settings.LatitudeDescription" xml:space="preserve">
+    <value>خط العرض الذي تقع عليه المدينة</value>
+  </data>
+  <data name="UI.Settings.Longitude" xml:space="preserve">
+    <value>خط الطول</value>
+  </data>
+  <data name="UI.Settings.LongitudeDescription" xml:space="preserve">
+    <value>خط الطول الذي تقع عليه المدينة</value>
+  </data>
+  <data name="UI.Settings.LocationByCountryCode" xml:space="preserve">
+    <value>استعمال معطيات</value>
+  </data>
+  <data name="UI.Settings.LocationByCountryCodeDescription" xml:space="preserve">
+    <value>تعيين المعطيات الأدنى الضرورية للخدمات لتحديد الموقع</value>
+  </data>
+  <data name="UI.Settings.LocationByQuery" xml:space="preserve">
+    <value>استعمال البحث</value>
+  </data>
+  <data name="UI.Settings.LocationByQueryDescription" xml:space="preserve">
+    <value>البحث عن الوقع من خلال عنوان أو اسم مدينة</value>
+  </data>
+  <data name="UI.Settings.LocationByCoordinates" xml:space="preserve">
+    <value>احداثيات معينة</value>
+  </data>
+  <data name="UI.Settings.LocationByCoordinatesDescription" xml:space="preserve">
+    <value>تحديد الموقع من الاحداثيات المقدمة يدويا</value>
+  </data>
+  <data name="UI.Settings.PoweredBy" xml:space="preserve">
+    <value>مشغل بواسطة</value>
+  </data>
+  <data name="UI.Settings.NoResult" xml:space="preserve">
+    <value>لا توجد نتيجة</value>
+  </data>
+  <data name="UI.Settings.LocationByQueryHint" xml:space="preserve">
+    <value>اكتب اسم مدينة أو عنوان (بالإنجليزية)</value>
+  </data>
+  <data name="UI.Settings.Searching" xml:space="preserve">
+    <value>جاري البحث...</value>
+  </data>
+  <data name="UI.Settings.Checking" xml:space="preserve">
+    <value>جاري التحقق...</value>
+  </data>
+  <data name="UI.Settings.Check" xml:space="preserve">
+    <value>تحقق</value>
+  </data>
 </root>

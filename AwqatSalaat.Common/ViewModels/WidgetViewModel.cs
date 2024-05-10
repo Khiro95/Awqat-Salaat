@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace AwqatSalaat.ViewModels
 {
@@ -77,14 +76,14 @@ namespace AwqatSalaat.ViewModels
             }
         }
 
-        private void SettingsUpdated(bool hasApiSettingsChanged)
+        private void SettingsUpdated(bool hasServiceSettingsChanged)
         {
             foreach (var time in Items)
             {
                 time.Distance = WidgetSettings.Settings.NotificationDistance;
             }
 
-            if (hasApiSettingsChanged)
+            if (hasServiceSettingsChanged)
             {
                 UpdateServiceClient();
 
@@ -221,29 +220,43 @@ namespace AwqatSalaat.ViewModels
 
         private IRequest BuildRequest(DateTime date, bool getEntireMonth)
         {
-            switch (WidgetSettings.Settings.Service)
+            RequestBase request;
+            var settings = WidgetSettings.Settings;
+
+            switch (settings.Service)
             {
                 case PrayerTimesService.IslamicFinder:
-                    return new IslamicFinderRequest
+                    request = new IslamicFinderRequest
                     {
-                        CountryCode = WidgetSettings.Settings.CountryCode,
-                        ZipCode = WidgetSettings.Settings.ZipCode,
-                        Method = WidgetSettings.Settings.CalculationMethod,
-                        Date = date,
-                        GetEntireMonth = getEntireMonth
+                        CountryCode = settings.CountryCode,
+                        ZipCode = settings.ZipCode,
+                        TimeZone = settings.LocationDetection != LocationDetectionMode.ByCountryCode ? TimeZoneHelper.GetIanaTimeZone() : null,
                     };
+                    break;
                 case PrayerTimesService.AlAdhan:
-                    return new AlAdhanRequest
+                    request = new AlAdhanRequest
                     {
-                        Country = WidgetSettings.Settings.CountryCode,
-                        City = WidgetSettings.Settings.City,
-                        Method = WidgetSettings.Settings.CalculationMethod,
-                        Date = date,
-                        GetEntireMonth = getEntireMonth
+                        Country = settings.CountryCode,
+                        City = settings.City,
                     };
+                    break;
                 default:
                     return null;
             }
+
+            request.Date = date;
+            request.GetEntireMonth = getEntireMonth;
+            request.Method = settings.CalculationMethod;
+            request.JuristicSchool = settings.School;
+
+            if (settings.LocationDetection != LocationDetectionMode.ByCountryCode)
+            {
+                request.Latitude = settings.Latitude;
+                request.Longitude = settings.Longitude;
+                request.UseCoordinates = true;
+            }
+
+            return request;
         }
     }
 }

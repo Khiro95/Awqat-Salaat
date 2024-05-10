@@ -41,5 +41,17 @@
     <Setting Name="MethodString" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="Latitude" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Longitude" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="School" Type="AwqatSalaat.Data.School" Scope="User">
+      <Value Profile="(Default)">Standard</Value>
+    </Setting>
+    <Setting Name="LocationDetection" Type="AwqatSalaat.Data.LocationDetectionMode" Scope="User">
+      <Value Profile="(Default)">ByCountryCode</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

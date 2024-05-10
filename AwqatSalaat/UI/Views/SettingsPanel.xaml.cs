@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace AwqatSalaat.UI.Views
@@ -20,6 +21,11 @@ namespace AwqatSalaat.UI.Views
             {
                 tabControl.SelectedIndex = 0;
             }
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
         }
     }
 }

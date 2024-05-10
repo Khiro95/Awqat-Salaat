@@ -1,24 +1,33 @@
 ﻿using AwqatSalaat.Services.Methods;
-using System;
+using System.Globalization;
 using System.Web;
 
 namespace AwqatSalaat.Services.AlAdhan
 {
-    public class AlAdhanRequest : IRequest
+    public class AlAdhanRequest : RequestBase
     {
-        public DateTime Date { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
-        public CalculationMethod Method { get; set; }
-        public bool GetEntireMonth { get; set; }
 
-        public string GetUrl()
+        public override string GetUrl()
         {
+            string endpointSuffix = "";
             // HttpUtility.ParseQueryString method actually returns an internal HttpValueCollection object
             // rather than a regular NameValueCollection
             var query = HttpUtility.ParseQueryString("");
-            query["country"] = Country;
-            query["city"] = City;
+            query["school"] = JuristicSchool.ToString("D");
+
+            if (UseCoordinates)
+            {
+                query["latitude"] = Latitude.ToString(CultureInfo.InvariantCulture);
+                query["longitude"] = Longitude.ToString(CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                query["country"] = Country;
+                query["city"] = City;
+                endpointSuffix = "ByCity";
+            }
 
             if (Method is IAlAdhanMethod method)
             {
@@ -36,16 +45,16 @@ namespace AwqatSalaat.Services.AlAdhan
                 query["methodSettings"] = string.Join(",", parameters);
             }
 
-            var endpoint = GetEntireMonth
-                ? $"http://api.aladhan.com/v1/calendarByCity/{Date.Year}/{Date.Month}"
-                : $"http://api.aladhan.com/v1/timingsByCity/{Date.ToString("dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture)}";
+            var endpointParameters = GetEntireMonth
+                ? $"calendar{endpointSuffix}/{Date.Year}/{Date.Month}"
+                : $"timings{endpointSuffix}/{Date.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)}";
 
-            return $"{endpoint}?{query}";
+            return $"https://api.aladhan.com/v1/{endpointParameters}?{query}";
         }
 
         private static string SerializeMethodParameter(CalculationMethodParameter methodParameter)
         {
-            string str = methodParameter.Value.ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
+            string str = methodParameter.Value.ToString("F1", CultureInfo.InvariantCulture);
 
             if (methodParameter.Type == CalculationMethodParameterType.FixedMinutes)
             {

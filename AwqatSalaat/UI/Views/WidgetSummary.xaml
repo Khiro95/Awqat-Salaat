@@ -124,7 +124,7 @@
                 <ProgressBar
                     IsIndeterminate="True"
                     Background="Transparent"
-                    Foreground="White"
+                    Foreground="{DynamicResource ThemeColors.TextPrimaryBrush}"
                     BorderThickness="0"
                     Height="2"
                     VerticalAlignment="Bottom"

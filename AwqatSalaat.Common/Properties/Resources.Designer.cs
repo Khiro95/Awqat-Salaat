@@ -70,6 +70,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hanafi.
+        /// </summary>
+        public static string Data_JuristicSchool_Hanafi {
+            get {
+                return ResourceManager.GetString("Data.JuristicSchool.Hanafi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standard (Shafi, Hanbali, Maliki).
+        /// </summary>
+        public static string Data_JuristicSchool_Standard {
+            get {
+                return ResourceManager.GetString("Data.JuristicSchool.Standard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Asr.
         /// </summary>
         public static string Data_Salaat_Asr {
@@ -232,6 +250,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check.
+        /// </summary>
+        public static string UI_Settings_Check {
+            get {
+                return ResourceManager.GetString("UI.Settings.Check", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checking....
+        /// </summary>
+        public static string UI_Settings_Checking {
+            get {
+                return ResourceManager.GetString("UI.Settings.Checking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to City.
         /// </summary>
         public static string UI_Settings_City {
@@ -277,6 +313,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Juristic school.
+        /// </summary>
+        public static string UI_Settings_JuristicSchool {
+            get {
+                return ResourceManager.GetString("UI.Settings.JuristicSchool", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asr jurisdiction method.
+        /// </summary>
+        public static string UI_Settings_JuristicSchoolDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.JuristicSchoolDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         public static string UI_Settings_Language {
@@ -291,6 +345,24 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_LanguageDescription {
             get {
                 return ResourceManager.GetString("UI.Settings.LanguageDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Latitude.
+        /// </summary>
+        public static string UI_Settings_Latitude {
+            get {
+                return ResourceManager.GetString("UI.Settings.Latitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The latitude of the city.
+        /// </summary>
+        public static string UI_Settings_LatitudeDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.LatitudeDescription", resourceCulture);
             }
         }
         
@@ -313,7 +385,88 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Calculation Method.
+        ///   Looks up a localized string similar to Specific coordinates.
+        /// </summary>
+        public static string UI_Settings_LocationByCoordinates {
+            get {
+                return ResourceManager.GetString("UI.Settings.LocationByCoordinates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Detect location from manually provided coordinates.
+        /// </summary>
+        public static string UI_Settings_LocationByCoordinatesDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.LocationByCoordinatesDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Parameters.
+        /// </summary>
+        public static string UI_Settings_LocationByCountryCode {
+            get {
+                return ResourceManager.GetString("UI.Settings.LocationByCountryCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify the minimum necessary parameters for services to detect location.
+        /// </summary>
+        public static string UI_Settings_LocationByCountryCodeDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.LocationByCountryCodeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Query.
+        /// </summary>
+        public static string UI_Settings_LocationByQuery {
+            get {
+                return ResourceManager.GetString("UI.Settings.LocationByQuery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for location by address or city name.
+        /// </summary>
+        public static string UI_Settings_LocationByQueryDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.LocationByQueryDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type city name or address.
+        /// </summary>
+        public static string UI_Settings_LocationByQueryHint {
+            get {
+                return ResourceManager.GetString("UI.Settings.LocationByQueryHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Longitude.
+        /// </summary>
+        public static string UI_Settings_Longitude {
+            get {
+                return ResourceManager.GetString("UI.Settings.Longitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The longitude of the city.
+        /// </summary>
+        public static string UI_Settings_LongitudeDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.LongitudeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calculation method.
         /// </summary>
         public static string UI_Settings_Method {
             get {
@@ -340,6 +493,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No result.
+        /// </summary>
+        public static string UI_Settings_NoResult {
+            get {
+                return ResourceManager.GetString("UI.Settings.NoResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Powered by.
+        /// </summary>
+        public static string UI_Settings_PoweredBy {
+            get {
+                return ResourceManager.GetString("UI.Settings.PoweredBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reminder offset.
         /// </summary>
         public static string UI_Settings_ReminderOffset {
@@ -354,6 +525,15 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_ReminderOffsetDescription {
             get {
                 return ResourceManager.GetString("UI.Settings.ReminderOffsetDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Searching....
+        /// </summary>
+        public static string UI_Settings_Searching {
+            get {
+                return ResourceManager.GetString("UI.Settings.Searching", resourceCulture);
             }
         }
         
@@ -399,6 +579,24 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_Tabs_General {
             get {
                 return ResourceManager.GetString("UI.Settings.Tabs.General", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location.
+        /// </summary>
+        public static string UI_Settings_Tabs_Location {
+            get {
+                return ResourceManager.GetString("UI.Settings.Tabs.Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service.
+        /// </summary>
+        public static string UI_Settings_Tabs_Service {
+            get {
+                return ResourceManager.GetString("UI.Settings.Tabs.Service", resourceCulture);
             }
         }
         

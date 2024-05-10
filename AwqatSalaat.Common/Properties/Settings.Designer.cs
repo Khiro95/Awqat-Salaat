@@ -178,5 +178,53 @@ namespace AwqatSalaat.Properties {
                 this["MethodString"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal Latitude {
+            get {
+                return ((decimal)(this["Latitude"]));
+            }
+            set {
+                this["Latitude"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal Longitude {
+            get {
+                return ((decimal)(this["Longitude"]));
+            }
+            set {
+                this["Longitude"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Standard")]
+        public global::AwqatSalaat.Data.School School {
+            get {
+                return ((global::AwqatSalaat.Data.School)(this["School"]));
+            }
+            set {
+                this["School"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ByCountryCode")]
+        public global::AwqatSalaat.Data.LocationDetectionMode LocationDetection {
+            get {
+                return ((global::AwqatSalaat.Data.LocationDetectionMode)(this["LocationDetection"]));
+            }
+            set {
+                this["LocationDetection"] = value;
+            }
+        }
     }
 }
