@@ -25,8 +25,28 @@ namespace AwqatSalaat.ViewModels
         public static Country[] AvailableCountries => CountriesProvider.GetCountries();
 
         public bool IsOpen { get => isOpen; set => Open(value); }
-        public bool UseArabic { get => Settings.DisplayLanguage == "ar"; set => SetLanguage("ar"); }
-        public bool UseEnglish { get => Settings.DisplayLanguage == "en"; set => SetLanguage("en"); }
+        public bool UseArabic
+        {
+            get => Settings.DisplayLanguage == "ar";
+            set
+            {
+                if (value)
+                {
+                    SetLanguage("ar");
+                }
+            }
+        }
+        public bool UseEnglish
+        {
+            get => Settings.DisplayLanguage == "en";
+            set
+            {
+                if (value)
+                {
+                    SetLanguage("en");
+                }
+            }
+        }
         public Settings Settings => Settings.Default;
         public RelayCommand Save { get; }
         public RelayCommand Cancel { get; }
@@ -53,14 +73,8 @@ namespace AwqatSalaat.ViewModels
             {
                 if (e.PropertyName == nameof(Settings.DisplayLanguage))
                 {
-                    if (UseArabic)
-                    {
-                        OnPropertyChanged(nameof(UseArabic));
-                    }
-                    else
-                    {
-                        OnPropertyChanged(nameof(UseEnglish));
-                    }
+                    OnPropertyChanged(nameof(UseArabic));
+                    OnPropertyChanged(nameof(UseEnglish));
                 }
             };
         }

@@ -128,9 +128,9 @@
             <Grid Margin="8">
                 <StackPanel Visibility="{x:Bind generalTab.IsSelected, Mode=OneWay}">
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Language}" Description="{mk:L11n Key=UI.Settings.LanguageDescription}" Margin="0,8,0,0">
-                        <RadioButtons MaxColumns="2" Margin="0,-8,0,0">
-                            <RadioButton Content="English" IsChecked="{x:Bind ViewModel.UseEnglish}"/>
-                            <RadioButton Content="العربية" IsChecked="{x:Bind ViewModel.UseArabic}" FlowDirection="RightToLeft"/>
+                        <RadioButtons MaxColumns="2" Margin="0,-8,0,0" FlowDirection="LeftToRight" HorizontalAlignment="Left">
+                            <RadioButton Content="English" GroupName="Language" IsChecked="{x:Bind ViewModel.UseEnglish}"/>
+                            <RadioButton Content="العربية" GroupName="Language" IsChecked="{x:Bind ViewModel.UseArabic}" FlowDirection="RightToLeft"/>
                         </RadioButtons>
                     </ctrl:SettingsItem>
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartup}" Description="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartupDescription}">
