@@ -156,8 +156,8 @@
             </controls:TabItemEx>
             <controls:TabItemEx Header="{mk:L11n UI.Settings.Tabs.Location}">
                 <StackPanel Margin="0,16,0,0">
-                    <RadioButton x:Name="byInputs" IsChecked="{Binding Locator.DetectByCountryCode}" VerticalContentAlignment="Top">
-                        <controls:SettingsItem Margin="0" Header="{mk:L11n UI.Settings.LocationByCountryCode}" Description="{mk:L11n UI.Settings.LocationByCountryCodeDescription}" IsEnabled="{Binding ElementName=byInputs, Path=IsChecked}">
+                    <RadioButton IsChecked="{Binding Locator.DetectByCountryCode}" VerticalContentAlignment="Top">
+                        <controls:SettingsItem Margin="0" Header="{mk:L11n UI.Settings.LocationByCountryCode}" Description="{mk:L11n UI.Settings.LocationByCountryCodeDescription}" IsEnabled="{Binding Locator.DetectByCountryCode, Mode=OneWay}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="150"/>
@@ -188,8 +188,8 @@
                             </Grid>
                         </controls:SettingsItem>
                     </RadioButton>
-                    <RadioButton x:Name="byAddr" IsChecked="{Binding Locator.DetectByQuery}" VerticalContentAlignment="Top" Margin="0,16,0,0">
-                        <controls:SettingsItem Margin="0" Header="{mk:L11n UI.Settings.LocationByQuery}" Description="{mk:L11n UI.Settings.LocationByQueryDescription}" IsEnabled="{Binding ElementName=byAddr, Path=IsChecked}">
+                    <RadioButton IsChecked="{Binding Locator.DetectByQuery}" VerticalContentAlignment="Top" Margin="0,16,0,0">
+                        <controls:SettingsItem Margin="0" Header="{mk:L11n UI.Settings.LocationByQuery}" Description="{mk:L11n UI.Settings.LocationByQueryDescription}" IsEnabled="{Binding Locator.DetectByQuery, Mode=OneWay}">
                             <StackPanel>
                                 <controls:TextBoxEx PlaceHolderText="{mk:L11n UI.Settings.LocationByQueryHint}" Text="{Binding Locator.SearchQuery, Delay=250, UpdateSourceTrigger=PropertyChanged}">
                                     <controls:TextBoxEx.DropDownContent>
@@ -243,8 +243,8 @@
                             </StackPanel>
                         </controls:SettingsItem>
                     </RadioButton>
-                    <RadioButton x:Name="byCoords" IsChecked="{Binding Locator.DetectByCoordinates}" VerticalContentAlignment="Top" Margin="0,16,0,0">
-                        <controls:SettingsItem Margin="0" Header="{mk:L11n UI.Settings.LocationByCoordinates}" Description="{mk:L11n UI.Settings.LocationByCoordinatesDescription}" IsEnabled="{Binding ElementName=byCoords, Path=IsChecked}">
+                    <RadioButton IsChecked="{Binding Locator.DetectByCoordinates}" VerticalContentAlignment="Top" Margin="0,16,0,0">
+                        <controls:SettingsItem Margin="0" Header="{mk:L11n UI.Settings.LocationByCoordinates}" Description="{mk:L11n UI.Settings.LocationByCoordinatesDescription}" IsEnabled="{Binding Locator.DetectByCoordinates, Mode=OneWay}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="150"/>
@@ -263,7 +263,7 @@
                                 <TextBlock Text="{mk:L11n UI.Settings.Longitude}" Grid.Row="2"/>
                                 <TextBox Text="{Binding Settings.Longitude}" Grid.Column="1" Grid.Row="2"/>
                                 <Button Content="{mk:L11n UI.Settings.Check}" Command="{Binding Locator.Check}" Width="50" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <DockPanel x:Name="dd" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2">
+                                <DockPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Visibility="{Binding Locator.PendingCheck, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Margin="8,0,0,0" VerticalAlignment="Center">
                                         <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE711;" Command="{Binding Locator.CancelCheck}" ToolTip="{mk:L11n UI.Settings.Cancel}" Visibility="{Binding Locator.PendingCheck, Converter={StaticResource BooleanToVisibilityConverter}}" d:Visibility="Visible"/>
                                         <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE8FB;" Command="{Binding Locator.ConfirmCheck}" ToolTip="{mk:L11n UI.Settings.Confirm}" Visibility="{Binding Locator.HasCheckResult, Converter={StaticResource BooleanToVisibilityConverter}}" d:Visibility="Visible"/>

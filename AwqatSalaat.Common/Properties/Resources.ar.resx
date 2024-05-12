@@ -289,7 +289,7 @@
     <value>استعمال البحث</value>
   </data>
   <data name="UI.Settings.LocationByQueryDescription" xml:space="preserve">
-    <value>البحث عن الوقع من خلال عنوان أو اسم مدينة</value>
+    <value>البحث عن الموقع من خلال عنوان أو اسم مدينة</value>
   </data>
   <data name="UI.Settings.LocationByCoordinates" xml:space="preserve">
     <value>احداثيات معينة</value>

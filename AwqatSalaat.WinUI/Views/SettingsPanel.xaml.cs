@@ -1,3 +1,4 @@
+using AwqatSalaat.Services.Nominatim;
 using AwqatSalaat.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -18,7 +19,6 @@ namespace AwqatSalaat.WinUI.Views
 
             // Workaround for a bug https://github.com/microsoft/microsoft-ui-xaml/issues/4035
             countryComboBox.RegisterPropertyChangedCallback(ComboBox.ItemsSourceProperty, OnItemsSourceChanged);
-            countryComboBox2.RegisterPropertyChangedCallback(ComboBox.ItemsSourceProperty, OnItemsSourceChanged);
         }
 
         // Workaround for a bug https://github.com/microsoft/microsoft-ui-xaml/issues/4035
@@ -38,6 +38,14 @@ namespace AwqatSalaat.WinUI.Views
             if (Visibility == Visibility.Collapsed)
             {
                 nav.SelectedItem = generalTab;
+            }
+        }
+
+        private void AutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs e)
+        {
+            if (e.SelectedItem is Place place)
+            {
+                ViewModel.Locator.SelectedPlace = place;
             }
         }
     }

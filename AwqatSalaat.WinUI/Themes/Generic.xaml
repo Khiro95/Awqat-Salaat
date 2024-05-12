@@ -7,6 +7,7 @@
     xmlns:mk="using:AwqatSalaat.WinUI.Markup">
 
     <converters:CustomDateTimeConverter x:Key="CustomDateTimeConverter"/>
+    <converters:BooleanInvertedConverter x:Key="BooleanInvertedConverter"/>
 
     <Style x:Key="TextBlockButtonStyle" TargetType="ButtonBase">
         <Setter Property="Background" Value="Transparent" />
@@ -111,12 +112,25 @@
             <Setter.Value>
                 <ControlTemplate TargetType="controls:SettingsItem">
                     <StackPanel>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup>
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="Disabled">
+                                    <VisualState.StateTriggers>
+                                        <StateTrigger IsActive="{Binding IsEnabled, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanInvertedConverter}}"/>
+                                    </VisualState.StateTriggers>
+                                    <VisualState.Setters>
+                                        <Setter Target="contentpresenter.Foreground" Value="{ThemeResource TextFillColorTertiaryBrush}"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
                         <ContentPresenter Content="{TemplateBinding Header}"/>
                         <TextBlock Text="{TemplateBinding Description}"
                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                    TextWrapping="Wrap"
                                    Margin="0,8"/>
-                        <ContentPresenter/>
+                        <ContentPresenter x:Name="contentpresenter"/>
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>

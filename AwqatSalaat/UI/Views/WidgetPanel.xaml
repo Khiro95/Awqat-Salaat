@@ -165,7 +165,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <view:SettingsPanel Margin="0,-0,0,0" Grid.RowSpan="2"/>
-            <TextBlock Text="{mk:L11n UI.Panel.Settings}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+            <TextBlock Text="{mk:L11n UI.Panel.Settings}" Foreground="{DynamicResource ThemeColors.TextSecondaryBrush}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE711;" Command="{Binding Cancel}" ToolTip="{mk:L11n UI.Settings.Cancel}"/>
                 <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE8FB;" Command="{Binding Save}" ToolTip="{mk:L11n UI.Settings.Confirm}"/>
