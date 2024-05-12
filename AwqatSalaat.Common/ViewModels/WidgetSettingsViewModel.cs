@@ -47,6 +47,7 @@ namespace AwqatSalaat.ViewModels
                 }
             }
         }
+        public string CountdownFormat => Settings.ShowSeconds ? "{0:hh\\:mm\\:ss}" : "{0:hh\\:mm}";
         public Settings Settings => Settings.Default;
         public RelayCommand Save { get; }
         public RelayCommand Cancel { get; }
@@ -75,6 +76,10 @@ namespace AwqatSalaat.ViewModels
                 {
                     OnPropertyChanged(nameof(UseArabic));
                     OnPropertyChanged(nameof(UseEnglish));
+                }
+                else if (e.PropertyName == nameof (Settings.ShowSeconds))
+                {
+                    OnPropertyChanged(nameof(CountdownFormat));
                 }
             };
         }

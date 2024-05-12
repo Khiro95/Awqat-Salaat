@@ -139,6 +139,9 @@
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowCountdown}" Description="{mk:L11n Key=UI.Settings.ShowCountdownDescription}">
                         <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.ShowCountdown}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
                     </ctrl:SettingsItem>
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowSeconds}" Description="{mk:L11n Key=UI.Settings.ShowSecondsDescription}" IsEnabled="{x:Bind ViewModel.Settings.ShowCountdown}">
+                        <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.ShowSeconds}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                    </ctrl:SettingsItem>
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ReminderOffset}" Description="{mk:L11n Key=UI.Settings.ReminderOffsetDescription}">
                         <NumberBox SpinButtonPlacementMode="Inline"
                                    Value="{x:Bind ViewModel.Settings.NotificationDistance}"

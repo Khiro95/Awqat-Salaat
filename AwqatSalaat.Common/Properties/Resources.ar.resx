@@ -315,4 +315,10 @@
   <data name="UI.Settings.Check" xml:space="preserve">
     <value>تحقق</value>
   </data>
+  <data name="UI.Settings.ShowSeconds" xml:space="preserve">
+    <value>اظهار الثواني</value>
+  </data>
+  <data name="UI.Settings.ShowSecondsDescription" xml:space="preserve">
+    <value>تحديد ما اذا كانت الثواني تظهر في العد التنازلي</value>
+  </data>
 </root>

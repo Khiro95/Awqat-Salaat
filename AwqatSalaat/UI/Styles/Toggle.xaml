@@ -63,6 +63,21 @@
                             </MultiTrigger.Conditions>
                             <Setter Property="Background" Value="{DynamicResource ThemeColors.AccentLightBrush}"/>
                         </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsEnabled" Value="False"/>
+                                <Condition Property="IsChecked" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="thumb" Property="Fill" Value="{DynamicResource ThemeColors.ControlDisabledForegroundBrush}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsEnabled" Value="False"/>
+                                <Condition Property="IsChecked" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{DynamicResource ThemeColors.ControlDisabledBackgroundBrush}"/>
+                            <Setter TargetName="thumb" Property="Fill" Value="{DynamicResource ThemeColors.ControlDisabledForegroundBrush}"/>
+                        </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -73,6 +88,9 @@
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Content" Value="{mk:L11n UI.Controls.Toggle.On}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource ThemeColors.ControlDisabledForegroundBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>

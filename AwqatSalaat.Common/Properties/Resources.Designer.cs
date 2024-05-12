@@ -574,6 +574,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show seconds.
+        /// </summary>
+        public static string UI_Settings_ShowSeconds {
+            get {
+                return ResourceManager.GetString("UI.Settings.ShowSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select whether to show seconds in countdown.
+        /// </summary>
+        public static string UI_Settings_ShowSecondsDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.ShowSecondsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to General.
         /// </summary>
         public static string UI_Settings_Tabs_General {

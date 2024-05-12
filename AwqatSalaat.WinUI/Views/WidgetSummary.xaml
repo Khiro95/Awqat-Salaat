@@ -139,7 +139,7 @@
                                     </Grid>
                                     <Grid RowDefinitions="*,*" Visibility="{x:Bind ViewModel.WidgetSettings.Settings.ShowCountdown}">
                                         <TextBlock Text="{mk:L11n Key=UI.Summary.After}" HorizontalAlignment="Center"/>
-                                        <TextBlock Text="{x:Bind sys:String.Format('{0:hh\\\\:mm}', ViewModel.Next.Countdown), FallbackValue=COUNTDOWN}" HorizontalAlignment="Center" Grid.Row="1"/>
+                                        <TextBlock Text="{x:Bind sys:String.Format(ViewModel.WidgetSettings.CountdownFormat, ViewModel.Next.Countdown), FallbackValue=COUNTDOWN}" HorizontalAlignment="Center" Grid.Row="1"/>
                                     </Grid>
                                 </helpers:XamlList>
                             </ItemsRepeater.ItemsSource>

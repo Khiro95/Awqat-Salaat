@@ -295,4 +295,10 @@
   <data name="UI.Settings.Check" xml:space="preserve">
     <value>Check</value>
   </data>
+  <data name="UI.Settings.ShowSeconds" xml:space="preserve">
+    <value>Show seconds</value>
+  </data>
+  <data name="UI.Settings.ShowSecondsDescription" xml:space="preserve">
+    <value>Select whether to show seconds in countdown</value>
+  </data>
 </root>

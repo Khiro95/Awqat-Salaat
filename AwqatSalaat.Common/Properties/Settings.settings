@@ -53,5 +53,8 @@
     <Setting Name="LocationDetection" Type="AwqatSalaat.Data.LocationDetectionMode" Scope="User">
       <Value Profile="(Default)">ByCountryCode</Value>
     </Setting>
+    <Setting Name="ShowSeconds" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
