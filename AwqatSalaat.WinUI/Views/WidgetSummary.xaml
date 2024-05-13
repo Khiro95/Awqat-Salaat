@@ -48,7 +48,7 @@
 
                     <StaticResource x:Key="NotificationFillColor" ResourceKey="SystemAccentColorDark1"/>
                 </ResourceDictionary>
-                <ResourceDictionary x:Key="Dark">
+                <ResourceDictionary x:Key="Default">
                     <StaticResource x:Key="ToggleButtonBackground" ResourceKey="ControlFillColorTransparentBrush" />
                     <StaticResource x:Key="ToggleButtonBackgroundPointerOver" ResourceKey="ControlFillColorDefaultBrush" />
                     <StaticResource x:Key="ToggleButtonBackgroundPressed" ResourceKey="ControlFillColorSecondaryBrush" />
