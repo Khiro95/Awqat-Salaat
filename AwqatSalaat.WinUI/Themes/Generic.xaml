@@ -58,6 +58,7 @@
     </Style>
 
     <Style TargetType="controls:PrayerTimeItem">
+        <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:PrayerTimeItem">
