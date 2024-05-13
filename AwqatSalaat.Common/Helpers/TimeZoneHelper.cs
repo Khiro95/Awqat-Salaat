@@ -22,7 +22,9 @@ namespace AwqatSalaat.Helpers
 
         public static DateTime ConvertDateTimeToLocal(DateTime dateTime, string ianaTimeZone)
         {
-            if (!tzInfoCache.TryGetValue(ianaTimeZone, out var timeZoneInfo))
+            TimeZoneInfo timeZoneInfo = null;
+
+            if (!string.IsNullOrEmpty(ianaTimeZone) && !tzInfoCache.TryGetValue(ianaTimeZone, out timeZoneInfo))
             {
                 if (TZConvert.TryIanaToWindows(ianaTimeZone, out string timeZoneId))
                 {
