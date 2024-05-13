@@ -20,7 +20,14 @@ namespace AwqatSalaat.WinUI.Converters
         {
             if (value is string numberString && targetType == typeof(decimal))
             {
-                return System.Convert.ToDecimal(numberString, System.Globalization.CultureInfo.InvariantCulture);
+                try
+                {
+                    return System.Convert.ToDecimal(numberString, System.Globalization.CultureInfo.InvariantCulture);
+                }
+                catch (FormatException fex)
+                {
+                    return decimal.Zero;
+                }
             }
 
             return null;

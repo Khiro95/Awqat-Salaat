@@ -218,9 +218,9 @@
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
                                 <TextBlock Text="{mk:L11n Key=UI.Settings.City}" Grid.Row="2"/>
-                                <TextBox Text="{Binding Settings.City}" Width="200" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
+                                <TextBox Text="{x:Bind ViewModel.Settings.City, UpdateSourceTrigger=PropertyChanged}" Width="200" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
                                 <TextBlock Text="{mk:L11n Key=UI.Settings.ZipCode}" Grid.Row="4"/>
-                                <TextBox Text="{Binding Settings.ZipCode}" Width="100" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="1"/>
+                                <TextBox Text="{x:Bind ViewModel.Settings.ZipCode, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="1"/>
                             </Grid>
                         </ctrl:SettingsItem>
                     </RadioButton>
