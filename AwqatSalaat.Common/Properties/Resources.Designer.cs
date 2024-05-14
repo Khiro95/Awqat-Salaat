@@ -61,6 +61,15 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A simple Islamic Windows widget to show the time of the next prayer alongside a countdown on the taskbar.
+        /// </summary>
+        public static string Data_AppDescription {
+            get {
+                return ResourceManager.GetString("Data.AppDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Awqat Salaat.
         /// </summary>
         public static string Data_AppName {
@@ -129,6 +138,24 @@ namespace AwqatSalaat.Properties {
         public static string Data_Salaat_Maghrib {
             get {
                 return ResourceManager.GetString("Data.Salaat.Maghrib", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contact.
+        /// </summary>
+        public static string UI_About_Contact {
+            get {
+                return ResourceManager.GetString("UI.About.Contact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Visit Project.
+        /// </summary>
+        public static string UI_About_VisitProject {
+            get {
+                return ResourceManager.GetString("UI.About.VisitProject", resourceCulture);
             }
         }
         
@@ -588,6 +615,15 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_ShowSecondsDescription {
             get {
                 return ResourceManager.GetString("UI.Settings.ShowSecondsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string UI_Settings_Tabs_About {
+            get {
+                return ResourceManager.GetString("UI.Settings.Tabs.About", resourceCulture);
             }
         }
         

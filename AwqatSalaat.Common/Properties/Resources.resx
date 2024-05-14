@@ -301,4 +301,16 @@
   <data name="UI.Settings.ShowSecondsDescription" xml:space="preserve">
     <value>Select whether to show seconds in countdown</value>
   </data>
+  <data name="Data.AppDescription" xml:space="preserve">
+    <value>A simple Islamic Windows widget to show the time of the next prayer alongside a countdown on the taskbar</value>
+  </data>
+  <data name="UI.Settings.Tabs.About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="UI.About.VisitProject" xml:space="preserve">
+    <value>Visit Project</value>
+  </data>
+  <data name="UI.About.Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
 </root>

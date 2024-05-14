@@ -2,6 +2,8 @@ using AwqatSalaat.Services.Nominatim;
 using AwqatSalaat.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using System.Reflection;
+using System;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -10,6 +12,11 @@ namespace AwqatSalaat.WinUI.Views
 {
     public sealed partial class SettingsPanel : UserControl
     {
+        private static readonly string Version = typeof(SettingsPanel).Assembly
+            .GetCustomAttribute<AssemblyFileVersionAttribute>()?
+            .Version;
+        private static readonly string Architecture = Environment.Is64BitProcess ? "64-bit" : "32-bit";
+
         private WidgetSettingsViewModel ViewModel => DataContext as WidgetSettingsViewModel;
 
         public SettingsPanel()
@@ -19,6 +26,9 @@ namespace AwqatSalaat.WinUI.Views
 
             // Workaround for a bug https://github.com/microsoft/microsoft-ui-xaml/issues/4035
             countryComboBox.RegisterPropertyChangedCallback(ComboBox.ItemsSourceProperty, OnItemsSourceChanged);
+
+            version.Text = "v" + (Version ?? "{ERROR}");
+            architecture.Text = Architecture;
         }
 
         // Workaround for a bug https://github.com/microsoft/microsoft-ui-xaml/issues/4035

@@ -27,6 +27,7 @@
                         <ResourceDictionary Source="../Themes/Dark.xaml"/>
                     </d:ResourceDictionary.MergedDictionaries>
                 </ui:ThemeDictionary>
+                <ResourceDictionary Source="../Assets/Vectors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <ObjectDataProvider x:Key="IslamicFinderMethodEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
@@ -308,6 +309,37 @@
                             </Grid>
                         </controls:SettingsItem>
                     </RadioButton>
+                </StackPanel>
+            </controls:TabItemEx>
+            <controls:TabItemEx Header="{mk:L11n UI.Settings.Tabs.About}">
+                <StackPanel Margin="16" MaxWidth="300">
+                    <TextBlock Text="{mk:L11n Data.AppName}" FontSize="18" FontWeight="Medium" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="version" d:Text="v3.1.0.2" Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="architecture" d:Text="x64" Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" HorizontalAlignment="Center" FlowDirection="LeftToRight"/>
+                    <TextBlock Text="{mk:L11n Data.AppDescription}" TextWrapping="Wrap" TextAlignment="Center" Foreground="{DynamicResource ThemeColors.TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,16,0,0"/>
+                    <Grid Margin="0,16,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock HorizontalAlignment="Center">
+                            <Hyperlink NavigateUri="https://github.com/Khiro95/Awqat-Salaat" RequestNavigate="Hyperlink_RequestNavigate">
+                                <Run Text="{mk:L11n UI.About.VisitProject}"/>
+                                <Hyperlink.ToolTip>
+                                    <ToolTip Content="https://github.com/Khiro95/Awqat-Salaat" FlowDirection="LeftToRight"/>
+                                </Hyperlink.ToolTip>
+                            </Hyperlink>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Center" Grid.Column="1">
+                            <Hyperlink NavigateUri="mailto:khiro95.gh@gmail.com" RequestNavigate="Hyperlink_RequestNavigate">
+                                <Run Text="{mk:L11n UI.About.Contact}"/>
+                                <Hyperlink.ToolTip>
+                                    <ToolTip Content="khiro95.gh@gmail.com" FlowDirection="LeftToRight"/>
+                                </Hyperlink.ToolTip>
+                            </Hyperlink>
+                        </TextBlock>
+                    </Grid>
+                    <Path Data="{StaticResource Ayah2}" Fill="{DynamicResource ThemeColors.TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,24,0,0" FlowDirection="LeftToRight"/>
                 </StackPanel>
             </controls:TabItemEx>
         </TabControl>

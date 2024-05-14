@@ -321,4 +321,16 @@
   <data name="UI.Settings.ShowSecondsDescription" xml:space="preserve">
     <value>تحديد ما اذا كانت الثواني تظهر في العد التنازلي</value>
   </data>
+  <data name="Data.AppDescription" xml:space="preserve">
+    <value>أداة إسلامية بسيطة خاصة بنظام ويندوز والتي تعرض وقت الصلاة القادمة إلى جانب العد العكسي على شريط المهام</value>
+  </data>
+  <data name="UI.Settings.Tabs.About" xml:space="preserve">
+    <value>حول</value>
+  </data>
+  <data name="UI.About.VisitProject" xml:space="preserve">
+    <value>زيارة المشروع</value>
+  </data>
+  <data name="UI.About.Contact" xml:space="preserve">
+    <value>اتصال</value>
+  </data>
 </root>

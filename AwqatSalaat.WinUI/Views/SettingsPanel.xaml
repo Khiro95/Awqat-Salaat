@@ -30,6 +30,10 @@
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
 
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Assets/Vectors.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
             <converters:BooleanToVisibilityInvertedConverter x:Key="BooleanToVisibilityInvertedConverter"/>
             <converters:DecimalConverter x:Key="DecimalConverter"/>
             <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
@@ -125,6 +129,7 @@
                 <NavigationViewItem x:Name="generalTab" Content="{mk:L11n Key=UI.Settings.Tabs.General}" IsSelected="True"/>
                 <NavigationViewItem x:Name="serviceTab" Content="{mk:L11n Key=UI.Settings.Tabs.Service}"/>
                 <NavigationViewItem x:Name="locationTab" Content="{mk:L11n Key=UI.Settings.Tabs.Location}"/>
+                <NavigationViewItem x:Name="aboutTab" Content="{mk:L11n Key=UI.Settings.Tabs.About}"/>
             </NavigationView.MenuItems>
             <Grid Margin="8">
                 <StackPanel Visibility="{x:Bind generalTab.IsSelected, Mode=OneWay}">
@@ -313,6 +318,35 @@
                             </Grid>
                         </ctrl:SettingsItem>
                     </RadioButton>
+                </StackPanel>
+                <StackPanel Margin="16" MaxWidth="300" Visibility="{x:Bind aboutTab.IsSelected, Mode=OneWay}">
+                    <TextBlock Text="{mk:L11n Key=Data.AppName}" FontSize="18" FontWeight="Medium" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="version" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="architecture" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" FlowDirection="LeftToRight"/>
+                    <TextBlock Text="{mk:L11n Key=Data.AppDescription}" TextWrapping="Wrap" TextAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,16,0,0"/>
+                    <Grid Margin="0,16,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock HorizontalAlignment="Center">
+                            <Hyperlink NavigateUri="https://github.com/Khiro95/Awqat-Salaat">
+                                <Run Text="{mk:L11n Key=UI.About.VisitProject}"/>
+                                <ToolTipService.ToolTip>
+                                    <ToolTip Content="https://github.com/Khiro95/Awqat-Salaat"/>
+                                </ToolTipService.ToolTip>
+                            </Hyperlink>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Center" Grid.Column="1">
+                            <Hyperlink NavigateUri="mailto:khiro95.gh@gmail.com">
+                                <Run Text="{mk:L11n Key=UI.About.Contact}"/>
+                                <ToolTipService.ToolTip>
+                                    <ToolTip Content="khiro95.gh@gmail.com"/>
+                                </ToolTipService.ToolTip>
+                            </Hyperlink>
+                        </TextBlock>
+                    </Grid>
+                    <Path Data="{StaticResource Ayah2}" Fill="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,24,0,0" FlowDirection="LeftToRight"/>
                 </StackPanel>
             </Grid>
         </NavigationView>
