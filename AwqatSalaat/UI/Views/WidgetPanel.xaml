@@ -59,15 +59,15 @@
                     <StackPanel TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" Grid.Row="0">
                         <TextBlock Text="{Binding DisplayedDate, StringFormat='dddd'}" Margin="0,4" HorizontalAlignment="Center"/>
                         <TextBlock Text="{Binding DisplayedDate, Converter={StaticResource HijriDateConverter}, ConverterParameter='dd MMMM yyyy'}" d:Text="28 صفر 1445" d:FlowDirection="RightToLeft" Margin="0,4" HorizontalAlignment="Center"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center" Visibility="Collapsed">
                             <TextBlock Text="{mk:L11n UI.Panel.CorrespondTo}"/>
                             <TextBlock Text="{Binding DisplayedDate, StringFormat=dd/MM/yyyy}" Language="en" Margin="4,0,0,0"/>
                         </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" Margin="0,4" HorizontalAlignment="Center" Grid.Row="1" FlowDirection="LeftToRight">
-                        <TextBlock d:Text="City" Text="{Binding City}"/>
-                        <TextBlock Text="-" Margin="4,0"/>
-                        <TextBlock d:Text="Country" Text="{Binding Country}"/>
+                    <StackPanel x:Name="locationPanel" Orientation="Horizontal" TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" Margin="0,4" HorizontalAlignment="Center" Grid.Row="1" FlowDirection="LeftToRight" SizeChanged="LocationPanel_SizeChanged">
+                        <TextBlock d:Text="City" Text="{Binding City}" HorizontalAlignment="Center"/>
+                        <Rectangle Height="1" Width="8" Fill="{DynamicResource ThemeColors.ControlBorderBrush}" HorizontalAlignment="Center" Margin="8,5,8,3"/>
+                        <TextBlock d:Text="Country" Text="{Binding Country}" HorizontalAlignment="Center"/>
                     </StackPanel>
                     <ItemsControl ItemsSource="{Binding Items}" Grid.Row="2" Grid.IsSharedSizeScope="True">
                         <ItemsControl.ItemTemplate>

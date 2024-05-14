@@ -29,7 +29,7 @@
         <Grid ColumnDefinitions="*,Auto" Visibility="{x:Bind ViewModel.WidgetSettings.IsOpen, Converter={StaticResource BooleanToVisibilityInvertedConverter}}" Margin="8">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition MinHeight="294"/>
+                <RowDefinition MinHeight="275"/>
             </Grid.RowDefinitions>
             <TextBlock Text="{mk:L11n Key=Data.AppName}" VerticalAlignment="Center"/>
             <CommandBar x:Name="commandBar" Grid.Column="1" OverflowButtonVisibility="Collapsed" Padding="0" Margin="-8">
@@ -52,17 +52,17 @@
                     <StackPanel Grid.Row="0">
                         <TextBlock Text="{x:Bind converters:CustomDateTimeConverter.Format(ViewModel.DisplayedDate, 'dddd', ash:LocaleManager.Default.Current)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" Margin="0,4" HorizontalAlignment="Center"/>
                         <TextBlock Text="{x:Bind ash:HijriDateHelper.Format(ViewModel.DisplayedDate, 'dd MMMM yyyy', ash:LocaleManager.Default.Current)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" FlowDirection="RightToLeft" Margin="0,4" HorizontalAlignment="Center"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center" Visibility="Collapsed">
                             <TextBlock Text="{mk:L11n Key=UI.Panel.CorrespondTo}" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                             <TextBlock Text="{x:Bind ViewModel.DisplayedDate.ToString('dd/MM/yyyy', x:Null)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" Margin="4,0,0,0"/>
                         </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center" Grid.Row="1" FlowDirection="LeftToRight">
-                        <TextBlock Text="{Binding City}" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
-                        <TextBlock Text="-" Margin="4,0" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
-                        <TextBlock Text="{Binding Country}" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                    <StackPanel x:Name="locationPanel" Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center" Grid.Row="1" FlowDirection="LeftToRight" SizeChanged="LocationPanel_SizeChanged">
+                        <TextBlock Text="{Binding City}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
+                        <Rectangle Height="1" Width="8" Fill="{ThemeResource ControlElevationBorderBrush}" Margin="8,5,8,3"/>
+                        <TextBlock Text="{Binding Country}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
                     </StackPanel>
-                    <ItemsControl ItemsSource="{Binding Items}" Grid.Row="2">
+                    <ItemsControl Background="DarkRed" ItemsSource="{Binding Items}" Grid.Row="2">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="vm:PrayerTimeViewModel">
                                 <controls:PrayerTimeItem

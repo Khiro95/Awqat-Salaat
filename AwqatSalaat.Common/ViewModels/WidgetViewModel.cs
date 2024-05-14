@@ -148,8 +148,9 @@ namespace AwqatSalaat.ViewModels
         private bool OnDataLoaded(ServiceData response)
         {
             latestData = response.Times;
-            Country = response.Location?.Country;
-            City = response.Location?.City;
+
+            UpdateDisplayedLocation(response?.Location);
+
             return Update();
         }
 
@@ -201,6 +202,26 @@ namespace AwqatSalaat.ViewModels
             }
 
             IsRefreshing = false;
+        }
+
+        private void UpdateDisplayedLocation(Location responseLocation)
+        {
+            string country = null;
+            string city = null;
+
+            if (WidgetSettings.Settings.Service == PrayerTimesService.IslamicFinder)
+            {
+                country = responseLocation?.Country;
+                city = responseLocation?.City;
+            }
+
+            if (string.IsNullOrEmpty(country) && WidgetSettings.Settings.CountryCode is string countryCode)
+            {
+                country = CountriesProvider.GetCountries().FirstOrDefault(c => c.Code == countryCode)?.Name;
+            }
+
+            Country = country;
+            City = string.IsNullOrEmpty(city) ? WidgetSettings.Settings.City : city;
         }
 
         private void UpdateServiceClient()
