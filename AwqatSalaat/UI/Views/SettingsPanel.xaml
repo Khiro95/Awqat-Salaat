@@ -78,7 +78,7 @@
             <DataTemplate x:Key="CalculationMethodTemplate" DataType="methods:CalculationMethod">
                 <StackPanel>
                     <TextBlock Text="{Binding Name}"/>
-                    <StackPanel Orientation="Horizontal" TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}">
+                    <StackPanel Orientation="Horizontal" TextBlock.FontSize="12" TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}">
                         <TextBlock Text="{mk:L11n Data.Salaat.Fajr}"/>
                         <ContentPresenter Content="{Binding Fajr}" ContentTemplate="{StaticResource MethodParameterValueTemplate}" Margin="8,0,0,0"/>
                         <TextBlock Text="-" Margin="8,0"/>

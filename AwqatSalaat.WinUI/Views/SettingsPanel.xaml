@@ -61,8 +61,8 @@
                                         </VisualState>
                                     </VisualStateGroup>
                                 </VisualStateManager.VisualStateGroups>
-                                <TextBlock Text="{Binding Parameter.Value, RelativeSource={RelativeSource TemplatedParent}}" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
-                                <TextBlock x:Name="unit" Text="°" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                                <TextBlock Text="{Binding Parameter.Value, RelativeSource={RelativeSource TemplatedParent}}" FontSize="12" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                                <TextBlock x:Name="unit" Text="°" FontSize="12" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
                             </StackPanel>
                         </ControlTemplate>
                     </Setter.Value>
@@ -75,6 +75,7 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel.Resources>
                             <Style TargetType="TextBlock">
+                                <Setter Property="FontSize" Value="12"/>
                                 <Setter Property="Foreground" Value="{ThemeResource TextFillColorTertiaryBrush}"/>
                             </Style>
                         </StackPanel.Resources>
