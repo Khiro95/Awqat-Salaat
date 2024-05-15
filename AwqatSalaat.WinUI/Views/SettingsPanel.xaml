@@ -320,7 +320,10 @@
                     </RadioButton>
                 </StackPanel>
                 <StackPanel Margin="16" MaxWidth="300" Visibility="{x:Bind aboutTab.IsSelected, Mode=OneWay}">
-                    <TextBlock Text="{mk:L11n Key=Data.AppName}" FontSize="18" FontWeight="Medium" HorizontalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="{mk:L11n Key=Data.AppName}" FontSize="18" FontWeight="Medium"/>
+                        <TextBlock Text="WinUI" FontSize="18" FontWeight="Medium" Margin="5,0,0,0"/>
+                    </StackPanel>
                     <TextBlock x:Name="version" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
                     <TextBlock x:Name="architecture" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" FlowDirection="LeftToRight"/>
                     <TextBlock Text="{mk:L11n Key=Data.AppDescription}" TextWrapping="Wrap" TextAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,16,0,0"/>
