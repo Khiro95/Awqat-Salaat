@@ -309,7 +309,8 @@ namespace AwqatSalaat.Interop
 
     public enum WindowMessage : uint
     {
-        WM_SETREDRAW = 0x000B
+        WM_SETREDRAW = 0x000B,
+        WM_SETTINGCHANGE = 0x001A
     }
 
     [Flags]

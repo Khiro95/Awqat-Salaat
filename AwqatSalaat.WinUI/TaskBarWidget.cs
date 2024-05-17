@@ -20,12 +20,14 @@ namespace AwqatSalaat.WinUI
     {
         private const string WidgetClassName = "AwqatSalaatWidgetWinRT";
         private const string TaskBarClassName = "Shell_TrayWnd";
+        private const string ReBarWindow32ClassName = "ReBarWindow32";
         private const string NotificationAreaClassName = "TrayNotifyWnd";
         private const string WidgetsButtonAutomationId = "WidgetsButton";
         private const int DefaultWidgetHostWidth = 118; // 110 for the button + 4 for left margin + 4 for right margin
 
         private static IntPtr hwndShell;
         private static IntPtr hwndTrayNotify;
+        private static IntPtr hwndReBar;
         private static RECT taskbarRect;
         private static RECT trayNotifyRect;
 
@@ -36,6 +38,7 @@ namespace AwqatSalaat.WinUI
         private DesktopWindowXamlSource host;
         private ManagementEventWatcher watcher;
         private WndProc wndProc;
+        private int currentOffsetY = 0;
         private bool? isTaskBarCentered;
         private bool? isTaskBarWidgetsEnabled;
         private bool disposedValue;
@@ -46,6 +49,7 @@ namespace AwqatSalaat.WinUI
         {
             hwndShell = User32.FindWindow(TaskBarClassName, null);
             hwndTrayNotify = User32.FindWindowEx(hwndShell, IntPtr.Zero, NotificationAreaClassName , null);
+            hwndReBar = User32.FindWindowEx(hwndShell, IntPtr.Zero, ReBarWindow32ClassName , null);
 
             var dpi = User32.GetDpiForWindow(hwndShell);
             var scale = dpi / 96d;
@@ -71,6 +75,7 @@ namespace AwqatSalaat.WinUI
             UpdatePositionImpl();
 
             host.Initialize(id);
+            host.SiteBridge.ResizePolicy = Microsoft.UI.Content.ContentSizePolicy.ResizeContentToParentWindow;
             host.Content = new WidgetSummary() { MaxWidth = 110, MaxHeight = 40 };
 
             User32.SetParent(hwnd, hwndShell);
@@ -158,7 +163,19 @@ namespace AwqatSalaat.WinUI
 #endif
                 }
 
-                appWindow.Move(new PointInt32(offsetX, 0));
+                User32.GetWindowRect(hwndReBar, out RECT barRect);
+                int offsetY = barRect.top - taskbarRect.top;
+
+
+                if (currentOffsetY != offsetY)
+                {
+                    appWindow.MoveAndResize(new RectInt32(offsetX, offsetY, WidgetHostWidth, barRect.bottom - barRect.top));
+                    currentOffsetY = offsetY;
+                }
+                else
+                {
+                    appWindow.Move(new PointInt32(offsetX, offsetY));
+                }
 
                 isTaskBarCentered = isCentered;
                 isTaskBarWidgetsEnabled = isWidgetsEnabled;
@@ -303,8 +320,20 @@ namespace AwqatSalaat.WinUI
             return null;
         }
 
-        private static IntPtr WindowProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam)
+        private IntPtr WindowProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam)
         {
+            var msg = (WindowMessage)uMsg;
+
+            if (msg == WindowMessage.WM_SETTINGCHANGE && lParam != IntPtr.Zero)
+            {
+                string area = Marshal.PtrToStringAnsi(lParam);
+
+                if (area == "UserInteractionMode")
+                {
+                    UpdatePosition(true);
+                }
+            }
+
             return User32.DefWindowProc(hWnd, uMsg, wParam, lParam);
         }
 
