@@ -319,10 +319,11 @@
                         </ctrl:SettingsItem>
                     </RadioButton>
                 </StackPanel>
-                <StackPanel Margin="16" MaxWidth="300" Visibility="{x:Bind aboutTab.IsSelected, Mode=OneWay}">
+                <StackPanel Margin="16,8,16,16" MaxWidth="300" Visibility="{x:Bind aboutTab.IsSelected, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="{mk:L11n Key=Data.AppName}" FontSize="18" FontWeight="Medium"/>
-                        <TextBlock Text="WinUI" FontSize="18" FontWeight="Medium" Margin="5,0,0,0"/>
+                        <Image x:Name="icon" Margin="0,0,8,0"/>
+                        <TextBlock Text="{mk:L11n Key=Data.AppName}" FontSize="18" FontWeight="Medium" VerticalAlignment="Center"/>
+                        <TextBlock Text="WinUI" FontSize="18" FontWeight="Medium" VerticalAlignment="Center" Margin="5,0,0,0"/>
                     </StackPanel>
                     <TextBlock x:Name="version" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
                     <TextBlock x:Name="architecture" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" FlowDirection="LeftToRight"/>

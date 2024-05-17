@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System.Reflection;
 using System;
+using System.Threading.Tasks;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -29,6 +30,7 @@ namespace AwqatSalaat.WinUI.Views
 
             version.Text = "v" + (Version ?? "{ERROR}");
             architecture.Text = Architecture;
+            SetImageSource();
         }
 
         // Workaround for a bug https://github.com/microsoft/microsoft-ui-xaml/issues/4035
@@ -40,6 +42,16 @@ namespace AwqatSalaat.WinUI.Views
                 comboBox.SelectedValuePath = null;
                 comboBox.SelectedValuePath = "Code";
             }
+        }
+
+        private async Task SetImageSource()
+        {
+            var path = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+            var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(path);
+            var iconThumbnail = await file.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.SingleItem, 32);
+            var bi = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage();
+            bi.SetSource(iconThumbnail);
+            icon.Source = bi;
         }
 
         private void OnVisibilityChanged(DependencyObject sender, DependencyProperty dp)
