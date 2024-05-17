@@ -341,7 +341,7 @@
                             </Hyperlink>
                         </TextBlock>
                         <TextBlock HorizontalAlignment="Center" Grid.Column="1">
-                            <Hyperlink NavigateUri="mailto:khiro95.gh@gmail.com">
+                            <Hyperlink Click="ContactHyperlink_Click">
                                 <Run Text="{mk:L11n Key=UI.About.Contact}"/>
                                 <ToolTipService.ToolTip>
                                     <ToolTip Content="khiro95.gh@gmail.com"/>

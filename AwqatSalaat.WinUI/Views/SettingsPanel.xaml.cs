@@ -58,5 +58,11 @@ namespace AwqatSalaat.WinUI.Views
                 ViewModel.Locator.SelectedPlace = place;
             }
         }
+
+        private void ContactHyperlink_Click(Microsoft.UI.Xaml.Documents.Hyperlink sender, Microsoft.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        {
+            //https://github.com/microsoft/microsoft-ui-xaml/issues/4438
+            Windows.System.Launcher.LaunchUriAsync(new Uri("mailto:khiro95.gh@gmail.com"));
+        }
     }
 }
