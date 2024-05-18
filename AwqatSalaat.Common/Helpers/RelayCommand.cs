@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Input;
 
 namespace AwqatSalaat.Helpers
@@ -14,6 +15,7 @@ namespace AwqatSalaat.Helpers
     {
         private readonly Action<object> _execute;
         private readonly Predicate<object> _canExecute;
+        private readonly SynchronizationContext _syncContext;
         /// <summary>
         /// Raised when RaiseCanExecuteChanged is called.
         /// </summary>
@@ -35,6 +37,7 @@ namespace AwqatSalaat.Helpers
         {
             _execute = execute ?? throw new ArgumentNullException("execute");
             _canExecute = canExecute;
+            _syncContext = SynchronizationContext.Current;
         }
         /// <summary>
         /// Determines whether this RelayCommand can execute in its current state.
@@ -66,7 +69,18 @@ namespace AwqatSalaat.Helpers
         /// </summary>
         public void RaiseCanExecuteChanged()
         {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            if (_syncContext is null)
+            {
+                CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            }
+            else
+            {
+                _syncContext.Post(arg =>
+                {
+                    var _this = (RelayCommand)arg;
+                    _this.CanExecuteChanged?.Invoke(_this, EventArgs.Empty);
+                }, this);
+            }
         }
     }
 }

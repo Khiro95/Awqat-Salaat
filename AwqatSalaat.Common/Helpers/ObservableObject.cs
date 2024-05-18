@@ -62,13 +62,16 @@ namespace AwqatSalaat.Helpers
             }
         }
 
-        protected void SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
             if (!Equals(field, value))
             {
                 field = value;
                 OnPropertyChanged(propertyName);
+                return true;
             }
+
+            return false;
         }
     }
 }

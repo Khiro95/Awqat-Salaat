@@ -20,8 +20,18 @@ namespace AwqatSalaat.ViewModels
         public TimeSpan Countdown => time - TimeStamp.Now;
         public bool IsElapsed => time < TimeStamp.Now;
         public bool IsTimeClose => isNext && Distance > 0 && !isNotificationDismissed && !IsElapsed && Countdown.TotalMinutes <= Distance;
-        public PrayerTimeState State { get => state; set => SetProperty(ref state, value); }
-        public ICommand DismissNotification { get; }
+        public PrayerTimeState State
+        {
+            get => state;
+            set
+            {
+                if (SetProperty(ref state, value) && value == PrayerTimeState.Near)
+                {
+                    DismissNotification.RaiseCanExecuteChanged();
+                }
+            }
+        }
+        public RelayCommand DismissNotification { get; }
 
         public event EventHandler Elapsed;
 
