@@ -1,6 +1,7 @@
 ﻿using AwqatSalaat.UI.Views;
 using CSDeskBand;
 using System;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
@@ -22,6 +23,10 @@ namespace AwqatSalaat
         {
             var ctx = new DispatcherSynchronizationContext();
             SynchronizationContext.SetSynchronizationContext(ctx);
+
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
+
             uiElement = new WidgetSummary
             {
                 PanelPlacement = GetPlacement(TaskbarInfo.Edge),
