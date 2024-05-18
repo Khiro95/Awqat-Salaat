@@ -163,6 +163,15 @@ namespace AwqatSalaat.WinUI
 #endif
                 }
 
+                if (osRTL)
+                {
+                    offsetX = Math.Clamp(offsetX, trayNotifyRect.right, taskbarRect.right - WidgetHostWidth);
+                }
+                else
+                {
+                    offsetX = Math.Clamp(offsetX, 0, trayNotifyRect.left - WidgetHostWidth); 
+                }
+
                 User32.GetWindowRect(hwndReBar, out RECT barRect);
                 int offsetY = barRect.top - taskbarRect.top;
 
@@ -328,7 +337,7 @@ namespace AwqatSalaat.WinUI
             {
                 string area = Marshal.PtrToStringAnsi(lParam);
 
-                if (area == "UserInteractionMode")
+                if (area is "UserInteractionMode" or "ConvertibleSlateMode")
                 {
                     UpdatePosition(true);
                 }
