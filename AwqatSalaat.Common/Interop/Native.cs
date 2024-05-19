@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace AwqatSalaat.Interop
 {
     public delegate IntPtr WndProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+    public delegate bool EnumWindowProc(IntPtr hwnd, IntPtr lParam);
 
     public static class User32
     {
@@ -13,6 +15,9 @@ namespace AwqatSalaat.Interop
             => MessageBox(HWND, lpText, lpCaption, (uint)buttons);
         public static int MessageBox(IntPtr HWND, string lpText, string lpCaption, MessageBoxButtons buttons, MessageBoxIcon icon)
             => MessageBox(HWND, lpText, lpCaption, (uint)buttons | (uint)icon);
+
+        [DllImport("user32.dll")]
+        public static extern uint GetDpiForWindow([In] IntPtr hWnd);
 
         [DllImport("user32.dll")]
         public static extern bool GetWindowRect([In] IntPtr hWnd, [Out] out RECT lpRect);
@@ -60,6 +65,15 @@ namespace AwqatSalaat.Interop
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern bool DestroyWindow(IntPtr hwnd);
+
+        [DllImport("user32.dll")]
+        public static extern bool EnumChildWindows(IntPtr hWndParent, EnumWindowProc lpEnumFunc, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetAncestor(IntPtr hwnd, GetAncestorFlags gaFlags);
+
+        [DllImport("user32.dll", CharSet = CharSet.Ansi)]
+        public static extern int GetClassName(IntPtr hwnd, [Out] StringBuilder lpClassName, int nMaxCount);
     }
 
     public static class Dwmapi
@@ -144,6 +158,13 @@ namespace AwqatSalaat.Interop
         MB_ICONERROR = MB_ICONHAND,
         MB_ICONINFORMATION = MB_ICONASTERISK,
         MB_ICONSTOP = MB_ICONHAND,
+    }
+
+    public enum GetAncestorFlags
+    {
+        GA_PARENT = 1,
+        GA_ROOT = 2,
+        GA_ROOTOWNER = 3,
     }
 
     public enum AccentState
@@ -288,7 +309,8 @@ namespace AwqatSalaat.Interop
 
     public enum WindowMessage : uint
     {
-        WM_SETREDRAW = 0x000B
+        WM_SETREDRAW = 0x000B,
+        WM_SETTINGCHANGE = 0x001A
     }
 
     [Flags]

@@ -26,5 +26,25 @@ namespace AwqatSalaat.UI.Views
             }
 #endif
         }
+
+        private void LocationPanel_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            // if Height changed then the size has changed because of orientation change
+            if (e.HeightChanged && e.PreviousSize.Height > 0)
+            {
+                return;
+            }
+
+            StackPanel stackPanel = (StackPanel)sender;
+
+            if (stackPanel.Orientation == Orientation.Horizontal && e.NewSize.Width > 200)
+            {
+                stackPanel.Orientation = Orientation.Vertical;
+            }
+            else
+            {
+                stackPanel.Orientation = Orientation.Horizontal;
+            }
+        }
     }
 }

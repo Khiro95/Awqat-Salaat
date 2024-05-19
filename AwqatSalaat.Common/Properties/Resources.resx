@@ -164,7 +164,7 @@
     <value>This code is used to identify the city. Different countries have different formats.</value>
   </data>
   <data name="UI.Settings.Method" xml:space="preserve">
-    <value>Calculation Method</value>
+    <value>Calculation method</value>
   </data>
   <data name="UI.Settings.MethodDescription" xml:space="preserve">
     <value>The calculation method which uses longitude, latitude and sun inclination along with other inputs</value>
@@ -225,5 +225,92 @@
   </data>
   <data name="UI.Settings.LaunchOnWindowsStartupDescription" xml:space="preserve">
     <value>Allow the widget to start running when Windows start</value>
+  </data>
+  <data name="UI.Settings.MinutesShort" xml:space="preserve">
+    <value>min</value>
+  </data>
+  <data name="UI.Settings.JuristicSchool" xml:space="preserve">
+    <value>Juristic school</value>
+  </data>
+  <data name="UI.Settings.JuristicSchoolDescription" xml:space="preserve">
+    <value>Asr jurisdiction method</value>
+  </data>
+  <data name="Data.JuristicSchool.Standard" xml:space="preserve">
+    <value>Standard (Shafi, Hanbali, Maliki)</value>
+  </data>
+  <data name="Data.JuristicSchool.Hanafi" xml:space="preserve">
+    <value>Hanafi</value>
+  </data>
+  <data name="UI.Settings.Tabs.Service" xml:space="preserve">
+    <value>Service</value>
+  </data>
+  <data name="UI.Settings.Tabs.Location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="UI.Settings.Latitude" xml:space="preserve">
+    <value>Latitude</value>
+  </data>
+  <data name="UI.Settings.LatitudeDescription" xml:space="preserve">
+    <value>The latitude of the city</value>
+  </data>
+  <data name="UI.Settings.Longitude" xml:space="preserve">
+    <value>Longitude</value>
+  </data>
+  <data name="UI.Settings.LongitudeDescription" xml:space="preserve">
+    <value>The longitude of the city</value>
+  </data>
+  <data name="UI.Settings.LocationByCountryCode" xml:space="preserve">
+    <value>Use Parameters</value>
+  </data>
+  <data name="UI.Settings.LocationByCountryCodeDescription" xml:space="preserve">
+    <value>Specify the minimum necessary parameters for services to detect location</value>
+  </data>
+  <data name="UI.Settings.LocationByQuery" xml:space="preserve">
+    <value>Use Query</value>
+  </data>
+  <data name="UI.Settings.LocationByQueryDescription" xml:space="preserve">
+    <value>Search for location by address or city name</value>
+  </data>
+  <data name="UI.Settings.LocationByCoordinates" xml:space="preserve">
+    <value>Specific coordinates</value>
+  </data>
+  <data name="UI.Settings.LocationByCoordinatesDescription" xml:space="preserve">
+    <value>Detect location from manually provided coordinates</value>
+  </data>
+  <data name="UI.Settings.PoweredBy" xml:space="preserve">
+    <value>Powered by</value>
+  </data>
+  <data name="UI.Settings.NoResult" xml:space="preserve">
+    <value>No result</value>
+  </data>
+  <data name="UI.Settings.LocationByQueryHint" xml:space="preserve">
+    <value>Type city name or address</value>
+  </data>
+  <data name="UI.Settings.Searching" xml:space="preserve">
+    <value>Searching...</value>
+  </data>
+  <data name="UI.Settings.Checking" xml:space="preserve">
+    <value>Checking...</value>
+  </data>
+  <data name="UI.Settings.Check" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="UI.Settings.ShowSeconds" xml:space="preserve">
+    <value>Show seconds</value>
+  </data>
+  <data name="UI.Settings.ShowSecondsDescription" xml:space="preserve">
+    <value>Select whether to show seconds in countdown</value>
+  </data>
+  <data name="Data.AppDescription" xml:space="preserve">
+    <value>A simple Islamic Windows widget to show the time of the next prayer alongside a countdown on the taskbar</value>
+  </data>
+  <data name="UI.Settings.Tabs.About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="UI.About.VisitProject" xml:space="preserve">
+    <value>Visit Project</value>
+  </data>
+  <data name="UI.About.Contact" xml:space="preserve">
+    <value>Contact</value>
   </data>
 </root>

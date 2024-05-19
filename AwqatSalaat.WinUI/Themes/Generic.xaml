@@ -6,7 +6,8 @@
     xmlns:converters="using:AwqatSalaat.WinUI.Converters"
     xmlns:mk="using:AwqatSalaat.WinUI.Markup">
 
-    <converters:CustomDateConverter x:Key="CustomDateConverter"/>
+    <converters:CustomDateTimeConverter x:Key="CustomDateTimeConverter"/>
+    <converters:BooleanInvertedConverter x:Key="BooleanInvertedConverter"/>
 
     <Style x:Key="TextBlockButtonStyle" TargetType="ButtonBase">
         <Setter Property="Background" Value="Transparent" />
@@ -57,6 +58,7 @@
     </Style>
 
     <Style TargetType="controls:PrayerTimeItem">
+        <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:PrayerTimeItem">
@@ -65,8 +67,12 @@
                             <VisualStateGroup x:Name="Default">
                                 <VisualState x:Name="Coming"/>
                                 <VisualState x:Name="Next">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="glyph" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextHighlightColor}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
                                     <VisualState.Setters>
-                                        <Setter Target="glyph.Foreground" Value="{ThemeResource TextHighlightColor}"/>
                                         <Setter Target="glyph.Glyph" Value="&#xE751;"/>
                                         <Setter Target="glyph.MirroredWhenRightToLeft" Value="True"/>
                                         <Setter Target="glyphcontainer.RenderTransform">
@@ -77,17 +83,27 @@
                                     </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="Near">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="root" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource AccentFillColorDefaultBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="glyph" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextOnAccentFillColorDefaultBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
                                     <VisualState.Setters>
-                                        <Setter Target="root.Background" Value="{ThemeResource AccentFillColorDefaultBrush}"/>
-                                        <Setter Target="glyph.Foreground" Value="{ThemeResource TextOnAccentFillColorDefaultBrush}"/>
                                         <Setter Target="glyph.Glyph" Value="&#xE7BA;"/>
                                         <Setter Target="dismissBtn.Visibility" Value="Visible"/>
                                     </VisualState.Setters>
                                 </VisualState>
                                 <VisualState x:Name="Elapsed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="glyph" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextFillColorSecondaryBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
                                     <VisualState.Setters>
                                         <Setter Target="glyph.Glyph" Value="&#xE73E;"/>
-                                        <Setter Target="glyph.Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}"/>
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
@@ -96,9 +112,9 @@
                             <Border x:Name="glyphcontainer" Margin="0,0,8,0" VerticalAlignment="Center" RenderTransformOrigin=".5,.5">
                                 <FontIcon x:Name="glyph" Glyph="&#xE823;" Foreground="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" FontSize="16"/>
                             </Border>
-                            <TextBlock Foreground="{TemplateBinding Foreground}" Text="{TemplateBinding PrayerName}" Grid.Column="1" VerticalAlignment="Center"/>
-                            <Button x:Name="dismissBtn" Style="{StaticResource TextBlockButtonStyle}" Padding="0" Content="{mk:L11n Key=UI.Panel.Dismiss}" Command="{Binding DismissCommand, RelativeSource={RelativeSource TemplatedParent}}" Margin="8,0,16,0" Grid.Column="2" Visibility="Collapsed"/>
-                            <TextBlock Foreground="{TemplateBinding Foreground}" Text="{Binding Time, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CustomDateConverter}, ConverterParameter='HH:mm'}" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="{TemplateBinding PrayerName}" Grid.Column="1" VerticalAlignment="Center"/>
+                            <Button x:Name="dismissBtn" Style="{StaticResource TextBlockButtonStyle}" Padding="0" Content="{mk:L11n Key=UI.Panel.Dismiss}" Command="{Binding DismissCommand, RelativeSource={RelativeSource TemplatedParent}}" Margin="16,0" Grid.Column="2" Visibility="Collapsed"/>
+                            <TextBlock Text="{Binding TimeString, RelativeSource={RelativeSource TemplatedParent}}" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -111,12 +127,25 @@
             <Setter.Value>
                 <ControlTemplate TargetType="controls:SettingsItem">
                     <StackPanel>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup>
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="Disabled">
+                                    <VisualState.StateTriggers>
+                                        <StateTrigger IsActive="{Binding IsEnabled, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanInvertedConverter}}"/>
+                                    </VisualState.StateTriggers>
+                                    <VisualState.Setters>
+                                        <Setter Target="contentpresenter.Foreground" Value="{ThemeResource TextFillColorTertiaryBrush}"/>
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
                         <ContentPresenter Content="{TemplateBinding Header}"/>
                         <TextBlock Text="{TemplateBinding Description}"
                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                    TextWrapping="Wrap"
                                    Margin="0,8"/>
-                        <ContentPresenter/>
+                        <ContentPresenter x:Name="contentpresenter"/>
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>

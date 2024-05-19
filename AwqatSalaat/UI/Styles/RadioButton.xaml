@@ -15,7 +15,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Border Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Height="20" Width="20" CornerRadius="10" VerticalAlignment="Center">
+                            <Border Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Height="20" Width="20" CornerRadius="10" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                                 <Ellipse x:Name="thumb" Margin="4"/>
                             </Border>
                             <ContentPresenter VerticalAlignment="Center" Margin="8,0,0,0" Grid.Column="1"/>

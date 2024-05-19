@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AwqatSalaat.UI.Views"
              xmlns:vm="clr-namespace:AwqatSalaat.ViewModels;assembly=AwqatSalaat.Common"
+             xmlns:methods="clr-namespace:AwqatSalaat.Services.Methods;assembly=AwqatSalaat.Common"
              xmlns:ui="clr-namespace:AwqatSalaat.UI"
              xmlns:controls="clr-namespace:AwqatSalaat.UI.Controls"
              xmlns:converters="clr-namespace:AwqatSalaat.UI.Converters"
@@ -14,7 +15,7 @@
              xmlns:api1="clr-namespace:AwqatSalaat.Services.IslamicFinder;assembly=AwqatSalaat.Common"
              xmlns:api2="clr-namespace:AwqatSalaat.Services.AlAdhan;assembly=AwqatSalaat.Common"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="800" d:Background="#192025">
+             d:DesignHeight="450" d:DesignWidth="800" d:Background="#192025">
     <d:UserControl.DataContext>
         <vm:WidgetSettingsViewModel/>
     </d:UserControl.DataContext>
@@ -26,6 +27,7 @@
                         <ResourceDictionary Source="../Themes/Dark.xaml"/>
                     </d:ResourceDictionary.MergedDictionaries>
                 </ui:ThemeDictionary>
+                <ResourceDictionary Source="../Assets/Vectors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <ObjectDataProvider x:Key="IslamicFinderMethodEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
@@ -43,12 +45,56 @@
                     <x:Type Type="{x:Type data:PrayerTimesService}"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
+            <ObjectDataProvider x:Key="SchoolEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type Type="{x:Type data:School}"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
 
             <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
+            <converters:LocalizedEnumConverter x:Key="LocalizedEnumConverter"/>
+            <converters:BoolToVisibilityInvertedConverter x:Key="BoolToVisibilityInvertedConverter"/>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
             <Style TargetType="controls:SettingsItem" BasedOn="{StaticResource DefaultSettingsItemStyle}">
                 <Setter Property="Margin" Value="0,16,0,0"/>
             </Style>
+
+            <DataTemplate x:Key="MethodParameterValueTemplate" DataType="methods:CalculationMethodParameter">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Value}"/>
+                    <TextBlock x:Name="unit"/>
+                </StackPanel>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Type}" Value="Angle">
+                        <Setter TargetName="unit" Property="Text" Value="°"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Type}" Value="FixedMinutes">
+                        <Setter TargetName="unit" Property="Text" Value="{mk:L11n UI.Settings.MinutesShort}"/>
+                        <Setter TargetName="unit" Property="Margin" Value="4,0,0,0"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+
+            <DataTemplate x:Key="CalculationMethodTemplate" DataType="methods:CalculationMethod">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}"/>
+                    <StackPanel Orientation="Horizontal" TextBlock.FontSize="12" TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}">
+                        <TextBlock Text="{mk:L11n Data.Salaat.Fajr}"/>
+                        <ContentPresenter Content="{Binding Fajr}" ContentTemplate="{StaticResource MethodParameterValueTemplate}" Margin="8,0,0,0"/>
+                        <TextBlock Text="-" Margin="8,0"/>
+                        <TextBlock Text="{mk:L11n Data.Salaat.Maghrib}"/>
+                        <ContentPresenter Content="{Binding Maghrib}" ContentTemplate="{StaticResource MethodParameterValueTemplate}" Margin="8,0,0,0"/>
+                        <TextBlock Text="-" Margin="8,0"/>
+                        <TextBlock Text="{mk:L11n Data.Salaat.Isha}"/>
+                        <ContentPresenter Content="{Binding Isha}" ContentTemplate="{StaticResource MethodParameterValueTemplate}" Margin="8,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="CalculationMethodDisplayTemplate" DataType="methods:CalculationMethod">
+                <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -65,10 +111,19 @@
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.ShowCountdown}" Description="{mk:L11n UI.Settings.ShowCountdownDescription}">
                             <CheckBox IsChecked="{Binding ShowCountdown}"/>
                         </controls:SettingsItem>
+                        <controls:SettingsItem Header="{mk:L11n UI.Settings.ShowSeconds}" Description="{mk:L11n UI.Settings.ShowSecondsDescription}" IsEnabled="{Binding ShowCountdown}">
+                            <CheckBox IsChecked="{Binding ShowSeconds}"/>
+                        </controls:SettingsItem>
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.ReminderOffset}" Description="{mk:L11n UI.Settings.ReminderOffsetDescription}">
                             <controls:NumericUpDown Value="{Binding NotificationDistance}" Maximum="720" Width="100" HorizontalAlignment="Left"/>
                         </controls:SettingsItem>
-                        <controls:SettingsItem Header="{mk:L11n UI.Settings.ServiceProvider}" Description="{mk:L11n UI.Settings.ServiceProviderDescription}">
+                    </StackPanel>
+                </ScrollViewer>
+            </controls:TabItemEx>
+            <controls:TabItemEx Header="{mk:L11n UI.Settings.Tabs.Service}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel DataContext="{Binding Settings}" Margin="0,16,0,0">
+                        <controls:SettingsItem Header="{mk:L11n UI.Settings.ServiceProvider}" Description="{mk:L11n UI.Settings.ServiceProviderDescription}" Margin="0">
                             <ComboBox ItemsSource="{Binding Source={StaticResource PrayerTimesServiceEnum}}" SelectedItem="{Binding Service}" Width="200" HorizontalAlignment="Left">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
@@ -77,23 +132,25 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </controls:SettingsItem>
-                    </StackPanel>
-                </ScrollViewer>
-            </controls:TabItemEx>
-            <controls:TabItemEx Header="Islamic Finder">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel DataContext="{Binding Settings}" Margin="0,16,0,0">
-                        <controls:SettingsItem Header="{mk:L11n UI.Settings.CountryCode}" Description="{mk:L11n UI.Settings.CountryCodeDescription}" Margin="0">
-                            <TextBox Text="{Binding CountryCode}" MaxLength="2" Width="50" HorizontalAlignment="Left"/>
-                        </controls:SettingsItem>
-                        <controls:SettingsItem Header="{mk:L11n UI.Settings.ZipCode}" Description="{mk:L11n UI.Settings.ZipCodeDescription}">
-                            <TextBox Text="{Binding ZipCode}" Width="100" HorizontalAlignment="Left"/>
-                        </controls:SettingsItem>
-                        <controls:SettingsItem Header="{mk:L11n UI.Settings.Method}" Description="{mk:L11n UI.Settings.MethodDescription}">
-                            <ComboBox ItemsSource="{Binding Source={StaticResource IslamicFinderMethodEnum}}" SelectedItem="{Binding Method}">
+                        <controls:SettingsItem Header="{mk:L11n UI.Settings.JuristicSchool}" Description="{mk:L11n UI.Settings.JuristicSchoolDescription}">
+                            <ComboBox ItemsSource="{Binding Source={StaticResource SchoolEnum}}" SelectedItem="{Binding School}" Width="300" HorizontalAlignment="Left">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding ., Converter={StaticResource EnumDescriptionConverter}}"/>
+                                        <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.JuristicSchool.{0}'}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </controls:SettingsItem>
+                        <controls:SettingsItem Header="{mk:L11n UI.Settings.Method}" Description="{mk:L11n UI.Settings.MethodDescription}">
+                            <ComboBox ItemsSource="{Binding Source={x:Static methods:CalculationMethod.AvailableMethods}, Mode=OneTime}" SelectedItem="{Binding CalculationMethod}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <ContentPresenter x:Name="presenter" Content="{Binding}" ContentTemplate="{StaticResource CalculationMethodTemplate}"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ComboBoxItem, AncestorLevel=1}}" Value="{x:Null}">
+                                                <Setter TargetName="presenter" Property="ContentTemplate" Value="{StaticResource CalculationMethodDisplayTemplate}" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
@@ -101,26 +158,189 @@
                     </StackPanel>
                 </ScrollViewer>
             </controls:TabItemEx>
-            <controls:TabItemEx Header="Al Adhan">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel DataContext="{Binding Settings}" Margin="0,16,0,0">
-                        <controls:SettingsItem Header="{mk:L11n UI.Settings.CountryCode}" Description="{mk:L11n UI.Settings.CountryCodeDescription}" Margin="0">
-                            <TextBox Text="{Binding CountryCode}" MaxLength="2" Width="50" HorizontalAlignment="Left"/>
+            <controls:TabItemEx Header="{mk:L11n UI.Settings.Tabs.Location}">
+                <StackPanel Margin="0,16,0,0">
+                    <RadioButton IsChecked="{Binding Locator.DetectByCountryCode}" VerticalContentAlignment="Top">
+                        <controls:SettingsItem Margin="0" Header="{mk:L11n UI.Settings.LocationByCountryCode}" Description="{mk:L11n UI.Settings.LocationByCountryCodeDescription}" IsEnabled="{Binding Locator.DetectByCountryCode, Mode=OneWay}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="8"/>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="8"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{mk:L11n UI.Settings.CountryCode}"/>
+                                <ComboBox ItemsSource="{Binding Source={x:Static vm:WidgetSettingsViewModel.AvailableCountries}}" SelectedValue="{Binding Settings.CountryCode}" SelectedValuePath="Code" FlowDirection="LeftToRight" Grid.Column="1">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <DockPanel>
+                                                <TextBlock Text="{Binding Code}" Foreground="{DynamicResource ThemeColors.TextSecondaryBrush}" Width="24"/>
+                                                <TextBlock Text="{Binding Name}" Margin="8,0,0,0"/>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <TextBlock Text="{mk:L11n UI.Settings.City}" Grid.Row="2"/>
+                                <TextBox Text="{Binding Settings.City}" Width="200" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
+                                <TextBlock Text="{mk:L11n UI.Settings.ZipCode}" Grid.Row="4"/>
+                                <TextBox Text="{Binding Settings.ZipCode}" Width="100" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="1"/>
+                            </Grid>
                         </controls:SettingsItem>
-                        <controls:SettingsItem Header="{mk:L11n UI.Settings.City}" Description="{mk:L11n UI.Settings.CityDescription}">
-                            <TextBox Text="{Binding City}" Width="200" HorizontalAlignment="Left"/>
+                    </RadioButton>
+                    <RadioButton IsChecked="{Binding Locator.DetectByQuery}" VerticalContentAlignment="Top" Margin="0,16,0,0">
+                        <controls:SettingsItem Margin="0" Header="{mk:L11n UI.Settings.LocationByQuery}" Description="{mk:L11n UI.Settings.LocationByQueryDescription}" IsEnabled="{Binding Locator.DetectByQuery, Mode=OneWay}">
+                            <StackPanel>
+                                <controls:TextBoxEx PlaceHolderText="{mk:L11n UI.Settings.LocationByQueryHint}" Text="{Binding Locator.SearchQuery, Delay=250, UpdateSourceTrigger=PropertyChanged}">
+                                    <controls:TextBoxEx.DropDownContent>
+                                        <Grid MinWidth="400" MaxWidth="800">
+                                            <ListBox ItemsSource="{Binding Locator.Places}" SelectedItem="{Binding Locator.SelectedPlace, Mode=OneWayToSource}" Background="Transparent" BorderThickness="0" FlowDirection="LeftToRight">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding DisplayName}"/>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                            <Grid MinHeight="40" Visibility="{Binding Locator.IsBusy, Converter={StaticResource BoolToVisibilityInvertedConverter}}">
+                                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" Visibility="{Binding Locator.HasPlaces, Converter={StaticResource BoolToVisibilityInvertedConverter}}">
+                                                    <TextBlock Text="{mk:L11n UI.Panel.Error}" Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" HorizontalAlignment="Center" Visibility="{Binding Locator.HasError, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                    <TextBlock HorizontalAlignment="Center">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Foreground" Value="{DynamicResource ThemeColors.TextTertiaryBrush}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding Locator.HasError}" Value="True">
+                                                                        <Setter Property="Text" Value="{Binding Locator.Error}"/>
+                                                                        <Setter Property="Foreground" Value="{DynamicResource ThemeColors.TextPrimaryBrush}"/>
+                                                                    </DataTrigger>
+                                                                    <MultiDataTrigger>
+                                                                        <MultiDataTrigger.Conditions>
+                                                                            <Condition Binding="{Binding Locator.HasQuery}" Value="True"/>
+                                                                            <Condition Binding="{Binding Locator.HasPlaces}" Value="False"/>
+                                                                            <Condition Binding="{Binding Locator.HasError}" Value="False"/>
+                                                                        </MultiDataTrigger.Conditions>
+                                                                        <Setter Property="Text" Value="{mk:L11n UI.Settings.NoResult}"/>
+                                                                    </MultiDataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Grid>
+                                            <Grid MinHeight="40" Visibility="{Binding Locator.IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                <TextBlock Text="{mk:L11n UI.Settings.Searching}" Foreground="{DynamicResource ThemeColors.TextPrimaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <ProgressBar IsIndeterminate="True" Background="Transparent" Foreground="{DynamicResource ThemeColors.TextPrimaryBrush}" BorderThickness="0" VerticalAlignment="Bottom" Height="2"/>
+                                            </Grid>
+                                        </Grid>
+                                    </controls:TextBoxEx.DropDownContent>
+                                </controls:TextBoxEx>
+                                <StackPanel Orientation="Horizontal" TextBlock.FontSize="12">
+                                    <TextBlock Text="{mk:L11n UI.Settings.PoweredBy}" Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}"/>
+                                    <TextBlock Margin="4,0,0,0">
+                                        <Hyperlink NavigateUri="https://nominatim.org/" RequestNavigate="Hyperlink_RequestNavigate" ToolTip="https://nominatim.org/">Nominatim</Hyperlink>
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
                         </controls:SettingsItem>
-                        <controls:SettingsItem Header="{mk:L11n UI.Settings.Method}" Description="{mk:L11n UI.Settings.MethodDescription}">
-                            <ComboBox ItemsSource="{Binding Source={StaticResource AlAdhanMethodEnum}}" SelectedItem="{Binding Method2}">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding ., Converter={StaticResource EnumDescriptionConverter}}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
+                    </RadioButton>
+                    <RadioButton IsChecked="{Binding Locator.DetectByCoordinates}" VerticalContentAlignment="Top" Margin="0,16,0,0">
+                        <controls:SettingsItem Margin="0" Header="{mk:L11n UI.Settings.LocationByCoordinates}" Description="{mk:L11n UI.Settings.LocationByCoordinatesDescription}" IsEnabled="{Binding Locator.DetectByCoordinates, Mode=OneWay}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="8"/>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="8"/>
+                                    <RowDefinition MinHeight="32"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{mk:L11n UI.Settings.Latitude}"/>
+                                <TextBox Text="{Binding Settings.Latitude}" Grid.Column="1"/>
+                                <TextBlock Text="{mk:L11n UI.Settings.Longitude}" Grid.Row="2"/>
+                                <TextBox Text="{Binding Settings.Longitude}" Grid.Column="1" Grid.Row="2"/>
+                                <Button Content="{mk:L11n UI.Settings.Check}" Command="{Binding Locator.Check}" Width="50" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <DockPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Visibility="{Binding Locator.PendingCheck, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Margin="8,0,0,0" VerticalAlignment="Center">
+                                        <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE711;" Command="{Binding Locator.CancelCheck}" ToolTip="{mk:L11n UI.Settings.Cancel}" Visibility="{Binding Locator.PendingCheck, Converter={StaticResource BooleanToVisibilityConverter}}" d:Visibility="Visible"/>
+                                        <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE8FB;" Command="{Binding Locator.ConfirmCheck}" ToolTip="{mk:L11n UI.Settings.Confirm}" Visibility="{Binding Locator.HasCheckResult, Converter={StaticResource BooleanToVisibilityConverter}}" d:Visibility="Visible"/>
+                                    </StackPanel>
+                                    <Grid>
+                                        <TextBlock Text="{Binding Locator.PendingPlace.DisplayName}" VerticalAlignment="Center" MaxWidth="400" TextWrapping="Wrap"/>
+                                        <Grid Visibility="{Binding Locator.IsChecking, Converter={StaticResource BoolToVisibilityInvertedConverter}}">
+                                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding Locator.HasCheckResult, Converter={StaticResource BoolToVisibilityInvertedConverter}}">
+                                                <TextBlock Text="{mk:L11n UI.Panel.Error}" Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" HorizontalAlignment="Center" Visibility="{Binding Locator.HasError, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                <TextBlock HorizontalAlignment="Center">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Foreground" Value="{DynamicResource ThemeColors.TextTertiaryBrush}"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Locator.HasError}" Value="True">
+                                                                    <Setter Property="Text" Value="{Binding Locator.Error}"/>
+                                                                    <Setter Property="Foreground" Value="{DynamicResource ThemeColors.TextPrimaryBrush}"/>
+                                                                </DataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding Locator.PendingCheck}" Value="True"/>
+                                                                        <Condition Binding="{Binding Locator.HasCheckResult}" Value="False"/>
+                                                                        <Condition Binding="{Binding Locator.HasError}" Value="False"/>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Text" Value="{mk:L11n UI.Settings.NoResult}"/>
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Grid>
+                                        <Grid Visibility="{Binding Locator.IsChecking, Converter={StaticResource BooleanToVisibilityConverter}}" d:Visibility="Visible">
+                                            <TextBlock Text="{mk:L11n UI.Settings.Checking}" Foreground="{DynamicResource ThemeColors.TextPrimaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            <ProgressBar IsIndeterminate="True" Background="Transparent" Foreground="{DynamicResource ThemeColors.TextPrimaryBrush}" BorderThickness="0" VerticalAlignment="Bottom" Height="2"/>
+                                        </Grid>
+                                    </Grid>
+                                </DockPanel>
+                            </Grid>
                         </controls:SettingsItem>
-                    </StackPanel>
-                </ScrollViewer>
+                    </RadioButton>
+                </StackPanel>
+            </controls:TabItemEx>
+            <controls:TabItemEx Header="{mk:L11n UI.Settings.Tabs.About}">
+                <StackPanel Margin="16" MaxWidth="300">
+                    <TextBlock Text="{mk:L11n Data.AppName}" FontSize="18" FontWeight="Medium" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="version" d:Text="v3.1.0.2" Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="architecture" d:Text="x64" Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" HorizontalAlignment="Center" FlowDirection="LeftToRight"/>
+                    <TextBlock Text="{mk:L11n Data.AppDescription}" TextWrapping="Wrap" TextAlignment="Center" Foreground="{DynamicResource ThemeColors.TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,16,0,0"/>
+                    <Grid Margin="0,16,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock HorizontalAlignment="Center">
+                            <Hyperlink NavigateUri="https://github.com/Khiro95/Awqat-Salaat" RequestNavigate="Hyperlink_RequestNavigate">
+                                <Run Text="{mk:L11n UI.About.VisitProject}"/>
+                                <Hyperlink.ToolTip>
+                                    <ToolTip Content="https://github.com/Khiro95/Awqat-Salaat" FlowDirection="LeftToRight"/>
+                                </Hyperlink.ToolTip>
+                            </Hyperlink>
+                        </TextBlock>
+                        <TextBlock HorizontalAlignment="Center" Grid.Column="1">
+                            <Hyperlink NavigateUri="mailto:khiro95.gh@gmail.com" RequestNavigate="Hyperlink_RequestNavigate">
+                                <Run Text="{mk:L11n UI.About.Contact}"/>
+                                <Hyperlink.ToolTip>
+                                    <ToolTip Content="khiro95.gh@gmail.com" FlowDirection="LeftToRight"/>
+                                </Hyperlink.ToolTip>
+                            </Hyperlink>
+                        </TextBlock>
+                    </Grid>
+                    <Path Data="{StaticResource Ayah2}" Fill="{DynamicResource ThemeColors.TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,24,0,0" FlowDirection="LeftToRight"/>
+                </StackPanel>
             </controls:TabItemEx>
         </TabControl>
     </Grid>

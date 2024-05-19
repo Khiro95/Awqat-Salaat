@@ -9,11 +9,13 @@
         <ResourceDictionary Source="../Styles/AcrylicPopup.xaml"/>
         <ResourceDictionary Source="../Styles/Button.xaml"/>
         <ResourceDictionary Source="../Styles/ComboBox.xaml"/>
+        <ResourceDictionary Source="../Styles/ListBox.xaml"/>
         <ResourceDictionary Source="../Styles/NumericUpDown.xaml"/>
         <ResourceDictionary Source="../Styles/SettingsItem.xaml"/>
         <ResourceDictionary Source="../Styles/TextBox.xaml"/>
         <ResourceDictionary Source="../Styles/Toggle.xaml"/>
         <ResourceDictionary Source="../Styles/RadioButton.xaml"/>
         <ResourceDictionary Source="../Styles/TabControl.xaml"/>
+        <ResourceDictionary Source="../Styles/HyperLink.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

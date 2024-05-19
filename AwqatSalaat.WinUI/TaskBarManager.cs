@@ -29,7 +29,7 @@ namespace AwqatSalaat.WinUI
             RepositionWidget = new RelayCommand(static o => taskBarWidget?.UpdatePosition(true));
 
             App.Quitting += App_Quitting;
-            LocaleManager.Default.CurrentChanged += (_, _) => UpdateTrayIconStrings();
+            LocaleManager.Default.CurrentChanged += (_, _) => UpdateTrayIconLocalization();
 
             AppIcon = System.Drawing.Icon.ExtractAssociatedIcon(Environment.ProcessPath);
         }
@@ -59,7 +59,7 @@ namespace AwqatSalaat.WinUI
                 Icon = AppIcon.Handle,
             };
 
-            UpdateTrayIconStrings();
+            UpdateTrayIconLocalization();
             trayIcon.MessageWindow.TaskbarCreated += (_, _) => dispatcher.TryEnqueue(OnTaskbarCreated);
             trayIcon.Create();
 
@@ -121,13 +121,15 @@ namespace AwqatSalaat.WinUI
             ShowWidgetExecute();
         }
 
-        private static void UpdateTrayIconStrings()
+        private static void UpdateTrayIconLocalization()
         {
             trayIcon.UpdateToolTip(LocaleManager.Default.Get("Data.AppName"));
             showItem.Text = LocaleManager.Default.Get("UI.ContextMenu.Show");
             hideItem.Text = LocaleManager.Default.Get("UI.ContextMenu.Hide");
             repositionItem.Text = LocaleManager.Default.Get("UI.ContextMenu.Reposition");
             quitItem.Text = LocaleManager.Default.Get("UI.ContextMenu.Quit");
+
+            trayIcon.ContextMenu.RightToLeft = LocaleManager.Default.CurrentCulture.TextInfo.IsRightToLeft;
         }
     }
 }

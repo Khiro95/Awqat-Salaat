@@ -10,6 +10,7 @@
     xmlns:converters="using:AwqatSalaat.WinUI.Converters"
     xmlns:mk="using:AwqatSalaat.WinUI.Markup"
     xmlns:vm="using:AwqatSalaat.ViewModels"
+    xmlns:ash="using:AwqatSalaat.Helpers"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" x:DefaultBindMode="OneWay">
@@ -47,7 +48,7 @@
 
                     <StaticResource x:Key="NotificationFillColor" ResourceKey="SystemAccentColorDark1"/>
                 </ResourceDictionary>
-                <ResourceDictionary x:Key="Dark">
+                <ResourceDictionary x:Key="Default">
                     <StaticResource x:Key="ToggleButtonBackground" ResourceKey="ControlFillColorTransparentBrush" />
                     <StaticResource x:Key="ToggleButtonBackgroundPointerOver" ResourceKey="ControlFillColorDefaultBrush" />
                     <StaticResource x:Key="ToggleButtonBackgroundPressed" ResourceKey="ControlFillColorSecondaryBrush" />
@@ -76,25 +77,13 @@
                     <StaticResource x:Key="NotificationFillColor" ResourceKey="SystemAccentColorLight2"/>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
+
             <converters:BooleanToVisibilityInvertedConverter x:Key="BooleanToVisibilityInvertedConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <UserControl.Transitions>
         <EdgeUIThemeTransition Edge="Bottom"/>
     </UserControl.Transitions>
-    <UserControl.ContextFlyout>
-        <MenuFlyout ShouldConstrainToRootBounds="False" SystemBackdrop="{StaticResource AcrylicBackgroundFillColorDefaultBackdrop}">
-            <MenuFlyout.MenuFlyoutPresenterStyle>
-                <Style TargetType="MenuFlyoutPresenter" BasedOn="{StaticResource DefaultMenuFlyoutPresenterStyle}">
-                    <Setter Property="Background" Value="Transparent"/>
-                </Style>
-            </MenuFlyout.MenuFlyoutPresenterStyle>
-            <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Hide}" Command="{x:Bind app:TaskBarManager.HideWidget, Mode=OneTime}"/>
-            <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Reposition}" Command="{x:Bind app:TaskBarManager.RepositionWidget, Mode=OneTime}"/>
-            <MenuFlyoutSeparator/>
-            <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Quit}" Command="{x:Bind app:App.Quit, Mode=OneTime}"/>
-        </MenuFlyout>
-    </UserControl.ContextFlyout>
     <Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="BackgroundStates">
@@ -122,6 +111,19 @@
         </VisualStateManager.VisualStateGroups>
         <ToggleButton x:Name="toggle" IsChecked="{x:Bind flyout.IsOpen}" IsThreeState="False" Checked="ToggleButton_Checked" Padding="0" FontSize="12" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
             <Grid x:Name="btngrid">
+                <Grid.ContextFlyout>
+                    <MenuFlyout ShouldConstrainToRootBounds="False" SystemBackdrop="{StaticResource AcrylicBackgroundFillColorDefaultBackdrop}">
+                        <MenuFlyout.MenuFlyoutPresenterStyle>
+                            <Style TargetType="MenuFlyoutPresenter" BasedOn="{StaticResource DefaultMenuFlyoutPresenterStyle}">
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Style>
+                        </MenuFlyout.MenuFlyoutPresenterStyle>
+                        <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Hide}" Command="{x:Bind app:TaskBarManager.HideWidget, Mode=OneTime}"/>
+                        <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Reposition}" Command="{x:Bind app:TaskBarManager.RepositionWidget, Mode=OneTime}"/>
+                        <MenuFlyoutSeparator/>
+                        <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Quit}" Command="{x:Bind app:App.Quit, Mode=OneTime}"/>
+                    </MenuFlyout>
+                </Grid.ContextFlyout>
                 <Border x:Name="alert" Background="Transparent" CornerRadius="{ThemeResource ControlCornerRadius}"/>
                 <Grid Margin="4" Visibility="{x:Bind ViewModel.WidgetSettings.Settings.IsConfigured}">
                     <Grid Visibility="{x:Bind ViewModel.IsRefreshing, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
@@ -133,11 +135,11 @@
                                 <helpers:XamlList>
                                     <Grid RowDefinitions="*,*">
                                         <TextBlock Text="{x:Bind ViewModel.Next.Name, FallbackValue=NAME}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        <TextBlock Text="{x:Bind ViewModel.Next.Time.ToString('HH:mm', x:Null), FallbackValue=TIME}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
+                                        <TextBlock Text="{x:Bind converters:CustomDateTimeConverter.FormatShortTime(ViewModel.Next.Time, ash:LocaleManager.Default.CurrentCulture), FallbackValue=TIME}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
                                     </Grid>
                                     <Grid RowDefinitions="*,*" Visibility="{x:Bind ViewModel.WidgetSettings.Settings.ShowCountdown}">
                                         <TextBlock Text="{mk:L11n Key=UI.Summary.After}" HorizontalAlignment="Center"/>
-                                        <TextBlock Text="{x:Bind sys:String.Format('{0:hh\\\\:mm}', ViewModel.Next.Countdown), FallbackValue=COUNTDOWN}" HorizontalAlignment="Center" Grid.Row="1"/>
+                                        <TextBlock Text="{x:Bind sys:String.Format(ViewModel.WidgetSettings.CountdownFormat, ViewModel.Next.Countdown), FallbackValue=COUNTDOWN}" HorizontalAlignment="Center" Grid.Row="1"/>
                                     </Grid>
                                 </helpers:XamlList>
                             </ItemsRepeater.ItemsSource>

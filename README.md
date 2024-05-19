@@ -52,6 +52,7 @@ This app bring Awqat Salaat to Windows 11 which wasn't supported in earlier vers
 - The widget may not respond to all changes in the taskbar to update its position (can be re-positioned manually).
 - The widget cannot be shown/hidden from the taskbar itself. However, a context-menu and a system tray icon are available to control the widget.
 - Explorer will not manage the widget so it has to be launched externally at Windows startup. This can be configured in Settings.
+- On 2-in-1 devices, you *may* need to manually re-position the widget after switching to/from tablet mode.
 - The blurred background effect doesn't work, for some reason, even though it works when the widget is not injected into the taskbar.
 
 ## Installation
@@ -76,21 +77,15 @@ It's expected that the widget will not appear after the installation finish, so 
   ![Right-click on taskbar again and this time Awqat Salaat name will appear under Toolbars](images/installation_step2.png)
 
 3. Now the widget should appear on the taskbar. Click on it to show settings panel then enter the necessary inputs and click on ✔️ to save changes.
-  Note that you only need to configure the service you wish to use, unless you want both.
   
-  ![The widget appear on the taskbar and settings panel open](images/installation_step3_1_en.png)
-  ![The settings panel show Islamic Finder service settings](images/installation_step3_2_en.png)
-  ![The settings panel show Al-Adhan service settings](images/installation_step3_3_en.png)
+  ![The widget appear on the taskbar and settings panel open](images/installation_step3_en.png)
 > [!tip]
 > Make sure to check available options for **Calculation Method** since there can be one for your country; otherwise just leave the default one. Custom method might be supported in future versions of the widget as well.
 
-> [!note]
-> Actually, each service provide its own set of built-in calculation methods. In future versions, these methods may be unified.
 ## Showcase
 
 ### Windows 10 (Deskband)
 
-Here some screenshots of Awqat Salaat widget for both dark and light theme.
 > [!note]
 > The theme always match system theme on Windows 10.
 
@@ -101,6 +96,9 @@ Here some screenshots of Awqat Salaat widget for both dark and light theme.
 ![Awqat Salaat widget notification for near prayer time](images/showcase_3_en.gif)
 
 ### Windows 11 (WinUI)
+
+> [!note]
+> The theme always match system theme.
 
 ![Awqat Salaat WinUI widget showing next prayer time on center-aligned taskbar](images/showcase_win11_1_en.png)
 
@@ -124,33 +122,7 @@ In addition, to build the installers the following SDK is needed:
 
 ## Changelog
 
-### v3.0
-
-- Add Awqat Salaat WinUI app to support Windows 11.
-- Fix a critical error in date serialization on systems that use different calendars other than Gregorian.
-- Fix settings loss after the installation of Windows Updates (such as cumulative updates).
-- Show Hijri date in English when Display language is not set to Arabic.
-
-### v2.0.1
-
-- Fix a typo in **Fajr** prayer English name.
-- Stabilize version numbers calculation
-
-### v2.0
-
-- Add Al-Adhan's Prayer Times API.
-
-### v1.1.3
-
-- Show clearer error message when Islamic Finder's Prayer Times API is down.
-
-### v1.1
-
-- Fix compatibility issues with Windows 7.
-
-### v1.0
-
-- Initial release.
+For a list of changes, check the changelog [here](CHANGELOG.md).
 
 ## Notes
 
@@ -158,9 +130,18 @@ In addition, to build the installers the following SDK is needed:
 - The preview app is used for development purposes only.
 - The Hijri date shown in the widget is provided by the runtime (.NET Framework/.NET) and is based on *Um Al Qura* calendar, thus it may not match the exact date everywhere.
 
-## Credits
+## Acknowledgement
 
 - [CSDeskBand:](https://github.com/dsafa/CSDeskBand) A library that simplifies the creation of DeskBands using WinForms or WPF.
 - [H.NotifyIcon:](https://github.com/HavenDV/H.NotifyIcon) A library that simplifies the creation of system tray icons.
-- [Islamic Finder:](http://www.islamicfinder.us/index.php/api) They provide a simple API for getting the prayers times.
+- [Islamic Finder:](https://www.islamicfinder.us/index.php/api) They provide a simple API for getting the prayers times.
 - [Al-Adhan:](https://aladhan.com/prayer-times-api) They provide a flexible API for getting the prayers times.
+- [Nominatim:](https://nominatim.org/) An open-source geocoding service.
+
+## Contact
+
+For any question or problem reporting, please consider opening a [new issue](https://github.com/Khiro95/Awqat-Salaat/issues/new) or send an email to khiro95.gh@gmail.com.
+
+## License
+
+This project is licensed under the terms of [MIT License](LICENSE).

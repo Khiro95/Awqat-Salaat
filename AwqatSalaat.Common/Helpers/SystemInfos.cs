@@ -73,7 +73,7 @@ namespace AwqatSalaat.Helpers
                 {
                     if (key != null)
                     {
-                        int value = Convert.ToInt32(key.GetValue("TaskbarAl", 0));
+                        int value = Convert.ToInt32(key.GetValue("TaskbarAl", 1));
                         return value == 1;
                     }
 

@@ -12,7 +12,7 @@
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->
             <ResourceDictionary.ThemeDictionaries>
-                <ResourceDictionary x:Key="Dark">
+                <ResourceDictionary x:Key="Default">
                     <Color x:Key="TextHighlightColor">#F2CC80</Color>
                     <SolidColorBrush x:Key="TextHighlightBrush" Color="{StaticResource TextHighlightColor}"/>
                 </ResourceDictionary>

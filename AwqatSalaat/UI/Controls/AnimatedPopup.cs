@@ -1,13 +1,12 @@
 ﻿using AwqatSalaat.Interop;
 using System;
-using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
@@ -32,6 +31,7 @@ namespace AwqatSalaat.UI.Controls
         private class AnimationContext : IDisposable
         {
             private bool disposedValue;
+            private readonly TaskCompletionSource<bool> taskCompletionSource = new TaskCompletionSource<bool>();
 
             public AnimationNativeData NativeData { get; } = new AnimationNativeData();
             public DateTime StartTime { get; }
@@ -40,6 +40,8 @@ namespace AwqatSalaat.UI.Controls
             public RECT OriginRect { get; }
             public IEasingFunction EasingFunction { get; }
             public RelativePlacement Placement { get; }
+            public double Progress => (DateTime.Now - StartTime).TotalMilliseconds / Duration.TotalMilliseconds;
+            public Task Task => taskCompletionSource.Task;
 
             public AnimationContext(TimeSpan duration, RECT originRect, RelativePlacement placement, IEasingFunction easingFunction, bool delay)
             {
@@ -56,8 +58,10 @@ namespace AwqatSalaat.UI.Controls
                 {
                     if (disposing)
                     {
-                        NativeData.Dispose();
+                        taskCompletionSource.TrySetResult(Progress >= 1d);
                     }
+
+                    NativeData.Dispose();
 
                     disposedValue = true;
                 }
@@ -67,6 +71,11 @@ namespace AwqatSalaat.UI.Controls
             {
                 Dispose(disposing: true);
                 GC.SuppressFinalize(this);
+            }
+
+            ~AnimationContext()
+            {
+                Dispose(disposing: false);
             }
         }
 
@@ -115,6 +124,11 @@ namespace AwqatSalaat.UI.Controls
             Left
         }
 
+        private static readonly MethodInfo methodUpdateWindowSettings;
+        private static readonly uint s_updateWindowSettings;
+        private static readonly object[] falseParam = new object[] { false };
+        private static readonly object[] trueParam = new object[] { true };
+
         // The main reason for this is to control the closure of the popup to be able to play closing animation BEFORE hiding the window
         private static readonly FrameworkPropertyMetadata baseIsOpenMetadata;
 
@@ -134,20 +148,44 @@ namespace AwqatSalaat.UI.Controls
                     baseIsOpenMetadata.DefaultValue,
                     FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
                     propertyChangedCallback: OnIsOpenChanged));
+
+            methodUpdateWindowSettings = typeof(HwndTarget).GetMethod("UpdateWindowSettings", BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[1] { typeof(bool) }, null);
+            var f = typeof(HwndTarget).GetField("s_updateWindowSettings", BindingFlags.Static | BindingFlags.NonPublic);
+            s_updateWindowSettings = Convert.ToUInt32(f.GetValue(null));
         }
 
-        private static void OnIsOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static async void OnIsOpenChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             AnimatedPopup popup = (AnimatedPopup)d;
             bool isShow = (bool)e.NewValue;
+
             if (isShow)
             {
+                if (popup.isClosingAnimationRunning)
+                {
+                    // Disable popuproot animation if exist to avoid animation delay
+                    popup.SetCurrentValue(PopupAnimationProperty, PopupAnimation.None);
+                    
+                    // Force animation to stop and close the popup
+                    popup.EndNativeClosingAnimation();
+
+                    // This is necessary to "await" closing animation task because the continuation is queued with Normal priority.
+                    // Without this, we would need to replace "await nativeAnimationTask" by "ContinueWith(..., TaskContinuationOptions.ExecuteSynchronously)"
+                    await Dispatcher.Yield(DispatcherPriority.Normal);
+
+                    // There is a DispatcherTimer that will hide the window when it fire
+                    // so we need to give it the chance to run before we continue
+                    await Dispatcher.Yield(DispatcherPriority.Input);
+                }
+
                 // Workaround to fix a bug for auto-size
                 if (double.IsNaN(popup.Width))
                 {
                     popup.Width = 0;
                     popup.Width = double.NaN;
                 }
+
+                // Workaround to fix a bug for auto-size
                 if (double.IsNaN(popup.Height))
                 {
                     popup.Height = 0;
@@ -159,19 +197,20 @@ namespace AwqatSalaat.UI.Controls
                     // Disable popuproot animation if exist
                     popup.SetCurrentValue(PopupAnimationProperty, PopupAnimation.None);
                 }
+
                 baseIsOpenMetadata.PropertyChangedCallback.Invoke(d, e);
             }
             else
             {
-                popup.OnCloseRequested();
-                DispatcherTimer timer = new DispatcherTimer();
-                timer.Tick += (s, ea) =>
+                // This will be null if native animation is disabled
+                var nativeAnimationTask = popup.OnCloseRequested();
+
+                if (nativeAnimationTask != null)
                 {
-                    timer.Stop();
-                    baseIsOpenMetadata.PropertyChangedCallback.Invoke(d, e);
-                };
-                timer.Interval = popup.UseNativeAnimation ? popup.DefaultNativeAnimationDuration : TimeSpan.Zero;
-                timer.Start();
+                    await nativeAnimationTask;
+                }
+                
+                baseIsOpenMetadata.PropertyChangedCallback.Invoke(d, e);
             }
         }
 
@@ -181,13 +220,15 @@ namespace AwqatSalaat.UI.Controls
         private readonly DispatcherTimer closingAnimationTimer;
         private HwndSource hwndSource;
         private AnimationContext animationCtx;
+        private RelativePlacement relativePlacement;
+        private bool isClosingAnimationRunning;
 
         protected HwndSource HwndSource => hwndSource;
         protected IntPtr Handle => hwndSource?.Handle ?? throw new InvalidOperationException();
 
         public virtual IEasingFunction OpeningEasingFunction { get; } = new ExponentialEase() { Exponent = 4, EasingMode = EasingMode.EaseOut };
         public virtual IEasingFunction ClosingEasingFunction { get; } = new ExponentialEase() { Exponent = 4, EasingMode = EasingMode.EaseOut };
-        public virtual TimeSpan DefaultNativeAnimationDuration { get; } = TimeSpan.FromMilliseconds(250);
+        public virtual TimeSpan DefaultNativeAnimationDuration { get; } = TimeSpan.FromMilliseconds(150);
         public virtual bool AnimateSizeOnOpening { get; } = true;
         public virtual bool AnimateOpacityOnOpening { get; } = true;
         public virtual bool AnimatePositionOnOpening { get; } = true;
@@ -218,52 +259,105 @@ namespace AwqatSalaat.UI.Controls
             closingAnimationTimer.Tick += NativeClosingAnimation;
             closingAnimationTimer.Interval = TimeSpan.FromMilliseconds(10);
         }
-
+        
         protected sealed override void OnOpened(EventArgs e)
         {
             hwndSource = (HwndSource)HwndSource.FromVisual(this.Child);
+
+            hwndSource.AddHook(CustomWndProc);
 
             if (UseNativeAnimation)
             {
                 // Disable drawing to avoid showing the window at its initial position/opacity (flicker)
                 User32.SendMessage(Handle, (uint)WindowMessage.WM_SETREDRAW, 0, 0);
 
-                // Begin animation when rendering is finished. This help to avoid flicker at the begining
-                hwndSource.ContentRendered += (_, __) => BeginNativeOpeningAnimation(DefaultNativeAnimationDuration);
+                // Begin animation when rendering is finished because rendering will be disabled to avoid flicker
+                hwndSource.ContentRendered += (_, __) =>
+                {
+                    BeginNativeOpeningAnimation(DefaultNativeAnimationDuration);
+
+                    // passing false will disable rendering
+                    methodUpdateWindowSettings.Invoke(hwndSource.CompositionTarget, falseParam);
+                };
             }
+
+            OnOpenedOverride(e);
 
             base.OnOpened(e);
         }
 
         protected sealed override void OnClosed(EventArgs e)
         {
-            closingAnimationTimer?.Stop();
-            animationCtx?.Dispose();
+            // Sometimes last animation frame comes late so we stop animation here
+            if (isClosingAnimationRunning)
+            {
+                EndNativeClosingAnimation();
+            }
+            
             hwndSource = null;
+
+            OnClosedOverride(e);
+
             base.OnClosed(e);
         }
 
-        private void OnCloseRequested()
+        private Task OnCloseRequested()
         {
             openingAnimationTimer?.Stop();
-            if (UseNativeAnimation)
-            {
-                BeginNativeClosingAnimation(DefaultNativeAnimationDuration);
-            }
-        }
 
-        private void BeginNativeClosingAnimation(TimeSpan duration)
+            if (UseNativeAnimation && hwndSource.CompositionTarget != null)
+            {
+                return BeginNativeClosingAnimation(DefaultNativeAnimationDuration);
+            }
+
+            return null;
+        }
+        
+        private Task BeginNativeClosingAnimation(TimeSpan duration)
         {
             Child.SetCurrentValue(IsHitTestVisibleProperty, false);
             OnClosingAnimationStarting();
 
             User32.GetWindowRect(Handle, out RECT orgRect);
 
-            animationCtx = new AnimationContext(duration, orgRect, GetRelativePlacement(orgRect), ClosingEasingFunction, false);
+            var placement = relativePlacement;
+            
+            try
+            {
+                // Popup size and placement may change while it's open so we try to get updated value.
+                // However, if a parent popup is closed before this one then we get NullReferenceException
+                // An other case is when the visual parent is detached from the parent window then we also get NullReferenceException
+                placement = GetRelativePlacement(orgRect, (FrameworkElement)VisualParent);
+            }
+            catch (NullReferenceException) { }
+
+            animationCtx = new AnimationContext(duration, orgRect, placement, ClosingEasingFunction, false);
 
             closingAnimationTimer.Start();
 
+            isClosingAnimationRunning = true;
+
+            // passing false will disable rendering
+            methodUpdateWindowSettings.Invoke(hwndSource.CompositionTarget, falseParam);
+            
             OnClosingAnimationStarted();
+
+            return animationCtx.Task;
+        }
+
+        private void EndNativeClosingAnimation()
+        {
+            // make sure the window won't be redrawn
+            User32.SendMessage(Handle, (uint)WindowMessage.WM_SETREDRAW, 0, 0);
+
+            closingAnimationTimer.Stop();
+            
+            animationCtx.Dispose();
+            animationCtx = null;
+            isClosingAnimationRunning = false;
+            
+            OnClosingAnimationCompleted();
+            Child.ClearValue(IsHitTestVisibleProperty);
         }
 
         private void BeginNativeOpeningAnimation(TimeSpan duration)
@@ -273,7 +367,9 @@ namespace AwqatSalaat.UI.Controls
 
             User32.GetWindowRect(Handle, out RECT orgRect);
 
-            animationCtx = new AnimationContext(duration, orgRect, GetRelativePlacement(orgRect), OpeningEasingFunction, true);
+            relativePlacement = GetRelativePlacement(orgRect, (FrameworkElement)VisualParent);
+
+            animationCtx = new AnimationContext(duration, orgRect, relativePlacement, OpeningEasingFunction, true);
 
             openingAnimationTimer.Start();
 
@@ -282,6 +378,28 @@ namespace AwqatSalaat.UI.Controls
                 User32.SendMessage(Handle, (uint)WindowMessage.WM_SETREDRAW, 1, 0);
                 Dispatcher.BeginInvoke(new Action(OnOpeningAnimationStarted), null);
             });
+        }
+
+        private void EndNativeOpeningAnimation()
+        {
+            openingAnimationTimer.Stop();
+
+            // in case the animation didn't reach 100%
+            POINT ppoint = new POINT() { x = animationCtx.OriginRect.left, y = animationCtx.OriginRect.top };
+
+            Marshal.StructureToPtr(ppoint, animationCtx.NativeData.DestinationPointPtr, false);
+
+            User32.UpdateLayeredWindow(hwndSource.Handle, IntPtr.Zero, animationCtx.NativeData.DestinationPointPtr, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, 0, visibleBlendFuncPtr, UpdateLayeredWindowFlags.ULW_ALPHA);
+
+            animationCtx.Dispose();
+            animationCtx = null;
+            
+            // enable rendering
+            methodUpdateWindowSettings.Invoke(hwndSource.CompositionTarget, trueParam);
+
+            Child.ClearValue(IsHitTestVisibleProperty);
+
+            OnOpeningAnimationCompleted();
         }
 
         private void NativeOpeningAnimation(object sender, EventArgs e)
@@ -301,54 +419,52 @@ namespace AwqatSalaat.UI.Controls
             // We reached end of animation
             if (DateTime.Now >= animationCtx.EndTime)
             {
-                openingAnimationTimer.Stop();
-
-                // in case the animation didn't reach 100%
-                POINT ppoint = new POINT() { x = animationCtx.OriginRect.left, y = animationCtx.OriginRect.top };
-
-                Marshal.StructureToPtr(ppoint, animationCtx.NativeData.DestinationPointPtr, false);
-
-                User32.UpdateLayeredWindow(hwndSource.Handle, IntPtr.Zero, animationCtx.NativeData.DestinationPointPtr, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, 0, visibleBlendFuncPtr, UpdateLayeredWindowFlags.ULW_ALPHA);
-
-                animationCtx.Dispose();
-                animationCtx = null;
-
-                OnOpeningAnimationCompleted();
-                Child.ClearValue(IsHitTestVisibleProperty);
+                EndNativeOpeningAnimation();
             }
             else
             {
-                double progress = (DateTime.Now - animationCtx.StartTime).TotalMilliseconds / animationCtx.Duration.TotalMilliseconds;
+                double progress = animationCtx.Progress;
                 double ease = animationCtx.EasingFunction.Ease(progress);
                 byte alpha = (byte)(ease * 255);
 
                 BLENDFUNCTION pblend = new BLENDFUNCTION(BlendOperation.AC_SRC_OVER, 0, alpha, AlphaFormat.AC_SRC_ALPHA);
                 POINT ppoint = new POINT() { x = animationCtx.OriginRect.left, y = animationCtx.OriginRect.top };
+
+                var effectiveOffset = animationPosOffset * (1 - ease);
+
+                if ((animationCtx.OriginRect.bottom - animationCtx.OriginRect.top) < (animationPosOffset * 2))
+                {
+                    effectiveOffset /= 2;
+                }
+
                 switch (animationCtx.Placement)
                 {
                     case RelativePlacement.Bottom:
-                        ppoint.y -= Convert.ToInt32(animationPosOffset * (1 - ease));
+                        ppoint.y -= Convert.ToInt32(effectiveOffset);
                         break;
                     case RelativePlacement.Top:
-                        ppoint.y += Convert.ToInt32(animationPosOffset * (1 - ease));
+                        ppoint.y += Convert.ToInt32(effectiveOffset);
                         break;
                     case RelativePlacement.Right:
-                        ppoint.x -= Convert.ToInt32(animationPosOffset * (1 - ease));
+                        ppoint.x -= Convert.ToInt32(effectiveOffset);
                         break;
                     case RelativePlacement.Left:
-                        ppoint.x += Convert.ToInt32(animationPosOffset * (1 - ease));
+                        ppoint.x += Convert.ToInt32(effectiveOffset);
                         break;
                 }
+
                 SIZE psize = new SIZE { cx = animationCtx.OriginRect.right - ppoint.x, cy = animationCtx.OriginRect.bottom - ppoint.y };
 
                 if (AnimateOpacityOnOpening)
                 {
                     Marshal.StructureToPtr(pblend, animationCtx.NativeData.BlendFunctionPtr, false);
                 }
+
                 if (AnimatePositionOnOpening)
                 {
                     Marshal.StructureToPtr(ppoint, animationCtx.NativeData.DestinationPointPtr, false);
                 }
+
                 if (AnimateSizeOnOpening)
                 {
                     Marshal.StructureToPtr(psize, animationCtx.NativeData.SizePtr, false);
@@ -379,47 +495,52 @@ namespace AwqatSalaat.UI.Controls
             // We reached end of animation
             if (DateTime.Now >= animationCtx.EndTime)
             {
-                closingAnimationTimer.Stop();
-
-                animationCtx.Dispose();
-                animationCtx = null;
-
-                OnClosingAnimationCompleted();
-                Child.ClearValue(IsHitTestVisibleProperty);
+                EndNativeClosingAnimation();
             }
             else
             {
-                double progress = (DateTime.Now - animationCtx.StartTime).TotalMilliseconds / animationCtx.Duration.TotalMilliseconds;
+                double progress = animationCtx.Progress;
                 double ease = animationCtx.EasingFunction.Ease(progress);
                 byte alpha = (byte)((1 - ease) * 255);
-
+                
                 BLENDFUNCTION pblend = new BLENDFUNCTION(BlendOperation.AC_SRC_OVER, 0, alpha, AlphaFormat.AC_SRC_ALPHA);
                 POINT ppoint = new POINT() { x = animationCtx.OriginRect.left, y = animationCtx.OriginRect.top };
+
+                var effectiveOffset = animationPosOffset * ease;
+
+                if ((animationCtx.OriginRect.bottom - animationCtx.OriginRect.top) < (animationPosOffset * 2))
+                {
+                    effectiveOffset /= 2;
+                }
+
                 switch (animationCtx.Placement)
                 {
                     case RelativePlacement.Bottom:
-                        ppoint.y -= Convert.ToInt32(animationPosOffset * ease);
+                        ppoint.y -= Convert.ToInt32(effectiveOffset);
                         break;
                     case RelativePlacement.Top:
-                        ppoint.y += Convert.ToInt32(animationPosOffset * ease);
+                        ppoint.y += Convert.ToInt32(effectiveOffset);
                         break;
                     case RelativePlacement.Right:
-                        ppoint.x -= Convert.ToInt32(animationPosOffset * ease);
+                        ppoint.x -= Convert.ToInt32(effectiveOffset);
                         break;
                     case RelativePlacement.Left:
-                        ppoint.x += Convert.ToInt32(animationPosOffset * ease);
+                        ppoint.x += Convert.ToInt32(effectiveOffset);
                         break;
                 }
+
                 SIZE psize = new SIZE { cx = animationCtx.OriginRect.right - ppoint.x, cy = animationCtx.OriginRect.bottom - ppoint.y };
 
                 if (AnimateOpacityOnClosing)
                 {
                     Marshal.StructureToPtr(pblend, animationCtx.NativeData.BlendFunctionPtr, false);
                 }
+
                 if (AnimatePositionOnClosing)
                 {
                     Marshal.StructureToPtr(ppoint, animationCtx.NativeData.DestinationPointPtr, false);
                 }
+
                 if (AnimateSizeOnClosing)
                 {
                     Marshal.StructureToPtr(psize, animationCtx.NativeData.SizePtr, false);
@@ -448,10 +569,11 @@ namespace AwqatSalaat.UI.Controls
         protected virtual void OnClosingAnimationStarted() { }
         protected virtual void OnClosingAnimationProgressed(double progress) { }
         protected virtual void OnClosingAnimationCompleted() { }
+        protected virtual void OnOpenedOverride(EventArgs e) { }
+        protected virtual void OnClosedOverride(EventArgs e) { }
 
-        private RelativePlacement GetRelativePlacement(RECT popupRect)
+        private static RelativePlacement GetRelativePlacement(RECT popupRect, FrameworkElement visualParent)
         {
-            var visualParent = (FrameworkElement)VisualParent;
             var rootVisual = ((HwndSource)HwndSource.FromVisual(visualParent)).RootVisual;
             var positionInParent = visualParent.TransformToAncestor(rootVisual).Transform(new Point());
             var pointInScreen = rootVisual.PointToScreen(positionInParent);
@@ -486,6 +608,19 @@ namespace AwqatSalaat.UI.Controls
             {
                 return RelativePlacement.Left;
             }
+        }
+
+        private IntPtr CustomWndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            // rendering is disabled when closing animation start
+            // but UpdateWindowSettings will cause it to resume hence creating flicker
+            // so we intercept s_updateWindowSettings message to prevent it from enabling rendering
+            if (isClosingAnimationRunning && msg == s_updateWindowSettings)
+            {
+                handled = true;
+            }
+
+            return IntPtr.Zero;
         }
 
         ~AnimatedPopup()

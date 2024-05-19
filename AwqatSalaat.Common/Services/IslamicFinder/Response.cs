@@ -1,12 +1,11 @@
-﻿using System;
+﻿using AwqatSalaat.Helpers;
+using System;
 using System.Runtime.Serialization;
 
 namespace AwqatSalaat.Services.IslamicFinder
 {
     public abstract class Response
     {
-        protected TimeZoneInfo timeZone;
-
         public bool Success { get; set; }
         public string Message { get; set; }
         public Settings Settings { get; set; }
@@ -16,11 +15,6 @@ namespace AwqatSalaat.Services.IslamicFinder
         {
             if (Success)
             {
-                if (TimeZoneConverter.TZConvert.TryIanaToWindows(Settings.TimeZone, out string tzID))
-                {
-                    timeZone = TimeZoneInfo.FindSystemTimeZoneById(tzID);
-                }
-
                 ParseImpl();
             }
         }
@@ -31,13 +25,7 @@ namespace AwqatSalaat.Services.IslamicFinder
         {
             var dt = baseDate + DateTime.Parse(time, System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
 
-            if (timeZone != null && timeZone.BaseUtcOffset != TimeZoneInfo.Local.BaseUtcOffset)
-            {
-                dt = TimeZoneInfo.ConvertTimeToUtc(dt, timeZone);
-                dt = TimeZoneInfo.ConvertTimeFromUtc(dt, TimeZoneInfo.Local);
-            }
-
-            return dt;
+            return TimeZoneHelper.ConvertDateTimeToLocal(dt, Settings.TimeZone);
         }
     }
 }

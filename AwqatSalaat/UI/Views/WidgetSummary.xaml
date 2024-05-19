@@ -27,6 +27,8 @@
             <BooleanToVisibilityConverter x:Key="BoolVisConverter"/>
             <converters:BoolToVisibilityInvertedConverter x:Key="BoolVisInvConverter"/>
             <converters:BoolInverterConverter x:Key="BoolInverterConverter"/>
+            <converters:ShortTimeConverter x:Key="ShortTimeConverter"/>
+            <converters:TimeSpanFormatConverter x:Key="TimeSpanFormatConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <UserControl.Style>
@@ -101,7 +103,7 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="{Binding Next.Name, FallbackValue=NAME}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <TextBlock Text="{Binding Next.Time, StringFormat=HH:mm, FallbackValue=TIME}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
+                                <TextBlock Text="{Binding Next.Time, Converter={StaticResource ShortTimeConverter}, FallbackValue=TIME}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
                             </Grid>
                             <Grid Visibility="{Binding WidgetSettings.Settings.ShowCountdown, Converter={StaticResource BoolVisConverter}}">
                                 <Grid.RowDefinitions>
@@ -109,7 +111,14 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="{mk:L11n UI.Summary.After}" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding Next.Countdown, StringFormat=hh\\:mm, FallbackValue=COUNTDOWN}" HorizontalAlignment="Center" Grid.Row="1"/>
+                                <TextBlock HorizontalAlignment="Center" Grid.Row="1">
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource TimeSpanFormatConverter}" FallbackValue="COUNTDOWN" TargetNullValue="COUNTDOWN">
+                                            <Binding Path="Next.Countdown"/>
+                                            <Binding Path="WidgetSettings.CountdownFormat"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                             </Grid>
                         </UniformGrid>
                     </Grid>
@@ -123,7 +132,7 @@
                 <ProgressBar
                     IsIndeterminate="True"
                     Background="Transparent"
-                    Foreground="White"
+                    Foreground="{DynamicResource ThemeColors.TextPrimaryBrush}"
                     BorderThickness="0"
                     Height="2"
                     VerticalAlignment="Bottom"
