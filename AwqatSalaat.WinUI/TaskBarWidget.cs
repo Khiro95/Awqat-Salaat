@@ -359,6 +359,7 @@ namespace AwqatSalaat.WinUI
 
                 // TODO: free unmanaged resources (unmanaged objects) and override finalizer
                 // TODO: set large fields to null
+                User32.UnregisterClass(WidgetClassName, Kernel32.GetModuleHandle(null));
                 disposedValue = true;
             }
         }

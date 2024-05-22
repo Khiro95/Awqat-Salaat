@@ -38,6 +38,9 @@ namespace AwqatSalaat.Interop
         public static extern ushort RegisterClassEx([In] ref WNDCLASSEX lpwcx);
 
         [DllImport("user32.dll")]
+        public static extern bool UnregisterClass([In] string lpClassName, [In, Optional] IntPtr hInstance);
+
+        [DllImport("user32.dll")]
         public static extern IntPtr SetParent([In] IntPtr hWndChild, [In] IntPtr hWndNewParent);
 
         [DllImport("User32.dll", CharSet = CharSet.Unicode)]
