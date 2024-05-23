@@ -77,6 +77,9 @@ namespace AwqatSalaat.Interop
 
         [DllImport("user32.dll", CharSet = CharSet.Ansi)]
         public static extern int GetClassName(IntPtr hwnd, [Out] StringBuilder lpClassName, int nMaxCount);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr GetProp(IntPtr hWnd, string lpString);
     }
 
     public static class Dwmapi

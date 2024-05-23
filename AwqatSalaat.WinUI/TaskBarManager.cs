@@ -26,7 +26,7 @@ namespace AwqatSalaat.WinUI
         {
             ShowWidget = new RelayCommand(static o => ShowWidgetExecute());
             HideWidget = new RelayCommand(static o => HideWidgetExecute());
-            RepositionWidget = new RelayCommand(static o => taskBarWidget?.UpdatePosition(true));
+            RepositionWidget = new RelayCommand(static o => taskBarWidget?.UpdatePosition());
 
             App.Quitting += App_Quitting;
             LocaleManager.Default.CurrentChanged += (_, _) => UpdateTrayIconLocalization();
@@ -40,7 +40,7 @@ namespace AwqatSalaat.WinUI
 
             showItem = new PopupMenuItem("Show", (_, _) => dispatcher.TryEnqueue(ShowWidgetExecute));
             hideItem = new PopupMenuItem("Hide", (_, _) => dispatcher.TryEnqueue(HideWidgetExecute));
-            repositionItem = new PopupMenuItem("Re-position", (_, _) => taskBarWidget?.UpdatePosition(true));
+            repositionItem = new PopupMenuItem("Re-position", (_, _) => taskBarWidget?.UpdatePosition());
             quitItem = new PopupMenuItem("Quit", (_, _) => dispatcher.TryEnqueue(() => App.Quit.Execute(null)));
 
             trayIcon = new TrayIconWithContextMenu()

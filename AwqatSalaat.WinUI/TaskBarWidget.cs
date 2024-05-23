@@ -6,12 +6,9 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml.Hosting;
 using System;
 using System.Collections.Generic;
-using System.Management;
 using System.Runtime.InteropServices;
-using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
-using UIAutomationClient;
 using Windows.Graphics;
 
 namespace AwqatSalaat.WinUI
@@ -25,22 +22,21 @@ namespace AwqatSalaat.WinUI
         private const string WidgetsButtonAutomationId = "WidgetsButton";
         private const int DefaultWidgetHostWidth = 118; // 110 for the button + 4 for left margin + 4 for right margin
 
-        private static IntPtr hwndShell;
-        private static IntPtr hwndTrayNotify;
-        private static IntPtr hwndReBar;
-        private static RECT taskbarRect;
-        private static RECT trayNotifyRect;
-
         private readonly int WidgetHostWidth;
-        
+
+        private readonly IntPtr hwndShell;
+        private readonly IntPtr hwndTrayNotify;
+        private readonly IntPtr hwndReBar;
+
+        private RECT taskbarRect;
+        private TaskbarStructureWatcher taskbarWatcher;
+
         private IntPtr hwnd;
         private AppWindow appWindow;
         private DesktopWindowXamlSource host;
-        private ManagementEventWatcher watcher;
         private WndProc wndProc;
+        private int currentOffsetX = int.MinValue;
         private int currentOffsetY = 0;
-        private bool? isTaskBarCentered;
-        private bool? isTaskBarWidgetsEnabled;
         private bool disposedValue;
 
         public event EventHandler Destroying;
@@ -71,16 +67,15 @@ namespace AwqatSalaat.WinUI
             taskbarRect = SystemInfos.GetTaskBarBounds();
             appWindow.ResizeClient(new SizeInt32(WidgetHostWidth, taskbarRect.bottom - taskbarRect.top));
 
-            User32.GetWindowRect(hwndTrayNotify, out trayNotifyRect);
-            UpdatePositionImpl();
-
             host.Initialize(id);
             host.SiteBridge.ResizePolicy = Microsoft.UI.Content.ContentSizePolicy.ResizeContentToParentWindow;
             host.Content = new WidgetSummary() { MaxWidth = 110, MaxHeight = 40 };
 
             User32.SetParent(hwnd, hwndShell);
 
-            CreateRegistryWatcher();
+            taskbarWatcher = new TaskbarStructureWatcher(hwndShell, UpdatePositionImpl);
+
+            UpdatePositionImpl();
         }
 
         private void AppWindow_Destroying(AppWindow sender, object args)
@@ -93,101 +88,109 @@ namespace AwqatSalaat.WinUI
 
         public void Destroy() => appWindow.Destroy();
 
-        public void UpdatePosition(bool forceUpdate = false)
-        {
-            Task.Run(() => UpdatePositionImpl(forceUpdate));
-        }
+        public void UpdatePosition() => Task.Run(UpdatePositionImpl);
 
-        private void UpdatePositionImpl(bool forceUpdate = false)
+        private void UpdatePositionImpl()
         {
             bool isCentered = SystemInfos.IsTaskBarCentered();
             bool isWidgetsEnabled = SystemInfos.IsTaskBarWidgetsEnabled();
 
-            if (forceUpdate || (isCentered != isTaskBarCentered) || (isWidgetsEnabled != isTaskBarWidgetsEnabled))
+            int offsetX = 0;
+            bool osRTL = System.Globalization.CultureInfo.InstalledUICulture.TextInfo.IsRightToLeft;
+
+            User32.GetWindowRect(hwndTrayNotify, out RECT trayNotifyRect);
+
+            IntPtr isAutoHidePtr = User32.GetProp(hwndShell, "IsAutoHideEnabled");
+            bool autoHide = isAutoHidePtr == (IntPtr)1;
+
+            if (autoHide)
             {
-                int offsetX = 0;
-                bool osRTL = System.Globalization.CultureInfo.InstalledUICulture.TextInfo.IsRightToLeft;
+                User32.GetWindowRect(hwndShell, out var newRect);
+                bool isHidden = newRect.top > taskbarRect.top;
 
-                if (isCentered)
+                if (isHidden)
                 {
-                    var widgetsButton = isWidgetsEnabled ? GetAutomationElement(WidgetsButtonAutomationId) : null;
-
-                    if (osRTL)
-                    {
-                        offsetX = (widgetsButton?.CurrentBoundingRectangle.left ?? taskbarRect.right) - WidgetHostWidth;
-                    }
-                    else
-                    {
-                        offsetX = widgetsButton?.CurrentBoundingRectangle.right ?? 0;
-                    }
+                    return;
                 }
-                else
-                {
-                    if (osRTL)
-                    {
-                        offsetX = trayNotifyRect.right;
-                    }
-                    else
-                    {
-                        offsetX = trayNotifyRect.left - WidgetHostWidth;
-                    }
-                }
+            }
 
-                try
-                {
-                    List<IntPtr> wnds = GetOtherInjectedWindows();
-
-                    foreach (var wnd in wnds)
-                    {
-                        User32.GetWindowRect(wnd, out var bounds);
-
-                        if (bounds.right < offsetX ||  bounds.left > (offsetX + WidgetHostWidth))
-                        {
-                            continue;
-                        }
-
-                        if (isCentered == osRTL)
-                        {
-                            offsetX = bounds.left - WidgetHostWidth;
-                        }
-                        else
-                        {
-                            offsetX = bounds.right;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-#if DEBUG
-                    throw;
-#endif
-                }
+            if (isCentered)
+            {
+                var widgetsButton = isWidgetsEnabled ? taskbarWatcher.GetAutomationElement(WidgetsButtonAutomationId) : null;
 
                 if (osRTL)
                 {
-                    offsetX = Math.Clamp(offsetX, trayNotifyRect.right, taskbarRect.right - WidgetHostWidth);
+                    offsetX = (widgetsButton?.CurrentBoundingRectangle.left ?? taskbarRect.right) - WidgetHostWidth;
                 }
                 else
                 {
-                    offsetX = Math.Clamp(offsetX, 0, trayNotifyRect.left - WidgetHostWidth); 
+                    offsetX = widgetsButton?.CurrentBoundingRectangle.right ?? 0;
                 }
-
-                User32.GetWindowRect(hwndReBar, out RECT barRect);
-                int offsetY = barRect.top - taskbarRect.top;
-
-
-                if (currentOffsetY != offsetY)
+            }
+            else
+            {
+                if (osRTL)
                 {
-                    appWindow.MoveAndResize(new RectInt32(offsetX, offsetY, WidgetHostWidth, barRect.bottom - barRect.top));
-                    currentOffsetY = offsetY;
+                    offsetX = trayNotifyRect.right;
                 }
                 else
                 {
-                    appWindow.Move(new PointInt32(offsetX, offsetY));
+                    offsetX = trayNotifyRect.left - WidgetHostWidth;
                 }
+            }
 
-                isTaskBarCentered = isCentered;
-                isTaskBarWidgetsEnabled = isWidgetsEnabled;
+            try
+            {
+                List<IntPtr> wnds = GetOtherInjectedWindows();
+
+                foreach (var wnd in wnds)
+                {
+                    User32.GetWindowRect(wnd, out var bounds);
+
+                    if (bounds.right < offsetX || bounds.left > (offsetX + WidgetHostWidth))
+                    {
+                        continue;
+                    }
+
+                    if (isCentered == osRTL)
+                    {
+                        offsetX = bounds.left - WidgetHostWidth;
+                    }
+                    else
+                    {
+                        offsetX = bounds.right;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                throw;
+#endif
+            }
+
+            if (osRTL)
+            {
+                offsetX = Math.Clamp(offsetX, trayNotifyRect.right, taskbarRect.right - WidgetHostWidth);
+            }
+            else
+            {
+                offsetX = Math.Clamp(offsetX, 0, trayNotifyRect.left - WidgetHostWidth);
+            }
+
+            User32.GetWindowRect(hwndReBar, out RECT barRect);
+            int offsetY = barRect.top - taskbarRect.top;
+
+            if (currentOffsetY != offsetY)
+            {
+                appWindow.MoveAndResize(new RectInt32(offsetX, offsetY, WidgetHostWidth, barRect.bottom - barRect.top));
+                currentOffsetX = offsetX;
+                currentOffsetY = offsetY;
+            }
+            else if (currentOffsetX != offsetX)
+            {
+                appWindow.Move(new PointInt32(offsetX, offsetY));
+                currentOffsetX = offsetX;
             }
         }
 
@@ -220,28 +223,6 @@ namespace AwqatSalaat.WinUI
                 lpParam: IntPtr.Zero);
 
             return hwnd;
-        }
-
-        private void CreateRegistryWatcher()
-        {
-            var currentUser = WindowsIdentity.GetCurrent();
-
-            WqlEventQuery query = new WqlEventQuery(
-                "SELECT * FROM RegistryKeyChangeEvent WHERE " +
-                 "Hive = 'HKEY_USERS' " +
-                 @"AND KeyPath = '" + currentUser.User.Value + @"\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced'");
-
-            query.WithinInterval = new TimeSpan(0, 0, 0, 1);
-
-            watcher = new ManagementEventWatcher(query);
-            watcher.EventArrived += new EventArrivedEventHandler(RegistryKeyChanged);
-            watcher.Start();
-        }
-
-        private void RegistryKeyChanged(object sender, EventArrivedEventArgs e)
-        {
-            // Taskbar alignment may have been changed or Widgets button is enabled/disabled, try to update position
-            UpdatePosition();
         }
 
         // https://stackoverflow.com/a/28055461/4644774
@@ -299,36 +280,6 @@ namespace AwqatSalaat.WinUI
             }
         }
 
-        private static IUIAutomationElement GetAutomationElement(string automationId)
-        {
-            IUIAutomation pUIAutomation = new CUIAutomation();
-            IUIAutomationElement taskbarElement = pUIAutomation.ElementFromHandle(hwndShell);
-
-            if (taskbarElement != null)
-            {
-                IUIAutomationElementArray elementArray = null;
-                IUIAutomationCondition condition = pUIAutomation.CreateTrueCondition();
-                elementArray = taskbarElement.FindAll(TreeScope.TreeScope_Descendants | TreeScope.TreeScope_Children, condition);
-
-                if (elementArray != null)
-                {
-                    int count = elementArray.Length;
-
-                    for (int i = 0; i <= count - 1; i++)
-                    {
-                        IUIAutomationElement element = elementArray.GetElement(i);
-
-                        if (element.CurrentAutomationId == automationId)
-                        {
-                            return element;
-                        }
-                    }
-                }
-            }
-
-            return null;
-        }
-
         private IntPtr WindowProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam)
         {
             var msg = (WindowMessage)uMsg;
@@ -339,7 +290,7 @@ namespace AwqatSalaat.WinUI
 
                 if (area is "UserInteractionMode" or "ConvertibleSlateMode")
                 {
-                    UpdatePosition(true);
+                    UpdatePosition();
                 }
             }
 
@@ -353,7 +304,7 @@ namespace AwqatSalaat.WinUI
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects)
-                    watcher.Dispose();
+                    taskbarWatcher.Dispose();
                     host.Dispose();
                 }
 
