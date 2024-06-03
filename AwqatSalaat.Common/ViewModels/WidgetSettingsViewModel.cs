@@ -1,7 +1,5 @@
 ﻿using AwqatSalaat.Data;
 using AwqatSalaat.Helpers;
-using AwqatSalaat.Services.AlAdhan;
-using AwqatSalaat.Services.IslamicFinder;
 using System;
 
 using Settings = AwqatSalaat.Properties.Settings;
@@ -77,7 +75,7 @@ namespace AwqatSalaat.ViewModels
                     OnPropertyChanged(nameof(UseArabic));
                     OnPropertyChanged(nameof(UseEnglish));
                 }
-                else if (e.PropertyName == nameof (Settings.ShowSeconds))
+                else if (e.PropertyName == nameof(Settings.ShowSeconds))
                 {
                     OnPropertyChanged(nameof(CountdownFormat));
                 }

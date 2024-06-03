@@ -53,13 +53,32 @@ namespace AwqatSalaat.WinUI.Views
             bi.SetSource(iconThumbnail);
             icon.Source = bi;
         }
-
+        
         private void OnVisibilityChanged(DependencyObject sender, DependencyProperty dp)
         {
             // change selection when collapsed to hide the transition from previous tab to general tab
             if (Visibility == Visibility.Collapsed)
             {
                 nav.SelectedItem = generalTab;
+
+                // When the widget switch to/from compact mode when editing some setting,
+                // a bug in ToggleSwitch makes it stuck at "Dragging" visual state hence when the flyout hide then show again
+                // the toggle will not show up visually correct. This is well observed for On->Off transition.
+                FixToggleSwitchVisualBug(countdownToggle);
+                FixToggleSwitchVisualBug(compactModeToggle);
+            }
+        }
+
+        private static void FixToggleSwitchVisualBug(ToggleSwitch toggleSwitch)
+        {
+            // Looks like there is a bug in ToggleSwitch visual states,
+            // when it become invisible during a switch while in Dragging state it doesn't continue to On/Off state.
+            // This make the ToggleSwitch remain visually ON in case the transition Dragging->On was interrupted
+            // and then it get asked to go to Off
+            if (!toggleSwitch.IsOn)
+            {
+                VisualStateManager.GoToState(toggleSwitch, "On", false);
+                VisualStateManager.GoToState(toggleSwitch, "Off", false);
             }
         }
 

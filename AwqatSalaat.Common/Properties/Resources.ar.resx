@@ -333,4 +333,10 @@
   <data name="UI.About.Contact" xml:space="preserve">
     <value>اتصال</value>
   </data>
+  <data name="UI.Settings.EnableCompactMode" xml:space="preserve">
+    <value>الوضع المضغوط</value>
+  </data>
+  <data name="UI.Settings.EnableCompactModeDescription" xml:space="preserve">
+    <value>جعل الأداة أصغر وتحجز مساحة أقل</value>
+  </data>
 </root>

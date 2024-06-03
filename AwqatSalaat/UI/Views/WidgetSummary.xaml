@@ -23,7 +23,13 @@
                     </d:ResourceDictionary.MergedDictionaries>
                 </ui:ThemeDictionary>
             </ResourceDictionary.MergedDictionaries>
-            
+
+            <GridLength x:Key="ZeroGridLength">0</GridLength>
+            <GridLength x:Key="MaxGridLength">50</GridLength>
+            <GridLength x:Key="StarGridLength">*</GridLength>
+            <Thickness x:Key="ZeroThickness">0</Thickness>
+            <HorizontalAlignment x:Key="StretchAlignment">Stretch</HorizontalAlignment>
+
             <BooleanToVisibilityConverter x:Key="BoolVisConverter"/>
             <converters:BoolToVisibilityInvertedConverter x:Key="BoolVisInvConverter"/>
             <converters:BoolInverterConverter x:Key="BoolInverterConverter"/>
@@ -55,6 +61,135 @@
         </Style>
     </UserControl.Style>
     <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="CountdownStates">
+                <VisualState x:Name="WithSeconds">
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="gap" Storyboard.TargetProperty="MaxWidth" From="0" To="6" Duration="0:0:.1"/>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="WithoutSeconds">
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="gap" Storyboard.TargetProperty="MaxWidth" To="0" Duration="0:0:.1"/>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+            <VisualStateGroup x:Name="DisplayModes">
+                <VisualState x:Name="Default" />
+                <VisualState x:Name="CompactNoCountdown">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startPanel" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame>
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Thickness Left="2" Right="2"/>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startPanel" Storyboard.TargetProperty="HorizontalAlignment" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource StretchAlignment}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startText" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroThickness}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="errorPanel" Storyboard.TargetProperty="HorizontalAlignment" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource StretchAlignment}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="errorPanel" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroThickness}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="errorText" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroThickness}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <DoubleAnimation Storyboard.TargetName="errorIco" Storyboard.TargetProperty="FontSize" To="16" Duration="0"/>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="gap" Storyboard.TargetProperty="Width" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroGridLength}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="col2" Storyboard.TargetProperty="Width" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroGridLength}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Compact">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startPanel" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame>
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Thickness Left="2" Right="2"/>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startPanel" Storyboard.TargetProperty="HorizontalAlignment" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource StretchAlignment}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startText" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroThickness}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="errorPanel" Storyboard.TargetProperty="HorizontalAlignment" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource StretchAlignment}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="errorPanel" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroThickness}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="errorText" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroThickness}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <DoubleAnimation Storyboard.TargetName="errorIco" Storyboard.TargetProperty="FontSize" To="16" Duration="0"/>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="gap" Storyboard.TargetProperty="Width" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroGridLength}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="col1" Storyboard.TargetProperty="Width" Duration="0:0:9" RepeatBehavior="Forever">
+                            <DiscreteObjectKeyFrame KeyTime="0:0:5" Value="{StaticResource ZeroGridLength}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="col2" Storyboard.TargetProperty="Width" Duration="0:0:9" RepeatBehavior="Forever">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ZeroGridLength}"/>
+                            <DiscreteObjectKeyFrame KeyTime="0:0:5" Value="{StaticResource MaxGridLength}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="CompactHorizontal">
+                    <Storyboard>
+                        <Int32AnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                            <LinearInt32KeyFrame Value="2"/>
+                        </Int32AnimationUsingKeyFrames>
+                        <Int32AnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
+                            <LinearInt32KeyFrame Value="0"/>
+                        </Int32AnimationUsingKeyFrames>
+                        <Int32AnimationUsingKeyFrames Storyboard.TargetName="afterTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                            <LinearInt32KeyFrame Value="0"/>
+                        </Int32AnimationUsingKeyFrames>
+                        <Int32AnimationUsingKeyFrames Storyboard.TargetName="afterTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
+                            <LinearInt32KeyFrame Value="1"/>
+                        </Int32AnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="row1" Storyboard.TargetProperty="Height" Duration="0:0:9" RepeatBehavior="Forever">
+                            <DiscreteObjectKeyFrame KeyTime="0:0:5" Value="{StaticResource ZeroGridLength}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="row2" Storyboard.TargetProperty="Height" Duration="0:0:9" RepeatBehavior="Forever">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ZeroGridLength}"/>
+                            <DiscreteObjectKeyFrame KeyTime="0:0:5" Value="{StaticResource StarGridLength}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="CompactHorizontalNoCountdown">
+                    <Storyboard>
+                        <Int32AnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                            <LinearInt32KeyFrame Value="2"/>
+                        </Int32AnimationUsingKeyFrames>
+                        <Int32AnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
+                            <LinearInt32KeyFrame Value="0"/>
+                        </Int32AnimationUsingKeyFrames>
+                        <Int32AnimationUsingKeyFrames Storyboard.TargetName="afterTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                            <LinearInt32KeyFrame Value="0"/>
+                        </Int32AnimationUsingKeyFrames>
+                        <Int32AnimationUsingKeyFrames Storyboard.TargetName="afterTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
+                            <LinearInt32KeyFrame Value="1"/>
+                        </Int32AnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="row2" Storyboard.TargetProperty="Height" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroGridLength}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <ToggleButton x:Name="toggle" BorderThickness="0" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" IsEnabled="{Binding ElementName=popup, Path=IsOpen, Converter={StaticResource BoolInverterConverter}}">
             <ToggleButton.Style>
                 <Style TargetType="ToggleButton">
@@ -81,52 +216,39 @@
             <Grid TextBlock.Foreground="{DynamicResource ThemeColors.TextPrimaryBrush}">
                 <Grid Margin="4" d:Visibility="Visible" Visibility="{Binding WidgetSettings.Settings.IsConfigured, Converter={StaticResource BoolVisConverter}}">
                     <Grid d:Visibility="Visible" Visibility="{Binding HasError, Converter={StaticResource BoolVisInvConverter}}">
-                        <UniformGrid d:Columns="2" Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisInvConverter}}">
-                            <UniformGrid.Style>
-                                <Style TargetType="UniformGrid">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WidgetSummary}, Path=Orientation}" Value="Horizontal">
-                                            <Setter Property="Columns" Value="2"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WidgetSummary}, Path=Orientation}" Value="Vertical">
-                                            <Setter Property="Columns" Value="1"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding WidgetSettings.Settings.ShowCountdown}" Value="False">
-                                            <Setter Property="Columns" Value="1"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </UniformGrid.Style>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="{Binding Next.Name, FallbackValue=NAME}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <TextBlock Text="{Binding Next.Time, Converter={StaticResource ShortTimeConverter}, FallbackValue=TIME}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
-                            </Grid>
-                            <Grid Visibility="{Binding WidgetSettings.Settings.ShowCountdown, Converter={StaticResource BoolVisConverter}}">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="{mk:L11n UI.Summary.After}" HorizontalAlignment="Center"/>
-                                <TextBlock HorizontalAlignment="Center" Grid.Row="1">
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource TimeSpanFormatConverter}" FallbackValue="COUNTDOWN" TargetNullValue="COUNTDOWN">
-                                            <Binding Path="Next.Countdown"/>
-                                            <Binding Path="WidgetSettings.CountdownFormat"/>
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </Grid>
-                        </UniformGrid>
+                        <Grid x:Name="grid" MaxHeight="40" HorizontalAlignment="Center" Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisInvConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Name="col1" Width="50" MaxWidth="50"/>
+                                <ColumnDefinition x:Name="gap" Width="6" MaxWidth="6"/>
+                                <ColumnDefinition x:Name="col2" Width="50" MaxWidth="50"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="row1"/>
+                                <RowDefinition x:Name="row2"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="{Binding Next.Name, FallbackValue=NAME}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="timeTB" d:Text="00:59 AM" Text="{Binding Next.Time, Converter={StaticResource ShortTimeConverter}, FallbackValue=TIME}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
+
+                            <TextBlock x:Name="afterTB" Text="{mk:L11n UI.Summary.After}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2"/>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Grid.Row="1" d:Text="99:99:99">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource TimeSpanFormatConverter}" FallbackValue="COUNTDOWN" TargetNullValue="COUNTDOWN">
+                                        <Binding Path="Next.Countdown"/>
+                                        <Binding Path="WidgetSettings.CountdownFormat"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </Grid>
                     </Grid>
                 </Grid>
                 <TextBlock
                     Text="{mk:L11n UI.Summary.Refreshing}"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
+                    TextAlignment="Center"
+                    TextWrapping="Wrap"
+                    Margin="2,0"
                     Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisConverter}}"
                     d:Visibility="Visible"/>
                 <ProgressBar
@@ -138,32 +260,26 @@
                     VerticalAlignment="Bottom"
                     Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisConverter}}"
                     d:Visibility="Visible"/>
-                <StackPanel
-                    Orientation="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WidgetSummary}, Path=Orientation}"
-                    d:Orientation="Horizontal"
+                <DockPanel
+                    x:Name="errorPanel"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Margin="3,0"
                     Visibility="{Binding HasError, Converter={StaticResource BoolVisConverter}}"
                     d:Visibility="Visible">
-                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{DynamicResource ThemeColors.TextHighlightBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <!-- gutter -->
-                    <Control Margin="3,4" Height="0" Width="0"/>
-                    <TextBlock Text="{mk:L11n UI.Summary.ErrorOccured}" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center"/>
-                </StackPanel>
-                <StackPanel
-                    Orientation="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WidgetSummary}, Path=Orientation}"
-                    d:Orientation="Horizontal"
+                    <TextBlock x:Name="errorIco" Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{DynamicResource ThemeColors.TextHighlightBrush}" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="errorText" Text="{mk:L11n UI.Summary.ErrorOccured}" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                </DockPanel>
+                <DockPanel
+                    x:Name="startPanel"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Margin="4,0"
                     Visibility="{Binding WidgetSettings.Settings.IsConfigured, Converter={StaticResource BoolVisInvConverter}}"
                     d:Visibility="Visible">
-                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{DynamicResource ThemeColors.TextHighlightBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <!-- gutter -->
-                    <Control Margin="4" Height="0" Width="0"/>
-                    <TextBlock Text="{mk:L11n UI.Summary.TapToStart}" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
-                </StackPanel>
+                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" FontSize="20" Foreground="{DynamicResource ThemeColors.TextHighlightBrush}" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="startText" Text="{mk:L11n UI.Summary.TapToStart}" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="8,0,0,0"/>
+                </DockPanel>
             </Grid>
         </ToggleButton>
         <controls:AcrylicPopup

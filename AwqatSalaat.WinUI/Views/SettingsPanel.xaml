@@ -143,10 +143,13 @@
                         <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.LaunchOnWindowsStartup}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
                     </ctrl:SettingsItem>
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowCountdown}" Description="{mk:L11n Key=UI.Settings.ShowCountdownDescription}">
-                        <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.ShowCountdown}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                        <ToggleSwitch x:Name="countdownToggle" IsOn="{x:Bind ViewModel.Settings.ShowCountdown}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
                     </ctrl:SettingsItem>
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowSeconds}" Description="{mk:L11n Key=UI.Settings.ShowSecondsDescription}" IsEnabled="{x:Bind ViewModel.Settings.ShowCountdown}">
                         <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.ShowSeconds}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                    </ctrl:SettingsItem>
+                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.EnableCompactMode}" Description="{mk:L11n Key=UI.Settings.EnableCompactModeDescription}" IsEnabled="{x:Bind ViewModel.Settings.ShowCountdown}">
+                        <ToggleSwitch x:Name="compactModeToggle" IsOn="{x:Bind ViewModel.Settings.UseCompactMode}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
                     </ctrl:SettingsItem>
                     <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ReminderOffset}" Description="{mk:L11n Key=UI.Settings.ReminderOffsetDescription}">
                         <NumberBox SpinButtonPlacementMode="Inline"

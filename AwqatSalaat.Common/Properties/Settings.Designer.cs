@@ -238,5 +238,17 @@ namespace AwqatSalaat.Properties {
                 this["ShowSeconds"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseCompactMode {
+            get {
+                return ((bool)(this["UseCompactMode"]));
+            }
+            set {
+                this["UseCompactMode"] = value;
+            }
+        }
     }
 }

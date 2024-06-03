@@ -313,4 +313,10 @@
   <data name="UI.About.Contact" xml:space="preserve">
     <value>Contact</value>
   </data>
+  <data name="UI.Settings.EnableCompactMode" xml:space="preserve">
+    <value>Compact mode</value>
+  </data>
+  <data name="UI.Settings.EnableCompactModeDescription" xml:space="preserve">
+    <value>Make the widget smaller and take less space</value>
+  </data>
 </root>

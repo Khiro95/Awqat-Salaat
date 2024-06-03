@@ -43,6 +43,8 @@ namespace CSDeskBand
         /// </summary>
         internal event EventHandler Closed;
 
+        internal IntPtr ParentWindowHandle => _parentWindowHandle;
+
         /// <summary>
         /// Gets the <see cref="CSDeskBandOptions"/>.
         /// </summary>
@@ -1124,6 +1126,8 @@ namespace CSDeskBand
                 return HwndSource.Handle;
             }
         }
+
+        protected IntPtr ParentHandle => _impl.ParentWindowHandle;
 
         /// <summary>
         /// Gets the deskband guid

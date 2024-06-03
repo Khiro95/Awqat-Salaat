@@ -62,7 +62,7 @@
                         <Rectangle Height="1" Width="8" Fill="{ThemeResource ControlElevationBorderBrush}" Margin="8,5,8,3"/>
                         <TextBlock Text="{Binding Country}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
                     </StackPanel>
-                    <ItemsControl Background="DarkRed" ItemsSource="{Binding Items}" Grid.Row="2">
+                    <ItemsControl ItemsSource="{Binding Items}" Grid.Row="2">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="vm:PrayerTimeViewModel">
                                 <controls:PrayerTimeItem

@@ -20,9 +20,10 @@ namespace AwqatSalaat.WinUI
         private const string ReBarWindow32ClassName = "ReBarWindow32";
         private const string NotificationAreaClassName = "TrayNotifyWnd";
         private const string WidgetsButtonAutomationId = "WidgetsButton";
-        private const int DefaultWidgetHostWidth = 118; // 110 for the button + 4 for left margin + 4 for right margin
+        private const int DefaultWidgetHostWidth = 124; // 116 for the button (2 for borders) + 4 for left margin + 4 for right margin
+        private const int CompactWidgetHostWidth = 70; // 62 for the button (2 for borders) + 4 for left margin + 4 for right margin
 
-        private readonly int WidgetHostWidth;
+        private readonly double dpiScale;
 
         private readonly IntPtr hwndShell;
         private readonly IntPtr hwndTrayNotify;
@@ -33,8 +34,10 @@ namespace AwqatSalaat.WinUI
 
         private IntPtr hwnd;
         private AppWindow appWindow;
+        private WidgetSummary widgetSummary;
         private DesktopWindowXamlSource host;
         private WndProc wndProc;
+        private int WidgetHostWidth;
         private int currentOffsetX = int.MinValue;
         private int currentOffsetY = 0;
         private bool disposedValue;
@@ -48,8 +51,8 @@ namespace AwqatSalaat.WinUI
             hwndReBar = User32.FindWindowEx(hwndShell, IntPtr.Zero, ReBarWindow32ClassName , null);
 
             var dpi = User32.GetDpiForWindow(hwndShell);
-            var scale = dpi / 96d;
-            WidgetHostWidth = (int)Math.Ceiling(scale * DefaultWidgetHostWidth);
+            dpiScale = dpi / 96d;
+            WidgetHostWidth = (int)Math.Ceiling(dpiScale * DefaultWidgetHostWidth);
         }
 
         public void Initialize()
@@ -69,13 +72,36 @@ namespace AwqatSalaat.WinUI
 
             host.Initialize(id);
             host.SiteBridge.ResizePolicy = Microsoft.UI.Content.ContentSizePolicy.ResizeContentToParentWindow;
-            host.Content = new WidgetSummary() { MaxWidth = 110, MaxHeight = 40 };
+            widgetSummary = new WidgetSummary() { Margin = new Microsoft.UI.Xaml.Thickness(4, 0, 4, 0), MaxHeight = 40 };
+            widgetSummary.DisplayModeChanged += WidgetSummary_DisplayModeChanged;
+            host.Content = widgetSummary;
 
             User32.SetParent(hwnd, hwndShell);
 
             taskbarWatcher = new TaskbarStructureWatcher(hwndShell, UpdatePositionImpl);
 
             UpdatePositionImpl();
+        }
+
+        private void WidgetSummary_DisplayModeChanged(DisplayMode displayMode)
+        {
+            int width = DefaultWidgetHostWidth;
+
+            if (displayMode is DisplayMode.Compact or DisplayMode.CompactNoCountdown)
+            {
+                width = CompactWidgetHostWidth;
+            }
+            
+            width = (int)Math.Ceiling(dpiScale * width);
+
+            if (width != WidgetHostWidth)
+            {
+                WidgetHostWidth = width;
+
+                appWindow.ResizeClient(new SizeInt32(WidgetHostWidth, appWindow.Size.Height));
+
+                UpdatePosition();
+            }
         }
 
         private void AppWindow_Destroying(AppWindow sender, object args)
@@ -304,6 +330,7 @@ namespace AwqatSalaat.WinUI
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects)
+                    widgetSummary.DisplayModeChanged -= WidgetSummary_DisplayModeChanged;
                     taskbarWatcher.Dispose();
                     host.Dispose();
                 }

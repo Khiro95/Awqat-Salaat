@@ -14,7 +14,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid d:Background="#192025" Background="{DynamicResource ThemeColors.DefaultAcrylicTintBrush}" MinWidth="100" Height="40">
+    <Grid d:Background="#192025" Background="{DynamicResource ThemeColors.DefaultAcrylicTintBrush}" MaxWidth="114" Height="40">
         <lib:WidgetSummary/>
     </Grid>
 </Window>

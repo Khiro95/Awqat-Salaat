@@ -28,6 +28,19 @@ namespace AwqatSalaat.WinUI
         {
             this.InitializeComponent();
             widget.ActualThemeChanged += (s, e) => grid.RequestedTheme = widget.ActualTheme;
+            widget.DisplayModeChanged += Widget_DisplayModeChanged;
+        }
+
+        private void Widget_DisplayModeChanged(Views.DisplayMode displayMode)
+        {
+            if (displayMode is Views.DisplayMode.Compact or Views.DisplayMode.CompactNoCountdown)
+            {
+                widget.Width = 62;
+            }
+            else
+            {
+                widget.Width = 116;
+            }
         }
     }
 }

@@ -16,6 +16,8 @@ namespace AwqatSalaat
     public class AwqatSalaatWidget : CSDeskBandWpf
     {
         private const string WidgetName = "Awqat Salaat";
+        private const int DefaultWidth = 114;
+        private const int CompactWidth = 60;
 
         private readonly WidgetSummary uiElement;
 
@@ -33,8 +35,15 @@ namespace AwqatSalaat
                 RemovePopupBorderAtPlacement = true
             };
 
-            Options.MinHorizontalSize = new Size(100, 40);
-            Options.MinVerticalSize = new Size(CSDeskBandOptions.TaskbarVerticalWidth, 100);
+            HwndSource.SizeToContent = SizeToContent.Width;
+
+            int minHWidth = Properties.Settings.Default.UseCompactMode || !Properties.Settings.Default.ShowCountdown
+                ? CompactWidth
+                : DefaultWidth;
+
+            Options.HorizontalSize = new Size(minHWidth, TaskbarInfo.Size.Height);
+            Options.MinHorizontalSize = new Size(minHWidth, 0);
+            Options.MinVerticalSize = new Size(CSDeskBandOptions.TaskbarVerticalWidth, 40);
 
             uiElement.Dispatcher.UnhandledException += (s, e) =>
             {
@@ -49,6 +58,45 @@ namespace AwqatSalaat
 
             TaskbarInfo.TaskbarEdgeChanged += TaskbarInfo_TaskbarEdgeChanged;
             TaskbarInfo.TaskbarOrientationChanged += TaskbarInfo_TaskbarOrientationChanged;
+
+            uiElement.DisplayModeChanged += UiElement_DisplayModeChanged;
+
+            uiElement.Orientation =
+                TaskbarInfo.Orientation == TaskbarOrientation.Vertical
+                ? System.Windows.Controls.Orientation.Vertical
+                : System.Windows.Controls.Orientation.Horizontal;
+        }
+
+        private void UiElement_DisplayModeChanged(DisplayMode displayMode)
+        {
+            int width;
+
+            if (TaskbarInfo.Orientation == TaskbarOrientation.Horizontal)
+            {
+                if (displayMode == DisplayMode.Compact || displayMode == DisplayMode.CompactNoCountdown)
+                {
+                    width = CompactWidth; 
+                }
+                else
+                {
+                    width = DefaultWidth;
+                }
+
+                Options.MinHorizontalSize.Width = width;
+            }
+            else
+            {
+                width = CSDeskBandOptions.TaskbarVerticalWidth;
+            }
+            
+            uiElement.Width = width;
+
+            const uint WM_COMMAND = 0x0111;
+
+            // unlock the taskbar then lock it to make it resize the deskband
+            IntPtr taskbarHandle = Interop.User32.GetAncestor(ParentHandle, Interop.GetAncestorFlags.GA_PARENT);
+            Interop.User32.SendMessage(taskbarHandle, WM_COMMAND, 424, 0); //unlock
+            Interop.User32.SendMessage(taskbarHandle, WM_COMMAND, 424, 0); //lock
         }
 
         private void TaskbarInfo_TaskbarEdgeChanged(object sender, TaskbarEdgeChangedEventArgs e)

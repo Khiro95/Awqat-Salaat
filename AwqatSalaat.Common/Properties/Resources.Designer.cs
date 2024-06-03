@@ -340,6 +340,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compact mode.
+        /// </summary>
+        public static string UI_Settings_EnableCompactMode {
+            get {
+                return ResourceManager.GetString("UI.Settings.EnableCompactMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make the widget smaller and take less space.
+        /// </summary>
+        public static string UI_Settings_EnableCompactModeDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.EnableCompactModeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Juristic school.
         /// </summary>
         public static string UI_Settings_JuristicSchool {
