@@ -76,11 +76,30 @@ namespace AwqatSalaat.WinUI
             widgetSummary.DisplayModeChanged += WidgetSummary_DisplayModeChanged;
             host.Content = widgetSummary;
 
-            User32.SetParent(hwnd, hwndShell);
+            InjectIntoTaskbar();
 
             taskbarWatcher = new TaskbarStructureWatcher(hwndShell, UpdatePositionImpl);
 
             UpdatePositionImpl();
+        }
+
+        private void InjectIntoTaskbar()
+        {
+            int attempts = 0;
+
+            while (attempts++ <= 3)
+            {
+                var result = User32.SetParent(hwnd, hwndShell);
+
+                if (result != IntPtr.Zero)
+                {
+                    return;
+                }
+
+                System.Threading.Thread.Sleep(1000);
+            }
+
+            throw new WidgetNotInjectedException("Could not inject the widget into the taskbar.\nThe taskbar may be in use.");
         }
 
         private void WidgetSummary_DisplayModeChanged(DisplayMode displayMode)

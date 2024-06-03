@@ -134,7 +134,15 @@ namespace AwqatSalaat.WinUI
 
             var dispatcher = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
 
-            TaskBarManager.Initialize(dispatcher);
+            try
+            {
+                TaskBarManager.Initialize(dispatcher);
+            }
+            catch (WidgetNotInjectedException ex)
+            {
+                ShowError(ex.Message);
+                Environment.Exit(ExitCodes.CouldNotInjectWidget);
+            }
         }
 
 #if DEBUG
@@ -147,6 +155,7 @@ namespace AwqatSalaat.WinUI
             // Not sure about using '1' since it can mean anything
             public const int AlreadyRunning = 2;
             public const int UnhandledException = 3;
+            public const int CouldNotInjectWidget = 4;
         }
     }
 }
