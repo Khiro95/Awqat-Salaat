@@ -86,6 +86,7 @@
 
             <converters:BooleanToVisibilityInvertedConverter x:Key="BooleanToVisibilityInvertedConverter"/>
             <converters:BooleanInvertedConverter x:Key="BooleanInvertedConverter"/>
+            <converters:EnumEqualityConverter x:Key="EnumEqualityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <UserControl.Transitions>
@@ -95,13 +96,31 @@
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="BackgroundStates">
                 <VisualState x:Name="Normal"/>
-                <VisualState x:Name="Notification">
+                <VisualState x:Name="NotificationNear">
                     <VisualState.StateTriggers>
-                        <StateTrigger IsActive="{x:Bind ViewModel.Next.IsTimeClose}"/>
+                        <StateTrigger IsActive="{x:Bind ViewModel.DisplayedTime.State, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Near}"/>
                     </VisualState.StateTriggers>
                     <Storyboard RepeatBehavior="Forever">
                         <ColorAnimation To="{ThemeResource NotificationFillColor}" Duration="0:0:2" Storyboard.TargetName="alert" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" AutoReverse="True"/>
                     </Storyboard>
+                </VisualState>
+                <VisualState x:Name="NotificationEntered">
+                    <VisualState.StateTriggers>
+                        <StateTrigger IsActive="{x:Bind ViewModel.DisplayedTime.State, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=EnteredRecently}"/>
+                    </VisualState.StateTriggers>
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="alert" Storyboard.TargetProperty="Background">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource FillCriticalBrush}" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="toggle" Storyboard.TargetProperty="Foreground">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextOnAccentFillColorDefaultBrush}" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                    <VisualState.Setters>
+                        <Setter Target="afterTB.Visibility" Value="Collapsed"/>
+                        <Setter Target="sinceTB.Visibility" Value="Visible"/>
+                        <Setter Target="sign.Visibility" Value="Visible"/>
+                    </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
             <VisualStateGroup x:Name="CountdownStates">
@@ -208,6 +227,12 @@
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="afterTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
                             <DiscreteObjectKeyFrame Value="1"/>
                         </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="sinceTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="sinceTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="1"/>
+                        </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="row1" Storyboard.TargetProperty="Height" Duration="0:0:9" RepeatBehavior="Forever">
                             <DiscreteObjectKeyFrame KeyTime="0:0:5" Value="{StaticResource ZeroGridLength}"/>
                         </ObjectAnimationUsingKeyFrames>
@@ -229,6 +254,12 @@
                             <DiscreteObjectKeyFrame Value="0"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="afterTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="1"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="sinceTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="sinceTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
                             <DiscreteObjectKeyFrame Value="1"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="row2" Storyboard.TargetProperty="Height" Duration="0">
@@ -267,11 +298,18 @@
                                 <RowDefinition x:Name="row2"/>
                             </Grid.RowDefinitions>
 
-                            <TextBlock Text="{x:Bind ViewModel.Next.Name, FallbackValue=NAME}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock x:Name="timeTB" Text="{x:Bind converters:CustomDateTimeConverter.FormatShortTime(ViewModel.Next.Time, ash:LocaleManager.Default.CurrentCulture), FallbackValue=TIME}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
+                            <TextBlock Text="{x:Bind ViewModel.DisplayedTime.Name, FallbackValue=NAME}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="timeTB" Text="{x:Bind converters:CustomDateTimeConverter.FormatShortTime(ViewModel.DisplayedTime.Time, ash:LocaleManager.Default.CurrentCulture), FallbackValue=TIME}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
 
                             <TextBlock x:Name="afterTB" Text="{mk:L11n Key=UI.Summary.After}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2"/>
-                            <TextBlock Text="{x:Bind sys:String.Format(ViewModel.WidgetSettings.CountdownFormat, ViewModel.Next.Countdown), FallbackValue=COUNTDOWN}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2"/>
+                            <!--We can't update "After" text because L11n extension uses Binding
+                                which is neither supported in VisualState setters nor in animations.
+                                So we have to use a separate element for "Since"-->
+                            <TextBlock x:Name="sinceTB" Text="{mk:L11n Key=UI.Summary.Since}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Visibility="Collapsed"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" FlowDirection="LeftToRight">
+                                <TextBlock x:Name="sign" Text="+" Visibility="Collapsed"/>
+                                <TextBlock Text="{x:Bind sys:String.Format(ViewModel.WidgetSettings.CountdownFormat, ViewModel.DisplayedTime.Countdown), FallbackValue=COUNTDOWN}" FlowDirection="{x:Bind timeTB.FlowDirection}"/>
+                            </StackPanel>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -316,6 +354,8 @@
                             <Setter Property="Background" Value="Transparent"/>
                             <Setter Property="Padding" Value="0"/>
                             <Setter Property="MaxWidth" Value="1000" />
+                            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Disabled"/>
+                            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
                         </Style>
                     </Flyout.FlyoutPresenterStyle>
                     <local:WidgetPanel x:Name="widgetPanel" MinWidth="200"/>

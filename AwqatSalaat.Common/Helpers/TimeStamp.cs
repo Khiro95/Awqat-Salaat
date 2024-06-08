@@ -9,7 +9,7 @@ namespace AwqatSalaat.Helpers
             get
             {
 #if DEBUG
-                return new DateTime(2023, 9, 13, 16, 00, 00);
+                return new DateTime(2023, 9, 13, 16, 04, 00);
 #endif
                 return DateTime.Now;
             }

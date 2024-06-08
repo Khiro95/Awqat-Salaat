@@ -250,5 +250,17 @@ namespace AwqatSalaat.Properties {
                 this["UseCompactMode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public byte NotificationDistanceElapsed {
+            get {
+                return ((byte)(this["NotificationDistanceElapsed"]));
+            }
+            set {
+                this["NotificationDistanceElapsed"] = value;
+            }
+        }
     }
 }

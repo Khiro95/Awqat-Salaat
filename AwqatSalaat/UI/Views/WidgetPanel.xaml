@@ -32,8 +32,8 @@
     <d:UserControl.DataContext>
         <vm:WidgetViewModel />
     </d:UserControl.DataContext>
-    <StackPanel Margin="8">
-        <Grid d:Width="200" d:Visibility="Visible" Visibility="{Binding WidgetSettings.IsOpen, Converter={StaticResource BoolVisInvConverter}}">
+    <Grid Margin="8">
+        <Grid x:Name="timesGrid" d:Width="200" Visibility="{Binding WidgetSettings.IsOpen, Converter={StaticResource BoolVisInvConverter}}" d:MaxHeight="296" d:Visibility="Visible" d:VerticalAlignment="Top">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition MinHeight="243"/>
@@ -76,14 +76,18 @@
                                     <Border.Style>
                                         <Style TargetType="Border">
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsElapsed}" Value="True">
+                                                <DataTrigger Binding="{Binding State}" Value="Entered">
                                                     <Setter Property="TextElement.Foreground" Value="{DynamicResource ThemeColors.TextSecondaryBrush}"/>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding IsNext}" Value="True">
+                                                <DataTrigger Binding="{Binding State}" Value="Next">
                                                     <Setter Property="TextElement.Foreground" Value="{DynamicResource ThemeColors.TextHighlightBrush}"/>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding IsTimeClose}" Value="True">
+                                                <DataTrigger Binding="{Binding State}" Value="Near">
                                                     <Setter Property="Background" Value="{DynamicResource ThemeColors.AccentBrush}"/>
+                                                    <Setter Property="TextElement.Foreground" Value="{DynamicResource ThemeColors.TextOnAccentBrush}"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding State}" Value="EnteredRecently">
+                                                    <Setter Property="Background" Value="{DynamicResource ThemeColors.FillCriticalBrush}"/>
                                                     <Setter Property="TextElement.Foreground" Value="{DynamicResource ThemeColors.TextOnAccentBrush}"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -100,22 +104,24 @@
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsElapsed}" Value="True">
+                                                        <DataTrigger Binding="{Binding State}" Value="Entered">
                                                             <Setter Property="Text" Value="&#xE73E;"/>
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding IsElapsed}" Value="False">
+                                                        <DataTrigger Binding="{Binding State}" Value="Coming">
                                                             <Setter Property="Text" Value="&#xE823;"/>
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding IsNext}" Value="True">
+                                                        <DataTrigger Binding="{Binding State}" Value="Next">
                                                             <Setter Property="Text" Value="&#xE751;"/>
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding IsTimeClose}" Value="True">
+                                                        <DataTrigger Binding="{Binding State}" Value="Near">
+                                                            <Setter Property="Text" Value="&#xE7BA;"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding State}" Value="EnteredRecently">
                                                             <Setter Property="Text" Value="&#xE7BA;"/>
                                                         </DataTrigger>
                                                         <MultiDataTrigger>
                                                             <MultiDataTrigger.Conditions>
-                                                                <Condition Binding="{Binding IsNext}" Value="True"/>
-                                                                <Condition Binding="{Binding IsTimeClose}" Value="False"/>
+                                                                <Condition Binding="{Binding State}" Value="Next"/>
                                                                 <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=FlowDirection}" Value="LeftToRight"/>
                                                             </MultiDataTrigger.Conditions>
                                                             <Setter Property="RenderTransform">
@@ -130,7 +136,7 @@
                                             </TextBlock.Style>
                                         </TextBlock>
                                         <TextBlock Text="{Binding Name}" Grid.Column="1"/>
-                                        <Button Style="{DynamicResource ButtonAltStyle}" Content="{mk:L11n UI.Panel.Dismiss}" Command="{Binding DismissNotification}" Foreground="{DynamicResource ThemeColors.TextOnAccentBrush}" Margin="16,0" Grid.Column="2" d:Visibility="Visible" Visibility="{Binding IsTimeClose, Converter={StaticResource BoolVisConverter}}"/>
+                                        <Button Style="{DynamicResource ButtonAltStyle}" Content="{mk:L11n UI.Panel.Dismiss}" Command="{Binding DismissNotification}" Foreground="{DynamicResource ThemeColors.TextOnAccentBrush}" Margin="16,0" Grid.Column="2" d:Visibility="Visible" Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BoolVisConverter}}"/>
                                         <TextBlock Text="{Binding Time, Converter={StaticResource ShortTimeConverter}}" Grid.Column="3" HorizontalAlignment="Center"/>
                                     </Grid>
                                 </Border>
@@ -159,7 +165,7 @@
                 <TextBlock Text="{Binding ErrorMessage}" d:Text="Something wrong happened, please check the settings and try again" TextAlignment="Center" TextWrapping="Wrap" Margin="8"/>
             </StackPanel>
         </Grid>
-        <Grid DataContext="{Binding WidgetSettings}" d:Visibility="Visible" Visibility="{Binding IsOpen, Converter={StaticResource BoolVisConverter}}" MinWidth="300" MaxWidth="760">
+        <Grid DataContext="{Binding WidgetSettings}" d:Visibility="Visible" Visibility="{Binding IsOpen, Converter={StaticResource BoolVisConverter}}" MinWidth="300" MaxWidth="760" d:Margin="0,296,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
@@ -171,5 +177,5 @@
                 <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE8FB;" Command="{Binding Save}" ToolTip="{mk:L11n UI.Settings.Confirm}"/>
             </StackPanel>
         </Grid>
-    </StackPanel>
+    </Grid>
 </UserControl>

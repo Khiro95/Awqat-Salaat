@@ -149,7 +149,7 @@
     <value>Reminder offset</value>
   </data>
   <data name="UI.Settings.ReminderOffsetDescription" xml:space="preserve">
-    <value>The amount of minutes before the time of the next salaat at which notification start. Value 0 disables the notifications.</value>
+    <value>The amount of minutes before the time of the next salaat at which notification start. Value 0 disables the notification.</value>
   </data>
   <data name="UI.Settings.CountryCode" xml:space="preserve">
     <value>Country code</value>
@@ -318,5 +318,14 @@
   </data>
   <data name="UI.Settings.EnableCompactModeDescription" xml:space="preserve">
     <value>Make the widget smaller and take less space</value>
+  </data>
+  <data name="UI.Summary.Since" xml:space="preserve">
+    <value>Since</value>
+  </data>
+  <data name="UI.Settings.ElapsedPeriod" xml:space="preserve">
+    <value>Elapsed time period</value>
+  </data>
+  <data name="UI.Settings.ElapsedPeriodDescription" xml:space="preserve">
+    <value>The amount of minutes for which a notification is run after the salaat time has entered. Value 0 disables the notification.</value>
   </data>
 </root>

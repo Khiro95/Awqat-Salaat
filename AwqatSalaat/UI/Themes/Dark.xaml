@@ -7,6 +7,8 @@
     <Color x:Key="ThemeColors.AccentLightColor">#D1BA8C</Color>
     <Color x:Key="ThemeColors.AccentDarkColor">#BC9055</Color>
 
+    <Color x:Key="ThemeColors.FillCriticalColor">#BA5D5D</Color>
+
     <Color x:Key="ThemeColors.TextPrimaryColor">#FFFFFF</Color>
     <Color x:Key="ThemeColors.TextSecondaryColor">#98FFFFFF</Color>
     <Color x:Key="ThemeColors.TextTertiaryColor">#78FFFFFF</Color>
@@ -38,6 +40,8 @@
     <SolidColorBrush x:Key="ThemeColors.AccentBrush" Color="{StaticResource ThemeColors.AccentColor}"/>
     <SolidColorBrush x:Key="ThemeColors.AccentLightBrush" Color="{StaticResource ThemeColors.AccentLightColor}"/>
     <SolidColorBrush x:Key="ThemeColors.AccentDarkBrush" Color="{StaticResource ThemeColors.AccentDarkColor}"/>
+
+    <SolidColorBrush x:Key="ThemeColors.FillCriticalBrush" Color="{StaticResource ThemeColors.FillCriticalColor}"/>
 
     <SolidColorBrush x:Key="ThemeColors.TextPrimaryBrush" Color="{StaticResource ThemeColors.TextPrimaryColor}"/>
     <SolidColorBrush x:Key="ThemeColors.TextSecondaryBrush" Color="{StaticResource ThemeColors.TextSecondaryColor}"/>

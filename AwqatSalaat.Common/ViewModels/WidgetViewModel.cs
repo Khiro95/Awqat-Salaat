@@ -15,6 +15,7 @@ namespace AwqatSalaat.ViewModels
     public class WidgetViewModel : ObservableObject
     {
         private PrayerTimeViewModel next;
+        private PrayerTimeViewModel displayedTime;
         private bool isRefreshing;
         private DateTime displayedDate = TimeStamp.Date;
         private string error, city, country;
@@ -22,6 +23,7 @@ namespace AwqatSalaat.ViewModels
         private IServiceClient serviceClient;
 
         public PrayerTimeViewModel Next { get => next; private set => SetProperty(ref next, value); }
+        public PrayerTimeViewModel DisplayedTime { get => displayedTime; private set => SetProperty(ref displayedTime, value); }
         public bool IsRefreshing
         {
             get => isRefreshing;
@@ -51,9 +53,10 @@ namespace AwqatSalaat.ViewModels
 
         public WidgetViewModel()
         {
-            foreach (var item in Items)
+            foreach (var time in Items)
             {
-                item.Elapsed += TimeElapsed;
+                time.Entered += TimeEntered;
+                time.EnteredNotificationDone += TimeEnteredNotificationDone;
             }
 
             Refresh = new RelayCommand(o => RefreshData(), o => !isRefreshing);
@@ -81,6 +84,7 @@ namespace AwqatSalaat.ViewModels
             foreach (var time in Items)
             {
                 time.Distance = WidgetSettings.Settings.NotificationDistance;
+                time.DistanceElapsed = WidgetSettings.Settings.NotificationDistanceElapsed;
             }
 
             if (hasServiceSettingsChanged)
@@ -94,7 +98,17 @@ namespace AwqatSalaat.ViewModels
             }
         }
 
-        private void TimeElapsed(object sender, EventArgs e)
+        private void TimeEntered(object sender, EventArgs e)
+        {
+            PrayerTimeViewModel prayerTime = (PrayerTimeViewModel)sender;
+
+            if (prayerTime.Key != nameof(PrayerTimes.Isha))
+            {
+                UpdateNext();
+            }
+        }
+
+        private void TimeEnteredNotificationDone(object sender, EventArgs e)
         {
             PrayerTimeViewModel prayerTime = (PrayerTimeViewModel)sender;
 
@@ -109,7 +123,7 @@ namespace AwqatSalaat.ViewModels
             }
             else
             {
-                UpdateNext();
+                UpdateDisplayedTime(true);
             }
         }
 
@@ -123,6 +137,7 @@ namespace AwqatSalaat.ViewModels
                 }
 
                 UpdateNext();
+                UpdateDisplayedTime(false);
                 return true;
             }
 
@@ -137,11 +152,27 @@ namespace AwqatSalaat.ViewModels
             }
 
             // Sorting doesn't hurt here, we only have 5 items :)
-            Next = Items.Where(i => !i.IsElapsed).OrderBy(i => i.Countdown.TotalSeconds).FirstOrDefault();
+            Next = Items.Where(i => !i.IsEntered).OrderBy(i => i.Countdown.TotalSeconds).FirstOrDefault();
 
             if (next != null)
             {
                 next.IsNext = true;
+            }
+        }
+
+        private void UpdateDisplayedTime(bool skipLookup)
+        {
+            if (displayedTime != null)
+            {
+                displayedTime.IsActive = false;
+            }
+
+            var time = skipLookup ? null : Items.SingleOrDefault(i => i.State == PrayerTimeState.EnteredRecently);
+            DisplayedTime = time ?? next;
+
+            if (displayedTime != null)
+            {
+                displayedTime.IsActive = true;
             }
         }
 
@@ -165,8 +196,8 @@ namespace AwqatSalaat.ViewModels
 
                 var apiResponse = await serviceClient.GetDataAsync(request);
 
-                // If Isha has passed, then we look for the next day
-                if (DisplayedDate == TimeStamp.Date && TimeStamp.Now > apiResponse.Times[TimeStamp.Date].Max(t => t.Value))
+                // If Isha has entered, then we look for the next day
+                if (DisplayedDate == TimeStamp.Date && TimeStamp.Now > apiResponse.Times[TimeStamp.Date].Max(t => t.Value).AddMinutes(WidgetSettings.Settings.NotificationDistanceElapsed))
                 {
                     DisplayedDate = TimeStamp.NextDate;
 
@@ -196,6 +227,12 @@ namespace AwqatSalaat.ViewModels
                 {
                     next.IsNext = false;
                     Next = null;
+                }
+
+                if (displayedTime != null)
+                {
+                    displayedTime.IsActive = false;
+                    DisplayedTime = null;
                 }
 
                 ErrorMessage = ex.Message;

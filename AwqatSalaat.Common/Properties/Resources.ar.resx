@@ -339,4 +339,13 @@
   <data name="UI.Settings.EnableCompactModeDescription" xml:space="preserve">
     <value>جعل الأداة أصغر وتحجز مساحة أقل</value>
   </data>
+  <data name="UI.Summary.Since" xml:space="preserve">
+    <value>منذ</value>
+  </data>
+  <data name="UI.Settings.ElapsedPeriod" xml:space="preserve">
+    <value>فترة الوقت المنقضي</value>
+  </data>
+  <data name="UI.Settings.ElapsedPeriodDescription" xml:space="preserve">
+    <value>عدد الدقائق التي يتم خلالها تشغيل اشعار بعد دخول الوقت. القيمة 0 تعني تعطيل الاشعار</value>
+  </data>
 </root>

@@ -15,7 +15,7 @@
              xmlns:api1="clr-namespace:AwqatSalaat.Services.IslamicFinder;assembly=AwqatSalaat.Common"
              xmlns:api2="clr-namespace:AwqatSalaat.Services.AlAdhan;assembly=AwqatSalaat.Common"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" d:Background="#192025">
+             d:DesignHeight="550" d:DesignWidth="800" d:Background="#192025">
     <d:UserControl.DataContext>
         <vm:WidgetSettingsViewModel/>
     </d:UserControl.DataContext>
@@ -119,6 +119,9 @@
                         </controls:SettingsItem>
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.ReminderOffset}" Description="{mk:L11n UI.Settings.ReminderOffsetDescription}">
                             <controls:NumericUpDown Value="{Binding NotificationDistance}" Maximum="720" Width="100" HorizontalAlignment="Left"/>
+                        </controls:SettingsItem>
+                        <controls:SettingsItem Header="{mk:L11n UI.Settings.ElapsedPeriod}" Description="{mk:L11n UI.Settings.ElapsedPeriodDescription}">
+                            <controls:NumericUpDown Value="{Binding NotificationDistanceElapsed}" Maximum="30" Width="100" HorizontalAlignment="Left"/>
                         </controls:SettingsItem>
                     </StackPanel>
                 </ScrollViewer>
