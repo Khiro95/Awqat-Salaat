@@ -328,4 +328,7 @@
   <data name="UI.Settings.ElapsedPeriodDescription" xml:space="preserve">
     <value>The amount of minutes for which a notification is run after the salaat time has entered. Value 0 disables the notification.</value>
   </data>
+  <data name="Data.Salaat.Shuruq" xml:space="preserve">
+    <value>Shuruq</value>
+  </data>
 </root>

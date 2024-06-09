@@ -104,11 +104,11 @@
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding State}" Value="Entered">
-                                                            <Setter Property="Text" Value="&#xE73E;"/>
-                                                        </DataTrigger>
                                                         <DataTrigger Binding="{Binding State}" Value="Coming">
                                                             <Setter Property="Text" Value="&#xE823;"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding State}" Value="ShuruqComing">
+                                                            <Setter Property="Text" Value="&#xE706;"/>
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding State}" Value="Next">
                                                             <Setter Property="Text" Value="&#xE751;"/>
@@ -118,6 +118,9 @@
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding State}" Value="EnteredRecently">
                                                             <Setter Property="Text" Value="&#xE7BA;"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding State}" Value="Entered">
+                                                            <Setter Property="Text" Value="&#xE73E;"/>
                                                         </DataTrigger>
                                                         <MultiDataTrigger>
                                                             <MultiDataTrigger.Conditions>

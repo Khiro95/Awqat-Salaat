@@ -42,6 +42,7 @@ namespace AwqatSalaat.ViewModels
         public ObservableCollection<PrayerTimeViewModel> Items { get; } = new ObservableCollection<PrayerTimeViewModel>()
         {
             new PrayerTimeViewModel(nameof(PrayerTimes.Fajr)),
+            new PrayerTimeViewModel(nameof(PrayerTimes.Shuruq)),
             new PrayerTimeViewModel(nameof(PrayerTimes.Dhuhr)),
             new PrayerTimeViewModel(nameof(PrayerTimes.Asr)),
             new PrayerTimeViewModel(nameof(PrayerTimes.Maghrib)),
@@ -152,7 +153,7 @@ namespace AwqatSalaat.ViewModels
             }
 
             // Sorting doesn't hurt here, we only have 5 items :)
-            Next = Items.Where(i => !i.IsEntered).OrderBy(i => i.Countdown.TotalSeconds).FirstOrDefault();
+            Next = Items.Where(i => !i.IsEntered && !i.IsShuruq).OrderBy(i => i.Countdown.TotalSeconds).FirstOrDefault();
 
             if (next != null)
             {
@@ -168,7 +169,16 @@ namespace AwqatSalaat.ViewModels
             }
 
             var time = skipLookup ? null : Items.SingleOrDefault(i => i.State == PrayerTimeState.EnteredRecently);
-            DisplayedTime = time ?? next;
+
+            // Check if we should display Shuruq time since it cannot be marked as "Next"
+            if (time is null && next?.Key == nameof(PrayerTimes.Dhuhr))
+            {
+                DisplayedTime = Items.SingleOrDefault(i => i.State == PrayerTimeState.ShuruqComing) ?? next;
+            }
+            else
+            {
+                DisplayedTime = time ?? next; 
+            }
 
             if (displayedTime != null)
             {

@@ -66,6 +66,11 @@
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="Default">
                                 <VisualState x:Name="Coming"/>
+                                <VisualState x:Name="ShuruqComing">
+                                    <VisualState.Setters>
+                                        <Setter Target="glyph.Glyph" Value="&#xE706;"/>
+                                    </VisualState.Setters>
+                                </VisualState>
                                 <VisualState x:Name="Next">
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="glyph" Storyboard.TargetProperty="Foreground">

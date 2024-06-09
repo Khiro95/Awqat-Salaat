@@ -13,11 +13,12 @@ namespace AwqatSalaat.ViewModels
         private PrayerTimeState state;
         private Timer timer;
 
-        private bool IsInEnteredNotificationPeriod => IsEntered && DistanceElapsed > 0 && !isNotificationDismissed && Elapsed.TotalMinutes <= DistanceElapsed;
-        private bool IsInNearNotificationPeriod => isNext && Distance > 0 && !IsEntered && !isNotificationDismissed && Countdown.TotalMinutes <= Distance;
+        private bool IsInEnteredNotificationPeriod => !IsShuruq && IsEntered && DistanceElapsed > 0 && !isNotificationDismissed && Elapsed.TotalMinutes <= DistanceElapsed;
+        private bool IsInNearNotificationPeriod => !IsShuruq && isNext && Distance > 0 && !IsEntered && !isNotificationDismissed && Countdown.TotalMinutes <= Distance;
 
         public string Name => LocaleManager.Default.Get($"Data.Salaat.{Key}");
         public string Key { get; }
+        public bool IsShuruq { get; }
         public DateTime Time { get => time; private set => SetProperty(ref time, value); }
         public bool IsNext { get => isNext; set { isNext = value; UpdateState(); } }
         public bool IsActive { get => isActive; set => Activate(value); }
@@ -44,6 +45,7 @@ namespace AwqatSalaat.ViewModels
 
         public PrayerTimeViewModel(string key)
         {
+            IsShuruq = key == nameof(Data.PrayerTimes.Shuruq);
             Key = key;
             DismissNotification = new RelayCommand(DismissExecute, o => IsInNearNotificationPeriod || IsInEnteredNotificationPeriod);
             LocaleManager.Default.CurrentChanged += (_, __) => OnPropertyChanged(nameof(Name));
@@ -93,7 +95,7 @@ namespace AwqatSalaat.ViewModels
                 bool shouldRaiseEvents = false;
 
                 // transition from previous state
-                if (state == PrayerTimeState.Next || state == PrayerTimeState.Near)
+                if (state == PrayerTimeState.ShuruqComing || state == PrayerTimeState.Next || state == PrayerTimeState.Near)
                 {
                     isNotificationDismissed = false;
                     shouldRaiseEvents = true;
@@ -140,7 +142,7 @@ namespace AwqatSalaat.ViewModels
             }
             else
             {
-                State = PrayerTimeState.Coming;
+                State = IsShuruq ? PrayerTimeState.ShuruqComing : PrayerTimeState.Coming;
             }
         }
     }
@@ -148,6 +150,7 @@ namespace AwqatSalaat.ViewModels
     public enum PrayerTimeState
     {
         Coming,
+        ShuruqComing,
         Next,
         Near,
         Entered,

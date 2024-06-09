@@ -12,6 +12,7 @@ namespace AwqatSalaat.Data
         private readonly Dictionary<string, DateTime> times;
 
         public DateTime Fajr => GetTime();
+        public DateTime Shuruq => GetTime();
         public DateTime Dhuhr => GetTime();
         public DateTime Asr => GetTime();
         public DateTime Maghrib => GetTime();

@@ -348,4 +348,7 @@
   <data name="UI.Settings.ElapsedPeriodDescription" xml:space="preserve">
     <value>عدد الدقائق التي يتم خلالها تشغيل اشعار بعد دخول الوقت. القيمة 0 تعني تعطيل الاشعار</value>
   </data>
+  <data name="Data.Salaat.Shuruq" xml:space="preserve">
+    <value>الشروق</value>
+  </data>
 </root>

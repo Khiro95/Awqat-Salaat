@@ -142,6 +142,15 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shuruq.
+        /// </summary>
+        public static string Data_Salaat_Shuruq {
+            get {
+                return ResourceManager.GetString("Data.Salaat.Shuruq", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contact.
         /// </summary>
         public static string UI_About_Contact {
