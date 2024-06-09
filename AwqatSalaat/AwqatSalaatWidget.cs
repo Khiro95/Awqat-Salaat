@@ -16,7 +16,7 @@ namespace AwqatSalaat
     public class AwqatSalaatWidget : CSDeskBandWpf
     {
         private const string WidgetName = "Awqat Salaat";
-        private const int DefaultWidth = 114;
+        private const int DefaultWidth = 118;
         private const int CompactWidth = 60;
 
         private readonly WidgetSummary uiElement;
@@ -29,17 +29,18 @@ namespace AwqatSalaat
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
 
-            uiElement = new WidgetSummary
-            {
-                PanelPlacement = GetPlacement(TaskbarInfo.Edge),
-                RemovePopupBorderAtPlacement = true
-            };
-
-            HwndSource.SizeToContent = SizeToContent.Width;
-
             int minHWidth = Properties.Settings.Default.UseCompactMode || !Properties.Settings.Default.ShowCountdown
                 ? CompactWidth
                 : DefaultWidth;
+
+            uiElement = new WidgetSummary
+            {
+                PanelPlacement = GetPlacement(TaskbarInfo.Edge),
+                RemovePopupBorderAtPlacement = true,
+                Width = minHWidth,
+            };
+
+            HwndSource.SizeToContent = SizeToContent.Width;
 
             Options.HorizontalSize = new Size(minHWidth, TaskbarInfo.Size.Height);
             Options.MinHorizontalSize = new Size(minHWidth, 0);

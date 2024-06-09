@@ -79,7 +79,7 @@
             </ResourceDictionary.ThemeDictionaries>
 
             <GridLength x:Key="ZeroGridLength">0</GridLength>
-            <GridLength x:Key="MaxGridLength">50</GridLength>
+            <GridLength x:Key="MaxGridLength">54</GridLength>
             <GridLength x:Key="StarGridLength">*</GridLength>
             <Thickness x:Key="ZeroThickness">0</Thickness>
             <HorizontalAlignment x:Key="StretchAlignment">Stretch</HorizontalAlignment>
@@ -285,13 +285,13 @@
                     </MenuFlyout>
                 </Grid.ContextFlyout>
                 <Border x:Name="alert" Background="Transparent" CornerRadius="{ThemeResource ControlCornerRadius}"/>
-                <Grid Margin="3" Visibility="{x:Bind ViewModel.WidgetSettings.Settings.IsConfigured}">
+                <Grid x:Name="grid" MaxHeight="40" Margin="3" Visibility="{x:Bind ViewModel.WidgetSettings.Settings.IsConfigured}">
                     <Grid Visibility="{x:Bind ViewModel.IsRefreshing, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
-                        <Grid x:Name="grid" MaxHeight="40" HorizontalAlignment="Center" Visibility="{x:Bind ViewModel.HasError, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
+                        <Grid HorizontalAlignment="Center" Visibility="{x:Bind ViewModel.HasError, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition x:Name="col1" Width="50" MaxWidth="50"/>
                                 <ColumnDefinition x:Name="gap" Width="6" MaxWidth="6"/>
-                                <ColumnDefinition x:Name="col2" Width="50" MaxWidth="50"/>
+                                <ColumnDefinition x:Name="col2" Width="54" MaxWidth="54"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition x:Name="row1"/>

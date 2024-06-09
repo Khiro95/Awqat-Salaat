@@ -39,7 +39,7 @@ namespace AwqatSalaat.WinUI
             }
             else
             {
-                widget.Width = 116;
+                widget.Width = 118;
             }
         }
     }

@@ -20,7 +20,7 @@ namespace AwqatSalaat.WinUI
         private const string ReBarWindow32ClassName = "ReBarWindow32";
         private const string NotificationAreaClassName = "TrayNotifyWnd";
         private const string WidgetsButtonAutomationId = "WidgetsButton";
-        private const int DefaultWidgetHostWidth = 124; // 116 for the button (2 for borders) + 4 for left margin + 4 for right margin
+        private const int DefaultWidgetHostWidth = 126; // 118 for the button (2 for borders) + 4 for left margin + 4 for right margin
         private const int CompactWidgetHostWidth = 70; // 62 for the button (2 for borders) + 4 for left margin + 4 for right margin
 
         private readonly double dpiScale;

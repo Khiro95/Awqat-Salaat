@@ -13,7 +13,7 @@
     </Window.SystemBackdrop>
     <Grid x:Name="grid">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <views:WidgetSummary x:Name="widget" Width="116" Height="40"/>
+            <views:WidgetSummary x:Name="widget" Width="118" Height="40"/>
         </StackPanel>
     </Grid>
 </Window>

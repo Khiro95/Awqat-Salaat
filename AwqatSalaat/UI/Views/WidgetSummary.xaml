@@ -10,7 +10,7 @@
              xmlns:controls="clr-namespace:AwqatSalaat.UI.Controls"
              xmlns:mk="clr-namespace:AwqatSalaat.Markup"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="114" d:Background="#192025" UseLayoutRounding="True">
+             d:DesignHeight="40" d:DesignWidth="118" d:Background="#192025" UseLayoutRounding="True">
     <UserControl.DataContext>
         <vm:WidgetViewModel/>
     </UserControl.DataContext>
@@ -25,7 +25,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <GridLength x:Key="ZeroGridLength">0</GridLength>
-            <GridLength x:Key="MaxGridLength">50</GridLength>
+            <GridLength x:Key="MaxGridLength">54</GridLength>
             <GridLength x:Key="StarGridLength">*</GridLength>
             <Thickness x:Key="ZeroThickness">0</Thickness>
             <HorizontalAlignment x:Key="StretchAlignment">Stretch</HorizontalAlignment>
@@ -225,13 +225,13 @@
                 </Style>
             </ToggleButton.Style>
             <Grid>
-                <Grid Margin="4" d:Visibility="Visible" Visibility="{Binding WidgetSettings.Settings.IsConfigured, Converter={StaticResource BoolVisConverter}}">
+                <Grid x:Name="grid" MaxHeight="40" Margin="4" d:Visibility="Visible" Visibility="{Binding WidgetSettings.Settings.IsConfigured, Converter={StaticResource BoolVisConverter}}">
                     <Grid d:Visibility="Visible" Visibility="{Binding HasError, Converter={StaticResource BoolVisInvConverter}}">
-                        <Grid x:Name="grid" MaxHeight="40" HorizontalAlignment="Center" Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisInvConverter}}">
+                        <Grid HorizontalAlignment="Center" Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisInvConverter}}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition x:Name="col1" Width="50" MaxWidth="50"/>
                                 <ColumnDefinition x:Name="gap" Width="6" MaxWidth="6"/>
-                                <ColumnDefinition x:Name="col2" Width="50" MaxWidth="50"/>
+                                <ColumnDefinition x:Name="col2" Width="54" MaxWidth="54"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition x:Name="row1"/>
