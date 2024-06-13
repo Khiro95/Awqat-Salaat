@@ -2,9 +2,12 @@ using AwqatSalaat.Services.Nominatim;
 using AwqatSalaat.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using System.Reflection;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.Storage.Pickers;
+using WinRT.Interop;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -18,11 +21,16 @@ namespace AwqatSalaat.WinUI.Views
             .Version;
         private static readonly string Architecture = Environment.Is64BitProcess ? "64-bit" : "32-bit";
 
+        private bool keepFlyoutOpen;
+
         private WidgetSettingsViewModel ViewModel => DataContext as WidgetSettingsViewModel;
+
+        public Flyout ParentFlyout { get; set; }
 
         public SettingsPanel()
         {
             this.InitializeComponent();
+            this.Loaded += SettingsPanel_Loaded;
             this.RegisterPropertyChangedCallback(VisibilityProperty, OnVisibilityChanged);
 
             // Workaround for a bug https://github.com/microsoft/microsoft-ui-xaml/issues/4035
@@ -33,10 +41,19 @@ namespace AwqatSalaat.WinUI.Views
             SetImageSource();
         }
 
+        private void SettingsPanel_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (ParentFlyout is not null)
+            {
+                ParentFlyout.Closing += (s, a) => a.Cancel = keepFlyoutOpen;
+            }
+        }
+
         // Workaround for a bug https://github.com/microsoft/microsoft-ui-xaml/issues/4035
         private static void OnItemsSourceChanged(DependencyObject sender, DependencyProperty dp)
         {
             ComboBox comboBox = sender as ComboBox;
+
             if (comboBox.ItemsSource is not null)
             {
                 comboBox.SelectedValuePath = null;
@@ -47,7 +64,7 @@ namespace AwqatSalaat.WinUI.Views
         private async Task SetImageSource()
         {
             var path = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-            var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(path);
+            var file = await StorageFile.GetFileFromPathAsync(path);
             var iconThumbnail = await file.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.SingleItem, 32);
             var bi = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage();
             bi.SetSource(iconThumbnail);
@@ -94,6 +111,34 @@ namespace AwqatSalaat.WinUI.Views
         {
             //https://github.com/microsoft/microsoft-ui-xaml/issues/4438
             Windows.System.Launcher.LaunchUriAsync(new Uri("mailto:khiro95.gh@gmail.com"));
+        }
+
+        private async void BrowseSound_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                FileOpenPicker fileOpenPicker = new()
+                {
+                    FileTypeFilter = { ".wav", ".mp3", ".wma", ".aac" },
+                };
+
+                InitializeWithWindow.Initialize(fileOpenPicker, App.MainHandle);
+
+                keepFlyoutOpen = true;
+                IsHitTestVisible = false;
+
+                StorageFile file = await fileOpenPicker.PickSingleFileAsync();
+
+                if (file != null)
+                {
+                    ViewModel.Settings.NotificationSoundFile = file.Path;
+                }
+            }
+            finally
+            {
+                keepFlyoutOpen = false;
+                IsHitTestVisible = true;
+            }
         }
     }
 }

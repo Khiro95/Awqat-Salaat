@@ -277,6 +277,15 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse....
+        /// </summary>
+        public static string UI_Settings_Browse {
+            get {
+                return ResourceManager.GetString("UI.Settings.Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string UI_Settings_Cancel {
@@ -381,6 +390,15 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_EnableCompactModeDescription {
             get {
                 return ResourceManager.GetString("UI.Settings.EnableCompactModeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        public static string UI_Settings_File {
+            get {
+                return ResourceManager.GetString("UI.Settings.File", resourceCulture);
             }
         }
         
@@ -570,6 +588,24 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_NoResult {
             get {
                 return ResourceManager.GetString("UI.Settings.NoResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notification sound.
+        /// </summary>
+        public static string UI_Settings_NotificationSound {
+            get {
+                return ResourceManager.GetString("UI.Settings.NotificationSound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play sound when the notification is active.
+        /// </summary>
+        public static string UI_Settings_NotificationSoundDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.NotificationSoundDescription", resourceCulture);
             }
         }
         

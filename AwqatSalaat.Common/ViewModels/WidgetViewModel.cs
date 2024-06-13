@@ -17,6 +17,7 @@ namespace AwqatSalaat.ViewModels
         private PrayerTimeViewModel next;
         private PrayerTimeViewModel displayedTime;
         private bool isRefreshing;
+        private bool isNotificationActive;
         private DateTime displayedDate = TimeStamp.Date;
         private string error, city, country;
         private Dictionary<DateTime, PrayerTimes> latestData;
@@ -52,12 +53,20 @@ namespace AwqatSalaat.ViewModels
         public RelayCommand Refresh { get; }
         public RelayCommand OpenSettings { get; }
 
+        public event Action NearNotificationStarted;
+        public event Action NearNotificationStopped;
+
         public WidgetViewModel()
         {
             foreach (var time in Items)
             {
                 time.Entered += TimeEntered;
                 time.EnteredNotificationDone += TimeEnteredNotificationDone;
+
+                if (!time.IsShuruq)
+                {
+                    time.PropertyChanged += TimePropertyChanged;
+                }
             }
 
             Refresh = new RelayCommand(o => RefreshData(), o => !isRefreshing);
@@ -128,6 +137,23 @@ namespace AwqatSalaat.ViewModels
             }
         }
 
+        private void TimePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            PrayerTimeViewModel prayerTime = (PrayerTimeViewModel)sender;
+
+            if (e.PropertyName == nameof(PrayerTimeViewModel.State))
+            {
+                if (prayerTime.State == PrayerTimeState.Near)
+                {
+                    OnNearNotificationStarted();
+                }
+                else if (prayerTime.State == PrayerTimeState.Next || prayerTime.State == PrayerTimeState.Entered)
+                {
+                    OnNearNotificationStopped();
+                }
+            }
+        }
+
         private bool Update()
         {
             if (latestData?.Count > 0 && latestData.ContainsKey(displayedDate))
@@ -183,6 +209,12 @@ namespace AwqatSalaat.ViewModels
             if (displayedTime != null)
             {
                 displayedTime.IsActive = true;
+
+                // In case we are already in notification period
+                if (displayedTime.State == PrayerTimeState.Near)
+                {
+                    OnNearNotificationStarted();
+                }
             }
         }
 
@@ -243,12 +275,35 @@ namespace AwqatSalaat.ViewModels
                 {
                     displayedTime.IsActive = false;
                     DisplayedTime = null;
+
+                    if (isNotificationActive)
+                    {
+                        OnNearNotificationStopped();
+                    }
                 }
 
                 ErrorMessage = ex.Message;
             }
 
             IsRefreshing = false;
+        }
+
+        private void OnNearNotificationStarted()
+        {
+            if (!isNotificationActive)
+            {
+                isNotificationActive = true;
+                NearNotificationStarted?.Invoke();
+            }
+        }
+
+        private void OnNearNotificationStopped()
+        {
+            if (isNotificationActive)
+            {
+                isNotificationActive = false;
+                NearNotificationStopped?.Invoke();
+            }
         }
 
         private void UpdateDisplayedLocation(Location responseLocation)

@@ -4,6 +4,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 
 namespace AwqatSalaat.UI.Views
 {
@@ -13,7 +14,9 @@ namespace AwqatSalaat.UI.Views
     public partial class WidgetSummary : UserControl
     {
         private bool shouldBeCompactHorizontally;
+        private bool isPlayingSound;
         private DisplayMode currentDisplayMode = DisplayMode.Default;
+        private readonly MediaPlayer mediaPlayer = new MediaPlayer();
 
         private WidgetViewModel ViewModel => DataContext as WidgetViewModel;
 
@@ -64,6 +67,8 @@ namespace AwqatSalaat.UI.Views
         public WidgetSummary()
         {
             InitializeComponent();
+
+            mediaPlayer.MediaEnded += (_, __) => mediaPlayer.Position = TimeSpan.Zero;
             popup.Closed += (_, __) =>
             {
                 if (ViewModel.WidgetSettings.IsOpen && ViewModel.WidgetSettings.Settings.IsConfigured)
@@ -72,10 +77,27 @@ namespace AwqatSalaat.UI.Views
                 }
             };
             this.Loaded += (_, __) => UpdateDisplayMode();
+            this.Unloaded += WidgetSummary_Unloaded;
             ViewModel.WidgetSettings.Settings.PropertyChanged += Settings_PropertyChanged;
-            LocaleManager.Default.CurrentChanged += (_, __) => UpdateDirection();
+            ViewModel.WidgetSettings.Updated += WidgetSettings_Updated;
+            ViewModel.NearNotificationStarted += ViewModel_NearNotificationStarted;
+            ViewModel.NearNotificationStopped += ViewModel_NearNotificationStopped;
+            LocaleManager.Default.CurrentChanged += LocaleManager_CurrentChanged;
+
             UpdateDirection();
             UpdateCountdownState();
+            UpdateNotificationSound();
+        }
+
+        private void WidgetSummary_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ViewModel.WidgetSettings.Settings.PropertyChanged -= Settings_PropertyChanged;
+            ViewModel.WidgetSettings.Updated -= WidgetSettings_Updated;
+            ViewModel.NearNotificationStarted -= ViewModel_NearNotificationStarted;
+            ViewModel.NearNotificationStopped -= ViewModel_NearNotificationStopped;
+            LocaleManager.Default.CurrentChanged -= LocaleManager_CurrentChanged;
+
+            mediaPlayer.Close();
         }
 
         private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -88,6 +110,38 @@ namespace AwqatSalaat.UI.Views
             {
                 UpdateCountdownState(); 
             }
+        }
+
+        private void ViewModel_NearNotificationStarted()
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (mediaPlayer.Source != null)
+                {
+                    mediaPlayer.Position = TimeSpan.Zero;
+                    mediaPlayer.Play();
+                    isPlayingSound = true;
+                }
+            }));
+        }
+
+        private void ViewModel_NearNotificationStopped()
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                mediaPlayer.Stop();
+                isPlayingSound = false;
+            }));
+        }
+
+        private void WidgetSettings_Updated(bool obj)
+        {
+            UpdateNotificationSound();
+        }
+
+        private void LocaleManager_CurrentChanged(object sender, EventArgs e)
+        {
+            UpdateDirection();
         }
 
         protected override Size ArrangeOverride(Size arrangeBounds)
@@ -159,6 +213,33 @@ namespace AwqatSalaat.UI.Views
             this.Language = System.Windows.Markup.XmlLanguage.GetLanguage(Properties.Resources.Culture.IetfLanguageTag);
         }
 
+        private void UpdateNotificationSound()
+        {
+            var filePath = ViewModel.WidgetSettings.Settings.NotificationSoundFilePath;
+
+            if (!string.Equals(mediaPlayer.Source?.AbsolutePath, filePath, StringComparison.InvariantCultureIgnoreCase))
+            {
+                mediaPlayer.Close();
+
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    mediaPlayer.Open(new Uri(filePath));
+                }
+                else
+                {
+                    isPlayingSound = false;
+                }
+
+                if (isPlayingSound)
+                {
+                    mediaPlayer.Play();
+                }
+                else if (ViewModel.DisplayedTime?.State == PrayerTimeState.Near)
+                {
+                    ViewModel_NearNotificationStarted();
+                }
+            }
+        }
     }
 
     public enum DisplayMode

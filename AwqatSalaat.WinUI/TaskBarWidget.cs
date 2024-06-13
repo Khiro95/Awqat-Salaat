@@ -42,6 +42,8 @@ namespace AwqatSalaat.WinUI
         private int currentOffsetY = 0;
         private bool disposedValue;
 
+        public IntPtr Handle => hwnd != IntPtr.Zero ? hwnd : throw new InvalidOperationException("The widget is not initialized.");
+
         public event EventHandler Destroying;
 
         public TaskBarWidget()

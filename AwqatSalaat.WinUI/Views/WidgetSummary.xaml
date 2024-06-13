@@ -358,7 +358,14 @@
                             <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
                         </Style>
                     </Flyout.FlyoutPresenterStyle>
-                    <local:WidgetPanel x:Name="widgetPanel" MinWidth="200"/>
+                    <Grid x:Name="flyoutContent">
+                        <local:WidgetPanel x:Name="widgetPanel" MinWidth="200" Visibility="{x:Bind ViewModel.WidgetSettings.IsOpen, Converter={StaticResource BooleanToVisibilityInvertedConverter}}"/>
+                        <local:SettingsPanel DataContext="{x:Bind ViewModel.WidgetSettings}"
+                                             MinWidth="300"
+                                             MaxWidth="760"
+                                             ParentFlyout="{x:Bind flyout}"
+                                             Visibility="{x:Bind ViewModel.WidgetSettings.IsOpen}"/>
+                    </Grid>
                 </controls:CustomizedFlyout>
             </FlyoutBase.AttachedFlyout>
         </ToggleButton>

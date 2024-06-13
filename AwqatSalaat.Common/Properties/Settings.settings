@@ -62,5 +62,11 @@
     <Setting Name="NotificationDistanceElapsed" Type="System.Byte" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="NotificationSoundFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Sounds\birds_chirping.mp3</Value>
+    </Setting>
+    <Setting Name="EnableNotificationSound" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

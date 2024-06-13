@@ -331,4 +331,16 @@
   <data name="Data.Salaat.Shuruq" xml:space="preserve">
     <value>Shuruq</value>
   </data>
+  <data name="UI.Settings.NotificationSound" xml:space="preserve">
+    <value>Notification sound</value>
+  </data>
+  <data name="UI.Settings.NotificationSoundDescription" xml:space="preserve">
+    <value>Play sound when the notification is active</value>
+  </data>
+  <data name="UI.Settings.File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="UI.Settings.Browse" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
 </root>

@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Windows.Input;
+using WinRT.Interop;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -20,6 +21,11 @@ namespace AwqatSalaat.WinUI
 
         public static event Action Quitting;
 
+#if DEBUG
+        public static IntPtr MainHandle { get; private set; }
+#else
+        public static IntPtr MainHandle => TaskBarManager.CurrentWidgetHandle;
+#endif
         public static ICommand Quit { get; }
 
         static App()
@@ -124,12 +130,13 @@ namespace AwqatSalaat.WinUI
         /// Invoked when the application is launched.
         /// </summary>
         /// <param name="args">Details about the launch request and process.</param>
-        protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+        protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
 #if DEBUG
             m_window = new MainWindow();
             m_window.Activate();
             m_window.Closed += (_, _) => QuitExecute();
+            MainHandle = WindowNative.GetWindowHandle(m_window);
 #endif
 
             var dispatcher = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();

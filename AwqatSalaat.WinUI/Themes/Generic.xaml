@@ -142,6 +142,7 @@
     </Style>
 
     <Style TargetType="controls:SettingsItem" x:Key="DefaultSettingsItemStyle">
+        <Setter Property="IsTabStop" Value="False"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:SettingsItem">

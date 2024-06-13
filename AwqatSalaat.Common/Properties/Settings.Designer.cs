@@ -262,5 +262,29 @@ namespace AwqatSalaat.Properties {
                 this["NotificationDistanceElapsed"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Sounds\\birds_chirping.mp3")]
+        public string NotificationSoundFile {
+            get {
+                return ((string)(this["NotificationSoundFile"]));
+            }
+            set {
+                this["NotificationSoundFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableNotificationSound {
+            get {
+                return ((bool)(this["EnableNotificationSound"]));
+            }
+            set {
+                this["EnableNotificationSound"] = value;
+            }
+        }
     }
 }

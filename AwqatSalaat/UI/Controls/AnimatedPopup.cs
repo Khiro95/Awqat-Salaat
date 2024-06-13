@@ -221,6 +221,7 @@ namespace AwqatSalaat.UI.Controls
         private HwndSource hwndSource;
         private AnimationContext animationCtx;
         private RelativePlacement relativePlacement;
+        private bool isTopMost = true;
         private bool isClosingAnimationRunning;
 
         protected HwndSource HwndSource => hwndSource;
@@ -236,6 +237,7 @@ namespace AwqatSalaat.UI.Controls
         public virtual bool AnimateOpacityOnClosing { get; } = true;
         public virtual bool AnimatePositionOnClosing { get; } = true;
         public bool UseNativeAnimation { get; set; } = true;
+        public bool IsTopMost { get => isTopMost; set => SetIsTopMost(value); }
 
         public AnimatedPopup() : base()
         {
@@ -263,6 +265,11 @@ namespace AwqatSalaat.UI.Controls
         protected sealed override void OnOpened(EventArgs e)
         {
             hwndSource = (HwndSource)HwndSource.FromVisual(this.Child);
+
+            if (!isTopMost)
+            {
+                User32.SetWindowPos(Handle, User32.HWND_TOP, 0, 0, 0, 0, SWP.SWP_NOSIZE | SWP.SWP_NOMOVE | SWP.SWP_NOREDRAW);
+            }
 
             hwndSource.AddHook(CustomWndProc);
 
@@ -607,6 +614,22 @@ namespace AwqatSalaat.UI.Controls
             else
             {
                 return RelativePlacement.Left;
+            }
+        }
+
+        private void SetIsTopMost(bool isTopMost)
+        {
+            if (this.isTopMost == isTopMost)
+            {
+                return;
+            }
+
+            this.isTopMost = isTopMost;
+
+            if (IsOpen)
+            {
+                IntPtr hwndPlace = isTopMost ? User32.HWND_TOPMOST : User32.HWND_TOP;
+                User32.SetWindowPos(Handle, hwndPlace, 0, 0, 0, 0, SWP.SWP_NOSIZE | SWP.SWP_NOMOVE | SWP.SWP_NOREDRAW);
             }
         }
 

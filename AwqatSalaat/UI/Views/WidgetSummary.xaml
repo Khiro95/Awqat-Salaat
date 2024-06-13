@@ -322,10 +322,24 @@
             x:Name="popup"
             AllowsTransparency="True"
             StaysOpen="False"
-            d:IsOpen="True" IsOpen="{Binding ElementName=toggle, Path=IsChecked, Mode=TwoWay}"
+            IsOpen="{Binding ElementName=toggle, Path=IsChecked, Mode=TwoWay}"
             PopupAnimation="Fade"
             Placement="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WidgetSummary}, Path=PanelPlacement}">
-            <local:WidgetPanel Background="#01000000" MinWidth="200" MaxHeight="700" FontSize="14" Foreground="{DynamicResource ThemeColors.TextPrimaryBrush}"/>
+            <Grid Background="#01000000" MaxHeight="700" TextElement.FontSize="14" TextElement.Foreground="{DynamicResource ThemeColors.TextPrimaryBrush}">
+                <local:WidgetPanel MinWidth="200" Visibility="{Binding WidgetSettings.IsOpen, Converter={StaticResource BoolVisInvConverter}}"/>
+                <Grid DataContext="{Binding WidgetSettings}" Visibility="{Binding IsOpen, Converter={StaticResource BoolVisConverter}}" MinWidth="300" MaxWidth="760" Margin="0,8,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <local:SettingsPanel Grid.RowSpan="2" ParentPopup="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=controls:AcrylicPopup}}"/>
+                    <TextBlock Text="{mk:L11n UI.Panel.Settings}" Foreground="{DynamicResource ThemeColors.TextSecondaryBrush}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="8,0,0,0"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,8,0">
+                        <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE711;" Command="{Binding Cancel}" ToolTip="{mk:L11n UI.Settings.Cancel}"/>
+                        <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE8FB;" Command="{Binding Save}" ToolTip="{mk:L11n UI.Settings.Confirm}"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
         </controls:AcrylicPopup>
     </Grid>
 </UserControl>

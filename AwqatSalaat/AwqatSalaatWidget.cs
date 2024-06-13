@@ -68,6 +68,11 @@ namespace AwqatSalaat
                 : System.Windows.Controls.Orientation.Horizontal;
         }
 
+        protected override void DeskbandOnClosed()
+        {
+            HwndSource.Dispose();
+        }
+
         private void UiElement_DisplayModeChanged(DisplayMode displayMode)
         {
             int width;

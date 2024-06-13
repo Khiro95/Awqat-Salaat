@@ -18,6 +18,7 @@ namespace AwqatSalaat.WinUI
         private static PopupMenuItem repositionItem;
         private static PopupMenuItem quitItem;
 
+        public static IntPtr CurrentWidgetHandle => taskBarWidget?.Handle ?? throw new InvalidOperationException("The taskbar widget is missing.");
         public static ICommand ShowWidget { get; }
         public static ICommand HideWidget { get; }
         public static ICommand RepositionWidget { get; }

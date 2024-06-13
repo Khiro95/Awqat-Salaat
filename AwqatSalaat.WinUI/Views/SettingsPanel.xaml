@@ -164,6 +164,18 @@
                                    Maximum="30"
                                    HorizontalAlignment="Left"/>
                         </ctrl:SettingsItem>
+                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.NotificationSound}" Description="{mk:L11n Key=UI.Settings.NotificationSoundDescription}">
+                            <StackPanel>
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.EnableNotificationSound}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                                <ContentControl Margin="8,8,0,0" HorizontalContentAlignment="Stretch" IsEnabled="{x:Bind ViewModel.Settings.EnableNotificationSound}" IsTabStop="False">
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <TextBlock Text="{mk:L11n Key=UI.Settings.File}" VerticalAlignment="Center"/>
+                                        <TextBox Text="{x:Bind ViewModel.Settings.NotificationSoundFile, UpdateSourceTrigger=PropertyChanged}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1"/>
+                                        <Button Content="{mk:L11n Key=UI.Settings.Browse}" Click="BrowseSound_Click" VerticalAlignment="Center" Grid.Column="2"/>
+                                    </Grid>
+                                </ContentControl>
+                            </StackPanel>
+                        </ctrl:SettingsItem>
                     </StackPanel>
                     <StackPanel Visibility="{x:Bind serviceTab.IsSelected, Mode=OneWay}">
                         <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ServiceProvider}" Description="{mk:L11n Key=UI.Settings.ServiceProviderDescription}">
