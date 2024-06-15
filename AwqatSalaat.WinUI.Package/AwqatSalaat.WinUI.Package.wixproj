@@ -1,35 +1,66 @@
 ﻿<Project Sdk="WixToolset.Sdk/4.0.3" InitialTargets="HarvestAppFiles">
-  <PropertyGroup>
-    <AwqatSalaatProject>..\AwqatSalaat.WinUI\AwqatSalaat.WinUI.csproj</AwqatSalaatProject>
-    <EnableProjectHarvesting>false</EnableProjectHarvesting>
-    <HarvestDirectorySuppressUniqueIds>true</HarvestDirectorySuppressUniqueIds>
-    <HarvestDirectoryTransforms>..\AwqatSalaat.Package\RemovePdbTransform.xslt</HarvestDirectoryTransforms>
-    <OutputName>AwqatSalaat.WinUI_$(Configuration)-$(Platform)</OutputName>
-  </PropertyGroup>
-  <Target Name="HarvestAppFiles">
     <PropertyGroup>
-      <ProjectPublishDir>$(ProjectDir)$(IntermediateOutputPath)publish</ProjectPublishDir>
+        <AwqatSalaatProject>..\AwqatSalaat.WinUI\AwqatSalaat.WinUI.csproj</AwqatSalaatProject>
+        <EnableProjectHarvesting>false</EnableProjectHarvesting>
+        <HarvestDirectorySuppressUniqueIds>true</HarvestDirectorySuppressUniqueIds>
+        <HarvestDirectoryTransforms>..\AwqatSalaat.Package\RemovePdbTransform.xslt</HarvestDirectoryTransforms>
     </PropertyGroup>
-    <!-- This task allow us to publish the project in order to get the files needed for deployment -->
-    <MSBuild Projects="$(AwqatSalaatProject)" Targets="Publish" Properties="Platform=$(Platform);PublishDir=$(ProjectPublishDir)" />
-    <Message Text="Harvesting files in: $(ProjectPublishDir)" Importance="high" />
+    <UsingTask TaskName="GetVersionString" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+        <ParameterGroup>
+            <AssemblyPath ParameterType="System.String" Required="true" />
+            <VersionString ParameterType="System.String" Output="true" />
+        </ParameterGroup>
+        <Task>
+            <Using Namespace="System.Diagnostics" />
+            <Code Type="Fragment" Language="cs">
+                <![CDATA[
+                Log.LogMessage(MessageImportance.High, "Getting version of assembly at: " + this.AssemblyPath);
+                
+                Version v = Version.Parse(FileVersionInfo.GetVersionInfo(this.AssemblyPath).FileVersion);
+                
+                this.VersionString = v.ToString(3);
+                ]]>
+            </Code>
+        </Task>
+    </UsingTask>
+    <Target Name="HarvestAppFiles">
+        <!-- This task allow us to get the directory and the full path of the compiled dll -->
+        <MSBuild Projects="$(AwqatSalaatProject)" Targets="GetTargetPath" Properties="Platform=$(Platform)">
+            <Output TaskParameter="TargetOutputs" ItemName="DllOutput" />
+        </MSBuild>
+
+        <!-- This task allow us to get the version of the compiled dll -->
+        <GetVersionString AssemblyPath="%(DllOutput.FullPath)">
+            <Output TaskParameter="VersionString" PropertyName="WidgetVersion" />
+        </GetVersionString>
+        <Message Text="Version: $(WidgetVersion)" Importance="high" />
+
+        <PropertyGroup>
+            <ProjectPublishDir>$(ProjectDir)$(IntermediateOutputPath)publish</ProjectPublishDir>
+            <TargetFileName>AwqatSalaat.WinUI_$(WidgetVersion)_$(Configuration)-$(Platform).$(TargetExt)</TargetFileName>
+        </PropertyGroup>
+        
+        <!-- This task allow us to publish the project in order to get the files needed for deployment -->
+        <MSBuild Projects="$(AwqatSalaatProject)" Targets="Publish" Properties="Platform=$(Platform);PublishDir=$(ProjectPublishDir)"/>
+        
+        <Message Text="Harvesting files in: $(ProjectPublishDir)" Importance="high" />
+        <ItemGroup>
+            <HarvestDirectory Include="$(ProjectPublishDir)">
+                <ComponentGroupName>AwqatSalaat.WinUI.Components</ComponentGroupName>
+                <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
+                <PreprocessorVariable>AwqatSalaat.WinUI.TargetDir</PreprocessorVariable>
+                <SuppressCom>true</SuppressCom>
+                <SuppressRegistry>true</SuppressRegistry>
+                <SuppressRootDirectory>true</SuppressRootDirectory>
+            </HarvestDirectory>
+        </ItemGroup>
+    </Target>
     <ItemGroup>
-      <HarvestDirectory Include="$(ProjectPublishDir)">
-        <ComponentGroupName>AwqatSalaat.WinUI.Components</ComponentGroupName>
-        <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
-        <PreprocessorVariable>AwqatSalaat.WinUI.TargetDir</PreprocessorVariable>
-        <SuppressCom>true</SuppressCom>
-        <SuppressRegistry>true</SuppressRegistry>
-        <SuppressRootDirectory>true</SuppressRootDirectory>
-      </HarvestDirectory>
+        <PackageReference Include="WixToolset.Heat" Version="4.0.3" />
+        <PackageReference Include="WixToolset.UI.wixext" Version="4.0.3" />
+        <PackageReference Include="WixToolset.Util.wixext" Version="4.0.5" />
     </ItemGroup>
-  </Target>
-  <ItemGroup>
-    <PackageReference Include="WixToolset.Heat" Version="4.0.3" />
-    <PackageReference Include="WixToolset.UI.wixext" Version="4.0.3" />
-    <PackageReference Include="WixToolset.Util.wixext" Version="4.0.5" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="$(AwqatSalaatProject)" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="$(AwqatSalaatProject)" />
+    </ItemGroup>
 </Project>

@@ -4,13 +4,41 @@
         <EnableProjectHarvesting>false</EnableProjectHarvesting>
         <HarvestDirectorySuppressUniqueIds>true</HarvestDirectorySuppressUniqueIds>
         <HarvestDirectoryTransforms>RemovePdbTransform.xslt</HarvestDirectoryTransforms>
-        <OutputName>AwqatSalaat_$(Configuration)-$(Platform)</OutputName>
     </PropertyGroup>
+    <UsingTask TaskName="GetVersionString" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+        <ParameterGroup>
+            <AssemblyPath ParameterType="System.String" Required="true" />
+            <VersionString ParameterType="System.String" Output="true" />
+        </ParameterGroup>
+        <Task>
+            <Using Namespace="System.Diagnostics" />
+            <Code Type="Fragment" Language="cs">
+                <![CDATA[
+                Log.LogMessage(MessageImportance.High, "Getting version of assembly at: " + this.AssemblyPath);
+                
+                Version v = Version.Parse(FileVersionInfo.GetVersionInfo(this.AssemblyPath).FileVersion);
+                
+                this.VersionString = v.ToString(3);
+                ]]>
+            </Code>
+        </Task>
+    </UsingTask>
     <Target Name="HarvestAppFiles">
         <!-- This task allow us to get the directory and the full path of the compiled dll -->
         <MSBuild Projects="$(AwqatSalaatProject)" Targets="GetTargetPath" Properties="Platform=AnyCPU">
             <Output TaskParameter="TargetOutputs" ItemName="DllOutput" />
         </MSBuild>
+
+        <!-- This task allow us to get the version of the compiled dll -->
+        <GetVersionString AssemblyPath="%(DllOutput.FullPath)">
+            <Output TaskParameter="VersionString" PropertyName="WidgetVersion" />
+        </GetVersionString>
+        <Message Text="Version: $(WidgetVersion)" Importance="high" />
+        
+        <PropertyGroup>
+            <TargetFileName>AwqatSalaat_$(WidgetVersion)_$(Configuration)-$(Platform).$(TargetExt)</TargetFileName>
+        </PropertyGroup>
+        
         <Message Text="Harvesting files in: %(DllOutput.RelativeDir)" Importance="high" />
         <ItemGroup>
             <HarvestDirectory Include="%(DllOutput.RelativeDir)">
