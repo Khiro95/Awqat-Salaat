@@ -1,4 +1,5 @@
 ﻿using Microsoft.UI.Dispatching;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -20,6 +21,21 @@ namespace AwqatSalaat.WinUI.Controls
             this.Opened += CustomizedFlyout_Opened;
             //this.Closing += CustomizedFlyout_Closing;
             this.Closed += CustomizedFlyout_Closed;
+        }
+        
+        protected override Control CreatePresenter()
+        {
+            var presenter = base.CreatePresenter();
+
+            var displayArea = DisplayArea.GetFromWindowId(XamlRoot.ContentIslandEnvironment.AppWindowId, DisplayAreaFallback.Primary);
+            int maxPresenterHeight = displayArea.WorkArea.Height - 8;
+
+            if (presenter.MaxHeight > maxPresenterHeight)
+            {
+                presenter.MaxHeight = maxPresenterHeight;
+            }
+
+            return presenter;
         }
 
         private void ShowAgain()
