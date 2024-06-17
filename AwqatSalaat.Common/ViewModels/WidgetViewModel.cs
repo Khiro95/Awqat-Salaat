@@ -147,7 +147,7 @@ namespace AwqatSalaat.ViewModels
                 {
                     OnNearNotificationStarted();
                 }
-                else if (prayerTime.State == PrayerTimeState.Next || prayerTime.State == PrayerTimeState.Entered)
+                else if (prayerTime.State == PrayerTimeState.Next || prayerTime.State == PrayerTimeState.EnteredRecently || prayerTime.State == PrayerTimeState.Entered)
                 {
                     OnNearNotificationStopped();
                 }
