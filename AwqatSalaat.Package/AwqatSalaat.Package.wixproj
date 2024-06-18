@@ -36,7 +36,7 @@
         <Message Text="Version: $(WidgetVersion)" Importance="high" />
         
         <PropertyGroup>
-            <TargetFileName>AwqatSalaat_$(WidgetVersion)_$(Configuration)-$(Platform).$(TargetExt)</TargetFileName>
+            <TargetFileName>AwqatSalaat_$(WidgetVersion)_$(Configuration)-$(Platform)$(TargetExt)</TargetFileName>
         </PropertyGroup>
         
         <Message Text="Harvesting files in: %(DllOutput.RelativeDir)" Importance="high" />

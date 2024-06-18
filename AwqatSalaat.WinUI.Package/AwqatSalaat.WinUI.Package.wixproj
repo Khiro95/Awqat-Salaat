@@ -37,7 +37,7 @@
 
         <PropertyGroup>
             <ProjectPublishDir>$(ProjectDir)$(IntermediateOutputPath)publish</ProjectPublishDir>
-            <TargetFileName>AwqatSalaat.WinUI_$(WidgetVersion)_$(Configuration)-$(Platform).$(TargetExt)</TargetFileName>
+            <TargetFileName>AwqatSalaat.WinUI_$(WidgetVersion)_$(Configuration)-$(Platform)$(TargetExt)</TargetFileName>
         </PropertyGroup>
         
         <!-- This task allow us to publish the project in order to get the files needed for deployment -->
