@@ -28,11 +28,17 @@ namespace AwqatSalaat.WinUI.Controls
             var presenter = base.CreatePresenter();
 
             var displayArea = DisplayArea.GetFromWindowId(XamlRoot.ContentIslandEnvironment.AppWindowId, DisplayAreaFallback.Primary);
-            int maxPresenterHeight = displayArea.WorkArea.Height - 8;
+            double maxPresenterHeight = displayArea.WorkArea.Height / XamlRoot.RasterizationScale - 8;
+            double maxPresenterWidth = displayArea.WorkArea.Width / XamlRoot.RasterizationScale - 4;
 
             if (presenter.MaxHeight > maxPresenterHeight)
             {
                 presenter.MaxHeight = maxPresenterHeight;
+            }
+
+            if (presenter.MaxWidth > maxPresenterWidth)
+            {
+                presenter.MaxWidth = maxPresenterWidth;
             }
 
             return presenter;
