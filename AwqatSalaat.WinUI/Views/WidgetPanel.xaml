@@ -28,7 +28,7 @@
         <Grid ColumnDefinitions="*,Auto" Margin="8">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition MinHeight="275"/>
+                <RowDefinition MinHeight="294"/>
             </Grid.RowDefinitions>
             <TextBlock Text="{mk:L11n Key=Data.AppName}" VerticalAlignment="Center"/>
             <CommandBar x:Name="commandBar" Grid.Column="1" OverflowButtonVisibility="Collapsed" Padding="0" Margin="-8">
