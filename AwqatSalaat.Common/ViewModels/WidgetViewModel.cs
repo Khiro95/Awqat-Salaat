@@ -122,9 +122,13 @@ namespace AwqatSalaat.ViewModels
         {
             PrayerTimeViewModel prayerTime = (PrayerTimeViewModel)sender;
 
-            if (prayerTime.Key == nameof(PrayerTimes.Isha))
+            // time jumps happen when PC enter sleep/hibernate mode then wakeup after hours
+            bool timeJumped = displayedDate != TimeStamp.Date;
+            var nextDate = timeJumped ? TimeStamp.Date : TimeStamp.NextDate;
+
+            if (prayerTime.Key == nameof(PrayerTimes.Isha) || timeJumped)
             {
-                DisplayedDate = TimeStamp.NextDate;
+                DisplayedDate = nextDate;
 
                 if (!Update())
                 {
@@ -214,6 +218,27 @@ namespace AwqatSalaat.ViewModels
                 if (displayedTime.State == PrayerTimeState.Near)
                 {
                     OnNearNotificationStarted();
+                }
+            }
+
+            FixTimeJumpSideEffect();
+        }
+
+        private void FixTimeJumpSideEffect()
+        {
+            var needFix = Items.Where(i => i.IsEntered && i.State != PrayerTimeState.Entered && i != displayedTime);
+
+            foreach (var item in needFix)
+            {
+                if (item.Key == nameof(PrayerTimes.Isha))
+                {
+                    // Isha time is special since it lead to changing the date and updating all the times
+                    TimeEnteredNotificationDone(item, EventArgs.Empty);
+                }
+                else
+                {
+                    // set IsNext to false to make the item update its state
+                    item.IsNext = false;
                 }
             }
         }
