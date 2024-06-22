@@ -9,6 +9,11 @@ namespace AwqatSalaat.Interop
 
     public static class User32
     {
+        public static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
+        public static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        public static readonly IntPtr HWND_TOP = new IntPtr(0);
+        public static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
+
         [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern int MessageBox(IntPtr HWND, string lpText, string lpCaption, uint uType);
         public static int MessageBox(IntPtr HWND, string lpText, string lpCaption, MessageBoxButtons buttons)
@@ -36,6 +41,9 @@ namespace AwqatSalaat.Interop
 
         [DllImport("user32.dll")]
         public static extern ushort RegisterClassEx([In] ref WNDCLASSEX lpwcx);
+
+        [DllImport("user32.dll")]
+        public static extern bool UnregisterClass([In] string lpClassName, [In, Optional] IntPtr hInstance);
 
         [DllImport("user32.dll")]
         public static extern IntPtr SetParent([In] IntPtr hWndChild, [In] IntPtr hWndNewParent);
@@ -74,6 +82,12 @@ namespace AwqatSalaat.Interop
 
         [DllImport("user32.dll", CharSet = CharSet.Ansi)]
         public static extern int GetClassName(IntPtr hwnd, [Out] StringBuilder lpClassName, int nMaxCount);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr GetProp(IntPtr hWnd, string lpString);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetWindowPos([In] IntPtr hWnd, [In, Optional] IntPtr hWndInsertAfter, [In] int X, [In] int Y, [In] int cx, [In] int cy, [In] SWP uFlags);
     }
 
     public static class Dwmapi
@@ -158,6 +172,26 @@ namespace AwqatSalaat.Interop
         MB_ICONERROR = MB_ICONHAND,
         MB_ICONINFORMATION = MB_ICONASTERISK,
         MB_ICONSTOP = MB_ICONHAND,
+    }
+
+    [Flags]
+    public enum SWP : uint
+    {
+        SWP_NOSIZE = 0x0001,
+        SWP_NOMOVE = 0x0002,
+        SWP_NOZORDER = 0x0004,
+        SWP_NOREDRAW = 0x0008,
+        SWP_NOACTIVATE = 0x0010,
+        SWP_DRAWFRAME = 0x0020,
+        SWP_FRAMECHANGED = 0x0020,
+        SWP_SHOWWINDOW = 0x0040,
+        SWP_HIDEWINDOW = 0x0080,
+        SWP_NOCOPYBITS = 0x0100,
+        SWP_NOOWNERZORDER = 0x0200,
+        SWP_NOREPOSITION = 0x0200,
+        SWP_NOSENDCHANGING = 0x0400,
+        SWP_DEFERERASE = 0x2000,
+        SWP_ASYNCWINDOWPOS = 0x4000,
     }
 
     public enum GetAncestorFlags

@@ -333,4 +333,34 @@
   <data name="UI.About.Contact" xml:space="preserve">
     <value>اتصال</value>
   </data>
+  <data name="UI.Settings.EnableCompactMode" xml:space="preserve">
+    <value>الوضع المضغوط</value>
+  </data>
+  <data name="UI.Settings.EnableCompactModeDescription" xml:space="preserve">
+    <value>جعل الأداة أصغر وتحجز مساحة أقل</value>
+  </data>
+  <data name="UI.Summary.Since" xml:space="preserve">
+    <value>منذ</value>
+  </data>
+  <data name="UI.Settings.ElapsedPeriod" xml:space="preserve">
+    <value>فترة الوقت المنقضي</value>
+  </data>
+  <data name="UI.Settings.ElapsedPeriodDescription" xml:space="preserve">
+    <value>عدد الدقائق التي يتم خلالها تشغيل اشعار بعد دخول الوقت. القيمة 0 تعني تعطيل الاشعار</value>
+  </data>
+  <data name="Data.Salaat.Shuruq" xml:space="preserve">
+    <value>الشروق</value>
+  </data>
+  <data name="UI.Settings.NotificationSound" xml:space="preserve">
+    <value>صوت الاشعار</value>
+  </data>
+  <data name="UI.Settings.NotificationSoundDescription" xml:space="preserve">
+    <value>تشغيل صوت عندما يكون الاشعار نشطا</value>
+  </data>
+  <data name="UI.Settings.File" xml:space="preserve">
+    <value>الملف</value>
+  </data>
+  <data name="UI.Settings.Browse" xml:space="preserve">
+    <value>استعراض...</value>
+  </data>
 </root>

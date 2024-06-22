@@ -1,3 +1,14 @@
+### v3.2
+
+- Add **Compact mode**.
+- Show Shuruq time.
+- Add option for showing elapsed time.
+- Add option for playing sound during notification period.
+- Make widget's pane on the taskbar display the texts correctly.
+- Improve widget positioning. (WinUI only)
+- Fix the issue of time jumps when Windows wake up from sleep/hibernation.
+- Minor bug-fixes.
+
 ### v3.1
 
 - Add the option of selecting juristic school for Asr prayer time.

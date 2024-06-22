@@ -1,15 +1,26 @@
 ﻿using AwqatSalaat.Services.AlAdhan;
 using AwqatSalaat.Services.IslamicFinder;
 using AwqatSalaat.Services.Methods;
+using System;
 using System.ComponentModel;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 
 namespace AwqatSalaat.Properties
 {
     public partial class Settings
     {
+        private static readonly string s_assemblyDirectory;
+
         private CalculationMethod _calculationMethod;
+        private string _notificationSoundFilePath;
+
+        static Settings()
+        {
+            var assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            s_assemblyDirectory = Path.GetDirectoryName(assemblyPath);
+        }
 
         public CalculationMethod CalculationMethod
         {
@@ -29,6 +40,19 @@ namespace AwqatSalaat.Properties
             }
         }
 
+        public string NotificationSoundFilePath
+        {
+            get => _notificationSoundFilePath;
+            private set
+            {
+                if (!string.Equals(_notificationSoundFilePath, value, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    _notificationSoundFilePath = value;
+                    base.OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(NotificationSoundFilePath)));
+                }
+            }
+        }
+
         protected override void OnSettingChanging(object sender, SettingChangingEventArgs e)
         {
             e.Cancel = object.Equals(this[e.SettingName], e.NewValue);
@@ -43,6 +67,10 @@ namespace AwqatSalaat.Properties
             if (e.PropertyName == nameof(MethodString) && _calculationMethod?.Id != MethodString)
             {
                 CalculationMethod = CalculationMethod.AvailableMethods.SingleOrDefault(m => m.Id == MethodString);
+            }
+            else if (e.PropertyName == nameof(NotificationSoundFile) || e.PropertyName == nameof(EnableNotificationSound))
+            {
+                UpdateSoundFilePath();
             }
         }
 
@@ -75,6 +103,8 @@ namespace AwqatSalaat.Properties
                 CountryCode = CountryCode.ToUpper();
             }
 
+            UpdateSoundFilePath();
+
             base.OnSettingsLoaded(sender, e);
         }
 
@@ -106,6 +136,39 @@ namespace AwqatSalaat.Properties
 
             var calculationMethod = (CalculationMethod)method;
             MethodString = calculationMethod.Id;
+        }
+
+        private void UpdateSoundFilePath()
+        {
+            if (!EnableNotificationSound || string.IsNullOrEmpty(NotificationSoundFile))
+            {
+                NotificationSoundFilePath = null;
+            }
+            else
+            {
+                try
+                {
+                    string path = null;
+
+                    if (Path.IsPathRooted(NotificationSoundFile))
+                    {
+                        // Use Path.GetFullPath to make sure we always have a drive letter
+                        path = Path.GetFullPath(NotificationSoundFile);
+                    }
+                    else
+                    {
+                        path = Path.Combine(s_assemblyDirectory, NotificationSoundFile);
+                    }
+
+                    NotificationSoundFilePath = File.Exists(path) ? path : null;
+                }
+                catch (Exception ex)
+                {
+#if DEBUG
+                    throw;
+#endif
+                }
+            }
         }
     }
 }

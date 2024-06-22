@@ -3,7 +3,6 @@
     x:Class="AwqatSalaat.WinUI.Views.WidgetPanel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:AwqatSalaat.WinUI.Views"
     xmlns:converters="using:AwqatSalaat.WinUI.Converters"
     xmlns:controls="using:AwqatSalaat.WinUI.Controls"
     xmlns:mk="using:AwqatSalaat.WinUI.Markup"
@@ -25,11 +24,11 @@
     <d:UserControl.DataContext>
         <vm:WidgetViewModel />
     </d:UserControl.DataContext>
-    <StackPanel>
-        <Grid ColumnDefinitions="*,Auto" Visibility="{x:Bind ViewModel.WidgetSettings.IsOpen, Converter={StaticResource BooleanToVisibilityInvertedConverter}}" Margin="8">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid ColumnDefinitions="*,Auto" Margin="8">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition MinHeight="275"/>
+                <RowDefinition MinHeight="294"/>
             </Grid.RowDefinitions>
             <TextBlock Text="{mk:L11n Key=Data.AppName}" VerticalAlignment="Center"/>
             <CommandBar x:Name="commandBar" Grid.Column="1" OverflowButtonVisibility="Collapsed" Padding="0" Margin="-8">
@@ -62,7 +61,7 @@
                         <Rectangle Height="1" Width="8" Fill="{ThemeResource ControlElevationBorderBrush}" Margin="8,5,8,3"/>
                         <TextBlock Text="{Binding Country}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
                     </StackPanel>
-                    <ItemsControl Background="DarkRed" ItemsSource="{Binding Items}" Grid.Row="2">
+                    <ItemsControl ItemsSource="{Binding Items}" Grid.Row="2">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:DataType="vm:PrayerTimeViewModel">
                                 <controls:PrayerTimeItem
@@ -95,9 +94,5 @@
                 <TextBlock Text="{x:Bind ViewModel.ErrorMessage}" TextAlignment="Center" TextWrapping="Wrap" Margin="8"/>
             </StackPanel>
         </Grid>
-        <local:SettingsPanel DataContext="{x:Bind ViewModel.WidgetSettings}"
-                             MinWidth="300"
-                             MaxWidth="760"
-                             Visibility="{x:Bind ViewModel.WidgetSettings.IsOpen}"/>
-    </StackPanel>
+    </ScrollViewer>
 </UserControl>

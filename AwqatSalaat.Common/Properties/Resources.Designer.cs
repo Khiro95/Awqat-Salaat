@@ -142,6 +142,15 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shuruq.
+        /// </summary>
+        public static string Data_Salaat_Shuruq {
+            get {
+                return ResourceManager.GetString("Data.Salaat.Shuruq", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contact.
         /// </summary>
         public static string UI_About_Contact {
@@ -268,6 +277,15 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse....
+        /// </summary>
+        public static string UI_Settings_Browse {
+            get {
+                return ResourceManager.GetString("UI.Settings.Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string UI_Settings_Cancel {
@@ -336,6 +354,51 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_CountryCodeDescription {
             get {
                 return ResourceManager.GetString("UI.Settings.CountryCodeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Elapsed time period.
+        /// </summary>
+        public static string UI_Settings_ElapsedPeriod {
+            get {
+                return ResourceManager.GetString("UI.Settings.ElapsedPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The amount of minutes for which a notification is run after the salaat time has entered. Value 0 disables the notification..
+        /// </summary>
+        public static string UI_Settings_ElapsedPeriodDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.ElapsedPeriodDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Compact mode.
+        /// </summary>
+        public static string UI_Settings_EnableCompactMode {
+            get {
+                return ResourceManager.GetString("UI.Settings.EnableCompactMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make the widget smaller and take less space.
+        /// </summary>
+        public static string UI_Settings_EnableCompactModeDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.EnableCompactModeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        public static string UI_Settings_File {
+            get {
+                return ResourceManager.GetString("UI.Settings.File", resourceCulture);
             }
         }
         
@@ -529,6 +592,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Notification sound.
+        /// </summary>
+        public static string UI_Settings_NotificationSound {
+            get {
+                return ResourceManager.GetString("UI.Settings.NotificationSound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play sound when the notification is active.
+        /// </summary>
+        public static string UI_Settings_NotificationSoundDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.NotificationSoundDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Powered by.
         /// </summary>
         public static string UI_Settings_PoweredBy {
@@ -547,7 +628,7 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The amount of minutes before the time of the next salaat at which notification start. Value 0 disables the notifications..
+        ///   Looks up a localized string similar to The amount of minutes before the time of the next salaat at which notification start. Value 0 disables the notification..
         /// </summary>
         public static string UI_Settings_ReminderOffsetDescription {
             get {
@@ -696,6 +777,15 @@ namespace AwqatSalaat.Properties {
         public static string UI_Summary_Refreshing {
             get {
                 return ResourceManager.GetString("UI.Summary.Refreshing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Since.
+        /// </summary>
+        public static string UI_Summary_Since {
+            get {
+                return ResourceManager.GetString("UI.Summary.Since", resourceCulture);
             }
         }
         

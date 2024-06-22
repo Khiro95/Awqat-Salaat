@@ -20,7 +20,11 @@ namespace AwqatSalaat.Services.IslamicFinder
 
                 foreach (var time in day.Value)
                 {
-                    if (time.Key != "Duha")
+                    if (time.Key == "Duha")
+                    {
+                        dayTimes.Add(nameof(PrayerTimes.Shuruq), ParseTimeToLocal(time.Value, date));
+                    }
+                    else
                     {
                         dayTimes.Add(time.Key, ParseTimeToLocal(time.Value, date));
                     }

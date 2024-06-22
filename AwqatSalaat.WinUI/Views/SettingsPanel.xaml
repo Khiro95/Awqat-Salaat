@@ -131,228 +131,251 @@
                 <NavigationViewItem x:Name="locationTab" Content="{mk:L11n Key=UI.Settings.Tabs.Location}"/>
                 <NavigationViewItem x:Name="aboutTab" Content="{mk:L11n Key=UI.Settings.Tabs.About}"/>
             </NavigationView.MenuItems>
-            <Grid Margin="8">
-                <StackPanel Visibility="{x:Bind generalTab.IsSelected, Mode=OneWay}">
-                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Language}" Description="{mk:L11n Key=UI.Settings.LanguageDescription}" Margin="0,8,0,0">
-                        <RadioButtons MaxColumns="2" Margin="0,-8,0,0" FlowDirection="LeftToRight" HorizontalAlignment="Left">
-                            <RadioButton Content="English" GroupName="Language" IsChecked="{x:Bind ViewModel.UseEnglish}"/>
-                            <RadioButton Content="العربية" GroupName="Language" IsChecked="{x:Bind ViewModel.UseArabic}" FlowDirection="RightToLeft"/>
-                        </RadioButtons>
-                    </ctrl:SettingsItem>
-                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartup}" Description="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartupDescription}">
-                        <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.LaunchOnWindowsStartup}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
-                    </ctrl:SettingsItem>
-                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowCountdown}" Description="{mk:L11n Key=UI.Settings.ShowCountdownDescription}">
-                        <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.ShowCountdown}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
-                    </ctrl:SettingsItem>
-                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowSeconds}" Description="{mk:L11n Key=UI.Settings.ShowSecondsDescription}" IsEnabled="{x:Bind ViewModel.Settings.ShowCountdown}">
-                        <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.ShowSeconds}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
-                    </ctrl:SettingsItem>
-                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ReminderOffset}" Description="{mk:L11n Key=UI.Settings.ReminderOffsetDescription}">
-                        <NumberBox SpinButtonPlacementMode="Inline"
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Grid Margin="8">
+                    <StackPanel Visibility="{x:Bind generalTab.IsSelected, Mode=OneWay}">
+                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Language}" Description="{mk:L11n Key=UI.Settings.LanguageDescription}" Margin="0,8,0,0">
+                            <RadioButtons MaxColumns="2" Margin="0,-8,0,0" FlowDirection="LeftToRight" HorizontalAlignment="Left">
+                                <RadioButton Content="English" GroupName="Language" IsChecked="{x:Bind ViewModel.UseEnglish}"/>
+                                <RadioButton Content="العربية" GroupName="Language" IsChecked="{x:Bind ViewModel.UseArabic}" FlowDirection="RightToLeft"/>
+                            </RadioButtons>
+                        </ctrl:SettingsItem>
+                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartup}" Description="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartupDescription}">
+                            <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.LaunchOnWindowsStartup}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                        </ctrl:SettingsItem>
+                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowCountdown}" Description="{mk:L11n Key=UI.Settings.ShowCountdownDescription}">
+                            <ToggleSwitch x:Name="countdownToggle" IsOn="{x:Bind ViewModel.Settings.ShowCountdown}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                        </ctrl:SettingsItem>
+                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowSeconds}" Description="{mk:L11n Key=UI.Settings.ShowSecondsDescription}" IsEnabled="{x:Bind ViewModel.Settings.ShowCountdown}">
+                            <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.ShowSeconds}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                        </ctrl:SettingsItem>
+                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.EnableCompactMode}" Description="{mk:L11n Key=UI.Settings.EnableCompactModeDescription}" IsEnabled="{x:Bind ViewModel.Settings.ShowCountdown}">
+                            <ToggleSwitch x:Name="compactModeToggle" IsOn="{x:Bind ViewModel.Settings.UseCompactMode}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                        </ctrl:SettingsItem>
+                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ReminderOffset}" Description="{mk:L11n Key=UI.Settings.ReminderOffsetDescription}">
+                            <NumberBox SpinButtonPlacementMode="Inline"
                                    Value="{x:Bind ViewModel.Settings.NotificationDistance}"
                                    Maximum="720"
                                    HorizontalAlignment="Left"/>
-                    </ctrl:SettingsItem>
-                </StackPanel>
-                <StackPanel Visibility="{x:Bind serviceTab.IsSelected, Mode=OneWay}">
-                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ServiceProvider}" Description="{mk:L11n Key=UI.Settings.ServiceProviderDescription}">
-                        <ComboBox PlaceholderText="Pick a service"
+                        </ctrl:SettingsItem>
+                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ElapsedPeriod}" Description="{mk:L11n Key=UI.Settings.ElapsedPeriodDescription}">
+                            <NumberBox SpinButtonPlacementMode="Inline"
+                                   Value="{x:Bind ViewModel.Settings.NotificationDistanceElapsed}"
+                                   Maximum="30"
+                                   HorizontalAlignment="Left"/>
+                        </ctrl:SettingsItem>
+                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.NotificationSound}" Description="{mk:L11n Key=UI.Settings.NotificationSoundDescription}">
+                            <StackPanel>
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.EnableNotificationSound}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                                <ContentControl Margin="8,8,0,0" HorizontalContentAlignment="Stretch" IsEnabled="{x:Bind ViewModel.Settings.EnableNotificationSound}" IsTabStop="False">
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <TextBlock Text="{mk:L11n Key=UI.Settings.File}" VerticalAlignment="Center"/>
+                                        <TextBox Text="{x:Bind ViewModel.Settings.NotificationSoundFile, UpdateSourceTrigger=PropertyChanged}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1"/>
+                                        <Button Content="{mk:L11n Key=UI.Settings.Browse}" Click="BrowseSound_Click" VerticalAlignment="Center" Grid.Column="2"/>
+                                    </Grid>
+                                </ContentControl>
+                            </StackPanel>
+                        </ctrl:SettingsItem>
+                    </StackPanel>
+                    <StackPanel Visibility="{x:Bind serviceTab.IsSelected, Mode=OneWay}">
+                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ServiceProvider}" Description="{mk:L11n Key=UI.Settings.ServiceProviderDescription}">
+                            <ComboBox PlaceholderText="Pick a service"
                                   ItemsSource="{mk:Enums Type=dt:PrayerTimesService}"
                                   SelectedItem="{Binding Settings.Service, Mode=TwoWay}"
                                   Width="150">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </ctrl:SettingsItem>
-                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.JuristicSchool}" Description="{mk:L11n Key=UI.Settings.JuristicSchoolDescription}">
-                        <ComboBox ItemsSource="{mk:Enums Type=dt:School}" SelectedItem="{Binding Settings.School, Mode=TwoWay}" Width="300">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.JuristicSchool.{0}'}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </ctrl:SettingsItem>
-                    <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Method}" Description="{mk:L11n Key=UI.Settings.MethodDescription}">
-                        <ComboBox PlaceholderText="Pick a method"
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </ctrl:SettingsItem>
+                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.JuristicSchool}" Description="{mk:L11n Key=UI.Settings.JuristicSchoolDescription}">
+                            <ComboBox ItemsSource="{mk:Enums Type=dt:School}" SelectedItem="{Binding Settings.School, Mode=TwoWay}" Width="300">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.JuristicSchool.{0}'}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </ctrl:SettingsItem>
+                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Method}" Description="{mk:L11n Key=UI.Settings.MethodDescription}">
+                            <ComboBox PlaceholderText="Pick a method"
                                   ItemsSource="{x:Bind methods:CalculationMethod.AvailableMethods, Mode=OneTime}"
                                   SelectedItem="{Binding Settings.CalculationMethod, Mode=TwoWay}"
                                   HorizontalAlignment="Stretch">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <ctrl:ComboBoxItemPresenter PopupItemTemplate="{StaticResource CalculationMethodTemplate}"
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <ctrl:ComboBoxItemPresenter PopupItemTemplate="{StaticResource CalculationMethodTemplate}"
                                                                 SelectedItemTemplate="{StaticResource CalculationMethodDisplayTemplate}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                    </ctrl:SettingsItem>
-                </StackPanel>
-                <StackPanel Visibility="{x:Bind locationTab.IsSelected, Mode=OneWay}">
-                    <RadioButton IsChecked="{x:Bind ViewModel.Locator.DetectByCountryCode}" GroupName="LocationMode" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
-                        <ctrl:SettingsItem Margin="0" Header="{mk:L11n Key=UI.Settings.LocationByCountryCode}" Description="{mk:L11n Key=UI.Settings.LocationByCountryCodeDescription}" IsEnabled="{x:Bind ViewModel.Locator.DetectByCountryCode, Mode=OneWay}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition Height="8"/>
-                                    <RowDefinition/>
-                                    <RowDefinition Height="8"/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="{mk:L11n Key=UI.Settings.CountryCode}"/>
-                                <ComboBox x:Name="countryComboBox"
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </ctrl:SettingsItem>
+                    </StackPanel>
+                    <StackPanel Visibility="{x:Bind locationTab.IsSelected, Mode=OneWay}">
+                        <RadioButton IsChecked="{x:Bind ViewModel.Locator.DetectByCountryCode}" GroupName="LocationMode" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                            <ctrl:SettingsItem Margin="0" Header="{mk:L11n Key=UI.Settings.LocationByCountryCode}" Description="{mk:L11n Key=UI.Settings.LocationByCountryCodeDescription}" IsEnabled="{x:Bind ViewModel.Locator.DetectByCountryCode, Mode=OneWay}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="8"/>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="8"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{mk:L11n Key=UI.Settings.CountryCode}"/>
+                                    <ComboBox x:Name="countryComboBox"
                                           ItemsSource="{x:Bind vm:WidgetSettingsViewModel.AvailableCountries, Mode=OneTime}"
                                           SelectedValuePath="Code"
                                           SelectedValue="{x:Bind ViewModel.Settings.CountryCode, Mode=TwoWay}"
                                           HorizontalAlignment="Stretch"
                                           FlowDirection="LeftToRight"
                                           Grid.Column="1">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding Code}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Width="24"/>
-                                                <TextBlock Text="{Binding Name}" Margin="8,0,0,0"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                                <TextBlock Text="{mk:L11n Key=UI.Settings.City}" Grid.Row="2"/>
-                                <TextBox Text="{x:Bind ViewModel.Settings.City, UpdateSourceTrigger=PropertyChanged}" Width="200" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
-                                <TextBlock Text="{mk:L11n Key=UI.Settings.ZipCode}" Grid.Row="4"/>
-                                <TextBox Text="{x:Bind ViewModel.Settings.ZipCode, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="1"/>
-                            </Grid>
-                        </ctrl:SettingsItem>
-                    </RadioButton>
-                    <RadioButton IsChecked="{x:Bind ViewModel.Locator.DetectByQuery}" GroupName="LocationMode" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="0,16,0,0">
-                        <ctrl:SettingsItem Margin="0" Header="{mk:L11n Key=UI.Settings.LocationByQuery}" Description="{mk:L11n Key=UI.Settings.LocationByQueryDescription}" IsEnabled="{x:Bind ViewModel.Locator.DetectByQuery, Mode=OneWay}">
-                            <AutoSuggestBox PlaceholderText="{mk:L11n Key=UI.Settings.LocationByQueryHint}"
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Code}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Width="24"/>
+                                                    <TextBlock Text="{Binding Name}" Margin="8,0,0,0"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <TextBlock Text="{mk:L11n Key=UI.Settings.City}" Grid.Row="2"/>
+                                    <TextBox Text="{x:Bind ViewModel.Settings.City, UpdateSourceTrigger=PropertyChanged}" Width="200" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
+                                    <TextBlock Text="{mk:L11n Key=UI.Settings.ZipCode}" Grid.Row="4"/>
+                                    <TextBox Text="{x:Bind ViewModel.Settings.ZipCode, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="1"/>
+                                </Grid>
+                            </ctrl:SettingsItem>
+                        </RadioButton>
+                        <RadioButton IsChecked="{x:Bind ViewModel.Locator.DetectByQuery}" GroupName="LocationMode" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="0,16,0,0">
+                            <ctrl:SettingsItem Margin="0" Header="{mk:L11n Key=UI.Settings.LocationByQuery}" Description="{mk:L11n Key=UI.Settings.LocationByQueryDescription}" IsEnabled="{x:Bind ViewModel.Locator.DetectByQuery, Mode=OneWay}">
+                                <AutoSuggestBox PlaceholderText="{mk:L11n Key=UI.Settings.LocationByQueryHint}"
                                             Text="{x:Bind ViewModel.Locator.SearchQuery}"
                                             DisplayMemberPath="DisplayName"
                                             AutoMaximizeSuggestionArea="True"
                                             UpdateTextOnSelect="False"
                                             SuggestionChosen="AutoSuggestBox_SuggestionChosen">
-                                <AutoSuggestBox.Description>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{mk:L11n Key=UI.Settings.PoweredBy}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" FontSize="12"/>
-                                        <TextBlock Margin="4,0,0,0" FontSize="12">
+                                    <AutoSuggestBox.Description>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{mk:L11n Key=UI.Settings.PoweredBy}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" FontSize="12"/>
+                                            <TextBlock Margin="4,0,0,0" FontSize="12">
                                             <Hyperlink NavigateUri="https://nominatim.org/" ToolTipService.ToolTip="https://nominatim.org/">Nominatim</Hyperlink>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </AutoSuggestBox.Description>
-                                <interactivity:Interaction.Behaviors>
-                                    <behaviors:AutoSuggestBoxExtended SuggestionsSource="{x:Bind ViewModel.Locator.Places, Mode=OneWay}"
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </AutoSuggestBox.Description>
+                                    <interactivity:Interaction.Behaviors>
+                                        <behaviors:AutoSuggestBoxExtended SuggestionsSource="{x:Bind ViewModel.Locator.Places, Mode=OneWay}"
                                                                       ShowCustomContent="{x:Bind ViewModel.Locator.HasQuery, Mode=OneWay}"
                                                                       HasError="{x:Bind ViewModel.Locator.HasError, Mode=OneWay}"
                                                                       IsSearching="{x:Bind ViewModel.Locator.IsBusy, Mode=OneWay}">
-                                        <behaviors:AutoSuggestBoxExtended.SearchingContent>
-                                            <Grid>
-                                                <TextBlock Text="{mk:L11n Key=UI.Settings.Searching}"
+                                            <behaviors:AutoSuggestBoxExtended.SearchingContent>
+                                                <Grid>
+                                                    <TextBlock Text="{mk:L11n Key=UI.Settings.Searching}"
                                                            VerticalAlignment="Center"
                                                            HorizontalAlignment="Center"/>
-                                                <ProgressBar IsIndeterminate="True" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Bottom"/>
-                                            </Grid>
-                                        </behaviors:AutoSuggestBoxExtended.SearchingContent>
-                                        <behaviors:AutoSuggestBoxExtended.NoResultContent>
-                                            <TextBlock Text="{mk:L11n Key=UI.Settings.NoResult}"
+                                                    <ProgressBar IsIndeterminate="True" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Bottom"/>
+                                                </Grid>
+                                            </behaviors:AutoSuggestBoxExtended.SearchingContent>
+                                            <behaviors:AutoSuggestBoxExtended.NoResultContent>
+                                                <TextBlock Text="{mk:L11n Key=UI.Settings.NoResult}"
                                                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
                                                        VerticalAlignment="Center"
                                                        HorizontalAlignment="Center"/>
-                                        </behaviors:AutoSuggestBoxExtended.NoResultContent>
-                                        <behaviors:AutoSuggestBoxExtended.ErrorContent>
-                                            <StackPanel>
-                                                <TextBlock Text="{mk:L11n Key=UI.Panel.Error}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
-                                                <TextBlock Text="{x:Bind ViewModel.Locator.Error, Mode=OneWay}" HorizontalAlignment="Center"/>
-                                            </StackPanel>
-                                        </behaviors:AutoSuggestBoxExtended.ErrorContent>
-                                    </behaviors:AutoSuggestBoxExtended>
-                                </interactivity:Interaction.Behaviors>
-                            </AutoSuggestBox>
-                        </ctrl:SettingsItem>
-                    </RadioButton>
-                    <RadioButton IsChecked="{x:Bind ViewModel.Locator.DetectByCoordinates}" GroupName="LocationMode" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="0,16,0,0">
-                        <ctrl:SettingsItem Margin="0" Header="{mk:L11n Key=UI.Settings.LocationByCoordinates}" Description="{mk:L11n Key=UI.Settings.LocationByCoordinatesDescription}" IsEnabled="{x:Bind ViewModel.Locator.DetectByCoordinates, Mode=OneWay}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"/>
-                                    <ColumnDefinition Width="150"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition Height="8"/>
-                                    <RowDefinition/>
-                                    <RowDefinition Height="8"/>
-                                    <RowDefinition MinHeight="48"/>
-                                </Grid.RowDefinitions>
-                                <TextBlock Text="{mk:L11n Key=UI.Settings.Latitude}"/>
-                                <TextBox Text="{x:Bind ViewModel.Settings.Latitude, Converter={StaticResource DecimalConverter}}" Grid.Column="1"/>
-                                <TextBlock Text="{mk:L11n Key=UI.Settings.Longitude}" Grid.Row="2"/>
-                                <TextBox Text="{x:Bind ViewModel.Settings.Longitude, Converter={StaticResource DecimalConverter}}" Grid.Column="1" Grid.Row="2"/>
-                                <Button Content="{mk:L11n Key=UI.Settings.Check}" Command="{x:Bind ViewModel.Locator.Check, Mode=OneWay}" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <Grid ColumnDefinitions="*,Auto"  Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Visibility="{x:Bind ViewModel.Locator.PendingCheck}" x:DefaultBindMode="OneWay">
-                                    <CommandBar OverflowButtonVisibility="Collapsed" Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
-                                        <AppBarButton Icon="Cancel" Width="32" IsCompact="True" Margin="0" Command="{x:Bind ViewModel.Locator.CancelCheck}" ToolTipService.ToolTip="{mk:L11n Key=UI.Settings.Cancel}" Visibility="{x:Bind ViewModel.Locator.PendingCheck}"/>
-                                        <AppBarButton Icon="Accept" Width="32" IsCompact="True" Margin="0" Command="{x:Bind ViewModel.Locator.ConfirmCheck}" ToolTipService.ToolTip="{mk:L11n Key=UI.Settings.Confirm}" Visibility="{x:Bind ViewModel.Locator.HasCheckResult}"/>
-                                    </CommandBar>
-                                    <Grid>
-                                        <TextBlock Text="{Binding Locator.PendingPlace.DisplayName}" VerticalAlignment="Center" MaxWidth="400" TextWrapping="Wrap"/>
-                                        <Grid Visibility="{x:Bind ViewModel.Locator.IsChecking, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
-                                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{x:Bind ViewModel.Locator.HasCheckResult, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
-                                                <TextBlock Text="{mk:L11n Key=UI.Panel.Error}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" Visibility="{x:Bind ViewModel.Locator.HasError}"/>
-                                                <TextBlock x:Name="checkStatusTextBlock" Text="{mk:L11n Key=UI.Settings.NoResult}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
-                                            </StackPanel>
-                                        </Grid>
-                                        <Grid Visibility="{x:Bind ViewModel.Locator.IsChecking}">
-                                            <TextBlock Text="{mk:L11n Key=UI.Settings.Checking}" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                            <ProgressBar IsIndeterminate="True" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Bottom"/>
+                                            </behaviors:AutoSuggestBoxExtended.NoResultContent>
+                                            <behaviors:AutoSuggestBoxExtended.ErrorContent>
+                                                <StackPanel>
+                                                    <TextBlock Text="{mk:L11n Key=UI.Panel.Error}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
+                                                    <TextBlock Text="{x:Bind ViewModel.Locator.Error, Mode=OneWay}" HorizontalAlignment="Center"/>
+                                                </StackPanel>
+                                            </behaviors:AutoSuggestBoxExtended.ErrorContent>
+                                        </behaviors:AutoSuggestBoxExtended>
+                                    </interactivity:Interaction.Behaviors>
+                                </AutoSuggestBox>
+                            </ctrl:SettingsItem>
+                        </RadioButton>
+                        <RadioButton IsChecked="{x:Bind ViewModel.Locator.DetectByCoordinates}" GroupName="LocationMode" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="0,16,0,0">
+                            <ctrl:SettingsItem Margin="0" Header="{mk:L11n Key=UI.Settings.LocationByCoordinates}" Description="{mk:L11n Key=UI.Settings.LocationByCoordinatesDescription}" IsEnabled="{x:Bind ViewModel.Locator.DetectByCoordinates, Mode=OneWay}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="8"/>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="8"/>
+                                        <RowDefinition MinHeight="48"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{mk:L11n Key=UI.Settings.Latitude}"/>
+                                    <TextBox Text="{x:Bind ViewModel.Settings.Latitude, Converter={StaticResource DecimalConverter}}" Grid.Column="1"/>
+                                    <TextBlock Text="{mk:L11n Key=UI.Settings.Longitude}" Grid.Row="2"/>
+                                    <TextBox Text="{x:Bind ViewModel.Settings.Longitude, Converter={StaticResource DecimalConverter}}" Grid.Column="1" Grid.Row="2"/>
+                                    <Button Content="{mk:L11n Key=UI.Settings.Check}" Command="{x:Bind ViewModel.Locator.Check, Mode=OneWay}" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    <Grid ColumnDefinitions="*,Auto"  Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Visibility="{x:Bind ViewModel.Locator.PendingCheck}" x:DefaultBindMode="OneWay">
+                                        <CommandBar OverflowButtonVisibility="Collapsed" Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
+                                            <AppBarButton Icon="Cancel" Width="32" IsCompact="True" Margin="0" Command="{x:Bind ViewModel.Locator.CancelCheck}" ToolTipService.ToolTip="{mk:L11n Key=UI.Settings.Cancel}" Visibility="{x:Bind ViewModel.Locator.PendingCheck}"/>
+                                            <AppBarButton Icon="Accept" Width="32" IsCompact="True" Margin="0" Command="{x:Bind ViewModel.Locator.ConfirmCheck}" ToolTipService.ToolTip="{mk:L11n Key=UI.Settings.Confirm}" Visibility="{x:Bind ViewModel.Locator.HasCheckResult}"/>
+                                        </CommandBar>
+                                        <Grid>
+                                            <TextBlock Text="{Binding Locator.PendingPlace.DisplayName}" VerticalAlignment="Center" MaxWidth="400" TextWrapping="Wrap"/>
+                                            <Grid Visibility="{x:Bind ViewModel.Locator.IsChecking, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
+                                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{x:Bind ViewModel.Locator.HasCheckResult, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
+                                                    <TextBlock Text="{mk:L11n Key=UI.Panel.Error}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" Visibility="{x:Bind ViewModel.Locator.HasError}"/>
+                                                    <TextBlock x:Name="checkStatusTextBlock" Text="{mk:L11n Key=UI.Settings.NoResult}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Grid>
+                                            <Grid Visibility="{x:Bind ViewModel.Locator.IsChecking}">
+                                                <TextBlock Text="{mk:L11n Key=UI.Settings.Checking}" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <ProgressBar IsIndeterminate="True" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Bottom"/>
+                                            </Grid>
                                         </Grid>
                                     </Grid>
                                 </Grid>
-                            </Grid>
-                        </ctrl:SettingsItem>
-                    </RadioButton>
-                </StackPanel>
-                <StackPanel Margin="16,8,16,16" MaxWidth="300" Visibility="{x:Bind aboutTab.IsSelected, Mode=OneWay}">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Image x:Name="icon" Margin="0,0,8,0"/>
-                        <TextBlock Text="{mk:L11n Key=Data.AppName}" FontSize="18" FontWeight="Medium" VerticalAlignment="Center"/>
-                        <TextBlock Text="WinUI" FontSize="18" FontWeight="Medium" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            </ctrl:SettingsItem>
+                        </RadioButton>
                     </StackPanel>
-                    <TextBlock x:Name="version" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
-                    <TextBlock x:Name="architecture" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" FlowDirection="LeftToRight"/>
-                    <TextBlock Text="{mk:L11n Key=Data.AppDescription}" TextWrapping="Wrap" TextAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,16,0,0"/>
-                    <Grid Margin="0,16,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock HorizontalAlignment="Center">
+                    <StackPanel Margin="16,8,16,16" MaxWidth="300" Visibility="{x:Bind aboutTab.IsSelected, Mode=OneWay}">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Image x:Name="icon" Margin="0,0,8,0"/>
+                            <TextBlock Text="{mk:L11n Key=Data.AppName}" FontSize="18" FontWeight="Medium" VerticalAlignment="Center"/>
+                            <TextBlock Text="WinUI" FontSize="18" FontWeight="Medium" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                        <TextBlock x:Name="version" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="architecture" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" FlowDirection="LeftToRight"/>
+                        <TextBlock Text="{mk:L11n Key=Data.AppDescription}" TextWrapping="Wrap" TextAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,16,0,0"/>
+                        <Grid Margin="0,16,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock HorizontalAlignment="Center">
                             <Hyperlink NavigateUri="https://github.com/Khiro95/Awqat-Salaat">
                                 <Run Text="{mk:L11n Key=UI.About.VisitProject}"/>
                                 <ToolTipService.ToolTip>
                                     <ToolTip Content="https://github.com/Khiro95/Awqat-Salaat"/>
                                 </ToolTipService.ToolTip>
                             </Hyperlink>
-                        </TextBlock>
-                        <TextBlock HorizontalAlignment="Center" Grid.Column="1">
+                            </TextBlock>
+                            <TextBlock HorizontalAlignment="Center" Grid.Column="1">
                             <Hyperlink Click="ContactHyperlink_Click">
                                 <Run Text="{mk:L11n Key=UI.About.Contact}"/>
                                 <ToolTipService.ToolTip>
                                     <ToolTip Content="khiro95.gh@gmail.com"/>
                                 </ToolTipService.ToolTip>
                             </Hyperlink>
-                        </TextBlock>
-                    </Grid>
-                    <Path Data="{StaticResource Ayah2}" Fill="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,24,0,0" FlowDirection="LeftToRight"/>
-                </StackPanel>
-            </Grid>
+                            </TextBlock>
+                        </Grid>
+                        <Path Data="{StaticResource Ayah2}" Fill="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,24,0,0" FlowDirection="LeftToRight"/>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
         </NavigationView>
     </Grid>
 </UserControl>

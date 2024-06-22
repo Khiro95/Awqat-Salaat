@@ -1,7 +1,7 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
     <Package Name="Awqat Salaat" Manufacturer="Khiro" Version="!(bind.fileVersion.AwqatSalaat.dll)" UpgradeCode="63e5c1de-dd06-4808-9fa1-235510ac232b">
 
-        <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
+        <MajorUpgrade AllowSameVersionUpgrades="true" DowngradeErrorMessage="!(loc.DowngradeError)" />
 
         <MediaTemplate EmbedCab="true"/>
 
