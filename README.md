@@ -89,24 +89,39 @@ It's expected that the widget will not appear after the installation finish, so 
 > [!note]
 > The theme always match system theme on Windows 10.
 
-![Awqat Salaat widget showing next prayer time](images/showcase_1_en.png)
+#### Regular
+![Awqat Salaat widget showing next prayer time](images/regular_win10_en.png)
+![Awqat Salaat widget showing prayers times for the whole day](images/regular_open_win10_en.png)
 
-![Awqat Salaat widget showing prayers times for the whole day](images/showcase_2_en.png)
+#### Compact
+![Awqat Salaat compact widget showing next prayer time](images/regular_compact_1_win10_en.png)
+![Awqat Salaat compact widget showing countdown](images/regular_compact_2_win10_en.png)
 
-![Awqat Salaat widget notification for near prayer time](images/showcase_3_en.gif)
+#### Reminder notification
+![Awqat Salaat widget notification for near prayer time](images/reminder_win10_en.png)
+
+#### Elapsed time notification
+![Awqat Salaat widget notification for entered prayer time](images/elapsed_win10_en.png)
 
 ### Windows 11 (WinUI)
 
 > [!note]
 > The theme always match system theme.
 
-![Awqat Salaat WinUI widget showing next prayer time on center-aligned taskbar](images/showcase_win11_1_en.png)
+#### Regular
+![Awqat Salaat WinUI widget showing next prayer time on center-aligned taskbar](images/regular_win11_center_en.png)
+![Awqat Salaat WinUI widget showing next prayer time on left-aligned taskbar](images/regular_win11_left_en.png)
+![Awqat Salaat WinUI widget showing prayers times for the whole day](images/regular_open_win11_en.png)
 
-![Awqat Salaat WinUI widget showing next prayer time on left-aligned taskbar](images/showcase_win11_2_en.png)
+#### Compact
+![Awqat Salaat WinUI compact widget showing next prayer time](images/regular_compact_1_win11_en.png)
+![Awqat Salaat WinUI compact widget showing countdown](images/regular_compact_2_win11_en.png)
 
-![Awqat Salaat WinUI widget showing prayers times for the whole day](images/showcase_win11_3_en.png)
+#### Reminder notification
+![Awqat Salaat WinUI widget notification for near prayer time](images/reminder_win11_en.png)
 
-![Quick tutorial for using Awqat Salaat WinUI](images/showcase_win11_4_en.gif)
+#### Elapsed time notification
+![Awqat Salaat WinUI widget notification for entered prayer time](images/elapsed_win11_en.png)
 
 ## Build
 
