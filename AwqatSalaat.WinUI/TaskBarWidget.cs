@@ -80,7 +80,11 @@ namespace AwqatSalaat.WinUI
 
             InjectIntoTaskbar();
 
-            taskbarWatcher = new TaskbarStructureWatcher(hwndShell, UpdatePositionImpl);
+            taskbarWatcher = new TaskbarStructureWatcher(hwndShell, () =>
+            {
+                System.Threading.Thread.Sleep(50);
+                UpdatePositionImpl();
+            });
 
             UpdatePositionImpl();
         }
@@ -161,10 +165,10 @@ namespace AwqatSalaat.WinUI
                 }
             }
 
+            var widgetsButton = isWidgetsEnabled ? taskbarWatcher.GetAutomationElement(WidgetsButtonAutomationId) : null;
+
             if (isCentered)
             {
-                var widgetsButton = isWidgetsEnabled ? taskbarWatcher.GetAutomationElement(WidgetsButtonAutomationId) : null;
-
                 if (osRTL)
                 {
                     offsetX = (widgetsButton?.CurrentBoundingRectangle.left ?? taskbarRect.right) - WidgetHostWidth;
@@ -178,11 +182,25 @@ namespace AwqatSalaat.WinUI
             {
                 if (osRTL)
                 {
-                    offsetX = trayNotifyRect.right;
+                    if (widgetsButton is not null && (widgetsButton.CurrentBoundingRectangle.left - trayNotifyRect.right) < WidgetHostWidth)
+                    {
+                        offsetX = widgetsButton.CurrentBoundingRectangle.right;
+                    }
+                    else
+                    {
+                        offsetX = trayNotifyRect.right;
+                    }
                 }
                 else
                 {
-                    offsetX = trayNotifyRect.left - WidgetHostWidth;
+                    if (widgetsButton is not null && (trayNotifyRect.left - widgetsButton.CurrentBoundingRectangle.right) < WidgetHostWidth)
+                    {
+                        offsetX = widgetsButton.CurrentBoundingRectangle.left - WidgetHostWidth;
+                    }
+                    else
+                    {
+                        offsetX = trayNotifyRect.left - WidgetHostWidth;
+                    }
                 }
             }
 

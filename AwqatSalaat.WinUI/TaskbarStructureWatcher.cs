@@ -1,4 +1,7 @@
-﻿using System;
+﻿using AwqatSalaat.Helpers;
+using System;
+using System.Management;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using UIAutomationClient;
 
@@ -14,11 +17,16 @@ namespace AwqatSalaat.WinUI
         private readonly IUIAutomationElement taskbarElement;
         private readonly Action changeCallback;
 
+        private bool widgetsButtonEnabled;
+        private ManagementEventWatcher watcher;
+
         public TaskbarStructureWatcher(IntPtr hwndTaskbar, Action changeCallback)
         {
             taskbarElement = pUIAutomation.ElementFromHandle(hwndTaskbar);
             this.changeCallback = changeCallback;
             RegisterEventHandlers();
+            widgetsButtonEnabled = SystemInfos.IsTaskBarWidgetsEnabled();
+            CreateRegistryWatcher();
         }
 
         public IUIAutomationElement GetAutomationElement(string automationId)
@@ -65,9 +73,37 @@ namespace AwqatSalaat.WinUI
             }
         }
 
+        private void CreateRegistryWatcher()
+        {
+            var currentUser = WindowsIdentity.GetCurrent();
+
+            WqlEventQuery query = new WqlEventQuery(
+                "SELECT * FROM RegistryKeyChangeEvent WHERE " +
+                 "Hive = 'HKEY_USERS' " +
+                 @"AND KeyPath = '" + currentUser.User.Value + @"\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced'");
+
+            query.WithinInterval = new TimeSpan(0, 0, 0, 1);
+
+            watcher = new ManagementEventWatcher(query);
+            watcher.EventArrived += new EventArrivedEventHandler(RegistryKeyChanged);
+            watcher.Start();
+        }
+
+        private void RegistryKeyChanged(object sender, EventArrivedEventArgs e)
+        {
+            bool isWidgetsButtonEnabled = SystemInfos.IsTaskBarWidgetsEnabled();
+
+            if (isWidgetsButtonEnabled != widgetsButtonEnabled)
+            {
+                widgetsButtonEnabled = isWidgetsButtonEnabled;
+                changeCallback?.Invoke();
+            }
+        }
+
         public void Dispose()
         {
             Task.Run(UnregisterEventHandlers);
+            watcher?.Dispose();
         }
     }
 }
