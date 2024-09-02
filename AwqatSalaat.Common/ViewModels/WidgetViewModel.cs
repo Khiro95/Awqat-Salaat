@@ -106,6 +106,8 @@ namespace AwqatSalaat.ViewModels
                 WidgetSettings.Settings.Save();
                 RefreshData();
             }
+
+            OnPropertyChanged(nameof(DisplayedDate));
         }
 
         private void TimeEntered(object sender, EventArgs e)

@@ -50,6 +50,11 @@
                     <x:Type Type="{x:Type data:School}"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
+            <ObjectDataProvider x:Key="CalendarTypeEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type Type="{x:Type data:CalendarType}"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
 
             <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
             <converters:LocalizedEnumConverter x:Key="LocalizedEnumConverter"/>
@@ -122,6 +127,31 @@
                         </controls:SettingsItem>
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.ElapsedPeriod}" Description="{mk:L11n UI.Settings.ElapsedPeriodDescription}">
                             <controls:NumericUpDown Value="{Binding NotificationDistanceElapsed}" Maximum="30" Width="100" HorizontalAlignment="Left"/>
+                        </controls:SettingsItem>
+                        <controls:SettingsItem Header="{mk:L11n UI.Settings.Calendar}" Description="{mk:L11n UI.Settings.CalendarDescription}">
+                            <StackPanel Orientation="Horizontal">
+                                <ComboBox ItemsSource="{Binding Source={StaticResource CalendarTypeEnum}}" SelectedItem="{Binding CalendarType}" Width="300" HorizontalAlignment="Left">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.CalendarType.{0}'}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <StackPanel Orientation="Horizontal" Margin="16,0,0,0" d:Visibility="Visible">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding CalendarType}" Value="UmAlQura">
+                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <TextBlock Text="{mk:L11n UI.Settings.HijriCalendarAdjustment}" VerticalAlignment="Center"/>
+                                    <controls:NumericUpDown Value="{Binding HijriAdjustment}" Minimum="-2" Maximum="2" Width="70" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </StackPanel>
                         </controls:SettingsItem>
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.NotificationSound}" Description="{mk:L11n UI.Settings.NotificationSoundDescription}">
                             <StackPanel>

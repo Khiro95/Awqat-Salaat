@@ -38,6 +38,7 @@
             <converters:DecimalConverter x:Key="DecimalConverter"/>
             <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
             <converters:LocalizedEnumConverter x:Key="LocalizedEnumConverter"/>
+            <converters:EnumEqualityConverter x:Key="EnumEqualityConverter"/>
 
             <!-- This doesn't work at the moment, binding in style setters isn't supported yet :( -->
             <Style TargetType="ToggleSwitch" BasedOn="{StaticResource DefaultToggleSwitchStyle}">
@@ -163,6 +164,27 @@
                                    Value="{x:Bind ViewModel.Settings.NotificationDistanceElapsed}"
                                    Maximum="30"
                                    HorizontalAlignment="Left"/>
+                        </ctrl:SettingsItem>
+                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Calendar}" Description="{mk:L11n Key=UI.Settings.CalendarDescription}">
+                            <StackPanel Orientation="Horizontal">
+                                <ComboBox ItemsSource="{mk:Enums Type=dt:CalendarType}" SelectedItem="{Binding Settings.CalendarType, Mode=TwoWay}" Width="280">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.CalendarType.{0}'}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <StackPanel Orientation="Horizontal" Visibility="{x:Bind hijriAdjustBox.IsEnabled, Mode=OneWay}" Margin="16,0,0,0">
+                                    <TextBlock Text="{mk:L11n Key=UI.Settings.HijriCalendarAdjustment}" VerticalAlignment="Center"/>
+                                    <NumberBox x:Name="hijriAdjustBox"
+                                               Value="{x:Bind ViewModel.Settings.HijriAdjustment}"
+                                               SpinButtonPlacementMode="Inline"
+                                               Minimum="-2"
+                                               Maximum="2"
+                                               Margin="8,0,0,0"
+                                               IsEnabled="{x:Bind ViewModel.Settings.CalendarType, Converter={StaticResource EnumEqualityConverter}, ConverterParameter='Hijri', Mode=OneWay}"/>
+                                </StackPanel>
+                            </StackPanel>
                         </ctrl:SettingsItem>
                         <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.NotificationSound}" Description="{mk:L11n Key=UI.Settings.NotificationSoundDescription}">
                             <StackPanel>

@@ -79,6 +79,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hijri.
+        /// </summary>
+        public static string Data_CalendarType_Hijri {
+            get {
+                return ResourceManager.GetString("Data.CalendarType.Hijri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Um Al Qura.
+        /// </summary>
+        public static string Data_CalendarType_UmAlQura {
+            get {
+                return ResourceManager.GetString("Data.CalendarType.UmAlQura", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hanafi.
         /// </summary>
         public static string Data_JuristicSchool_Hanafi {
@@ -286,6 +304,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calendar type.
+        /// </summary>
+        public static string UI_Settings_Calendar {
+            get {
+                return ResourceManager.GetString("UI.Settings.Calendar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The calendar which is used to determine Hijri date.
+        /// </summary>
+        public static string UI_Settings_CalendarDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.CalendarDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string UI_Settings_Cancel {
@@ -399,6 +435,15 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_File {
             get {
                 return ResourceManager.GetString("UI.Settings.File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adjust by (day).
+        /// </summary>
+        public static string UI_Settings_HijriCalendarAdjustment {
+            get {
+                return ResourceManager.GetString("UI.Settings.HijriCalendarAdjustment", resourceCulture);
             }
         }
         

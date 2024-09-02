@@ -343,4 +343,19 @@
   <data name="UI.Settings.Browse" xml:space="preserve">
     <value>Browse...</value>
   </data>
+  <data name="Data.CalendarType.Hijri" xml:space="preserve">
+    <value>Hijri</value>
+  </data>
+  <data name="Data.CalendarType.UmAlQura" xml:space="preserve">
+    <value>Um Al Qura</value>
+  </data>
+  <data name="UI.Settings.Calendar" xml:space="preserve">
+    <value>Calendar type</value>
+  </data>
+  <data name="UI.Settings.CalendarDescription" xml:space="preserve">
+    <value>The calendar which is used to determine Hijri date</value>
+  </data>
+  <data name="UI.Settings.HijriCalendarAdjustment" xml:space="preserve">
+    <value>Adjust by (day)</value>
+  </data>
 </root>

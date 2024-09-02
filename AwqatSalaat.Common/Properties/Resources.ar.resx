@@ -363,4 +363,19 @@
   <data name="UI.Settings.Browse" xml:space="preserve">
     <value>استعراض...</value>
   </data>
+  <data name="Data.CalendarType.Hijri" xml:space="preserve">
+    <value>الهجري</value>
+  </data>
+  <data name="Data.CalendarType.UmAlQura" xml:space="preserve">
+    <value>أم القرى</value>
+  </data>
+  <data name="UI.Settings.Calendar" xml:space="preserve">
+    <value>نوع التقويم</value>
+  </data>
+  <data name="UI.Settings.CalendarDescription" xml:space="preserve">
+    <value>التقويم الذي يستخدم لمعرفة التاريخ الهجري</value>
+  </data>
+  <data name="UI.Settings.HijriCalendarAdjustment" xml:space="preserve">
+    <value>تعديل بـ (يوم)</value>
+  </data>
 </root>
