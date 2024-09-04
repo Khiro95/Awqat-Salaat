@@ -310,5 +310,17 @@ namespace AwqatSalaat.Properties {
                 this["HijriAdjustment"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        public int CustomPosition {
+            get {
+                return ((int)(this["CustomPosition"]));
+            }
+            set {
+                this["CustomPosition"] = value;
+            }
+        }
     }
 }

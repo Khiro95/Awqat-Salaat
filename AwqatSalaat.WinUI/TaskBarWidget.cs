@@ -1,9 +1,11 @@
 ﻿using AwqatSalaat.Helpers;
 using AwqatSalaat.Interop;
+using AwqatSalaat.WinUI.Controls;
 using AwqatSalaat.WinUI.Views;
 using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml.Hosting;
+using Microsoft.UI.Xaml.Input;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -40,6 +42,9 @@ namespace AwqatSalaat.WinUI
         private int WidgetHostWidth;
         private int currentOffsetX = int.MinValue;
         private int currentOffsetY = 0;
+        private bool isDragging;
+        private int draggingInnerOffsetX;
+        private int lastCursorPositionX;
         private bool disposedValue;
 
         public IntPtr Handle => hwnd != IntPtr.Zero ? hwnd : throw new InvalidOperationException("The widget is not initialized.");
@@ -76,7 +81,11 @@ namespace AwqatSalaat.WinUI
             host.SiteBridge.ResizePolicy = Microsoft.UI.Content.ContentSizePolicy.ResizeContentToParentWindow;
             widgetSummary = new WidgetSummary() { Margin = new Microsoft.UI.Xaml.Thickness(4, 0, 4, 0), MaxHeight = 40 };
             widgetSummary.DisplayModeChanged += WidgetSummary_DisplayModeChanged;
-            host.Content = widgetSummary;
+            host.Content = new GridEx
+            {
+                Children = { widgetSummary },
+                Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(Colors.Transparent)
+            };
 
             InjectIntoTaskbar();
 
@@ -139,14 +148,27 @@ namespace AwqatSalaat.WinUI
 
         public void Destroy() => appWindow.Destroy();
 
-        public void UpdatePosition() => Task.Run(UpdatePositionImpl);
+        public void UpdatePosition(bool force = false)
+        {
+            if (force && Properties.Settings.Default.CustomPosition != -1)
+            {
+                Properties.Settings.Default.CustomPosition = -1;
+
+                if (Properties.Settings.Default.IsConfigured)
+                {
+                    Properties.Settings.Default.Save();
+                }
+            }
+
+            Task.Run(UpdatePositionImpl);
+        }
 
         private void UpdatePositionImpl()
         {
             bool isCentered = SystemInfos.IsTaskBarCentered();
             bool isWidgetsEnabled = SystemInfos.IsTaskBarWidgetsEnabled();
 
-            int offsetX = 0;
+            int offsetX = Properties.Settings.Default.CustomPosition;
             bool osRTL = System.Globalization.CultureInfo.InstalledUICulture.TextInfo.IsRightToLeft;
 
             User32.GetWindowRect(hwndTrayNotify, out RECT trayNotifyRect);
@@ -165,82 +187,86 @@ namespace AwqatSalaat.WinUI
                 }
             }
 
-            var widgetsButton = isWidgetsEnabled ? taskbarWatcher.GetAutomationElement(WidgetsButtonAutomationId) : null;
+            // -1 means the user didn't set manual position, so we have to find the best one
+            if (offsetX == -1)
+            {
+                var widgetsButton = isWidgetsEnabled ? taskbarWatcher.GetAutomationElement(WidgetsButtonAutomationId) : null;
 
-            if (isCentered)
-            {
-                if (osRTL)
+                if (isCentered)
                 {
-                    offsetX = (widgetsButton?.CurrentBoundingRectangle.left ?? taskbarRect.right) - WidgetHostWidth;
-                }
-                else
-                {
-                    offsetX = widgetsButton?.CurrentBoundingRectangle.right ?? 0;
-                }
-            }
-            else
-            {
-                if (osRTL)
-                {
-                    if (widgetsButton is not null && (widgetsButton.CurrentBoundingRectangle.left - trayNotifyRect.right) < WidgetHostWidth)
+                    if (osRTL)
                     {
-                        offsetX = widgetsButton.CurrentBoundingRectangle.right;
+                        offsetX = (widgetsButton?.CurrentBoundingRectangle.left ?? taskbarRect.right) - WidgetHostWidth;
                     }
                     else
                     {
-                        offsetX = trayNotifyRect.right;
+                        offsetX = widgetsButton?.CurrentBoundingRectangle.right ?? 0;
                     }
                 }
                 else
                 {
-                    if (widgetsButton is not null && (trayNotifyRect.left - widgetsButton.CurrentBoundingRectangle.right) < WidgetHostWidth)
+                    if (osRTL)
                     {
-                        offsetX = widgetsButton.CurrentBoundingRectangle.left - WidgetHostWidth;
+                        if (widgetsButton is not null && (widgetsButton.CurrentBoundingRectangle.left - trayNotifyRect.right) < WidgetHostWidth)
+                        {
+                            offsetX = widgetsButton.CurrentBoundingRectangle.right;
+                        }
+                        else
+                        {
+                            offsetX = trayNotifyRect.right;
+                        }
                     }
                     else
                     {
-                        offsetX = trayNotifyRect.left - WidgetHostWidth;
+                        if (widgetsButton is not null && (trayNotifyRect.left - widgetsButton.CurrentBoundingRectangle.right) < WidgetHostWidth)
+                        {
+                            offsetX = widgetsButton.CurrentBoundingRectangle.left - WidgetHostWidth;
+                        }
+                        else
+                        {
+                            offsetX = trayNotifyRect.left - WidgetHostWidth;
+                        }
                     }
                 }
-            }
 
-            try
-            {
-                List<IntPtr> wnds = GetOtherInjectedWindows();
-
-                foreach (var wnd in wnds)
+                try
                 {
-                    User32.GetWindowRect(wnd, out var bounds);
+                    List<IntPtr> wnds = GetOtherInjectedWindows();
 
-                    if (bounds.right < offsetX || bounds.left > (offsetX + WidgetHostWidth))
+                    foreach (var wnd in wnds)
                     {
-                        continue;
-                    }
+                        User32.GetWindowRect(wnd, out var bounds);
 
-                    if (isCentered == osRTL)
-                    {
-                        offsetX = bounds.left - WidgetHostWidth;
-                    }
-                    else
-                    {
-                        offsetX = bounds.right;
+                        if (bounds.right < offsetX || bounds.left > (offsetX + WidgetHostWidth))
+                        {
+                            continue;
+                        }
+
+                        if (isCentered == osRTL)
+                        {
+                            offsetX = bounds.left - WidgetHostWidth;
+                        }
+                        else
+                        {
+                            offsetX = bounds.right;
+                        }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+                catch (Exception ex)
+                {
 #if DEBUG
-                throw;
+                    throw;
 #endif
-            }
+                }
 
-            if (osRTL)
-            {
-                offsetX = Math.Clamp(offsetX, trayNotifyRect.right, taskbarRect.right - WidgetHostWidth);
-            }
-            else
-            {
-                offsetX = Math.Clamp(offsetX, 0, trayNotifyRect.left - WidgetHostWidth);
+                if (osRTL)
+                {
+                    offsetX = Math.Clamp(offsetX, trayNotifyRect.right, taskbarRect.right - WidgetHostWidth);
+                }
+                else
+                {
+                    offsetX = Math.Clamp(offsetX, 0, trayNotifyRect.left - WidgetHostWidth);
+                }
             }
 
             User32.GetWindowRect(hwndReBar, out RECT barRect);
@@ -257,6 +283,110 @@ namespace AwqatSalaat.WinUI
                 appWindow.Move(new PointInt32(offsetX, offsetY));
                 currentOffsetX = offsetX;
             }
+        }
+
+        public void StartDragging()
+        {
+            if (!isDragging)
+            {
+                widgetSummary.IsHitTestVisible = false;
+                User32.SetCursorPos(appWindow.Position.X + appWindow.Size.Width / 2, appWindow.Position.Y + appWindow.Size.Height / 2);
+                host.Content.KeyUp += Content_KeyUp;
+                host.Content.PointerPressed += Content_PointerPressed;
+                host.Content.PointerReleased += Content_PointerReleased;
+                (host.Content as GridEx).SetCursor(Microsoft.UI.Input.InputSystemCursorShape.SizeWestEast);
+                isDragging = true;
+
+                // If the command is triggered from tray menu then we need to make the window focused to receive keyboard events
+                if (!host.HasFocus && hwnd != User32.GetForegroundWindow())
+                {
+                    User32.SetForegroundWindow(hwnd);
+                }
+            }
+        }
+
+        public void EndDragging(bool revert)
+        {
+            if (isDragging)
+            {
+                isDragging = false;
+                host.Content.ReleasePointerCaptures();
+                host.Content.KeyUp -= Content_KeyUp;
+                host.Content.PointerMoved -= Content_PointerMoved;
+                host.Content.PointerPressed -= Content_PointerPressed;
+                host.Content.PointerReleased -= Content_PointerReleased;
+                (host.Content as GridEx).ResetCursor();
+                widgetSummary.IsHitTestVisible = true;
+                
+                if (revert)
+                {
+                    appWindow.Move(new PointInt32(currentOffsetX, currentOffsetY));
+                }
+                else
+                {
+                    currentOffsetX = appWindow.Position.X;
+                    Properties.Settings.Default.CustomPosition = currentOffsetX;
+
+                    if (Properties.Settings.Default.IsConfigured)
+                    {
+                        Properties.Settings.Default.Save(); 
+                    }
+                }
+            }
+        }
+
+        private void Content_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Escape && isDragging)
+            {
+                EndDragging(true);
+            }
+        }
+
+        private void Content_PointerReleased(object sender, PointerRoutedEventArgs e)
+        {
+            EndDragging(false);
+        }
+
+        private void Content_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            e.Handled = true;
+            host.Content.PointerMoved += Content_PointerMoved;
+            host.Content.CapturePointer(e.Pointer);
+            User32.GetCursorPos(out var lpPoint);
+            lastCursorPositionX = lpPoint.x;
+            draggingInnerOffsetX = lpPoint.x - appWindow.Position.X;
+        }
+
+        private void Content_PointerMoved(object sender, PointerRoutedEventArgs e)
+        {
+            User32.GetWindowRect(hwndTrayNotify, out RECT trayNotifyRect);
+            User32.GetCursorPos(out var lpPoint);
+
+            int minCursorX, maxCursorX;
+            bool osRTL = System.Globalization.CultureInfo.InstalledUICulture.TextInfo.IsRightToLeft;
+
+            if (osRTL)
+            {
+                minCursorX = trayNotifyRect.right + draggingInnerOffsetX;
+                maxCursorX = taskbarRect.right - WidgetHostWidth + draggingInnerOffsetX;
+            }
+            else
+            {
+                minCursorX = draggingInnerOffsetX;
+                maxCursorX = trayNotifyRect.left - WidgetHostWidth + draggingInnerOffsetX;
+            }
+
+            lpPoint.x = Math.Clamp(lpPoint.x, minCursorX, maxCursorX);
+
+            int delta = lpPoint.x - lastCursorPositionX;
+            int newX = delta + appWindow.Position.X;
+
+            appWindow.Move(new PointInt32(newX, currentOffsetY));
+            lastCursorPositionX = lpPoint.x;
+
+            // This is necessary to make sure the content can raise keyboard events
+            host.Content.Focus(Microsoft.UI.Xaml.FocusState.Programmatic);
         }
 
         private void RegisterWindowClass()

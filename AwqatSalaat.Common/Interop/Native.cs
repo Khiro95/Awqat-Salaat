@@ -88,6 +88,18 @@ namespace AwqatSalaat.Interop
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool SetWindowPos([In] IntPtr hWnd, [In, Optional] IntPtr hWndInsertAfter, [In] int X, [In] int Y, [In] int cx, [In] int cy, [In] SWP uFlags);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetCursorPos([In] int x, [In] int y);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool GetCursorPos([Out] out POINT lpPoint);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetForegroundWindow([In] IntPtr hWnd);
     }
 
     public static class Dwmapi

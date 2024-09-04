@@ -358,4 +358,7 @@
   <data name="UI.Settings.HijriCalendarAdjustment" xml:space="preserve">
     <value>Adjust by (day)</value>
   </data>
+  <data name="UI.ContextMenu.ManualPosition" xml:space="preserve">
+    <value>Manual position</value>
+  </data>
 </root>

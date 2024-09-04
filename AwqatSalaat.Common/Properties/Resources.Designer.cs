@@ -196,6 +196,15 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manual position.
+        /// </summary>
+        public static string UI_ContextMenu_ManualPosition {
+            get {
+                return ResourceManager.GetString("UI.ContextMenu.ManualPosition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Quit.
         /// </summary>
         public static string UI_ContextMenu_Quit {
