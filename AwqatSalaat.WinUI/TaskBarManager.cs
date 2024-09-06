@@ -56,6 +56,7 @@ namespace AwqatSalaat.WinUI
                     {
                         showItem,
                         hideItem,
+                        new PopupMenuSeparator(),
                         repositionItem,
                         manualPositionItem,
                         new PopupMenuSeparator(),
@@ -88,11 +89,15 @@ namespace AwqatSalaat.WinUI
             {
                 var widget = new TaskBarWidget();
 
+                widget.Destroying += Widget_Destroying;
+
                 widget.Initialize();
 
                 widget.Show();
 
                 taskBarWidget = widget;
+
+                UpdateTrayMenuItemsStates(true);
             }
         }
 
@@ -107,6 +112,12 @@ namespace AwqatSalaat.WinUI
 
                 taskBarWidget = null;
             }
+        }
+
+        private static void Widget_Destroying(object sender, EventArgs e)
+        {
+            (sender as TaskBarWidget).Destroying -= Widget_Destroying;
+            UpdateTrayMenuItemsStates(false);
         }
 
         private static void OnTaskbarCreated()
@@ -125,6 +136,14 @@ namespace AwqatSalaat.WinUI
 
             HideWidgetExecute();
             ShowWidgetExecute();
+        }
+
+        private static void UpdateTrayMenuItemsStates(bool isWidgetVisible)
+        {
+            showItem.Enabled = !isWidgetVisible;
+            hideItem.Enabled = isWidgetVisible;
+            repositionItem.Enabled = isWidgetVisible;
+            manualPositionItem.Enabled = isWidgetVisible;
         }
 
         private static void UpdateTrayIconLocalization()
