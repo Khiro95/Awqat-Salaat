@@ -17,5 +17,6 @@
         <ResourceDictionary Source="../Styles/RadioButton.xaml"/>
         <ResourceDictionary Source="../Styles/TabControl.xaml"/>
         <ResourceDictionary Source="../Styles/HyperLink.xaml"/>
+        <ResourceDictionary Source="../Styles/ScrollViewer.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
