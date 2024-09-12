@@ -70,7 +70,7 @@ namespace AwqatSalaat
 
         protected override void DeskbandOnClosed()
         {
-            HwndSource.Dispose();
+            HwndSource?.Dispose();
         }
 
         private void UiElement_DisplayModeChanged(DisplayMode displayMode)
