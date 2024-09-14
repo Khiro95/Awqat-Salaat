@@ -78,7 +78,7 @@ namespace AwqatSalaat.ViewModels
                 SettingsUpdated(false);
                 UpdateServiceClient();
 
-                var cached = JsonConvert.DeserializeObject<ServiceData>(WidgetSettings.Settings.ApiCache);
+                var cached = JsonConvert.DeserializeObject<ServiceData>(WidgetSettings.Settings.ApiCache ?? "");
 
                 if (cached != null)
                 {
