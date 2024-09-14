@@ -31,8 +31,7 @@ namespace AwqatSalaat.WinUI
         private readonly IntPtr hwndTrayNotify;
         private readonly IntPtr hwndReBar;
 
-        private RECT taskbarRect;
-        private TaskbarStructureWatcher taskbarWatcher;
+        private readonly TaskbarStructureWatcher taskbarWatcher;
 
         private IntPtr hwnd;
         private AppWindow appWindow;
@@ -45,6 +44,7 @@ namespace AwqatSalaat.WinUI
         private bool isDragging;
         private int draggingInnerOffsetX;
         private int lastCursorPositionX;
+        private bool initialized;
         private bool disposedValue;
 
         public IntPtr Handle => hwnd != IntPtr.Zero ? hwnd : throw new InvalidOperationException("The widget is not initialized.");
@@ -60,6 +60,10 @@ namespace AwqatSalaat.WinUI
             var dpi = User32.GetDpiForWindow(hwndShell);
             dpiScale = dpi / 96d;
             WidgetHostWidth = (int)Math.Ceiling(dpiScale * DefaultWidgetHostWidth);
+
+            taskbarWatcher = new TaskbarStructureWatcher(hwndShell, hwndReBar);
+            taskbarWatcher.TaskbarChangedNotificationStarted += TaskbarWatcher_TaskbarChangedNotificationStarted;
+            taskbarWatcher.TaskbarChangedNotificationCompleted += TaskbarWatcher_TaskbarChangedNotificationCompleted;
         }
 
         public void Initialize()
@@ -74,7 +78,7 @@ namespace AwqatSalaat.WinUI
             appWindow.IsShownInSwitchers = false;
             appWindow.Destroying += AppWindow_Destroying;
 
-            taskbarRect = SystemInfos.GetTaskBarBounds();
+            var taskbarRect = SystemInfos.GetTaskBarBounds();
             appWindow.ResizeClient(new SizeInt32(WidgetHostWidth, taskbarRect.bottom - taskbarRect.top));
 
             host.Initialize(id);
@@ -89,13 +93,39 @@ namespace AwqatSalaat.WinUI
 
             InjectIntoTaskbar();
 
-            taskbarWatcher = new TaskbarStructureWatcher(hwndShell, () =>
-            {
-                System.Threading.Thread.Sleep(50);
-                UpdatePositionImpl();
-            });
+            UpdatePositionImpl(TaskbarChangeReason.None);
 
-            UpdatePositionImpl();
+            initialized = true;
+        }
+
+        private void TaskbarWatcher_TaskbarChangedNotificationStarted(object sender, TaskbarChangedEventArgs e)
+        {
+            if (e.IsTaskbarHidden || !initialized)
+            {
+                e.Canceled = true;
+                return;
+            }
+
+            int savedOffsetX = Properties.Settings.Default.CustomPosition;
+
+            // -1 means the user didn't set manual position
+            if (savedOffsetX == -1 && e.Reason == TaskbarChangeReason.Alignment)
+            {
+                // This only to make the widget show an animation :)
+                widgetSummary.DispatcherQueue.TryEnqueue(() => (host.Content as GridEx).Children.Clear());
+            }
+            else if (savedOffsetX > -1 && e.Reason != TaskbarChangeReason.TabletMode)
+            {
+                e.Canceled = true;
+            }
+        }
+
+        private void TaskbarWatcher_TaskbarChangedNotificationCompleted(object sender, TaskbarChangedEventArgs e)
+        {
+            if (initialized)
+            {
+                UpdatePositionImpl(e.Reason, e.IsTaskbarCentered, e.IsTaskbarWidgetsEnabled);
+            }
         }
 
         private void InjectIntoTaskbar()
@@ -148,7 +178,7 @@ namespace AwqatSalaat.WinUI
 
         public void Destroy() => appWindow.Destroy();
 
-        public void UpdatePosition(bool force = false)
+        public void UpdatePosition(bool force = false, TaskbarChangeReason reason = TaskbarChangeReason.None)
         {
             if (force && Properties.Settings.Default.CustomPosition != -1)
             {
@@ -160,37 +190,29 @@ namespace AwqatSalaat.WinUI
                 }
             }
 
-            Task.Run(UpdatePositionImpl);
+            Task.Run(() => UpdatePositionImpl(reason));
         }
 
-        private void UpdatePositionImpl()
+        private void UpdatePositionImpl(TaskbarChangeReason changeReason)
         {
             bool isCentered = SystemInfos.IsTaskBarCentered();
             bool isWidgetsEnabled = SystemInfos.IsTaskBarWidgetsEnabled();
 
+            UpdatePositionImpl(changeReason, isCentered, isWidgetsEnabled);
+        }
+
+        private void UpdatePositionImpl(TaskbarChangeReason changeReason, bool isCentered, bool isWidgetsEnabled)
+        {
             int offsetX = Properties.Settings.Default.CustomPosition;
             bool osRTL = System.Globalization.CultureInfo.InstalledUICulture.TextInfo.IsRightToLeft;
 
-            User32.GetWindowRect(hwndTrayNotify, out RECT trayNotifyRect);
-
-            IntPtr isAutoHidePtr = User32.GetProp(hwndShell, "IsAutoHideEnabled");
-            bool autoHide = isAutoHidePtr == (IntPtr)1;
-
-            if (autoHide)
-            {
-                User32.GetWindowRect(hwndShell, out var newRect);
-                bool isHidden = newRect.top > taskbarRect.top;
-
-                if (isHidden)
-                {
-                    return;
-                }
-            }
+            User32.GetWindowRect(hwndShell, out RECT taskbarRect);
 
             // -1 means the user didn't set manual position, so we have to find the best one
             if (offsetX == -1)
             {
                 var widgetsButton = isWidgetsEnabled ? taskbarWatcher.GetAutomationElement(WidgetsButtonAutomationId) : null;
+                User32.GetWindowRect(hwndTrayNotify, out RECT trayNotifyRect);
 
                 if (isCentered)
                 {
@@ -283,6 +305,17 @@ namespace AwqatSalaat.WinUI
                 appWindow.Move(new PointInt32(offsetX, offsetY));
                 currentOffsetX = offsetX;
             }
+
+            // This only to make the widget show an animation :)
+            widgetSummary.DispatcherQueue.TryEnqueue(() =>
+            {
+                var grid = host.Content as GridEx;
+
+                if (changeReason == TaskbarChangeReason.Alignment || grid.Children.Count == 0)
+                {
+                    grid.Children.Add(widgetSummary);
+                }
+            });
         }
 
         public void StartDragging()
@@ -360,6 +393,7 @@ namespace AwqatSalaat.WinUI
 
         private void Content_PointerMoved(object sender, PointerRoutedEventArgs e)
         {
+            User32.GetWindowRect(hwndShell, out RECT taskbarRect);
             User32.GetWindowRect(hwndTrayNotify, out RECT trayNotifyRect);
             User32.GetCursorPos(out var lpPoint);
 
@@ -485,7 +519,7 @@ namespace AwqatSalaat.WinUI
 
                 if (area is "UserInteractionMode" or "ConvertibleSlateMode")
                 {
-                    UpdatePosition();
+                    UpdatePosition(reason: TaskbarChangeReason.TabletMode);
                 }
             }
 
@@ -500,6 +534,8 @@ namespace AwqatSalaat.WinUI
                 {
                     // TODO: dispose managed state (managed objects)
                     widgetSummary.DisplayModeChanged -= WidgetSummary_DisplayModeChanged;
+                    taskbarWatcher.TaskbarChangedNotificationStarted -= TaskbarWatcher_TaskbarChangedNotificationStarted;
+                    taskbarWatcher.TaskbarChangedNotificationCompleted -= TaskbarWatcher_TaskbarChangedNotificationCompleted;
                     taskbarWatcher.Dispose();
                     host.Dispose();
                 }
@@ -511,12 +547,12 @@ namespace AwqatSalaat.WinUI
             }
         }
 
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~TaskBarWidget()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
+        // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        ~TaskBarWidget()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: false);
+        }
 
         public void Dispose()
         {
