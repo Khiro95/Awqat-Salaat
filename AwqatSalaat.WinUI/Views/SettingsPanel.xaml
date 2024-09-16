@@ -372,27 +372,35 @@
                         <TextBlock x:Name="version" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
                         <TextBlock x:Name="architecture" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" FlowDirection="LeftToRight"/>
                         <TextBlock Text="{mk:L11n Key=Data.AppDescription}" TextWrapping="Wrap" TextAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,16,0,0"/>
-                        <Grid Margin="0,16,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock HorizontalAlignment="Center">
-                            <Hyperlink NavigateUri="https://github.com/Khiro95/Awqat-Salaat">
-                                <Run Text="{mk:L11n Key=UI.About.VisitProject}"/>
-                                <ToolTipService.ToolTip>
-                                    <ToolTip Content="https://github.com/Khiro95/Awqat-Salaat"/>
-                                </ToolTipService.ToolTip>
-                            </Hyperlink>
-                            </TextBlock>
-                            <TextBlock HorizontalAlignment="Center" Grid.Column="1">
-                            <Hyperlink Click="ContactHyperlink_Click">
-                                <Run Text="{mk:L11n Key=UI.About.Contact}"/>
-                                <ToolTipService.ToolTip>
-                                    <ToolTip Content="khiro95.gh@gmail.com"/>
-                                </ToolTipService.ToolTip>
-                            </Hyperlink>
-                            </TextBlock>
+                        <Grid Margin="0,16,0,0" Height="19">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{x:Bind ViewModel.IsCheckingNewVersion, Converter={StaticResource BooleanToVisibilityInvertedConverter}, Mode=OneWay}">
+                                <TextBlock>
+                                    <Hyperlink NavigateUri="https://github.com/Khiro95/Awqat-Salaat">
+                                        <Run Text="{mk:L11n Key=UI.About.VisitProject}"/>
+                                        <ToolTipService.ToolTip>
+                                            <ToolTip Content="https://github.com/Khiro95/Awqat-Salaat"/>
+                                        </ToolTipService.ToolTip>
+                                    </Hyperlink>
+                                </TextBlock>
+                                <TextBlock Margin="32,0">
+                                    <Hyperlink Click="ContactHyperlink_Click">
+                                        <Run Text="{mk:L11n Key=UI.About.Contact}"/>
+                                        <ToolTipService.ToolTip>
+                                            <ToolTip Content="khiro95.gh@gmail.com"/>
+                                        </ToolTipService.ToolTip>
+                                    </Hyperlink>
+                                </TextBlock>
+                                <TextBlock>
+                                    <Hyperlink Click="CheckForUpdatesHyperlink_Click">
+                                        <Run Text="{mk:L11n Key=UI.About.CheckForUpdates}"/>
+                                    </Hyperlink>
+                                </TextBlock>
+                            </StackPanel>
+                            <ProgressBar
+                                IsIndeterminate="True"
+                                Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                                VerticalAlignment="Center"
+                                Visibility="{x:Bind ViewModel.IsCheckingNewVersion, Mode=OneWay}"/>
                         </Grid>
                         <Path Data="{StaticResource Ayah2}" Fill="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,24,0,0" FlowDirection="LeftToRight"/>
                     </StackPanel>

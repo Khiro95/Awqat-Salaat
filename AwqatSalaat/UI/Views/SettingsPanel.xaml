@@ -366,27 +366,38 @@
                         <TextBlock x:Name="version" d:Text="v3.1.0.2" Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" HorizontalAlignment="Center"/>
                         <TextBlock x:Name="architecture" d:Text="x64" Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" HorizontalAlignment="Center" FlowDirection="LeftToRight"/>
                         <TextBlock Text="{mk:L11n Data.AppDescription}" TextWrapping="Wrap" TextAlignment="Center" Foreground="{DynamicResource ThemeColors.TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,16,0,0"/>
-                        <Grid Margin="0,16,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock HorizontalAlignment="Center">
-                            <Hyperlink NavigateUri="https://github.com/Khiro95/Awqat-Salaat" RequestNavigate="Hyperlink_RequestNavigate">
-                                <Run Text="{mk:L11n UI.About.VisitProject}"/>
-                                <Hyperlink.ToolTip>
-                                    <ToolTip Content="https://github.com/Khiro95/Awqat-Salaat" FlowDirection="LeftToRight"/>
-                                </Hyperlink.ToolTip>
-                            </Hyperlink>
-                            </TextBlock>
-                            <TextBlock HorizontalAlignment="Center" Grid.Column="1">
-                            <Hyperlink NavigateUri="mailto:khiro95.gh@gmail.com" RequestNavigate="Hyperlink_RequestNavigate">
-                                <Run Text="{mk:L11n UI.About.Contact}"/>
-                                <Hyperlink.ToolTip>
-                                    <ToolTip Content="khiro95.gh@gmail.com" FlowDirection="LeftToRight"/>
-                                </Hyperlink.ToolTip>
-                            </Hyperlink>
-                            </TextBlock>
+                        <Grid Margin="0,16,0,0" Height="19">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding IsCheckingNewVersion, Converter={StaticResource BoolToVisibilityInvertedConverter}}">
+                                <TextBlock>
+                                    <Hyperlink NavigateUri="https://github.com/Khiro95/Awqat-Salaat" RequestNavigate="Hyperlink_RequestNavigate">
+                                        <Run Text="{mk:L11n UI.About.VisitProject}"/>
+                                        <Hyperlink.ToolTip>
+                                            <ToolTip Content="https://github.com/Khiro95/Awqat-Salaat" FlowDirection="LeftToRight"/>
+                                        </Hyperlink.ToolTip>
+                                    </Hyperlink>
+                                </TextBlock>
+                                <TextBlock Margin="32,0">
+                                    <Hyperlink NavigateUri="mailto:khiro95.gh@gmail.com" RequestNavigate="Hyperlink_RequestNavigate">
+                                        <Run Text="{mk:L11n UI.About.Contact}"/>
+                                        <Hyperlink.ToolTip>
+                                            <ToolTip Content="khiro95.gh@gmail.com" FlowDirection="LeftToRight"/>
+                                        </Hyperlink.ToolTip>
+                                    </Hyperlink>
+                                </TextBlock>
+                                <TextBlock>
+                                    <Hyperlink Click="CheckForUpdatesClick">
+                                        <Run Text="{mk:L11n UI.About.CheckForUpdates}"/>
+                                    </Hyperlink>
+                                </TextBlock>
+                            </StackPanel>
+                            <ProgressBar IsIndeterminate="True"
+                                         Background="Transparent"
+                                         Foreground="{DynamicResource ThemeColors.TextPrimaryBrush}"
+                                         BorderThickness="0"
+                                         Height="2"
+                                         VerticalAlignment="Center"
+                                         Visibility="{Binding IsCheckingNewVersion, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         d:Visibility="Visible"/>
                         </Grid>
                         <Path Data="{StaticResource Ayah2}" Fill="{DynamicResource ThemeColors.TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,24,0,0" FlowDirection="LeftToRight"/>
                     </StackPanel>

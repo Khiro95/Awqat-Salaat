@@ -13,7 +13,8 @@ namespace AwqatSalaat.WinUI.Controls
         private bool xamlRootHadChanges;
         private FrameworkElement target;
         private bool hasClosed;
-        private Control latestPresenter;
+        private bool isFirstTime;
+        private Control flyoutPresenter;
 
         public bool ClosedBecauseOfResize { get; private set; }
 
@@ -42,7 +43,7 @@ namespace AwqatSalaat.WinUI.Controls
                 presenter.MaxWidth = maxPresenterWidth;
             }
 
-            latestPresenter = presenter;
+            flyoutPresenter = presenter;
 
             return presenter;
         }
@@ -107,8 +108,12 @@ namespace AwqatSalaat.WinUI.Controls
                 xamlRoot.Changed += XamlRoot_Changed;
             }
 
-            var popup = latestPresenter.Parent as Popup;
-            popup.GotFocus += (s, ee) => latestPresenter?.Focus(FocusState.Programmatic);
+            var popup = flyoutPresenter.Parent as Popup;
+
+            if (isFirstTime)
+            {
+                popup.GotFocus += (_, _) => flyoutPresenter?.Focus(FocusState.Programmatic);
+            }
         }
 
         private void XamlRoot_Changed(XamlRoot sender, XamlRootChangedEventArgs args)

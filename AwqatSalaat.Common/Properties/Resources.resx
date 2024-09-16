@@ -361,4 +361,22 @@
   <data name="UI.ContextMenu.ManualPosition" xml:space="preserve">
     <value>Manual position</value>
   </data>
+  <data name="UI.About.CheckForUpdates" xml:space="preserve">
+    <value>Check for Updates</value>
+  </data>
+  <data name="Dialog.AppAlreadyRunning" xml:space="preserve">
+    <value>The application is already running.</value>
+  </data>
+  <data name="Dialog.WidgetUpToDate" xml:space="preserve">
+    <value>The widget is already up-to-date.</value>
+  </data>
+  <data name="Dialog.NewUpdateAvailableFormat" xml:space="preserve">
+    <value>A new release is available!
+Version: {0}
+
+Would you like to visit download page?</value>
+  </data>
+  <data name="Dialog.CheckingUpdatesFailed" xml:space="preserve">
+    <value>Could not check for updates.</value>
+  </data>
 </root>

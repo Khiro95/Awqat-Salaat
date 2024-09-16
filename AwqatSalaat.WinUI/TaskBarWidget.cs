@@ -446,7 +446,7 @@ namespace AwqatSalaat.WinUI
                 dwStyle: WindowStyles.WS_POPUP,
                 x: 0, y: 0,
                 nWidth: 0, nHeight: 0,
-                hWndParent: parent,
+                hWndParent: IntPtr.Zero,// parent, // Setting parent was causing reentrancy issue on Windows 10
                 hMenu: IntPtr.Zero,
                 hInstance: IntPtr.Zero,
                 lpParam: IntPtr.Zero);

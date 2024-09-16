@@ -3,6 +3,7 @@ using AwqatSalaat.ViewModels;
 using Microsoft.Win32;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -82,6 +83,65 @@ namespace AwqatSalaat.UI.Views
             {
                 ParentPopup.StaysOpen = false;
                 ParentPopup.IsTopMost = true;
+            }
+        }
+
+        private async void CheckForUpdatesClick(object sender, RoutedEventArgs e)
+        {
+            // MessageBox will make the popup disappear so we have to force it to stay open temporarily
+            var popup = Utils.GetOpenPopups().First();
+            bool alteredPopup = false;
+
+            if (popup != null && !popup.StaysOpen)
+            {
+                popup.StaysOpen = true;
+                alteredPopup = true;
+            }
+
+            try
+            {
+                var current = System.Version.Parse(Version);
+#if DEBUG
+                current = System.Version.Parse("1.0");
+#endif
+                var latest = await ViewModel.CheckForNewVersion(current);
+
+                if (latest is null)
+                {
+                    MessageBox.Show(
+                        Properties.Resources.Dialog_WidgetUpToDate,
+                        Properties.Resources.Data_AppName,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                }
+                else
+                {
+                    var result = MessageBox.Show(
+                        string.Format(Properties.Resources.Dialog_NewUpdateAvailableFormat, latest.Tag),
+                        Properties.Resources.Data_AppName,
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        Process.Start(new ProcessStartInfo(latest.HtmlUrl));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    Properties.Resources.Dialog_CheckingUpdatesFailed + $"\nError: {ex.Message}",
+                    Properties.Resources.Data_AppName,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            finally
+            {
+                if (alteredPopup)
+                {
+                    popup.StaysOpen = false;
+                }
             }
         }
     }

@@ -1,5 +1,9 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Interop;
 
 namespace AwqatSalaat.UI
 {
@@ -65,6 +69,17 @@ namespace AwqatSalaat.UI
             }
 
             return false;
+        }
+
+        // https://stackoverflow.com/a/32462688/4644774
+        public static IEnumerable<Popup> GetOpenPopups()
+        {
+            return PresentationSource.CurrentSources.OfType<HwndSource>()
+                .Select(h => h.RootVisual)
+                .OfType<FrameworkElement>()
+                .Select(f => f.Parent)
+                .OfType<Popup>()
+                .Where(p => p.IsOpen);
         }
     }
 }

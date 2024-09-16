@@ -1,7 +1,9 @@
+using AwqatSalaat.Interop;
 using AwqatSalaat.Services.Nominatim;
 using AwqatSalaat.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Documents;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -107,10 +109,55 @@ namespace AwqatSalaat.WinUI.Views
             }
         }
 
-        private void ContactHyperlink_Click(Microsoft.UI.Xaml.Documents.Hyperlink sender, Microsoft.UI.Xaml.Documents.HyperlinkClickEventArgs args)
+        private void ContactHyperlink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
         {
-            //https://github.com/microsoft/microsoft-ui-xaml/issues/4438
+            // https://github.com/microsoft/microsoft-ui-xaml/issues/4438
             Windows.System.Launcher.LaunchUriAsync(new Uri("mailto:khiro95.gh@gmail.com"));
+        }
+
+        private async void CheckForUpdatesHyperlink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
+        {
+            try
+            {
+                var current = System.Version.Parse(Version);
+#if DEBUG
+                current = System.Version.Parse("1.0");
+#endif
+                var latest = await ViewModel.CheckForNewVersion(current);
+
+                if (latest is null)
+                {
+                    User32.MessageBox(
+                        IntPtr.Zero,
+                        Properties.Resources.Dialog_WidgetUpToDate,
+                        Properties.Resources.Data_AppName,
+                        MessageBoxButtons.MB_OK,
+                        MessageBoxIcon.MB_ICONINFORMATION);
+                }
+                else
+                {
+                    int result = User32.MessageBox(
+                        IntPtr.Zero,
+                        string.Format(Properties.Resources.Dialog_NewUpdateAvailableFormat, latest.Tag),
+                        Properties.Resources.Data_AppName,
+                        MessageBoxButtons.MB_YESNO,
+                        MessageBoxIcon.MB_ICONQUESTION);
+
+                    if (result == 6)
+                    {
+                        Windows.System.Launcher.LaunchUriAsync(new Uri(latest.HtmlUrl));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                User32.MessageBox(
+                        IntPtr.Zero,
+                        Properties.Resources.Dialog_CheckingUpdatesFailed + $"\nError: {ex.Message}",
+                        Properties.Resources.Data_AppName,
+                        MessageBoxButtons.MB_OK,
+                        MessageBoxIcon.MB_ICONERROR);
+            }
         }
 
         private async void BrowseSound_Click(object sender, RoutedEventArgs e)

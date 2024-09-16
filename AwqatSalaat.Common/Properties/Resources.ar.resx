@@ -381,4 +381,22 @@
   <data name="UI.ContextMenu.ManualPosition" xml:space="preserve">
     <value>تموقع يدوي</value>
   </data>
+  <data name="UI.About.CheckForUpdates" xml:space="preserve">
+    <value>تحقق من التحديثات</value>
+  </data>
+  <data name="Dialog.AppAlreadyRunning" xml:space="preserve">
+    <value>التطبيق قيد التشغيل بالفعل.</value>
+  </data>
+  <data name="Dialog.WidgetUpToDate" xml:space="preserve">
+    <value>الأداة بالفعل محدثة.</value>
+  </data>
+  <data name="Dialog.NewUpdateAvailableFormat" xml:space="preserve">
+    <value>إصدار جديد متوفر!
+نسخة: {0}
+
+هل تود زيارة صفحة التحميل؟</value>
+  </data>
+  <data name="Dialog.CheckingUpdatesFailed" xml:space="preserve">
+    <value>لم يمكن التحقق من وجود تحديثات.</value>
+  </data>
 </root>

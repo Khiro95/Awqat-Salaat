@@ -169,6 +169,54 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The application is already running..
+        /// </summary>
+        public static string Dialog_AppAlreadyRunning {
+            get {
+                return ResourceManager.GetString("Dialog.AppAlreadyRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not check for updates..
+        /// </summary>
+        public static string Dialog_CheckingUpdatesFailed {
+            get {
+                return ResourceManager.GetString("Dialog.CheckingUpdatesFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A new release is available!
+        ///Version: {0}
+        ///
+        ///Would you like to visit download page?.
+        /// </summary>
+        public static string Dialog_NewUpdateAvailableFormat {
+            get {
+                return ResourceManager.GetString("Dialog.NewUpdateAvailableFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The widget is already up-to-date..
+        /// </summary>
+        public static string Dialog_WidgetUpToDate {
+            get {
+                return ResourceManager.GetString("Dialog.WidgetUpToDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check for Updates.
+        /// </summary>
+        public static string UI_About_CheckForUpdates {
+            get {
+                return ResourceManager.GetString("UI.About.CheckForUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contact.
         /// </summary>
         public static string UI_About_Contact {

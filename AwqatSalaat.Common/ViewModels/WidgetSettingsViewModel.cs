@@ -1,7 +1,9 @@
 ﻿using AwqatSalaat.Data;
 using AwqatSalaat.Helpers;
+using AwqatSalaat.Services.GitHub;
 using System;
-
+using System.Linq;
+using System.Threading.Tasks;
 using Settings = AwqatSalaat.Properties.Settings;
 
 namespace AwqatSalaat.ViewModels
@@ -9,6 +11,7 @@ namespace AwqatSalaat.ViewModels
     public class WidgetSettingsViewModel : ObservableObject
     {
         private bool isOpen = !Settings.Default.IsConfigured;
+        private bool isCheckingNewVersion;
         private (
             PrayerTimesService service,
             School school,
@@ -23,6 +26,7 @@ namespace AwqatSalaat.ViewModels
         public static Country[] AvailableCountries => CountriesProvider.GetCountries();
 
         public bool IsOpen { get => isOpen; set => Open(value); }
+        public bool IsCheckingNewVersion { get => isCheckingNewVersion; set => SetProperty(ref isCheckingNewVersion, value); }
         public bool UseArabic
         {
             get => Settings.DisplayLanguage == "ar";
@@ -80,6 +84,45 @@ namespace AwqatSalaat.ViewModels
                     OnPropertyChanged(nameof(CountdownFormat));
                 }
             };
+        }
+
+        public async Task<Release> CheckForNewVersion(Version currentVersion)
+        {
+            try
+            {
+                IsCheckingNewVersion = true;
+
+                var latest = await GitHubClient.GetLatestRelease();
+
+                if (latest is null)
+                {
+                    return null;
+                }
+
+                if (latest.IsDraft || latest.IsPreRelease)
+                {
+                    var allReleases = await GitHubClient.GetReleases();
+
+                    if (allReleases?.Length > 1)
+                    {
+                        latest = allReleases
+                            .Where(r => !r.IsDraft && !r.IsPreRelease)
+                            .DefaultIfEmpty(new Release { Tag = "0.0" })
+                            .OrderByDescending(r => r.GetVersion())
+                            .First();
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+
+                return latest.GetVersion() > currentVersion ? latest : null;
+            }
+            finally
+            {
+                IsCheckingNewVersion = false;
+            }
         }
 
         private void SaveExecute(object obj)
