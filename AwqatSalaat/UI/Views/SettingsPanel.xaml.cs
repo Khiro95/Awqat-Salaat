@@ -1,4 +1,5 @@
-﻿using AwqatSalaat.UI.Controls;
+﻿using AwqatSalaat.Helpers;
+using AwqatSalaat.UI.Controls;
 using AwqatSalaat.ViewModels;
 using Microsoft.Win32;
 using System;
@@ -108,19 +109,11 @@ namespace AwqatSalaat.UI.Views
 
                 if (latest is null)
                 {
-                    MessageBox.Show(
-                        Properties.Resources.Dialog_WidgetUpToDate,
-                        Properties.Resources.Data_AppName,
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
+                    MessageBoxEx.Info(Properties.Resources.Dialog_WidgetUpToDate);
                 }
                 else
                 {
-                    var result = MessageBox.Show(
-                        string.Format(Properties.Resources.Dialog_NewUpdateAvailableFormat, latest.Tag),
-                        Properties.Resources.Data_AppName,
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Question);
+                    var result = MessageBoxEx.Question(string.Format(Properties.Resources.Dialog_NewUpdateAvailableFormat, latest.Tag));
 
                     if (result == MessageBoxResult.Yes)
                     {
@@ -130,11 +123,7 @@ namespace AwqatSalaat.UI.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    Properties.Resources.Dialog_CheckingUpdatesFailed + $"\nError: {ex.Message}",
-                    Properties.Resources.Data_AppName,
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                MessageBoxEx.Error(Properties.Resources.Dialog_CheckingUpdatesFailed + $"\nError: {ex.Message}");
             }
             finally
             {

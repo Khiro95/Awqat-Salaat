@@ -1,6 +1,7 @@
 using AwqatSalaat.Interop;
 using AwqatSalaat.Services.Nominatim;
 using AwqatSalaat.ViewModels;
+using AwqatSalaat.WinUI.Helpers;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
@@ -127,23 +128,13 @@ namespace AwqatSalaat.WinUI.Views
 
                 if (latest is null)
                 {
-                    User32.MessageBox(
-                        IntPtr.Zero,
-                        Properties.Resources.Dialog_WidgetUpToDate,
-                        Properties.Resources.Data_AppName,
-                        MessageBoxButtons.MB_OK,
-                        MessageBoxIcon.MB_ICONINFORMATION);
+                    MessageBox.Info(Properties.Resources.Dialog_WidgetUpToDate);
                 }
                 else
                 {
-                    int result = User32.MessageBox(
-                        IntPtr.Zero,
-                        string.Format(Properties.Resources.Dialog_NewUpdateAvailableFormat, latest.Tag),
-                        Properties.Resources.Data_AppName,
-                        MessageBoxButtons.MB_YESNO,
-                        MessageBoxIcon.MB_ICONQUESTION);
+                    var result = MessageBox.Question(string.Format(Properties.Resources.Dialog_NewUpdateAvailableFormat, latest.Tag));
 
-                    if (result == 6)
+                    if (result == MessageBoxResult.IDYES)
                     {
                         Windows.System.Launcher.LaunchUriAsync(new Uri(latest.HtmlUrl));
                     }
@@ -151,12 +142,7 @@ namespace AwqatSalaat.WinUI.Views
             }
             catch (Exception ex)
             {
-                User32.MessageBox(
-                        IntPtr.Zero,
-                        Properties.Resources.Dialog_CheckingUpdatesFailed + $"\nError: {ex.Message}",
-                        Properties.Resources.Data_AppName,
-                        MessageBoxButtons.MB_OK,
-                        MessageBoxIcon.MB_ICONERROR);
+                MessageBox.Error(Properties.Resources.Dialog_CheckingUpdatesFailed + $"\nError: {ex.Message}");
             }
         }
 

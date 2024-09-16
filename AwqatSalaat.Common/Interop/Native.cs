@@ -16,10 +16,6 @@ namespace AwqatSalaat.Interop
 
         [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern int MessageBox(IntPtr HWND, string lpText, string lpCaption, uint uType);
-        public static int MessageBox(IntPtr HWND, string lpText, string lpCaption, MessageBoxButtons buttons)
-            => MessageBox(HWND, lpText, lpCaption, (uint)buttons);
-        public static int MessageBox(IntPtr HWND, string lpText, string lpCaption, MessageBoxButtons buttons, MessageBoxIcon icon)
-            => MessageBox(HWND, lpText, lpCaption, (uint)buttons | (uint)icon);
 
         [DllImport("user32.dll")]
         public static extern uint GetDpiForWindow([In] IntPtr hWnd);
@@ -184,6 +180,32 @@ namespace AwqatSalaat.Interop
         MB_ICONERROR = MB_ICONHAND,
         MB_ICONINFORMATION = MB_ICONASTERISK,
         MB_ICONSTOP = MB_ICONHAND,
+    }
+
+    public enum MessageBoxResult : uint
+    {
+        // NONE is not a standard value, I added it to simplify things
+        NONE = 0,
+        IDOK = 1,
+        IDCANCEL = 2,
+        IDABORT = 3,
+        IDRETRY = 4,
+        IDIGNORE = 5,
+        IDYES = 6,
+        IDNO = 7,
+    }
+
+    [Flags]
+    public enum MessageBoxOptions : uint
+    {
+        // NONE is not a standard value, I added it to simplify things
+        NONE = 0,
+        MB_SETFOREGROUND = 0x00010000,
+        MB_DEFAULT_DESKTOP_ONLY = 0x00020000,
+        MB_TOPMOST = 0x00040000,
+        MB_RIGHT = 0x00080000,
+        MB_RTLREADING = 0x00100000,
+        MB_SERVICE_NOTIFICATION = 0x00200000,
     }
 
     [Flags]

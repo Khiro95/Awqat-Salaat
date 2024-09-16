@@ -59,7 +59,7 @@ namespace AwqatSalaat.WinUI
 
             if (!created)
             {
-                ShowError("The application is already running.");
+                ShowError(Properties.Resources.Dialog_AppAlreadyRunning);
                 Environment.Exit(ExitCodes.AlreadyRunning);
             }
         }
@@ -116,8 +116,7 @@ namespace AwqatSalaat.WinUI
 
         private static void ShowError(string message)
         {
-            string caption = LocaleManager.Default.Get("Data.AppName");
-            Interop.User32.MessageBox(IntPtr.Zero, message, caption, Interop.MessageBoxButtons.MB_OK, Interop.MessageBoxIcon.MB_ICONERROR);
+            Helpers.MessageBox.Error(message);
         }
 
         private static void QuitExecute()
