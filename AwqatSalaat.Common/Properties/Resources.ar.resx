@@ -399,4 +399,8 @@
   <data name="Dialog.CheckingUpdatesFailed" xml:space="preserve">
     <value>لم يمكن التحقق من وجود تحديثات.</value>
   </data>
+  <data name="UI.Panel.ServiceDownHint" xml:space="preserve">
+    <value>الخدمة متوقفة؟
+جرب التبديل إلى خدمة أخرى بالذهاب إلى</value>
+  </data>
 </root>

@@ -154,16 +154,51 @@
             Grid.Row="1"
             Grid.ColumnSpan="2"
             Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisConverter}}"/>
-        <StackPanel
+        <Grid
             Width="180"
             HorizontalAlignment="Center"
-            VerticalAlignment="Center"
             Grid.Row="1"
             Grid.ColumnSpan="2"
             Visibility="{Binding HasError, Converter={StaticResource BoolVisConverter}}"
             d:Visibility="Hidden">
-            <TextBlock Text="{mk:L11n UI.Panel.Error}" HorizontalAlignment="Center" Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}"/>
-            <TextBlock Text="{Binding ErrorMessage}" d:Text="Something wrong happened, please check the settings and try again" TextAlignment="Center" TextWrapping="Wrap" Margin="8"/>
-        </StackPanel>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border x:Name="errorBounds" Margin="0,32,0,0"/>
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="{mk:L11n UI.Panel.Error}" HorizontalAlignment="Center" Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}"/>
+                <TextBlock Text="{Binding ErrorMessage}"
+                           d:Text="Something wrong happened, please check the settings and try again"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"
+                           TextTrimming="CharacterEllipsis"
+                           MaxHeight="{Binding ElementName=errorBounds, Path=ActualHeight}"
+                           Margin="8"/>
+            </StackPanel>
+            <StackPanel Margin="16,8" Grid.Row="1">
+                <TextBlock Text="{mk:L11n UI.Panel.ServiceDownHint}" Foreground="{DynamicResource ThemeColors.TextSecondaryBrush}" TextAlignment="Center" TextWrapping="Wrap"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" TextBlock.Foreground="{DynamicResource ThemeColors.TextSecondaryBrush}" Margin="0,8,0,0">
+                    <TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center"/>
+                    <TextBlock Text="&#xE974;" FontFamily="Segoe MDL2 Assets" FontSize="10" Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" VerticalAlignment="Center" Margin="4,0">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <Trigger Property="FlowDirection" Value="RightToLeft">
+                                        <Setter Property="RenderTransform">
+                                            <Setter.Value>
+                                                <ScaleTransform ScaleX="-1"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="RenderTransformOrigin" Value=".5,.5"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock Text="{mk:L11n UI.Settings.Tabs.Service}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

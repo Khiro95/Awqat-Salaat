@@ -83,16 +83,30 @@
                 Grid.Row="1"
                 Grid.ColumnSpan="2"
                 Visibility="{x:Bind ViewModel.IsRefreshing}"/>
-            <StackPanel
+            <Grid
                 Width="180"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"
                 Grid.Row="1"
                 Grid.ColumnSpan="2"
                 Visibility="{x:Bind ViewModel.HasError}">
-                <TextBlock Text="{mk:L11n Key=UI.Panel.Error}" HorizontalAlignment="Center" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
-                <TextBlock Text="{x:Bind ViewModel.ErrorMessage}" TextAlignment="Center" TextWrapping="Wrap" Margin="8"/>
-            </StackPanel>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Border Margin="0,32,0,0" SizeChanged="ErrorBounds_SizeChanged"/>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="{mk:L11n Key=UI.Panel.Error}" HorizontalAlignment="Center" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                    <TextBlock x:Name="errorMessage" Text="{x:Bind ViewModel.ErrorMessage}" TextAlignment="Center" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Margin="8"/>
+                </StackPanel>
+                <StackPanel Margin="16,8" Grid.Row="1">
+                    <TextBlock Text="{mk:L11n Key=UI.Panel.ServiceDownHint}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextAlignment="Center" TextWrapping="Wrap"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,0">
+                        <FontIcon Glyph="&#xE713;" FontSize="16" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center"/>
+                        <FontIcon Glyph="&#xE974;" FontSize="10" Foreground="{ThemeResource TextFillColorTertiaryBrush}" MirroredWhenRightToLeft="True" VerticalAlignment="Center" Margin="4,0"/>
+                        <TextBlock Text="{mk:L11n Key=UI.Settings.Tabs.Service}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
         </Grid>
     </ScrollViewer>
 </UserControl>

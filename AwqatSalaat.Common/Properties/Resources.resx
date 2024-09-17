@@ -379,4 +379,8 @@ Would you like to visit download page?</value>
   <data name="Dialog.CheckingUpdatesFailed" xml:space="preserve">
     <value>Could not check for updates.</value>
   </data>
+  <data name="UI.Panel.ServiceDownHint" xml:space="preserve">
+    <value>Service down?
+Try switching to other service by going to</value>
+  </data>
 </root>

@@ -66,5 +66,10 @@ namespace AwqatSalaat.WinUI.Views
                 stackPanel.Orientation = Orientation.Horizontal;
             }
         }
+
+        private void ErrorBounds_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            errorMessage.MaxHeight = e.NewSize.Height;
+        }
     }
 }

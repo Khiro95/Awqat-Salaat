@@ -113,6 +113,7 @@ namespace AwqatSalaat.WinUI.Controls
             if (isFirstTime)
             {
                 popup.GotFocus += (_, _) => flyoutPresenter?.Focus(FocusState.Programmatic);
+                isFirstTime = false;
             }
         }
 

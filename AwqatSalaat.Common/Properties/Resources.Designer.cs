@@ -343,6 +343,16 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Service down?
+        ///Try switching to other service by going to.
+        /// </summary>
+        public static string UI_Panel_ServiceDownHint {
+            get {
+                return ResourceManager.GetString("UI.Panel.ServiceDownHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string UI_Panel_Settings {

@@ -256,6 +256,11 @@ namespace AwqatSalaat.ViewModels
 
         private async Task RefreshData()
         {
+            if (IsRefreshing)
+            {
+                return;
+            }
+
             try
             {
                 ErrorMessage = null;
@@ -311,8 +316,10 @@ namespace AwqatSalaat.ViewModels
 
                 ErrorMessage = ex.Message;
             }
-
-            IsRefreshing = false;
+            finally
+            {
+                IsRefreshing = false;
+            }
         }
 
         private void OnNearNotificationStarted()
