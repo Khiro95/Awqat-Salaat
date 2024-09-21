@@ -13,7 +13,7 @@ namespace AwqatSalaat.WinUI.Controls
         private bool xamlRootHadChanges;
         private FrameworkElement target;
         private bool hasClosed;
-        private bool isFirstTime;
+        private bool isFirstTime = true;
         private Control flyoutPresenter;
 
         public bool ClosedBecauseOfResize { get; private set; }
