@@ -204,10 +204,10 @@ namespace CSDeskBand
                 var oleWindow = (IOleWindow)pUnkSite;
                 oleWindow.GetWindow(out _parentWindowHandle);
 
-                uint windowStyles = User32.GetWindowLong(_provider.Handle, -16);
+                uint windowStyles = User32.GetWindowLong(_provider.Handle, User32.GWL_STYLE);
                 windowStyles &= ~(uint)WindowStyles.WS_POPUP;
                 windowStyles |= (uint)WindowStyles.WS_CHILD;
-                User32.SetWindowLong(_provider.Handle, -16, windowStyles);
+                User32.SetWindowLong(_provider.Handle, User32.GWL_STYLE, windowStyles);
 
                 _parentSite = (IInputObjectSite)pUnkSite;
                 return HRESULT.S_OK;
@@ -2083,6 +2083,9 @@ namespace CSDeskBand.Interop
 
     internal class User32
     {
+        // Used in [Get/Set]WindowLong
+        public const int GWL_STYLE = -16;
+
         [DllImport("user32.dll", SetLastError = true)]
         public static extern int SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 
