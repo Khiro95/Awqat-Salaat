@@ -24,11 +24,21 @@ namespace AwqatSalaat.WinUI.Views
             .Version;
         private static readonly string Architecture = Environment.Is64BitProcess ? "64-bit" : "32-bit";
 
+#if PACKAGED
+        static SettingsPanel()
+        {
+            var packageVersion = Windows.ApplicationModel.Package.Current.Id.Version;
+            Version = $"{packageVersion.Major}.{packageVersion.Minor}.{packageVersion.Build}.{packageVersion.Revision}";
+        }
+#endif
+
         private bool keepFlyoutOpen;
+        private bool loadedFirstTime;
 
         private WidgetSettingsViewModel ViewModel => DataContext as WidgetSettingsViewModel;
 
         public Flyout ParentFlyout { get; set; }
+        public StartupSettings StartupSettings { get; } = new StartupSettings();
 
         public SettingsPanel()
         {
@@ -46,10 +56,20 @@ namespace AwqatSalaat.WinUI.Views
 
         private void SettingsPanel_Loaded(object sender, RoutedEventArgs e)
         {
-            if (ParentFlyout is not null)
+            if (!loadedFirstTime)
             {
-                ParentFlyout.Closing += (s, a) => a.Cancel = keepFlyoutOpen;
+                loadedFirstTime = true;
+                this.ViewModel.Updated += _ => StartupSettings.Commit();
+
+                if (ParentFlyout is not null)
+                {
+                    ParentFlyout.Closing += (s, a) => a.Cancel = keepFlyoutOpen;
+                }
             }
+
+#if PACKAGED
+            StartupSettings.VerifyStartupTask();
+#endif
         }
 
         // Workaround for a bug https://github.com/microsoft/microsoft-ui-xaml/issues/4035
@@ -120,10 +140,35 @@ namespace AwqatSalaat.WinUI.Views
         {
             try
             {
+                keepFlyoutOpen = true;
                 var current = System.Version.Parse(Version);
 #if DEBUG
                 current = System.Version.Parse("1.0");
 #endif
+#if PACKAGED
+                ViewModel.IsCheckingNewVersion = true;
+
+                var storeContext = Windows.Services.Store.StoreContext.GetDefault();
+                var updates = await storeContext.GetAppAndOptionalStorePackageUpdatesAsync();
+
+                ViewModel.IsCheckingNewVersion = false;
+
+                if (updates.Count > 1)
+                {
+                    var version = updates[0].Package.Id.Version;
+                    var versionString = string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+                    var result = MessageBox.Question(string.Format(Properties.Resources.Dialog_NewUpdateAvailableFormat, versionString));
+
+                    if (result == MessageBoxResult.IDYES)
+                    {
+                        Windows.System.Launcher.LaunchUriAsync(new Uri("ms-windows-store://pdp/?productid=9NHH4C81FZ0N")); ;
+                    }
+                }
+                else
+                {
+                    MessageBox.Info(Properties.Resources.Dialog_WidgetUpToDate);
+                }
+#else
                 var latest = await ViewModel.CheckForNewVersion(current);
 
                 if (latest is null)
@@ -139,10 +184,19 @@ namespace AwqatSalaat.WinUI.Views
                         Windows.System.Launcher.LaunchUriAsync(new Uri(latest.HtmlUrl));
                     }
                 }
+#endif
             }
             catch (Exception ex)
             {
                 MessageBox.Error(Properties.Resources.Dialog_CheckingUpdatesFailed + $"\nError: {ex.Message}");
+            }
+            finally
+            {
+                keepFlyoutOpen = false;
+#if PACKAGED
+                // Just in case
+                ViewModel.IsCheckingNewVersion = false;
+#endif
             }
         }
 

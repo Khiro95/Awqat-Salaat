@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+  IgnorableNamespaces="uap rescap desktop uap3">
+
+  <Identity
+    Name="Khiro.AwqatSalaatWinUI"
+    Publisher="CN=C005A407-3926-439C-B560-3187F3293A86"
+    Version="0.0.0.0" />
+
+  <Properties>
+    <DisplayName>Awqat Salaat WinUI</DisplayName>
+    <PublisherDisplayName>Khiro</PublisherDisplayName>
+    <Logo>Images\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22631.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="x-generate"/>
+    <Resource uap:Scale="200" />
+  </Resources>
+
+  <Applications>
+    <Application Id="App"
+      Executable="$targetnametoken$.exe"
+      EntryPoint="$targetentrypoint$">
+      <Extensions>
+        <desktop:Extension Category="windows.startupTask">
+          <desktop:StartupTask
+            TaskId="AwqatSalaatStartupTask"
+            Enabled="true"
+            DisplayName="Awqat Salaat WinUI" />
+        </desktop:Extension>
+      </Extensions>
+      <uap:VisualElements
+        DisplayName="Awqat Salaat WinUI"
+        Description="A simple Windows widget to show the time of the next prayer alongside a countdown on the taskbar."
+        BackgroundColor="transparent" Square150x150Logo="Images\MedTile.png" Square44x44Logo="Images\AppList.png">
+        <uap:DefaultTile Square71x71Logo="Images\SmallTile.png"/>
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+    <Capability Name="internetClient"/>
+    <uap3:Capability Name="backgroundMediaPlayback"/>
+  </Capabilities>
+</Package>

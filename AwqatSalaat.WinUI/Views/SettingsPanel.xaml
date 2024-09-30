@@ -141,8 +141,8 @@
                                 <RadioButton Content="العربية" GroupName="Language" IsChecked="{x:Bind ViewModel.UseArabic}" FlowDirection="RightToLeft"/>
                             </RadioButtons>
                         </ctrl:SettingsItem>
-                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartup}" Description="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartupDescription}">
-                            <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.LaunchOnWindowsStartup}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartup}" Description="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartupDescription}" IsEnabled="{x:Bind StartupSettings.CanSetLaunchOnStartup, Mode=OneWay}">
+                            <ToggleSwitch IsOn="{x:Bind StartupSettings.LaunchOnStartup}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
                         </ctrl:SettingsItem>
                         <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowCountdown}" Description="{mk:L11n Key=UI.Settings.ShowCountdownDescription}">
                             <ToggleSwitch x:Name="countdownToggle" IsOn="{x:Bind ViewModel.Settings.ShowCountdown}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>

@@ -120,6 +120,9 @@ namespace AwqatSalaat.Interop
     {
         [DllImport("kernel32.dll")]
         public static extern IntPtr GetModuleHandle(string module);
+
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr RegisterApplicationRestart(string pwzCommandline, ApplicationRestart dwFlags = ApplicationRestart.None);
     }
 
     [Flags]
@@ -378,6 +381,7 @@ namespace AwqatSalaat.Interop
     public enum WindowMessage : uint
     {
         WM_SETREDRAW = 0x000B,
+        WM_QUERYENDSESSION = 0x0011,
         WM_SETTINGCHANGE = 0x001A
     }
 
@@ -494,4 +498,26 @@ namespace AwqatSalaat.Interop
         /// </summary>
         DWMNCRP_LAST
     };
+
+    [Flags]
+    public enum ApplicationRestart
+    {
+        None = 0,
+        /// <summary>
+        /// Do not restart the process if it terminates due to an unhandled exception.
+        /// </summary>
+        RESTART_NO_CRASH = 1,
+        /// <summary>
+        /// Do not restart the process if it terminates due to the application not responding.
+        /// </summary>
+        RESTART_NO_HANG = 2,
+        /// <summary>
+        /// Do not restart the process if it terminates due to the installation of an update.
+        /// </summary>
+        RESTART_NO_PATCH = 4,
+        /// <summary>
+        /// Do not restart the process if the computer is restarted as the result of an update.
+        /// </summary>
+        RESTART_NO_REBOOT = 8,
+    }
 }

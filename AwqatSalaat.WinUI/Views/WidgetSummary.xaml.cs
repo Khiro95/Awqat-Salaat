@@ -87,7 +87,6 @@ namespace AwqatSalaat.WinUI.Views
 
         private void WidgetSettings_Updated(bool apiSettingsUpdated)
         {
-            App.SetLaunchOnWindowsStartup(ViewModel.WidgetSettings.Settings.LaunchOnWindowsStartup);
             UpdateNotificationSound();
         }
 

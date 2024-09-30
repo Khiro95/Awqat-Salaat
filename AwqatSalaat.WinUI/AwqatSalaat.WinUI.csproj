@@ -12,14 +12,24 @@
         <EnableMsixTooling>true</EnableMsixTooling>
         <ApplicationIcon>Assets/as_ico_win11.ico</ApplicationIcon>
 
-        <WindowsPackageType>None</WindowsPackageType>
+        <WindowsPackageType Condition="'$(IsPackaged)'==''">None</WindowsPackageType>
         <SelfContained>false</SelfContained>
         <AppContainerApplication>true</AppContainerApplication>
 
         <Product>Awqat Salaat WinUI</Product>
     </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsPackaged)'=='true'">
+        <DefineConstants>$(DefineConstants);PACKAGED</DefineConstants>
+
+        <SignAssembly>True</SignAssembly>
+
+        <AssemblyOriginatorKeyFile>Assets\sign_key.snk</AssemblyOriginatorKeyFile>
+    </PropertyGroup>
+    
     <ItemGroup>
       <Content Remove="Assets\as_ico_win11.ico" />
+      <Content Remove="Assets\sign_key.snk" />
       <Content Remove="Assets\Vectors.xaml" />
     </ItemGroup>
 
@@ -50,7 +60,7 @@
     <ItemGroup>
         <PackageReference Include="H.NotifyIcon" Version="2.0.129" />
         <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240311000" />
-        <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
+        <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.3233" />
         <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
         <PackageReference Include="System.Management" Version="8.0.0" />
         <Manifest Include="$(ApplicationManifest)" />
