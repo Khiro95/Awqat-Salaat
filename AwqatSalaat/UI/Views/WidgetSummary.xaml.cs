@@ -4,6 +4,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace AwqatSalaat.UI.Views
@@ -69,11 +70,24 @@ namespace AwqatSalaat.UI.Views
             InitializeComponent();
 
             mediaPlayer.MediaEnded += (_, __) => mediaPlayer.Position = TimeSpan.Zero;
+            popup.Opened += (_, __) =>
+            {
+                var src = HwndSource.FromVisual(popup.Child) as HwndSource;
+                (src.RootVisual as UIElement)?.Focus();
+            };
             popup.Closed += (_, __) =>
             {
                 if (ViewModel.WidgetSettings.IsOpen && ViewModel.WidgetSettings.Settings.IsConfigured)
                 {
                     ViewModel.WidgetSettings.Cancel.Execute(null);
+                }
+            };
+            popup.KeyDown += (_, e) =>
+            {
+                if (e.Key == System.Windows.Input.Key.Escape)
+                {
+                    toggle.IsChecked = false;
+                    e.Handled = true;
                 }
             };
             this.Loaded += (_, __) => UpdateDisplayMode();

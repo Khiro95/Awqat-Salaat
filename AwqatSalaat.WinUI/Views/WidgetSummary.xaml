@@ -9,6 +9,7 @@
     xmlns:controls="using:AwqatSalaat.WinUI.Controls"
     xmlns:converters="using:AwqatSalaat.WinUI.Converters"
     xmlns:mk="using:AwqatSalaat.WinUI.Markup"
+    xmlns:media="using:AwqatSalaat.WinUI.Media"
     xmlns:vm="using:AwqatSalaat.ViewModels"
     xmlns:ash="using:AwqatSalaat.Helpers"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -87,6 +88,8 @@
             <converters:BooleanToVisibilityInvertedConverter x:Key="BooleanToVisibilityInvertedConverter"/>
             <converters:BooleanInvertedConverter x:Key="BooleanInvertedConverter"/>
             <converters:EnumEqualityConverter x:Key="EnumEqualityConverter"/>
+
+            <media:DesktopAcrylicSystemBackdrop x:Key="DesktopAcrylicSystemBackdrop"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <UserControl.Transitions>
@@ -272,14 +275,11 @@
         <ToggleButton x:Name="toggle" IsChecked="{x:Bind flyout.IsOpen}" IsThreeState="False" Checked="ToggleButton_Checked" Padding="0" FontSize="12" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
             <Grid x:Name="btngrid">
                 <Grid.ContextFlyout>
-                    <MenuFlyout ShouldConstrainToRootBounds="False" SystemBackdrop="{StaticResource AcrylicBackgroundFillColorDefaultBackdrop}">
-                        <MenuFlyout.MenuFlyoutPresenterStyle>
-                            <Style TargetType="MenuFlyoutPresenter" BasedOn="{StaticResource DefaultMenuFlyoutPresenterStyle}">
-                                <Setter Property="Background" Value="Transparent"/>
-                            </Style>
-                        </MenuFlyout.MenuFlyoutPresenterStyle>
-                        <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Hide}" Command="{x:Bind app:TaskBarManager.HideWidget, Mode=OneTime}"/>
+                    <MenuFlyout ShouldConstrainToRootBounds="False" SystemBackdrop="{StaticResource DesktopAcrylicSystemBackdrop}">
                         <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Reposition}" Command="{x:Bind app:TaskBarManager.RepositionWidget, Mode=OneTime}"/>
+                        <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.ManualPosition}" Command="{x:Bind app:TaskBarManager.ManuallyPositionWidget}"/>
+                        <MenuFlyoutSeparator/>
+                        <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Hide}" Command="{x:Bind app:TaskBarManager.HideWidget, Mode=OneTime}"/>
                         <MenuFlyoutSeparator/>
                         <MenuFlyoutItem Text="{mk:L11n Key=UI.ContextMenu.Quit}" Command="{x:Bind app:App.Quit, Mode=OneTime}"/>
                     </MenuFlyout>
@@ -348,7 +348,7 @@
                 </Grid>
             </Grid>
             <FlyoutBase.AttachedFlyout>
-                <controls:CustomizedFlyout x:Name="flyout" ShouldConstrainToRootBounds="False" SystemBackdrop="{StaticResource AcrylicBackgroundFillColorDefaultBackdrop}" Opened="Flyout_Opened" Closed="Flyout_Closed">
+                <controls:CustomizedFlyout x:Name="flyout" ShouldConstrainToRootBounds="False" SystemBackdrop="{StaticResource DesktopAcrylicSystemBackdrop}" Opened="Flyout_Opened" Closed="Flyout_Closed">
                     <Flyout.FlyoutPresenterStyle>
                         <Style TargetType="FlyoutPresenter" BasedOn="{StaticResource DefaultFlyoutPresenterStyle}">
                             <Setter Property="Background" Value="Transparent"/>

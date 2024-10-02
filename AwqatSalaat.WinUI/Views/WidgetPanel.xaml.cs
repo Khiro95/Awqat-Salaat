@@ -26,8 +26,14 @@ namespace AwqatSalaat.WinUI.Views
         private void themeBtn_Click(object sender, RoutedEventArgs e)
         {
             // cannot change app theme at runtime so we change popup's theme only
-            var presenter = this.Parent as FlyoutPresenter;
-            var popup = presenter?.Parent as Popup;
+            var popups = Microsoft.UI.Xaml.Media.VisualTreeHelper.GetOpenPopupsForXamlRoot(XamlRoot);
+
+            if (popups.Count != 1)
+            {
+                return;
+            }
+
+            var popup = popups[0];
 
             if (popup is not null)
             {
@@ -59,6 +65,11 @@ namespace AwqatSalaat.WinUI.Views
             {
                 stackPanel.Orientation = Orientation.Horizontal;
             }
+        }
+
+        private void ErrorBounds_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            errorMessage.MaxHeight = e.NewSize.Height;
         }
     }
 }

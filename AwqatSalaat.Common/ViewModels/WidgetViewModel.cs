@@ -78,7 +78,7 @@ namespace AwqatSalaat.ViewModels
                 SettingsUpdated(false);
                 UpdateServiceClient();
 
-                var cached = JsonConvert.DeserializeObject<ServiceData>(WidgetSettings.Settings.ApiCache);
+                var cached = JsonConvert.DeserializeObject<ServiceData>(WidgetSettings.Settings.ApiCache ?? "");
 
                 if (cached != null)
                 {
@@ -106,6 +106,8 @@ namespace AwqatSalaat.ViewModels
                 WidgetSettings.Settings.Save();
                 RefreshData();
             }
+
+            OnPropertyChanged(nameof(DisplayedDate));
         }
 
         private void TimeEntered(object sender, EventArgs e)
@@ -254,6 +256,11 @@ namespace AwqatSalaat.ViewModels
 
         private async Task RefreshData()
         {
+            if (IsRefreshing)
+            {
+                return;
+            }
+
             try
             {
                 ErrorMessage = null;
@@ -309,8 +316,10 @@ namespace AwqatSalaat.ViewModels
 
                 ErrorMessage = ex.Message;
             }
-
-            IsRefreshing = false;
+            finally
+            {
+                IsRefreshing = false;
+            }
         }
 
         private void OnNearNotificationStarted()

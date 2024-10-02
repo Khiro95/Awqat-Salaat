@@ -1,3 +1,17 @@
+### v3.3
+
+- Make the widget available on Microsoft Store. (WinUI only)
+- Allow dragging the widget to custom position. (WinUI only)
+- Add a setting to control Hijri date.
+- Add updates checking in About page.
+- Enable Acrylic background. (WinUI only)
+- Improve widget positioning. (WinUI only)
+- Fix navigation using Tab key. (Deskband only)
+- Make MessageBox dialogs respect current language direction.
+- Show a hint when the current service is down to suggest a potential solution.
+- Improve location search using Nominatim.
+- Various bug-fixes.
+
 ### v3.2
 
 - Add **Compact mode**.

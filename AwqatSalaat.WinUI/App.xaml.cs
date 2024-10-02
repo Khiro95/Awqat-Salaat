@@ -1,8 +1,6 @@
 ﻿using AwqatSalaat.Helpers;
-using IWshRuntimeLibrary;
 using Microsoft.UI.Xaml;
 using System;
-using System.IO;
 using System.Threading;
 using System.Windows.Input;
 using WinRT.Interop;
@@ -59,41 +57,8 @@ namespace AwqatSalaat.WinUI
 
             if (!created)
             {
-                ShowError("The application is already running.");
+                ShowError(Properties.Resources.Dialog_AppAlreadyRunning);
                 Environment.Exit(ExitCodes.AlreadyRunning);
-            }
-        }
-
-        public static void SetLaunchOnWindowsStartup(bool launchOnWindowsStartup)
-        {
-            var process = System.Diagnostics.Process.GetCurrentProcess();
-            var moduleInfo = process.MainModule.FileVersionInfo;
-            var shortcutPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Startup), moduleInfo.ProductName + ".lnk");
-
-            if (launchOnWindowsStartup)
-            {
-                WshShell wshShell = new WshShell();
-                
-                // Create the shortcut
-                IWshShortcut shortcut = (IWshShortcut)wshShell.CreateShortcut(shortcutPath);
-
-                shortcut.TargetPath = moduleInfo.FileName;
-                shortcut.WorkingDirectory = Path.GetDirectoryName(moduleInfo.FileName);
-                shortcut.Description = $"Launch {moduleInfo.ProductName}";
-                shortcut.Save();
-            }
-            else
-            {
-                try
-                {
-                    System.IO.File.Delete(shortcutPath);
-                }
-                catch (Exception ex)
-                {
-#if DEBUG
-                    throw;
-#endif
-                }
             }
         }
 
@@ -116,8 +81,7 @@ namespace AwqatSalaat.WinUI
 
         private static void ShowError(string message)
         {
-            string caption = LocaleManager.Default.Get("Data.AppName");
-            Interop.User32.MessageBox(IntPtr.Zero, message, caption, Interop.MessageBoxButtons.MB_OK, Interop.MessageBoxIcon.MB_ICONERROR);
+            Helpers.MessageBox.Error(message);
         }
 
         private static void QuitExecute()

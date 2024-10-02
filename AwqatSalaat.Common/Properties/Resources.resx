@@ -343,4 +343,44 @@
   <data name="UI.Settings.Browse" xml:space="preserve">
     <value>Browse...</value>
   </data>
+  <data name="Data.CalendarType.Hijri" xml:space="preserve">
+    <value>Hijri</value>
+  </data>
+  <data name="Data.CalendarType.UmAlQura" xml:space="preserve">
+    <value>Um Al Qura</value>
+  </data>
+  <data name="UI.Settings.Calendar" xml:space="preserve">
+    <value>Calendar type</value>
+  </data>
+  <data name="UI.Settings.CalendarDescription" xml:space="preserve">
+    <value>The calendar which is used to determine Hijri date</value>
+  </data>
+  <data name="UI.Settings.HijriCalendarAdjustment" xml:space="preserve">
+    <value>Adjust by (day)</value>
+  </data>
+  <data name="UI.ContextMenu.ManualPosition" xml:space="preserve">
+    <value>Manual position</value>
+  </data>
+  <data name="UI.About.CheckForUpdates" xml:space="preserve">
+    <value>Check for Updates</value>
+  </data>
+  <data name="Dialog.AppAlreadyRunning" xml:space="preserve">
+    <value>The application is already running.</value>
+  </data>
+  <data name="Dialog.WidgetUpToDate" xml:space="preserve">
+    <value>The widget is already up-to-date.</value>
+  </data>
+  <data name="Dialog.NewUpdateAvailableFormat" xml:space="preserve">
+    <value>A new release is available!
+Version: {0}
+
+Would you like to visit download page?</value>
+  </data>
+  <data name="Dialog.CheckingUpdatesFailed" xml:space="preserve">
+    <value>Could not check for updates.</value>
+  </data>
+  <data name="UI.Panel.ServiceDownHint" xml:space="preserve">
+    <value>Service down?
+Try switching to other service by going to</value>
+  </data>
 </root>

@@ -9,6 +9,7 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="MinWidth" Value="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=ActualWidth}"/>
         <Setter Property="FocusVisualStyle" Value="{DynamicResource DefaultFocusVisual}"/>
         <Setter Property="Template">
             <Setter.Value>

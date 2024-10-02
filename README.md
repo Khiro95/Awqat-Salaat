@@ -18,7 +18,17 @@ So **DON'T** rely on the widget to get the exact time, especially for performing
 
 ## Supported Platforms
 
-Awqat Salaat is a *Windows* widget that is available in two forms:
+Awqat Salaat is a *Windows* widget that is available in two forms: ***Deskband*** (Awqat Salaat) and ***WinUI*** (Awqat Salaat WinUI).
+Here is a quick compatibility comarison between both forms:
+
+| Operating System | Awqat Salaat | Awqat Salaat WinUI |
+| --- | --- | --- |
+| **Windows 11** | Incompatible ❌ | Compatible ✔ |
+| **Windows 10** | Compatible ✔ | Compatible ✔⚠ |
+| **Windows 8/8.1** | Compatible ✔ | Incompatible ❌ |
+| **Windows 7** | Compatible ✔ | Incompatible ❌ |
+
+⚠ Awqat Salaat WinUI is not supported on Windows 10 versions older than 1809.
 
 ### Awqat Salaat (Deskband)
 
@@ -37,7 +47,7 @@ This app bring Awqat Salaat to Windows 11 which wasn't supported in earlier vers
 > [!note]
 > Although this app can run on Windows 10, it's *not recommended* due to the limitiations listed below, use deskband widget instead.
 
-#### Requirements:
+#### Requirements
 
 - [.NET Desktop Runtime 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 - [Windows App Runtime 1.5](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/downloads)
@@ -53,9 +63,16 @@ This app bring Awqat Salaat to Windows 11 which wasn't supported in earlier vers
 - The widget cannot be shown/hidden from the taskbar itself. However, a context-menu and a system tray icon are available to control the widget.
 - Explorer will not manage the widget so it has to be launched externally at Windows startup. This can be configured in Settings.
 - On 2-in-1 devices, you *may* need to manually re-position the widget after switching to/from tablet mode.
-- The blurred background effect doesn't work, for some reason, even though it works when the widget is not injected into the taskbar.
 
 ## Installation
+
+### From Microsoft Store
+
+Awqat Salaat WinUI is available on Microsoft Store.
+
+[<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>](https://apps.microsoft.com/detail/9nhh4c81fz0n?mode=full)
+
+### From GitHub
 
 Go to [Releases](https://github.com/Khiro95/Awqat-Salaat/releases) page and download the installer that matches your OS architecture.
 
@@ -63,6 +80,8 @@ Go to [Releases](https://github.com/Khiro95/Awqat-Salaat/releases) page and down
 > If you choose the `x86` version of the installer while your OS is `x64`, then the widget won't install correctly.
 
 After downloading the installer, double-click on it to install the widget.
+
+### Steps
 
 ***If you choose Awqat Salaat WinUI, launch the app and jump directly to step 3.***
 
@@ -143,7 +162,6 @@ For a list of changes, check the changelog [here](CHANGELOG.md).
 
 - The widget cache all the times of the current month, obtained from the API, so that it can work in offline mode.
 - The preview app is used for development purposes only.
-- The Hijri date shown in the widget is provided by the runtime (.NET Framework/.NET) and is based on *Um Al Qura* calendar, thus it may not match the exact date everywhere.
 
 ## Acknowledgement
 
@@ -156,6 +174,10 @@ For a list of changes, check the changelog [here](CHANGELOG.md).
 ## Contact
 
 For any question or problem reporting, please consider opening a [new issue](https://github.com/Khiro95/Awqat-Salaat/issues/new) or send an email to khiro95.gh@gmail.com.
+
+## Privacy Policy
+
+You can find details [here](PRIVACY-POLICY.md).
 
 ## License
 

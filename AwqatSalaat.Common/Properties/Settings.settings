@@ -68,5 +68,14 @@
     <Setting Name="EnableNotificationSound" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="CalendarType" Type="AwqatSalaat.Data.CalendarType" Scope="User">
+      <Value Profile="(Default)">UmAlQura</Value>
+    </Setting>
+    <Setting Name="HijriAdjustment" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="CustomPosition" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">-1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

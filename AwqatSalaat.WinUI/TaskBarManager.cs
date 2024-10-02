@@ -16,18 +16,21 @@ namespace AwqatSalaat.WinUI
         private static PopupMenuItem showItem;
         private static PopupMenuItem hideItem;
         private static PopupMenuItem repositionItem;
+        private static PopupMenuItem manualPositionItem;
         private static PopupMenuItem quitItem;
 
         public static IntPtr CurrentWidgetHandle => taskBarWidget?.Handle ?? throw new InvalidOperationException("The taskbar widget is missing.");
         public static ICommand ShowWidget { get; }
         public static ICommand HideWidget { get; }
         public static ICommand RepositionWidget { get; }
+        public static ICommand ManuallyPositionWidget { get; }
 
         static TaskBarManager()
         {
             ShowWidget = new RelayCommand(static o => ShowWidgetExecute());
             HideWidget = new RelayCommand(static o => HideWidgetExecute());
-            RepositionWidget = new RelayCommand(static o => taskBarWidget?.UpdatePosition());
+            RepositionWidget = new RelayCommand(static o => taskBarWidget?.UpdatePosition(true));
+            ManuallyPositionWidget = new RelayCommand(static o => taskBarWidget?.StartDragging());
 
             App.Quitting += App_Quitting;
             LocaleManager.Default.CurrentChanged += (_, _) => UpdateTrayIconLocalization();
@@ -41,7 +44,8 @@ namespace AwqatSalaat.WinUI
 
             showItem = new PopupMenuItem("Show", (_, _) => dispatcher.TryEnqueue(ShowWidgetExecute));
             hideItem = new PopupMenuItem("Hide", (_, _) => dispatcher.TryEnqueue(HideWidgetExecute));
-            repositionItem = new PopupMenuItem("Re-position", (_, _) => taskBarWidget?.UpdatePosition());
+            repositionItem = new PopupMenuItem("Re-position", (_, _) => taskBarWidget?.UpdatePosition(true));
+            manualPositionItem = new PopupMenuItem("Manual position", (_, _) => dispatcher.TryEnqueue(() => taskBarWidget?.StartDragging()));
             quitItem = new PopupMenuItem("Quit", (_, _) => dispatcher.TryEnqueue(() => App.Quit.Execute(null)));
 
             trayIcon = new TrayIconWithContextMenu()
@@ -52,7 +56,9 @@ namespace AwqatSalaat.WinUI
                     {
                         showItem,
                         hideItem,
+                        new PopupMenuSeparator(),
                         repositionItem,
+                        manualPositionItem,
                         new PopupMenuSeparator(),
                         quitItem,
                     }
@@ -83,11 +89,15 @@ namespace AwqatSalaat.WinUI
             {
                 var widget = new TaskBarWidget();
 
+                widget.Destroying += Widget_Destroying;
+
                 widget.Initialize();
 
                 widget.Show();
 
                 taskBarWidget = widget;
+
+                UpdateTrayMenuItemsStates(true);
             }
         }
 
@@ -102,6 +112,12 @@ namespace AwqatSalaat.WinUI
 
                 taskBarWidget = null;
             }
+        }
+
+        private static void Widget_Destroying(object sender, EventArgs e)
+        {
+            (sender as TaskBarWidget).Destroying -= Widget_Destroying;
+            UpdateTrayMenuItemsStates(false);
         }
 
         private static void OnTaskbarCreated()
@@ -122,12 +138,21 @@ namespace AwqatSalaat.WinUI
             ShowWidgetExecute();
         }
 
+        private static void UpdateTrayMenuItemsStates(bool isWidgetVisible)
+        {
+            showItem.Enabled = !isWidgetVisible;
+            hideItem.Enabled = isWidgetVisible;
+            repositionItem.Enabled = isWidgetVisible;
+            manualPositionItem.Enabled = isWidgetVisible;
+        }
+
         private static void UpdateTrayIconLocalization()
         {
             trayIcon.UpdateToolTip(LocaleManager.Default.Get("Data.AppName"));
             showItem.Text = LocaleManager.Default.Get("UI.ContextMenu.Show");
             hideItem.Text = LocaleManager.Default.Get("UI.ContextMenu.Hide");
             repositionItem.Text = LocaleManager.Default.Get("UI.ContextMenu.Reposition");
+            manualPositionItem.Text = LocaleManager.Default.Get("UI.ContextMenu.ManualPosition");
             quitItem.Text = LocaleManager.Default.Get("UI.ContextMenu.Quit");
 
             trayIcon.ContextMenu.RightToLeft = LocaleManager.Default.CurrentCulture.TextInfo.IsRightToLeft;

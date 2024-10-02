@@ -203,7 +203,11 @@ namespace CSDeskBand
             {
                 var oleWindow = (IOleWindow)pUnkSite;
                 oleWindow.GetWindow(out _parentWindowHandle);
-                User32.SetParent(_provider.Handle, _parentWindowHandle);
+
+                uint windowStyles = User32.GetWindowLong(_provider.Handle, User32.GWL_STYLE);
+                windowStyles &= ~(uint)WindowStyles.WS_POPUP;
+                windowStyles |= (uint)WindowStyles.WS_CHILD;
+                User32.SetWindowLong(_provider.Handle, User32.GWL_STYLE, windowStyles);
 
                 _parentSite = (IInputObjectSite)pUnkSite;
                 return HRESULT.S_OK;
@@ -360,6 +364,10 @@ namespace CSDeskBand
         /// <inheritdoc/>
         public int TranslateAcceleratorIO(ref MSG msg)
         {
+            msg.hwnd = _provider.Handle;
+            User32.TranslateMessage(ref msg);
+            User32.DispatchMessage(ref msg);
+
             return HRESULT.S_OK;
         }
 
@@ -370,7 +378,7 @@ namespace CSDeskBand
         /// <param name="focused">True if focused.</param>
         public void UpdateFocus(bool focused)
         {
-            (_parentSite as IInputObjectSite)?.OnFocusChangeIS(this, focused ? 1 : 0);
+            (_parentSite as IInputObjectSite)?.OnFocusChangeIS(_provider, focused ? 1 : 0);
         }
 
         private void Options_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -1001,6 +1009,7 @@ namespace CSDeskBand
     using System.Windows.Interop;   
     using CSDeskBand.Interop;
     using System.Windows.Documents;
+    using System.Windows.Input;
     using System.Windows.Media;
     using System.Windows;
 
@@ -1023,7 +1032,7 @@ namespace CSDeskBand
             var hwndSourceParameters = new HwndSourceParameters("Deskband host for wpf", 1, 1)
             {
                 TreatAsInputRoot = true,
-                WindowStyle = unchecked((int)(WindowStyles.WS_VISIBLE | WindowStyles.WS_POPUP)),
+                WindowStyle = unchecked((int)(WindowStyles.WS_POPUP)),
                 HwndSourceHook = HwndSourceHook,
             };
 
@@ -1116,6 +1125,13 @@ namespace CSDeskBand
                     try
                     {
                         _rootVisual.Child = UIElement;
+                        UIElement.IsKeyboardFocusWithinChanged += (s, e) =>
+                        {
+                            if ((bool)e.NewValue)
+                            {
+                                UpdateFocus(true);
+                            }
+                        };
                     }
                     catch (Exception ex)
                     {
@@ -1141,7 +1157,7 @@ namespace CSDeskBand
             {
                 if (value)
                 {
-                    UIElement?.Focus();
+                    (UIElement as FrameworkElement)?.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
                 }
             }
         }
@@ -1279,7 +1295,15 @@ namespace CSDeskBand
 
         public int TranslateAcceleratorIO(ref Interop.MSG msg)
         {
-            return _impl.TranslateAcceleratorIO(ref msg);
+            IKeyboardInputSink keyboardInputSink = HwndSource as IKeyboardInputSink;
+            var m = new System.Windows.Interop.MSG()
+            {
+                message = (int)msg.message,
+                wParam = msg.wParam,
+                lParam = msg.lParam,
+            };
+            
+            return keyboardInputSink.TranslateAccelerator(ref m, Keyboard.Modifiers) ? HRESULT.S_OK : HRESULT.S_FALSE;
         }
 
         [ComRegisterFunction]
@@ -2059,11 +2083,20 @@ namespace CSDeskBand.Interop
 
     internal class User32
     {
+        // Used in [Get/Set]WindowLong
+        public const int GWL_STYLE = -16;
+
         [DllImport("user32.dll", SetLastError = true)]
         public static extern int SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 
         [DllImport("user32.dll")]
         public static extern bool InsertMenuItem(IntPtr hMenu, uint uItem, bool fByPosition, ref MENUITEMINFO lpmii);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern uint GetWindowLong(IntPtr hwnd, int index);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern uint SetWindowLong(IntPtr hwnd, int index, uint newStyle);
 
         [DllImport("user32.dll")]
         public static extern IntPtr CreateMenu();
@@ -2171,10 +2204,11 @@ namespace CSDeskBand.Interop
     {
         public IntPtr hwnd;
         public uint message;
-        public uint wParam;
-        public int lParam;
+        public IntPtr wParam;
+        public IntPtr lParam;
         public uint time;
         public POINT pt;
+        public uint lPrivate;
     }
 
     [StructLayout(LayoutKind.Sequential)]

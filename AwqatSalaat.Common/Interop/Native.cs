@@ -16,10 +16,6 @@ namespace AwqatSalaat.Interop
 
         [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern int MessageBox(IntPtr HWND, string lpText, string lpCaption, uint uType);
-        public static int MessageBox(IntPtr HWND, string lpText, string lpCaption, MessageBoxButtons buttons)
-            => MessageBox(HWND, lpText, lpCaption, (uint)buttons);
-        public static int MessageBox(IntPtr HWND, string lpText, string lpCaption, MessageBoxButtons buttons, MessageBoxIcon icon)
-            => MessageBox(HWND, lpText, lpCaption, (uint)buttons | (uint)icon);
 
         [DllImport("user32.dll")]
         public static extern uint GetDpiForWindow([In] IntPtr hWnd);
@@ -88,6 +84,18 @@ namespace AwqatSalaat.Interop
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool SetWindowPos([In] IntPtr hWnd, [In, Optional] IntPtr hWndInsertAfter, [In] int X, [In] int Y, [In] int cx, [In] int cy, [In] SWP uFlags);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetCursorPos([In] int x, [In] int y);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool GetCursorPos([Out] out POINT lpPoint);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetForegroundWindow([In] IntPtr hWnd);
     }
 
     public static class Dwmapi
@@ -112,6 +120,9 @@ namespace AwqatSalaat.Interop
     {
         [DllImport("kernel32.dll")]
         public static extern IntPtr GetModuleHandle(string module);
+
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr RegisterApplicationRestart(string pwzCommandline, ApplicationRestart dwFlags = ApplicationRestart.None);
     }
 
     [Flags]
@@ -172,6 +183,32 @@ namespace AwqatSalaat.Interop
         MB_ICONERROR = MB_ICONHAND,
         MB_ICONINFORMATION = MB_ICONASTERISK,
         MB_ICONSTOP = MB_ICONHAND,
+    }
+
+    public enum MessageBoxResult : uint
+    {
+        // NONE is not a standard value, I added it to simplify things
+        NONE = 0,
+        IDOK = 1,
+        IDCANCEL = 2,
+        IDABORT = 3,
+        IDRETRY = 4,
+        IDIGNORE = 5,
+        IDYES = 6,
+        IDNO = 7,
+    }
+
+    [Flags]
+    public enum MessageBoxOptions : uint
+    {
+        // NONE is not a standard value, I added it to simplify things
+        NONE = 0,
+        MB_SETFOREGROUND = 0x00010000,
+        MB_DEFAULT_DESKTOP_ONLY = 0x00020000,
+        MB_TOPMOST = 0x00040000,
+        MB_RIGHT = 0x00080000,
+        MB_RTLREADING = 0x00100000,
+        MB_SERVICE_NOTIFICATION = 0x00200000,
     }
 
     [Flags]
@@ -344,6 +381,7 @@ namespace AwqatSalaat.Interop
     public enum WindowMessage : uint
     {
         WM_SETREDRAW = 0x000B,
+        WM_QUERYENDSESSION = 0x0011,
         WM_SETTINGCHANGE = 0x001A
     }
 
@@ -460,4 +498,26 @@ namespace AwqatSalaat.Interop
         /// </summary>
         DWMNCRP_LAST
     };
+
+    [Flags]
+    public enum ApplicationRestart
+    {
+        None = 0,
+        /// <summary>
+        /// Do not restart the process if it terminates due to an unhandled exception.
+        /// </summary>
+        RESTART_NO_CRASH = 1,
+        /// <summary>
+        /// Do not restart the process if it terminates due to the application not responding.
+        /// </summary>
+        RESTART_NO_HANG = 2,
+        /// <summary>
+        /// Do not restart the process if it terminates due to the installation of an update.
+        /// </summary>
+        RESTART_NO_PATCH = 4,
+        /// <summary>
+        /// Do not restart the process if the computer is restarted as the result of an update.
+        /// </summary>
+        RESTART_NO_REBOOT = 8,
+    }
 }

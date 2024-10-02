@@ -363,4 +363,44 @@
   <data name="UI.Settings.Browse" xml:space="preserve">
     <value>استعراض...</value>
   </data>
+  <data name="Data.CalendarType.Hijri" xml:space="preserve">
+    <value>الهجري</value>
+  </data>
+  <data name="Data.CalendarType.UmAlQura" xml:space="preserve">
+    <value>أم القرى</value>
+  </data>
+  <data name="UI.Settings.Calendar" xml:space="preserve">
+    <value>نوع التقويم</value>
+  </data>
+  <data name="UI.Settings.CalendarDescription" xml:space="preserve">
+    <value>التقويم الذي يستخدم لمعرفة التاريخ الهجري</value>
+  </data>
+  <data name="UI.Settings.HijriCalendarAdjustment" xml:space="preserve">
+    <value>تعديل بـ (يوم)</value>
+  </data>
+  <data name="UI.ContextMenu.ManualPosition" xml:space="preserve">
+    <value>تموقع يدوي</value>
+  </data>
+  <data name="UI.About.CheckForUpdates" xml:space="preserve">
+    <value>تحقق من التحديثات</value>
+  </data>
+  <data name="Dialog.AppAlreadyRunning" xml:space="preserve">
+    <value>التطبيق قيد التشغيل بالفعل.</value>
+  </data>
+  <data name="Dialog.WidgetUpToDate" xml:space="preserve">
+    <value>الأداة بالفعل محدثة.</value>
+  </data>
+  <data name="Dialog.NewUpdateAvailableFormat" xml:space="preserve">
+    <value>إصدار جديد متوفر!
+نسخة: {0}
+
+هل تود زيارة صفحة التحميل؟</value>
+  </data>
+  <data name="Dialog.CheckingUpdatesFailed" xml:space="preserve">
+    <value>لم يمكن التحقق من وجود تحديثات.</value>
+  </data>
+  <data name="UI.Panel.ServiceDownHint" xml:space="preserve">
+    <value>الخدمة متوقفة؟
+جرب التبديل إلى خدمة أخرى بالذهاب إلى</value>
+  </data>
 </root>

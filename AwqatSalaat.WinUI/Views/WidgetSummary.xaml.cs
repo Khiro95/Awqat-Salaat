@@ -87,7 +87,6 @@ namespace AwqatSalaat.WinUI.Views
 
         private void WidgetSettings_Updated(bool apiSettingsUpdated)
         {
-            App.SetLaunchOnWindowsStartup(ViewModel.WidgetSettings.Settings.LaunchOnWindowsStartup);
             UpdateNotificationSound();
         }
 
@@ -98,7 +97,7 @@ namespace AwqatSalaat.WinUI.Views
 
         private void Flyout_Opened(object sender, object e)
         {
-            flyoutContent.Focus(FocusState.Programmatic);
+            //flyoutContent.Focus(FocusState.Programmatic);
         }
 
         private void Flyout_Closed(object sender, object e)

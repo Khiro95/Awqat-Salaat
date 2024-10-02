@@ -93,10 +93,13 @@ namespace AwqatSalaat.Helpers
                 {
                     if (key != null)
                     {
-                        int value = Convert.ToInt32(key.GetValue("TaskbarDa", 0));
+                        int value = Convert.ToInt32(key.GetValue("TaskbarDa", 1));
                         return value == 1;
                     }
                 }
+
+                // Widgets button is enabled by default in Windows 11
+                return true;
             }
 
             return false;

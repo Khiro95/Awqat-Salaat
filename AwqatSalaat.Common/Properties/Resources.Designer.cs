@@ -79,6 +79,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hijri.
+        /// </summary>
+        public static string Data_CalendarType_Hijri {
+            get {
+                return ResourceManager.GetString("Data.CalendarType.Hijri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Um Al Qura.
+        /// </summary>
+        public static string Data_CalendarType_UmAlQura {
+            get {
+                return ResourceManager.GetString("Data.CalendarType.UmAlQura", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hanafi.
         /// </summary>
         public static string Data_JuristicSchool_Hanafi {
@@ -151,6 +169,54 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The application is already running..
+        /// </summary>
+        public static string Dialog_AppAlreadyRunning {
+            get {
+                return ResourceManager.GetString("Dialog.AppAlreadyRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not check for updates..
+        /// </summary>
+        public static string Dialog_CheckingUpdatesFailed {
+            get {
+                return ResourceManager.GetString("Dialog.CheckingUpdatesFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A new release is available!
+        ///Version: {0}
+        ///
+        ///Would you like to visit download page?.
+        /// </summary>
+        public static string Dialog_NewUpdateAvailableFormat {
+            get {
+                return ResourceManager.GetString("Dialog.NewUpdateAvailableFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The widget is already up-to-date..
+        /// </summary>
+        public static string Dialog_WidgetUpToDate {
+            get {
+                return ResourceManager.GetString("Dialog.WidgetUpToDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check for Updates.
+        /// </summary>
+        public static string UI_About_CheckForUpdates {
+            get {
+                return ResourceManager.GetString("UI.About.CheckForUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contact.
         /// </summary>
         public static string UI_About_Contact {
@@ -174,6 +240,15 @@ namespace AwqatSalaat.Properties {
         public static string UI_ContextMenu_Hide {
             get {
                 return ResourceManager.GetString("UI.ContextMenu.Hide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manual position.
+        /// </summary>
+        public static string UI_ContextMenu_ManualPosition {
+            get {
+                return ResourceManager.GetString("UI.ContextMenu.ManualPosition", resourceCulture);
             }
         }
         
@@ -268,6 +343,16 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Service down?
+        ///Try switching to other service by going to.
+        /// </summary>
+        public static string UI_Panel_ServiceDownHint {
+            get {
+                return ResourceManager.GetString("UI.Panel.ServiceDownHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string UI_Panel_Settings {
@@ -282,6 +367,24 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_Browse {
             get {
                 return ResourceManager.GetString("UI.Settings.Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calendar type.
+        /// </summary>
+        public static string UI_Settings_Calendar {
+            get {
+                return ResourceManager.GetString("UI.Settings.Calendar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The calendar which is used to determine Hijri date.
+        /// </summary>
+        public static string UI_Settings_CalendarDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.CalendarDescription", resourceCulture);
             }
         }
         
@@ -399,6 +502,15 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_File {
             get {
                 return ResourceManager.GetString("UI.Settings.File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adjust by (day).
+        /// </summary>
+        public static string UI_Settings_HijriCalendarAdjustment {
+            get {
+                return ResourceManager.GetString("UI.Settings.HijriCalendarAdjustment", resourceCulture);
             }
         }
         

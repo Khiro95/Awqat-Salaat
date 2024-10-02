@@ -1,4 +1,5 @@
-﻿using AwqatSalaat.UI.Views;
+﻿using AwqatSalaat.Helpers;
+using AwqatSalaat.UI.Views;
 using CSDeskBand;
 using System;
 using System.Net;
@@ -12,10 +13,9 @@ namespace AwqatSalaat
 {
     [ComVisible(true)]
     [Guid("5F3E38A1-34C1-4A48-9B53-C15241BF1C6F")]
-    [CSDeskBandRegistration(Name = WidgetName, ShowDeskBand = true)]
+    [CSDeskBandRegistration(Name = "Awqat Salaat", ShowDeskBand = true)]
     public class AwqatSalaatWidget : CSDeskBandWpf
     {
-        private const string WidgetName = "Awqat Salaat";
         private const int DefaultWidth = 118;
         private const int CompactWidth = 60;
 
@@ -48,13 +48,13 @@ namespace AwqatSalaat
 
             uiElement.Dispatcher.UnhandledException += (s, e) =>
             {
-                MessageBox.Show(e.Exception.Message + '\n' + e.Exception.InnerException?.Message, WidgetName);
+                MessageBoxEx.Error(e.Exception.Message + '\n' + e.Exception.InnerException?.Message);
             };
 
             uiElement.Dispatcher.UnhandledExceptionFilter += (s, e) =>
             {
                 e.RequestCatch = false;
-                MessageBox.Show(e.Exception.Message + '\n' + e.Exception.InnerException?.Message, WidgetName);
+                MessageBoxEx.Error(e.Exception.Message + '\n' + e.Exception.InnerException?.Message);
             };
 
             TaskbarInfo.TaskbarEdgeChanged += TaskbarInfo_TaskbarEdgeChanged;
@@ -70,7 +70,7 @@ namespace AwqatSalaat
 
         protected override void DeskbandOnClosed()
         {
-            HwndSource.Dispose();
+            HwndSource?.Dispose();
         }
 
         private void UiElement_DisplayModeChanged(DisplayMode displayMode)
