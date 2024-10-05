@@ -112,7 +112,11 @@ namespace AwqatSalaat.WinUI
             catch (WidgetNotInjectedException ex)
             {
                 ShowError(ex.Message);
-                Environment.Exit(ExitCodes.CouldNotInjectWidget);
+                // Calling Environment.Exit(ExitCodes.CouldNotInjectWidget) directly make the widget crash for some reason.
+                // The workaround is to call Exit() then asynchonously call Environment.Exit(ExitCodes.CouldNotInjectWidget)
+                // to override exit code; otherwise exit code will be 0x0
+                Exit();
+                System.Threading.Tasks.Task.Delay(50).ContinueWith(task => Environment.Exit(ExitCodes.CouldNotInjectWidget));
             }
         }
 
