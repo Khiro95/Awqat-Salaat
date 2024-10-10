@@ -48,7 +48,7 @@
 > [!note]
 > بالرغم من أن التطبيق يمكن أن يعمل على نظام ويندوز 10 إلا أنه *لا ينصح به* بسبب محدوديته في بعض الجوانب كما هو مذكور في الأسفل، لذا يستحسن استعمال أداة deskband.
 
-#### المتطلبات
+#### المتطلبات (غير ضرورية لنسخة متجر مايكروسوفت)
 
 - [.NET Desktop Runtime 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 - [Windows App Runtime 1.5](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/downloads)

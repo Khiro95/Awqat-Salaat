@@ -1,3 +1,8 @@
+### v3.3.1
+
+- Fix crashing after failing to inject the widget into the taskbar. (WinUI only)
+- Fix bug of wrong detection of Windows display language. (WinUI only)
+
 ### v3.3
 
 - Make the widget available on Microsoft Store. (WinUI only)
