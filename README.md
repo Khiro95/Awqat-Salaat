@@ -47,7 +47,7 @@ This app bring Awqat Salaat to Windows 11 which wasn't supported in earlier vers
 > [!note]
 > Although this app can run on Windows 10, it's *not recommended* due to the limitiations listed below, use deskband widget instead.
 
-#### Requirements
+#### Requirements (NOT necessary for Microsoft Store version)
 
 - [.NET Desktop Runtime 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 - [Windows App Runtime 1.5](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/downloads)
