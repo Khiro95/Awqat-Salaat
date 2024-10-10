@@ -25,6 +25,8 @@ namespace AwqatSalaat.WinUI
         private const int DefaultWidgetHostWidth = 126; // 118 for the button (2 for borders) + 4 for left margin + 4 for right margin
         private const int CompactWidgetHostWidth = 70; // 62 for the button (2 for borders) + 4 for left margin + 4 for right margin
 
+        private static readonly bool IsRtlUI = System.Globalization.CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
+
         private readonly double dpiScale;
 
         private readonly IntPtr hwndShell;
@@ -204,7 +206,6 @@ namespace AwqatSalaat.WinUI
         private void UpdatePositionImpl(TaskbarChangeReason changeReason, bool isCentered, bool isWidgetsEnabled)
         {
             int offsetX = Properties.Settings.Default.CustomPosition;
-            bool osRTL = System.Globalization.CultureInfo.InstalledUICulture.TextInfo.IsRightToLeft;
 
             User32.GetWindowRect(hwndShell, out RECT taskbarRect);
 
@@ -216,7 +217,7 @@ namespace AwqatSalaat.WinUI
 
                 if (isCentered)
                 {
-                    if (osRTL)
+                    if (IsRtlUI)
                     {
                         offsetX = (widgetsButton?.CurrentBoundingRectangle.left ?? taskbarRect.right) - WidgetHostWidth;
                     }
@@ -227,7 +228,7 @@ namespace AwqatSalaat.WinUI
                 }
                 else
                 {
-                    if (osRTL)
+                    if (IsRtlUI)
                     {
                         if (widgetsButton is not null && (widgetsButton.CurrentBoundingRectangle.left - trayNotifyRect.right) < WidgetHostWidth)
                         {
@@ -264,7 +265,7 @@ namespace AwqatSalaat.WinUI
                             continue;
                         }
 
-                        if (isCentered == osRTL)
+                        if (isCentered == IsRtlUI)
                         {
                             offsetX = bounds.left - WidgetHostWidth;
                         }
@@ -281,7 +282,7 @@ namespace AwqatSalaat.WinUI
 #endif
                 }
 
-                if (osRTL)
+                if (IsRtlUI)
                 {
                     offsetX = Math.Clamp(offsetX, trayNotifyRect.right, taskbarRect.right - WidgetHostWidth);
                 }
@@ -398,9 +399,8 @@ namespace AwqatSalaat.WinUI
             User32.GetCursorPos(out var lpPoint);
 
             int minCursorX, maxCursorX;
-            bool osRTL = System.Globalization.CultureInfo.InstalledUICulture.TextInfo.IsRightToLeft;
 
-            if (osRTL)
+            if (IsRtlUI)
             {
                 minCursorX = trayNotifyRect.right + draggingInnerOffsetX;
                 maxCursorX = taskbarRect.right - WidgetHostWidth + draggingInnerOffsetX;
