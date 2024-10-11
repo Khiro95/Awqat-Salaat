@@ -13,7 +13,5 @@ namespace AwqatSalaat.Services
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
         public bool UseCoordinates { get; set; }
-
-        public abstract string GetUrl();
     }
 }

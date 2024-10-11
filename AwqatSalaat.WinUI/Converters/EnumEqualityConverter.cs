@@ -5,7 +5,7 @@ namespace AwqatSalaat.WinUI.Converters
 {
     internal class EnumEqualityConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, string language)
+        public static bool TestEquality(object value, object parameter)
         {
             if (value is Enum && parameter is string comparand && !string.IsNullOrEmpty(comparand))
             {
@@ -13,6 +13,11 @@ namespace AwqatSalaat.WinUI.Converters
             }
 
             return false;
+        }
+
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return TestEquality(value, parameter);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

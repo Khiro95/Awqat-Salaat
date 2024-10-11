@@ -3,7 +3,7 @@ using System.Web;
 
 namespace AwqatSalaat.Services.IslamicFinder
 {
-    public class IslamicFinderRequest : RequestBase
+    public class IslamicFinderRequest : WebRequestBase
     {
         public string CountryCode { get; set; }
         public string ZipCode { get; set; }

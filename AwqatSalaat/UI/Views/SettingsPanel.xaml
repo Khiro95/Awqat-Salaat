@@ -170,13 +170,29 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel DataContext="{Binding Settings}" Margin="8,16,8,8">
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.ServiceProvider}" Description="{mk:L11n UI.Settings.ServiceProviderDescription}" Margin="0">
-                            <ComboBox ItemsSource="{Binding Source={StaticResource PrayerTimesServiceEnum}}" SelectedItem="{Binding Service}" Width="200" HorizontalAlignment="Left">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding ., Converter={StaticResource EnumDescriptionConverter}}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
+                            <StackPanel>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource PrayerTimesServiceEnum}}" SelectedItem="{Binding Service}" Width="200" HorizontalAlignment="Left">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.PrayerTimesService.{0}'}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <StackPanel Orientation="Horizontal" TextBlock.FontSize="12" TextBlock.Foreground="{DynamicResource ThemeColors.TextHighlightBrush}" Margin="2,2,0,0" d:Visibility="Visible">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Service}" Value="Local">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{mk:L11n UI.Settings.LocalServiceNote}" Margin="4,0,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
                         </controls:SettingsItem>
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.JuristicSchool}" Description="{mk:L11n UI.Settings.JuristicSchoolDescription}">
                             <ComboBox ItemsSource="{Binding Source={StaticResource SchoolEnum}}" SelectedItem="{Binding School}" Width="300" HorizontalAlignment="Left">

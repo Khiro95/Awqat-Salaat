@@ -403,4 +403,10 @@
     <value>الخدمة متوقفة؟
 جرب التبديل إلى خدمة أخرى بالذهاب إلى</value>
   </data>
+  <data name="UI.Settings.LocalServiceNote" xml:space="preserve">
+    <value>الخدمة المحلية تحتاج إلى احداثيات. تأكد من إدخالها في إعدادات الموقع</value>
+  </data>
+  <data name="Data.PrayerTimesService.Local" xml:space="preserve">
+    <value>محلية (بدون اتصال)</value>
+  </data>
 </root>

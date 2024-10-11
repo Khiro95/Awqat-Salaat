@@ -383,4 +383,16 @@ Would you like to visit download page?</value>
     <value>Service down?
 Try switching to other service by going to</value>
   </data>
+  <data name="UI.Settings.LocalServiceNote" xml:space="preserve">
+    <value>The local service require coordinates. Make sure to set them in Location settings</value>
+  </data>
+  <data name="Data.PrayerTimesService.Local" xml:space="preserve">
+    <value>Local (offline)</value>
+  </data>
+  <data name="Data.PrayerTimesService.AlAdhan" xml:space="preserve">
+    <value>Al Adhan</value>
+  </data>
+  <data name="Data.PrayerTimesService.IslamicFinder" xml:space="preserve">
+    <value>Islamic Finder</value>
+  </data>
 </root>

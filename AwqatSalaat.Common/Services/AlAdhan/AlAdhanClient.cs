@@ -14,7 +14,7 @@ namespace AwqatSalaat.Services.AlAdhan
 
             if (req.GetEntireMonth)
             {
-                var res = await GetDataAsync<MonthResponse>(request);
+                var res = await GetDataAsync<MonthResponse>(req);
 
                 return new ServiceData
                 {
@@ -28,7 +28,7 @@ namespace AwqatSalaat.Services.AlAdhan
             }
         }
 
-        private static async Task<T> GetDataAsync<T>(IRequest request)
+        private static async Task<T> GetDataAsync<T>(IWebRequest request)
         {
             try
             {

@@ -3,6 +3,7 @@ using AwqatSalaat.Helpers;
 using AwqatSalaat.Services;
 using AwqatSalaat.Services.AlAdhan;
 using AwqatSalaat.Services.IslamicFinder;
+using AwqatSalaat.Services.Local;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -256,7 +257,7 @@ namespace AwqatSalaat.ViewModels
 
         private async Task RefreshData()
         {
-            if (IsRefreshing)
+            if (isRefreshing)
             {
                 return;
             }
@@ -284,9 +285,12 @@ namespace AwqatSalaat.ViewModels
 
                 OnDataLoaded(apiResponse);
 
-                // Cache the result for offline use, just in case
-                WidgetSettings.Settings.ApiCache = JsonConvert.SerializeObject(apiResponse);
-                WidgetSettings.Settings.Save();
+                if (WidgetSettings.Settings.Service != PrayerTimesService.Local)
+                {
+                    // Cache the result for offline use, just in case
+                    WidgetSettings.Settings.ApiCache = JsonConvert.SerializeObject(apiResponse);
+                    WidgetSettings.Settings.Save();
+                }
             }
             catch (NetworkException nex)
             {
@@ -370,6 +374,9 @@ namespace AwqatSalaat.ViewModels
                 case PrayerTimesService.AlAdhan:
                     serviceClient = new AlAdhanClient();
                     break;
+                case PrayerTimesService.Local:
+                    serviceClient = new LocalClient();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -396,6 +403,9 @@ namespace AwqatSalaat.ViewModels
                         Country = settings.CountryCode,
                         City = settings.City,
                     };
+                    break;
+                case PrayerTimesService.Local:
+                    request = new LocalRequest();
                     break;
                 default:
                     return null;

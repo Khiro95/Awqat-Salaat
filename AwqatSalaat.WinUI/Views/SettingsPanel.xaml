@@ -39,6 +39,7 @@
             <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
             <converters:LocalizedEnumConverter x:Key="LocalizedEnumConverter"/>
             <converters:EnumEqualityConverter x:Key="EnumEqualityConverter"/>
+            <converters:EnumEqualityToVisibilityConverter x:Key="EnumEqualityToVisibilityConverter"/>
 
             <!-- This doesn't work at the moment, binding in style setters isn't supported yet :( -->
             <Style TargetType="ToggleSwitch" BasedOn="{StaticResource DefaultToggleSwitchStyle}">
@@ -201,16 +202,22 @@
                     </StackPanel>
                     <StackPanel Visibility="{x:Bind serviceTab.IsSelected, Mode=OneWay}">
                         <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ServiceProvider}" Description="{mk:L11n Key=UI.Settings.ServiceProviderDescription}">
-                            <ComboBox PlaceholderText="Pick a service"
-                                  ItemsSource="{mk:Enums Type=dt:PrayerTimesService}"
-                                  SelectedItem="{Binding Settings.Service, Mode=TwoWay}"
-                                  Width="150">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
+                            <StackPanel>
+                                <ComboBox PlaceholderText="Pick a service"
+                                          ItemsSource="{mk:Enums Type=dt:PrayerTimesService}"
+                                          SelectedItem="{Binding Settings.Service, Mode=TwoWay}"
+                                          Width="200">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.PrayerTimesService.{0}'}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <StackPanel Orientation="Horizontal" Margin="2,2,0,0" Visibility="{x:Bind ViewModel.Settings.Service, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter='Local', Mode=OneWay}">
+                                    <FontIcon Glyph="&#xE7BA;" FontSize="12" Foreground="{ThemeResource TextHighlightBrush}" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="localServiceNote" Text="{mk:L11n Key=UI.Settings.LocalServiceNote}" FontSize="12" Foreground="{ThemeResource TextHighlightBrush}" Margin="4,0,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
                         </ctrl:SettingsItem>
                         <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.JuristicSchool}" Description="{mk:L11n Key=UI.Settings.JuristicSchoolDescription}">
                             <ComboBox ItemsSource="{mk:Enums Type=dt:School}" SelectedItem="{Binding Settings.School, Mode=TwoWay}" Width="300">
@@ -229,7 +236,7 @@
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <ctrl:ComboBoxItemPresenter PopupItemTemplate="{StaticResource CalculationMethodTemplate}"
-                                                                SelectedItemTemplate="{StaticResource CalculationMethodDisplayTemplate}"/>
+                                                                    SelectedItemTemplate="{StaticResource CalculationMethodDisplayTemplate}"/>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>

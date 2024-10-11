@@ -4,7 +4,7 @@ using System.Web;
 
 namespace AwqatSalaat.Services.AlAdhan
 {
-    public class AlAdhanRequest : RequestBase
+    public class AlAdhanRequest : WebRequestBase
     {
         public string Country { get; set; }
         public string City { get; set; }

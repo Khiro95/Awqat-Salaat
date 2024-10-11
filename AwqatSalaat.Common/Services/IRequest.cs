@@ -13,7 +13,5 @@ namespace AwqatSalaat.Services
         decimal Longitude { get; }
         bool UseCoordinates { get; }
         bool GetEntireMonth { get; }
-
-        string GetUrl();
     }
 }

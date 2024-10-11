@@ -15,7 +15,7 @@ namespace AwqatSalaat.Services.IslamicFinder
 
             if (req.GetEntireMonth)
             {
-                var res = await GetDataAsync<EntireMonthResponse>(request);
+                var res = await GetDataAsync<EntireMonthResponse>(req);
 
                 return new ServiceData
                 {
@@ -25,7 +25,7 @@ namespace AwqatSalaat.Services.IslamicFinder
             }
             else
             {
-                var res = await GetDataAsync<SingleDayResponse>(request);
+                var res = await GetDataAsync<SingleDayResponse>(req);
                 res.Times.Adjust(request.Date);
                 var dict = new Dictionary<DateTime, PrayerTimes>
                 {
@@ -40,7 +40,7 @@ namespace AwqatSalaat.Services.IslamicFinder
             }
         }
 
-        private static async Task<T> GetDataAsync<T>(IRequest request) where T : Response
+        private static async Task<T> GetDataAsync<T>(IWebRequest request) where T : Response
         {
             try
             {

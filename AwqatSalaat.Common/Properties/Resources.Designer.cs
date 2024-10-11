@@ -115,6 +115,33 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Al Adhan.
+        /// </summary>
+        public static string Data_PrayerTimesService_AlAdhan {
+            get {
+                return ResourceManager.GetString("Data.PrayerTimesService.AlAdhan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Islamic Finder.
+        /// </summary>
+        public static string Data_PrayerTimesService_IslamicFinder {
+            get {
+                return ResourceManager.GetString("Data.PrayerTimesService.IslamicFinder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local (offline).
+        /// </summary>
+        public static string Data_PrayerTimesService_Local {
+            get {
+                return ResourceManager.GetString("Data.PrayerTimesService.Local", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Asr.
         /// </summary>
         public static string Data_Salaat_Asr {
@@ -583,6 +610,15 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_LaunchOnWindowsStartupDescription {
             get {
                 return ResourceManager.GetString("UI.Settings.LaunchOnWindowsStartupDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The local service require coordinates. Make sure to set them in Location settings.
+        /// </summary>
+        public static string UI_Settings_LocalServiceNote {
+            get {
+                return ResourceManager.GetString("UI.Settings.LocalServiceNote", resourceCulture);
             }
         }
         
