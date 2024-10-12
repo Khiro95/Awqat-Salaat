@@ -37,7 +37,6 @@
             <converters:BooleanToVisibilityInvertedConverter x:Key="BooleanToVisibilityInvertedConverter"/>
             <converters:DecimalConverter x:Key="DecimalConverter"/>
             <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
-            <converters:LocalizedEnumConverter x:Key="LocalizedEnumConverter"/>
             <converters:EnumEqualityConverter x:Key="EnumEqualityConverter"/>
             <converters:EnumEqualityToVisibilityConverter x:Key="EnumEqualityToVisibilityConverter"/>
 
@@ -171,7 +170,7 @@
                                 <ComboBox ItemsSource="{mk:Enums Type=dt:CalendarType}" SelectedItem="{Binding Settings.CalendarType, Mode=TwoWay}" Width="280">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.CalendarType.{0}'}"/>
+                                            <ctrl:LocalizedEnumPresenter EnumValue="{Binding}" KeyFormat="Data.CalendarType.{0}"/>
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
@@ -209,7 +208,7 @@
                                           Width="200">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.PrayerTimesService.{0}'}"/>
+                                            <ctrl:LocalizedEnumPresenter EnumValue="{Binding}" KeyFormat="Data.PrayerTimesService.{0}"/>
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
@@ -223,7 +222,7 @@
                             <ComboBox ItemsSource="{mk:Enums Type=dt:School}" SelectedItem="{Binding Settings.School, Mode=TwoWay}" Width="300">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.JuristicSchool.{0}'}"/>
+                                        <ctrl:LocalizedEnumPresenter EnumValue="{Binding}" KeyFormat="Data.JuristicSchool.{0}"/>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>

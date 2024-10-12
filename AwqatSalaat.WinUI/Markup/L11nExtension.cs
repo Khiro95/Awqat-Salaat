@@ -35,12 +35,19 @@ namespace AwqatSalaat.WinUI.Markup
 
         protected override object ProvideValue()
         {
+            Binding binding = CreateBinding(Key);
+
+            return binding;
+        }
+
+        public static Binding CreateBinding(string key)
+        {
             Binding binding = new Binding
             {
                 Path = new PropertyPath(nameof(LocaleManager.Current)),
                 Source = LocaleManager.Default,
                 Converter = localeKeyConverter,
-                ConverterParameter = Key
+                ConverterParameter = key
             };
 
             return binding;
