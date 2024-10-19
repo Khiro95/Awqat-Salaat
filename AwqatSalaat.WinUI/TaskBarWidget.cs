@@ -213,26 +213,27 @@ namespace AwqatSalaat.WinUI
             if (offsetX == -1)
             {
                 var widgetsButton = isWidgetsEnabled ? taskbarWatcher.GetAutomationElement(WidgetsButtonAutomationId) : null;
+                var widgetsButtonBoundingRectangle = widgetsButton?.CurrentBoundingRectangle;
                 User32.GetWindowRect(hwndTrayNotify, out RECT trayNotifyRect);
 
                 if (isCentered)
                 {
                     if (IsRtlUI)
                     {
-                        offsetX = (widgetsButton?.CurrentBoundingRectangle.left ?? taskbarRect.right) - WidgetHostWidth;
+                        offsetX = (widgetsButtonBoundingRectangle?.left ?? taskbarRect.right) - WidgetHostWidth;
                     }
                     else
                     {
-                        offsetX = widgetsButton?.CurrentBoundingRectangle.right ?? 0;
+                        offsetX = widgetsButtonBoundingRectangle?.right ?? 0;
                     }
                 }
                 else
                 {
                     if (IsRtlUI)
                     {
-                        if (widgetsButton is not null && (widgetsButton.CurrentBoundingRectangle.left - trayNotifyRect.right) < WidgetHostWidth)
+                        if (widgetsButton is not null && (widgetsButtonBoundingRectangle.Value.left - trayNotifyRect.right) < WidgetHostWidth)
                         {
-                            offsetX = widgetsButton.CurrentBoundingRectangle.right;
+                            offsetX = widgetsButtonBoundingRectangle.Value.right;
                         }
                         else
                         {
@@ -241,9 +242,9 @@ namespace AwqatSalaat.WinUI
                     }
                     else
                     {
-                        if (widgetsButton is not null && (trayNotifyRect.left - widgetsButton.CurrentBoundingRectangle.right) < WidgetHostWidth)
+                        if (widgetsButton is not null && (trayNotifyRect.left - widgetsButtonBoundingRectangle.Value.right) < WidgetHostWidth)
                         {
-                            offsetX = widgetsButton.CurrentBoundingRectangle.left - WidgetHostWidth;
+                            offsetX = widgetsButtonBoundingRectangle.Value.left - WidgetHostWidth;
                         }
                         else
                         {
@@ -446,7 +447,7 @@ namespace AwqatSalaat.WinUI
                 dwStyle: WindowStyles.WS_POPUP,
                 x: 0, y: 0,
                 nWidth: 0, nHeight: 0,
-                hWndParent: IntPtr.Zero,// parent, // Setting parent was causing reentrancy issue on Windows 10
+                hWndParent: parent,
                 hMenu: IntPtr.Zero,
                 hInstance: IntPtr.Zero,
                 lpParam: IntPtr.Zero);

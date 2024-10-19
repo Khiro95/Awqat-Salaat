@@ -65,6 +65,7 @@ namespace AwqatSalaat.WinUI
         }
 
         private const int UIA_BoundingRectanglePropertyId = 30001;
+        private const int UIA_NamePropertyId = 30005;
         private const int UIA_AutomationIdPropertyId = 30011;
 
         private static readonly IUIAutomation pUIAutomation = new CUIAutomation();
@@ -92,7 +93,11 @@ namespace AwqatSalaat.WinUI
         {
             this.hwndTaskbar = hwndTaskbar;
             this.hwndReBar = hwndReBar;
-            taskbarElement = pUIAutomation.ElementFromHandle(hwndTaskbar);
+
+            IUIAutomationCacheRequest cacheReq = pUIAutomation.CreateCacheRequest();
+            cacheReq.AddProperty(UIA_NamePropertyId);
+            taskbarElement = pUIAutomation.ElementFromHandleBuildCache(hwndTaskbar, cacheReq);
+
             widgetsButtonEnabled = SystemInfos.IsTaskBarWidgetsEnabled();
             taskbarCentered = SystemInfos.IsTaskBarCentered();
             taskbarHidden = IsTaskbarHidden();
@@ -139,7 +144,7 @@ namespace AwqatSalaat.WinUI
 
         void IUIAutomationStructureChangedEventHandler.HandleStructureChangedEvent(IUIAutomationElement sender, StructureChangeType changeType, Array runtimeId)
         {
-            if (sender.CurrentName == taskbarElement.CurrentName)
+            if (sender.CachedName == taskbarElement.CachedName)
             {
                 RaiseNotification();
             }
@@ -147,7 +152,7 @@ namespace AwqatSalaat.WinUI
 
         void IUIAutomationPropertyChangedEventHandler.HandlePropertyChangedEvent(IUIAutomationElement sender, int propertyId, object newValue)
         {
-            if (sender.CurrentName == taskbarElement.CurrentName)
+            if (sender.CachedName == taskbarElement.CachedName)
             {
                 RaiseNotification();
             }
@@ -253,8 +258,11 @@ namespace AwqatSalaat.WinUI
         {
             if (taskbarElement is not null)
             {
-                pUIAutomation.AddStructureChangedEventHandler(taskbarElement, TreeScope.TreeScope_Subtree, null, this);
-                pUIAutomation.AddPropertyChangedEventHandler(taskbarElement, TreeScope.TreeScope_Children, null, this, new int[] { UIA_BoundingRectanglePropertyId });
+                IUIAutomationCacheRequest cacheReq = pUIAutomation.CreateCacheRequest();
+                cacheReq.AutomationElementMode = AutomationElementMode.AutomationElementMode_None;
+                cacheReq.AddProperty(UIA_NamePropertyId);
+                pUIAutomation.AddStructureChangedEventHandler(taskbarElement, TreeScope.TreeScope_Subtree, cacheReq, this);
+                pUIAutomation.AddPropertyChangedEventHandler(taskbarElement, TreeScope.TreeScope_Children, cacheReq, this, new int[] { UIA_BoundingRectanglePropertyId });
             }
         }
 
