@@ -52,6 +52,13 @@ namespace AwqatSalaat.WinUI.Views
             version.Text = "v" + (Version ?? "{ERROR}");
             architecture.Text = Architecture;
             SetImageSource();
+
+            nav.SelectionChanged += Nav_SelectionChanged;
+        }
+
+        private void Nav_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            contentContainer.Content = args.SelectedItemContainer.Tag;
         }
 
         private void SettingsPanel_Loaded(object sender, RoutedEventArgs e)
@@ -86,12 +93,18 @@ namespace AwqatSalaat.WinUI.Views
 
         private async Task SetImageSource()
         {
-            var path = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-            var file = await StorageFile.GetFileFromPathAsync(path);
-            var iconThumbnail = await file.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.SingleItem, 32);
-            var bi = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage();
-            bi.SetSource(iconThumbnail);
-            icon.Source = bi;
+#if PACKAGED
+            var resourceContext = new Windows.ApplicationModel.Resources.Core.ResourceContext();
+            resourceContext.QualifierValues["targetsize"] = "32";
+            var namedResource = Windows.ApplicationModel.Resources.Core.ResourceManager.Current.MainResourceMap[@"Files/Images/applist.png"];
+            var resourceCandidate = namedResource.Resolve(resourceContext);
+            var imageFileStream = await resourceCandidate.GetValueAsStreamAsync();
+            var bitmapImage = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage();
+            bitmapImage.SetSourceAsync(imageFileStream);
+            icon.Source = bitmapImage;
+#else
+            icon.Source = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/app_icon_32.png"));
+#endif
         }
         
         private void OnVisibilityChanged(DependencyObject sender, DependencyProperty dp)

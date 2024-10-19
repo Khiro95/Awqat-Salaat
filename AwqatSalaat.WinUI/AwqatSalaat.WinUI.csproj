@@ -26,6 +26,10 @@
 
         <AssemblyOriginatorKeyFile>Assets\sign_key.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
+
+    <ItemGroup Condition="'$(IsPackaged)'=='true'">
+        <Content Remove="Assets\app_icon_32.png" />
+    </ItemGroup>
     
     <ItemGroup>
       <Content Remove="Assets\as_ico_win11.ico" />
