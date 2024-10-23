@@ -61,6 +61,42 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Adhan 1.
+        /// </summary>
+        public static string Data_AdhanSound_Adhan1 {
+            get {
+                return ResourceManager.GetString("Data.AdhanSound.Adhan1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adhan 2.
+        /// </summary>
+        public static string Data_AdhanSound_Adhan2 {
+            get {
+                return ResourceManager.GetString("Data.AdhanSound.Adhan2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string Data_AdhanSound_Custom {
+            get {
+                return ResourceManager.GetString("Data.AdhanSound.Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string Data_AdhanSound_None {
+            get {
+                return ResourceManager.GetString("Data.AdhanSound.None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A simple Islamic Windows widget to show the time of the next prayer alongside a countdown on the taskbar.
         /// </summary>
         public static string Data_AppDescription {
@@ -307,6 +343,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Play Preview.
+        /// </summary>
+        public static string UI_Controls_SoundPreview_ToolTipIdle {
+            get {
+                return ResourceManager.GetString("UI.Controls.SoundPreview.ToolTipIdle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop.
+        /// </summary>
+        public static string UI_Controls_SoundPreview_ToolTipPlaying {
+            get {
+                return ResourceManager.GetString("UI.Controls.SoundPreview.ToolTipPlaying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Off.
         /// </summary>
         public static string UI_Controls_Toggle_Off {
@@ -385,6 +439,51 @@ namespace AwqatSalaat.Properties {
         public static string UI_Panel_Settings {
             get {
                 return ResourceManager.GetString("UI.Panel.Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop Sound.
+        /// </summary>
+        public static string UI_Panel_StopSound {
+            get {
+                return ResourceManager.GetString("UI.Panel.StopSound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fajr Adhan file.
+        /// </summary>
+        public static string UI_Settings_AdhanFileFajr {
+            get {
+                return ResourceManager.GetString("UI.Settings.AdhanFileFajr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standard Adhan file.
+        /// </summary>
+        public static string UI_Settings_AdhanFileStandard {
+            get {
+                return ResourceManager.GetString("UI.Settings.AdhanFileStandard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adhan sound.
+        /// </summary>
+        public static string UI_Settings_AdhanSound {
+            get {
+                return ResourceManager.GetString("UI.Settings.AdhanSound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sound of Adhan to play when prayer time enter.
+        /// </summary>
+        public static string UI_Settings_AdhanSoundDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.AdhanSoundDescription", resourceCulture);
             }
         }
         

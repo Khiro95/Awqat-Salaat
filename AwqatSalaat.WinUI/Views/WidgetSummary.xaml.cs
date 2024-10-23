@@ -1,6 +1,7 @@
 using AwqatSalaat.Helpers;
 using AwqatSalaat.ViewModels;
 using AwqatSalaat.WinUI.Controls;
+using AwqatSalaat.WinUI.Media;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -16,6 +17,9 @@ namespace AwqatSalaat.WinUI.Views
 {
     public sealed partial class WidgetSummary : UserControl
     {
+        private const string NearNotificationTag = "NearNotification";
+        private const string AdhanSoundTag = "Adhan";
+
 #if DEBUG
         public static WidgetSummary Current { get; private set; }
 #endif
@@ -23,8 +27,7 @@ namespace AwqatSalaat.WinUI.Views
         private bool shouldBeCompactHorizontally;
         private bool isPlayingSound;
         private DisplayMode currentDisplayMode = DisplayMode.Default;
-        private MediaSource mediaSource;
-        private readonly MediaPlayer mediaPlayer = new MediaPlayer() { IsLoopingEnabled = true, AutoPlay = true };
+        private AudioPlayerSession currentAudioSession;
 
         private WidgetViewModel ViewModel => DataContext as WidgetViewModel;
 
@@ -43,6 +46,7 @@ namespace AwqatSalaat.WinUI.Views
             ViewModel.WidgetSettings.Settings.PropertyChanged += Settings_PropertyChanged;
             ViewModel.NearNotificationStarted += ViewModel_NearNotificationStarted;
             ViewModel.NearNotificationStopped += ViewModel_NearNotificationStopped;
+            ViewModel.AdhanRequested += ViewModel_AdhanRequested;
             LocaleManager.Default.CurrentChanged += LocaleManager_CurrentChanged;
 
             UpdateDirection();
@@ -55,10 +59,10 @@ namespace AwqatSalaat.WinUI.Views
             ViewModel.WidgetSettings.Updated -= WidgetSettings_Updated;
             ViewModel.NearNotificationStarted -= ViewModel_NearNotificationStarted;
             ViewModel.NearNotificationStopped -= ViewModel_NearNotificationStopped;
+            ViewModel.AdhanRequested -= ViewModel_AdhanRequested;
             LocaleManager.Default.CurrentChanged -= LocaleManager_CurrentChanged;
 
-            mediaPlayer.Dispose();
-            mediaSource?.Dispose();
+            currentAudioSession?.End();
         }
 
         private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -69,20 +73,57 @@ namespace AwqatSalaat.WinUI.Views
             }
         }
 
+        private void ViewModel_AdhanRequested(bool isFajrTime)
+        {
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                var file = isFajrTime
+                        ? ViewModel.WidgetSettings.Settings.AdhanFajrSoundFilePath
+                        : ViewModel.WidgetSettings.Settings.AdhanSoundFilePath;
+                var session = new AudioPlayerSession
+                {
+                    File = file,
+                    Tag = AdhanSoundTag,
+                };
+                PlaySound(session);
+            });
+        }
+
         private void ViewModel_NearNotificationStarted()
         {
-            if (mediaSource?.Uri is not null)
+            DispatcherQueue.TryEnqueue(() =>
             {
-                mediaPlayer.Position = TimeSpan.Zero;
-                mediaPlayer.Source = mediaSource;
-                isPlayingSound = true;
-            }
+                var file = ViewModel.WidgetSettings.Settings.NotificationSoundFilePath;
+                var session = new AudioPlayerSession
+                {
+                    File = file,
+                    Loop = true,
+                    Tag = NearNotificationTag,
+                };
+                PlaySound(session);
+            });
         }
 
         private void ViewModel_NearNotificationStopped()
         {
-            mediaPlayer.Source = null;
-            isPlayingSound = false;
+            DispatcherQueue.TryEnqueue(() => currentAudioSession?.End());
+        }
+
+        private void PlaySound(AudioPlayerSession session)
+        {
+            bool started = AudioPlayer.Play(session);
+
+            if (started)
+            {
+                currentAudioSession = session;
+                session.Ended += AudioSession_Ended;
+            }
+        }
+
+        private void AudioSession_Ended()
+        {
+            currentAudioSession.Ended -= AudioSession_Ended;
+            currentAudioSession = null;
         }
 
         private void WidgetSettings_Updated(bool apiSettingsUpdated)
@@ -170,28 +211,29 @@ namespace AwqatSalaat.WinUI.Views
         {
             var filePath = ViewModel.WidgetSettings.Settings.NotificationSoundFilePath;
 
-            if (!string.Equals(mediaSource?.Uri?.AbsolutePath, filePath, StringComparison.InvariantCultureIgnoreCase))
+            // Do we have a running notification sound?
+            if (currentAudioSession?.Tag == NearNotificationTag)
             {
-                mediaSource?.Dispose();
+                // Yes, we have
 
-                if (!string.IsNullOrEmpty(filePath))
+                // Did the file path change?
+                if (!string.Equals(currentAudioSession.File, filePath, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    mediaSource = MediaSource.CreateFromUri(new Uri(filePath));
+                    // Yes,
+
+                    // Stop current sound
+                    currentAudioSession.End();
                 }
                 else
                 {
-                    isPlayingSound = false;
-                    mediaSource = null;
+                    return;
                 }
+            }
 
-                if (isPlayingSound)
-                {
-                    mediaPlayer.Source = mediaSource;
-                }
-                else if (ViewModel.DisplayedTime?.State == PrayerTimeState.Near)
-                {
-                    ViewModel_NearNotificationStarted();
-                }
+            // Start playing if we have notification
+            if (!string.IsNullOrEmpty(filePath) && ViewModel.DisplayedTime?.State == PrayerTimeState.Near)
+            {
+                ViewModel_NearNotificationStarted();
             }
         }
 

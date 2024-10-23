@@ -1,0 +1,52 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ctrl="clr-namespace:AwqatSalaat.UI.Controls"
+                    xmlns:mk="clr-namespace:AwqatSalaat.Markup">
+    <Style TargetType="ctrl:SoundPreviewButton">
+        <Setter Property="Foreground" Value="{DynamicResource ThemeColors.GlyphForegroundBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource ThemeColors.ControlBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ThemeColors.ControlBorderBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="1"/>
+        <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}"/>
+        <Setter Property="ToolTip" Value="{mk:L11n UI.Controls.SoundPreview.ToolTipIdle}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ctrl:SoundPreviewButton">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <TextBlock x:Name="tb" Text="&#xE768;" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="{TemplateBinding Padding}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPlaying" Value="True">
+                            <Setter TargetName="tb" Property="Text" Value="&#xE71A;"/>
+                            <Setter Property="ToolTip" Value="{mk:L11n UI.Controls.SoundPreview.ToolTipPlaying}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="File" Value="{x:Null}">
+                <Setter Property="IsEnabled" Value="False"/>
+            </Trigger>
+            <Trigger Property="File" Value="">
+                <Setter Property="IsEnabled" Value="False"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource ThemeColors.ControlHoverBackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeColors.ControlHoverBorderBrush}"/>
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeColors.ControlHoverBorderBrush}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource ThemeColors.ControlPressedBackgroundBrush}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource ThemeColors.ControlDisabledForegroundBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

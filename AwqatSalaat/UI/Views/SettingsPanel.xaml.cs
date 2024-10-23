@@ -47,44 +47,12 @@ namespace AwqatSalaat.UI.Views
 
         private void SettingsPanel_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if ((bool)e.NewValue)
-            {
-                tabControl.SelectedIndex = 0;
-            }
+            tabControl.SelectedIndex = (bool)e.NewValue ? 0 : -1;
         }
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
-        }
-
-        private void BrowseSound_Click(object sender, RoutedEventArgs e)
-        {
-            if (openFileDialog is null)
-            {
-                openFileDialog = new OpenFileDialog()
-                {
-                    Filter = "Audio Files(*.wav;*.wma;*.mp3;*.aac)|*.wav;*.wma;*.mp3;*.aac;"
-                };
-            }
-
-            ParentPopup.StaysOpen = true;
-            ParentPopup.IsTopMost = false;
-
-            try
-            {
-                openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(ViewModel.Settings.NotificationSoundFilePath);
-
-                if (openFileDialog.ShowDialog() == true)
-                {
-                    ViewModel.Settings.NotificationSoundFile = openFileDialog.FileName;
-                }
-            }
-            finally
-            {
-                ParentPopup.StaysOpen = false;
-                ParentPopup.IsTopMost = true;
-            }
         }
 
         private async void CheckForUpdatesClick(object sender, RoutedEventArgs e)
@@ -131,6 +99,50 @@ namespace AwqatSalaat.UI.Views
                 {
                     popup.StaysOpen = false;
                 }
+            }
+        }
+
+        private void BrowseNotificationSound_Click(object sender, RoutedEventArgs e)
+        {
+            BrowseSoundFile(ViewModel.Settings.NotificationSoundFilePath, (s, f) => s.NotificationSoundFile = f);
+        }
+
+        private void BrowseAdhanSound_Click(object sender, RoutedEventArgs e)
+        {
+            BrowseSoundFile(ViewModel.Settings.AdhanSoundFilePath, (s, f) => s.AdhanSoundFile = f);
+        }
+
+        private void BrowseAdhanFajrSound_Click(object sender, RoutedEventArgs e)
+        {
+            BrowseSoundFile(ViewModel.Settings.AdhanFajrSoundFilePath, (s, f) => s.AdhanFajrSoundFile = f);
+        }
+
+        private void BrowseSoundFile(string initialPath, Action<Properties.Settings, string> fileSetter)
+        {
+            if (openFileDialog is null)
+            {
+                openFileDialog = new OpenFileDialog()
+                {
+                    Filter = "Audio Files(*.wav;*.wma;*.mp3;*.aac)|*.wav;*.wma;*.mp3;*.aac;"
+                };
+            }
+
+            ParentPopup.StaysOpen = true;
+            ParentPopup.IsTopMost = false;
+
+            try
+            {
+                openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(initialPath);
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    fileSetter(ViewModel.Settings, openFileDialog.FileName);
+                }
+            }
+            finally
+            {
+                ParentPopup.StaysOpen = false;
+                ParentPopup.IsTopMost = true;
             }
         }
     }

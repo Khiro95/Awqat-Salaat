@@ -395,4 +395,37 @@ Try switching to other service by going to</value>
   <data name="Data.PrayerTimesService.IslamicFinder" xml:space="preserve">
     <value>Islamic Finder</value>
   </data>
+  <data name="UI.Settings.AdhanSound" xml:space="preserve">
+    <value>Adhan sound</value>
+  </data>
+  <data name="UI.Settings.AdhanSoundDescription" xml:space="preserve">
+    <value>Sound of Adhan to play when prayer time enter</value>
+  </data>
+  <data name="UI.Settings.AdhanFileStandard" xml:space="preserve">
+    <value>Standard Adhan file</value>
+  </data>
+  <data name="UI.Settings.AdhanFileFajr" xml:space="preserve">
+    <value>Fajr Adhan file</value>
+  </data>
+  <data name="Data.AdhanSound.None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Data.AdhanSound.Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="Data.AdhanSound.Adhan1" xml:space="preserve">
+    <value>Adhan 1</value>
+  </data>
+  <data name="UI.Controls.SoundPreview.ToolTipIdle" xml:space="preserve">
+    <value>Play Preview</value>
+  </data>
+  <data name="UI.Controls.SoundPreview.ToolTipPlaying" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="UI.Panel.StopSound" xml:space="preserve">
+    <value>Stop Sound</value>
+  </data>
+  <data name="Data.AdhanSound.Adhan2" xml:space="preserve">
+    <value>Adhan 2</value>
+  </data>
 </root>

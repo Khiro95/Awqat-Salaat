@@ -112,13 +112,18 @@ namespace AwqatSalaat.ViewModels
                 }
                 else
                 {
+                    var previousState = state;
                     shouldRaiseEvents |= state == PrayerTimeState.EnteredRecently;
 
                     State = PrayerTimeState.Entered;
 
                     if (shouldRaiseEvents)
                     {
-                        Entered?.Invoke(this, EventArgs.Empty);
+                        if (previousState != PrayerTimeState.EnteredRecently)
+                        {
+                            Entered?.Invoke(this, EventArgs.Empty);
+                        }
+
                         EnteredNotificationDone?.Invoke(this, EventArgs.Empty);
                     }
                 }

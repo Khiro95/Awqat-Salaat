@@ -409,4 +409,37 @@
   <data name="Data.PrayerTimesService.Local" xml:space="preserve">
     <value>محلية (بدون اتصال)</value>
   </data>
+  <data name="UI.Settings.AdhanSound" xml:space="preserve">
+    <value>صوت الأذان</value>
+  </data>
+  <data name="UI.Settings.AdhanSoundDescription" xml:space="preserve">
+    <value>صوت الأذان الذي يتم تشغيله عند دخول وقت الصلاة</value>
+  </data>
+  <data name="UI.Settings.AdhanFileStandard" xml:space="preserve">
+    <value>ملف الأذان القياسي</value>
+  </data>
+  <data name="UI.Settings.AdhanFileFajr" xml:space="preserve">
+    <value>ملف أذان الفجر</value>
+  </data>
+  <data name="Data.AdhanSound.None" xml:space="preserve">
+    <value>لا شيء</value>
+  </data>
+  <data name="Data.AdhanSound.Custom" xml:space="preserve">
+    <value>مخصص</value>
+  </data>
+  <data name="Data.AdhanSound.Adhan1" xml:space="preserve">
+    <value>أذان 1</value>
+  </data>
+  <data name="UI.Controls.SoundPreview.ToolTipIdle" xml:space="preserve">
+    <value>تشغيل معاينة</value>
+  </data>
+  <data name="UI.Controls.SoundPreview.ToolTipPlaying" xml:space="preserve">
+    <value>إيقاف</value>
+  </data>
+  <data name="UI.Panel.StopSound" xml:space="preserve">
+    <value>إيقاف الصوت</value>
+  </data>
+  <data name="Data.AdhanSound.Adhan2" xml:space="preserve">
+    <value>أذان 2</value>
+  </data>
 </root>

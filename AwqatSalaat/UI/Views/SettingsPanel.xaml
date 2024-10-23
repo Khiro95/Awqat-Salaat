@@ -15,7 +15,7 @@
              xmlns:api1="clr-namespace:AwqatSalaat.Services.IslamicFinder;assembly=AwqatSalaat.Common"
              xmlns:api2="clr-namespace:AwqatSalaat.Services.AlAdhan;assembly=AwqatSalaat.Common"
              mc:Ignorable="d"
-             d:DesignHeight="700" d:DesignWidth="800" d:Background="#192025">
+             d:DesignHeight="1000" d:DesignWidth="800" d:Background="#192025">
     <d:UserControl.DataContext>
         <vm:WidgetSettingsViewModel/>
     </d:UserControl.DataContext>
@@ -53,6 +53,11 @@
             <ObjectDataProvider x:Key="CalendarTypeEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type Type="{x:Type data:CalendarType}"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+            <ObjectDataProvider x:Key="AdhanSoundEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type Type="{x:Type data:AdhanSound}"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
 
@@ -130,7 +135,7 @@
                         </controls:SettingsItem>
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.Calendar}" Description="{mk:L11n UI.Settings.CalendarDescription}">
                             <StackPanel Orientation="Horizontal">
-                                <ComboBox ItemsSource="{Binding Source={StaticResource CalendarTypeEnum}}" SelectedItem="{Binding CalendarType}" Width="300" HorizontalAlignment="Left">
+                                <ComboBox ItemsSource="{Binding Source={StaticResource CalendarTypeEnum}}" SelectedItem="{Binding CalendarType}" Width="200" HorizontalAlignment="Left">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.CalendarType.{0}'}"/>
@@ -153,12 +158,56 @@
                                 </StackPanel>
                             </StackPanel>
                         </controls:SettingsItem>
+                        <controls:SettingsItem Header="{mk:L11n UI.Settings.AdhanSound}" Description="{mk:L11n UI.Settings.AdhanSoundDescription}">
+                            <StackPanel>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource AdhanSoundEnum}}" SelectedItem="{Binding AdhanSound}" Width="200" HorizontalAlignment="Left">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.AdhanSound.{0}'}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <Grid x:Name="adhangrid" Margin="8,8,0,0">
+                                    <Grid.Style>
+                                        <Style TargetType="Grid">
+                                            <Setter Property="Tag" Value="False"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding AdhanSound}" Value="Custom">
+                                                    <Setter Property="Tag" Value="True"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="8"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{mk:L11n UI.Settings.AdhanFileStandard}" VerticalAlignment="Center"/>
+                                    <TextBox Text="{Binding AdhanSoundFile}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1" IsEnabled="{Binding ElementName=adhangrid, Path=Tag}"/>
+                                    <controls:SoundPreviewButton File="{Binding AdhanSoundFilePath}" Grid.Column="2"/>
+                                    <Button Content="{mk:L11n UI.Settings.Browse}" Click="BrowseAdhanSound_Click" Grid.Column="3" Margin="8,0,0,0" IsEnabled="{Binding ElementName=adhangrid, Path=Tag}"/>
+
+                                    <TextBlock Text="{mk:L11n UI.Settings.AdhanFileFajr}" VerticalAlignment="Center" Grid.Row="2"/>
+                                    <TextBox Text="{Binding AdhanFajrSoundFile}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1" Grid.Row="2" IsEnabled="{Binding ElementName=adhangrid, Path=Tag}"/>
+                                    <controls:SoundPreviewButton File="{Binding AdhanFajrSoundFilePath}" Grid.Column="2" Grid.Row="3"/>
+                                    <Button Content="{mk:L11n UI.Settings.Browse}" Click="BrowseAdhanFajrSound_Click" Grid.Column="3" Grid.Row="3" Margin="8,0,0,0" IsEnabled="{Binding ElementName=adhangrid, Path=Tag}"/>
+                                </Grid>
+                            </StackPanel>
+                        </controls:SettingsItem>
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.NotificationSound}" Description="{mk:L11n UI.Settings.NotificationSoundDescription}">
                             <StackPanel>
                                 <CheckBox IsChecked="{Binding EnableNotificationSound}"/>
                                 <DockPanel Margin="8,8,0,0" IsEnabled="{Binding EnableNotificationSound}" d:IsEnabled="True">
                                     <TextBlock Text="{mk:L11n UI.Settings.File}" VerticalAlignment="Center"/>
-                                    <Button Content="{mk:L11n UI.Settings.Browse}" DockPanel.Dock="Right" Click="BrowseSound_Click"/>
+                                    <Button Content="{mk:L11n UI.Settings.Browse}" DockPanel.Dock="Right" Click="BrowseNotificationSound_Click" Margin="8,0,0,0"/>
+                                    <controls:SoundPreviewButton File="{Binding NotificationSoundFilePath}" DockPanel.Dock="Right"/>
                                     <TextBox Text="{Binding NotificationSoundFile}" Margin="8,0" FlowDirection="LeftToRight"/>
                                 </DockPanel>
                             </StackPanel>

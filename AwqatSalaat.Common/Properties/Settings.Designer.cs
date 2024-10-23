@@ -12,7 +12,7 @@ namespace AwqatSalaat.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.11.0.0")]
     public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -320,6 +320,42 @@ namespace AwqatSalaat.Properties {
             }
             set {
                 this["CustomPosition"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AdhanSoundFile {
+            get {
+                return ((string)(this["AdhanSoundFile"]));
+            }
+            set {
+                this["AdhanSoundFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AdhanFajrSoundFile {
+            get {
+                return ((string)(this["AdhanFajrSoundFile"]));
+            }
+            set {
+                this["AdhanFajrSoundFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public global::AwqatSalaat.Data.AdhanSound AdhanSound {
+            get {
+                return ((global::AwqatSalaat.Data.AdhanSound)(this["AdhanSound"]));
+            }
+            set {
+                this["AdhanSound"] = value;
             }
         }
     }

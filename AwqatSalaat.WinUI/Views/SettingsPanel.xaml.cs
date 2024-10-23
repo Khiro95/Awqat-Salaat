@@ -213,7 +213,22 @@ namespace AwqatSalaat.WinUI.Views
             }
         }
 
-        private async void BrowseSound_Click(object sender, RoutedEventArgs e)
+        private async void BrowseNotificationSound_Click(object sender, RoutedEventArgs e)
+        {
+            await BrowseSoundFileAsync((s, f) => s.NotificationSoundFile = f);
+        }
+
+        private async void BrowseAdhanSound_Click(object sender, RoutedEventArgs e)
+        {
+            await BrowseSoundFileAsync((s, f) => s.AdhanSoundFile = f);
+        }
+
+        private async void BrowseAdhanFajrSound_Click(object sender, RoutedEventArgs e)
+        {
+            await BrowseSoundFileAsync((s, f) => s.AdhanFajrSoundFile = f);
+        }
+
+        private async Task BrowseSoundFileAsync(Action<Properties.Settings, string> fileSetter)
         {
             try
             {
@@ -231,7 +246,7 @@ namespace AwqatSalaat.WinUI.Views
 
                 if (file != null)
                 {
-                    ViewModel.Settings.NotificationSoundFile = file.Path;
+                    fileSetter(ViewModel.Settings, file.Path);
                 }
             }
             finally

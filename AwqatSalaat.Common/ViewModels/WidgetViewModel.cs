@@ -56,6 +56,7 @@ namespace AwqatSalaat.ViewModels
 
         public event Action NearNotificationStarted;
         public event Action NearNotificationStopped;
+        public event Action<bool> AdhanRequested;
 
         public WidgetViewModel()
         {
@@ -118,6 +119,15 @@ namespace AwqatSalaat.ViewModels
             if (prayerTime.Key != nameof(PrayerTimes.Isha))
             {
                 UpdateNext();
+            }
+
+            // Make sure there is no time jump and that adhan is desired
+            if (prayerTime.Time.Date == TimeStamp.Date
+                && prayerTime.Time.Hour == TimeStamp.Now.Hour
+                && prayerTime.Time.Minute == TimeStamp.Now.Minute
+                && WidgetSettings.Settings.AdhanSound != AdhanSound.None)
+            {
+                AdhanRequested?.Invoke(prayerTime.Key == nameof(PrayerTimes.Fajr));
             }
         }
 

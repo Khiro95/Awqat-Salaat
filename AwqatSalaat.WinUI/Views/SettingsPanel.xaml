@@ -181,14 +181,48 @@
                                     </StackPanel>
                                 </StackPanel>
                             </ctrl:SettingsItem>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.AdhanSound}" Description="{mk:L11n Key=UI.Settings.AdhanSoundDescription}">
+                                <StackPanel>
+                                    <ComboBox ItemsSource="{mk:Enums Type=dt:AdhanSound}" SelectedItem="{Binding Settings.AdhanSound, Mode=TwoWay}" Width="280">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <ctrl:LocalizedEnumPresenter EnumValue="{Binding}" KeyFormat="Data.AdhanSound.{0}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <Grid Margin="8,8,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="8"/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="{mk:L11n Key=UI.Settings.AdhanFileStandard}" VerticalAlignment="Center"/>
+                                        <TextBox Text="{x:Bind ViewModel.Settings.AdhanSoundFile}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1" IsEnabled="{x:Bind ViewModel.Settings.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
+                                        <ctrl:SoundPreviewButton File="{x:Bind ViewModel.Settings.AdhanSoundFilePath, Mode=OneWay}" IdleToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipIdle}" PlayingToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipPlaying}" Grid.Column="2"/>
+                                        <Button Content="{mk:L11n Key=UI.Settings.Browse}" Click="BrowseAdhanSound_Click" Grid.Column="3" Margin="8,0,0,0" IsEnabled="{x:Bind ViewModel.Settings.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
+
+                                        <TextBlock Text="{mk:L11n Key=UI.Settings.AdhanFileFajr}" VerticalAlignment="Center" Grid.Row="2"/>
+                                        <TextBox Text="{x:Bind ViewModel.Settings.AdhanFajrSoundFile}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1" Grid.Row="2" IsEnabled="{x:Bind ViewModel.Settings.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
+                                        <ctrl:SoundPreviewButton File="{x:Bind ViewModel.Settings.AdhanFajrSoundFilePath, Mode=OneWay}" IdleToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipIdle}" PlayingToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipPlaying}" Grid.Column="2" Grid.Row="3"/>
+                                        <Button Content="{mk:L11n Key=UI.Settings.Browse}" Click="BrowseAdhanFajrSound_Click" Grid.Column="3" Grid.Row="3" Margin="8,0,0,0" IsEnabled="{x:Bind ViewModel.Settings.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </ctrl:SettingsItem>
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.NotificationSound}" Description="{mk:L11n Key=UI.Settings.NotificationSoundDescription}">
                                 <StackPanel>
                                     <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.EnableNotificationSound}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
                                     <ContentControl Margin="8,8,0,0" HorizontalContentAlignment="Stretch" IsEnabled="{x:Bind ViewModel.Settings.EnableNotificationSound}" IsTabStop="False">
-                                        <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <Grid ColumnDefinitions="Auto,*,Auto,Auto">
                                             <TextBlock Text="{mk:L11n Key=UI.Settings.File}" VerticalAlignment="Center"/>
                                             <TextBox Text="{x:Bind ViewModel.Settings.NotificationSoundFile, UpdateSourceTrigger=PropertyChanged}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1"/>
-                                            <Button Content="{mk:L11n Key=UI.Settings.Browse}" Click="BrowseSound_Click" VerticalAlignment="Center" Grid.Column="2"/>
+                                            <ctrl:SoundPreviewButton File="{x:Bind ViewModel.Settings.NotificationSoundFilePath, Mode=OneWay}" IdleToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipIdle}" PlayingToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipPlaying}" Grid.Column="2" Grid.Row="3"/>
+                                            <Button Content="{mk:L11n Key=UI.Settings.Browse}" Click="BrowseNotificationSound_Click" VerticalAlignment="Center" Grid.Column="3" Margin="8,0,0,0"/>
                                         </Grid>
                                     </ContentControl>
                                 </StackPanel>

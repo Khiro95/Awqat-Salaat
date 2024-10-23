@@ -182,4 +182,32 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="controls:SoundPreviewButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:SoundPreviewButton">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Idle"/>
+                                <VisualState x:Name="Playing">
+                                    <VisualState.Setters>
+                                        <Setter Target="PART_Button.Content">
+                                            <Setter.Value>
+                                                <SymbolIcon Symbol="Stop"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Button x:Name="PART_Button" Padding="5" ToolTipService.ToolTip="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ToolTipService.ToolTip)}">
+                            <SymbolIcon Symbol="Play"/>
+                        </Button>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

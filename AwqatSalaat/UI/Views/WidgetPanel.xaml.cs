@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using AwqatSalaat.Media;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -12,6 +13,8 @@ namespace AwqatSalaat.UI.Views
         public WidgetPanel()
         {
             InitializeComponent();
+            Loaded += WidgetPanel_Loaded;
+            Unloaded += WidgetPanel_Unloaded;
 #if DEBUG
             themeBtn.Click += (_, __) => ThemeManager.ToggleTheme();
 #else
@@ -25,6 +28,30 @@ namespace AwqatSalaat.UI.Views
                 themeBtn.Visibility = Visibility.Collapsed;
             }
 #endif
+        }
+
+        private void WidgetPanel_Loaded(object sender, RoutedEventArgs e)
+        {
+            AudioPlayer.Started += AudioPlayer_Started;
+            AudioPlayer.Stopped += AudioPlayer_Stopped;
+
+            stopSoundButton.Visibility = AudioPlayer.CurrentSession is null ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private void WidgetPanel_Unloaded(object sender, RoutedEventArgs e)
+        {
+            AudioPlayer.Started -= AudioPlayer_Started;
+            AudioPlayer.Stopped -= AudioPlayer_Stopped;
+        }
+
+        private void AudioPlayer_Started()
+        {
+            stopSoundButton.Visibility = Visibility.Visible;
+        }
+
+        private void AudioPlayer_Stopped()
+        {
+            stopSoundButton.Visibility = Visibility.Collapsed;
         }
 
         private void LocationPanel_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -45,6 +72,11 @@ namespace AwqatSalaat.UI.Views
             {
                 stackPanel.Orientation = Orientation.Horizontal;
             }
+        }
+
+        private void StopSound_Click(object sender, RoutedEventArgs e)
+        {
+            AudioPlayer.CurrentSession?.End();
         }
     }
 }
