@@ -6,6 +6,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="../Styles/DefaultFocusVisual.xaml"/>
         
+        <ResourceDictionary Source="../Styles/AcrylicWindow.xaml"/>
         <ResourceDictionary Source="../Styles/AcrylicPopup.xaml"/>
         <ResourceDictionary Source="../Styles/Button.xaml"/>
         <ResourceDictionary Source="../Styles/ComboBox.xaml"/>

@@ -1,4 +1,5 @@
 ﻿using AwqatSalaat.Data;
+using AwqatSalaat.Helpers;
 using System;
 using System.Collections.Generic;
 
@@ -11,7 +12,7 @@ namespace AwqatSalaat.Services.IslamicFinder
 
         protected sealed override void ParseImpl()
         {
-            DateTime today = DateTime.Today;
+            DateTime today = TimeStamp.Date;
             DateTime date = new DateTime(today.Year, today.Month, today.Day, 0, 0, 0, DateTimeKind.Unspecified);
             Dictionary<string, DateTime> dayTimes = new Dictionary<string, DateTime>(5);
 

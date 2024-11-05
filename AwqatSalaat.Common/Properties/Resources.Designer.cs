@@ -298,6 +298,43 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gregorian.
+        /// </summary>
+        public static string UI_Calendar_Gregorian {
+            get {
+                return ResourceManager.GetString("UI.Calendar.Gregorian", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hijri.
+        /// </summary>
+        public static string UI_Calendar_Hijri {
+            get {
+                return ResourceManager.GetString("UI.Calendar.Hijri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No data.
+        ///Choose the calendar and set the desired year and month then click on Refresh.
+        /// </summary>
+        public static string UI_Calendar_NoData {
+            get {
+                return ResourceManager.GetString("UI.Calendar.NoData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calendar.
+        /// </summary>
+        public static string UI_Calendar_Title {
+            get {
+                return ResourceManager.GetString("UI.Calendar.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide.
         /// </summary>
         public static string UI_ContextMenu_Hide {
@@ -402,6 +439,15 @@ namespace AwqatSalaat.Properties {
         public static string UI_Panel_Error {
             get {
                 return ResourceManager.GetString("UI.Panel.Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to More informations.
+        /// </summary>
+        public static string UI_Panel_MoreInfo {
+            get {
+                return ResourceManager.GetString("UI.Panel.MoreInfo", resourceCulture);
             }
         }
         
@@ -1042,6 +1088,42 @@ namespace AwqatSalaat.Properties {
         public static string UI_Summary_TapToStart {
             get {
                 return ResourceManager.GetString("UI.Summary.TapToStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string UI_Window_Close {
+            get {
+                return ResourceManager.GetString("UI.Window.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximize.
+        /// </summary>
+        public static string UI_Window_Maximize {
+            get {
+                return ResourceManager.GetString("UI.Window.Maximize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimize.
+        /// </summary>
+        public static string UI_Window_Minimize {
+            get {
+                return ResourceManager.GetString("UI.Window.Minimize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore.
+        /// </summary>
+        public static string UI_Window_Restore {
+            get {
+                return ResourceManager.GetString("UI.Window.Restore", resourceCulture);
             }
         }
     }

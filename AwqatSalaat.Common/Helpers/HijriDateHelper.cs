@@ -13,8 +13,20 @@ namespace AwqatSalaat.Helpers
         private static readonly DateTimeFormatInfo s_EnglishHijriDateTimeFormatInfo;
         private static readonly HijriCalendar s_HijriCalendar = new HijriCalendar();
 
+        public static MonthRecord[] HijriMonths { get; }
+
         static HijriDateHelper()
         {
+            var calendar = new UmAlQuraCalendar();
+            HijriMonths = new MonthRecord[12];
+
+            for (int i = 1; i <= 12; i++)
+            {
+                // Here 15 is a safe choice to make sure both HijriCaledar and UmAlQuraCalendar
+                // return same month when we convert later
+                HijriMonths[i - 1] = new MonthRecord(i, calendar.ToDateTime(1446, i, 15, 0, 0, 0, 0));
+            }
+
             var englishHijriMonths = new string[]
             {
                 "Muharram",

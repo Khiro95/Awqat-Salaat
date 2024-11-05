@@ -3,7 +3,8 @@
     x:Class="AwqatSalaat.WinUI.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:AwqatSalaat.WinUI">
+    xmlns:local="using:AwqatSalaat.WinUI"
+    xmlns:converters="using:AwqatSalaat.WinUI.Converters">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -35,6 +36,10 @@
             <Color x:Key="SystemAccentColorDark1">#BAA272</Color>
             <Color x:Key="SystemAccentColorDark2">#BC9055</Color>
             <Color x:Key="SystemAccentColorDark3">#997D51</Color>
+
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:BooleanToVisibilityInvertedConverter x:Key="BooleanToVisibilityInvertedConverter"/>
+            <converters:BooleanInvertedConverter x:Key="BooleanInvertedConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

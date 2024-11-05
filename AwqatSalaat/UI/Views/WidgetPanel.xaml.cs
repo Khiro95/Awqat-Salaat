@@ -1,6 +1,8 @@
 ﻿using AwqatSalaat.Media;
+using AwqatSalaat.UI.Controls;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace AwqatSalaat.UI.Views
@@ -77,6 +79,18 @@ namespace AwqatSalaat.UI.Views
         private void StopSound_Click(object sender, RoutedEventArgs e)
         {
             AudioPlayer.CurrentSession?.End();
+        }
+
+        private void MoreInfo_Click(object sender, RoutedEventArgs e)
+        {
+            var hwndSource = HwndSource.FromVisual(this);
+
+            if (hwndSource?.RootVisual is FrameworkElement fe && fe.Parent is AcrylicPopup popup)
+            {
+                popup.SetCurrentValue(AcrylicPopup.IsOpenProperty, false);
+            }
+
+            MoreInfoWindow.Open();
         }
     }
 }

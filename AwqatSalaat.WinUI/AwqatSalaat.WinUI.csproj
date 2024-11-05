@@ -26,10 +26,6 @@
 
         <AssemblyOriginatorKeyFile>Assets\sign_key.snk</AssemblyOriginatorKeyFile>
     </PropertyGroup>
-
-    <ItemGroup Condition="'$(IsPackaged)'=='true'">
-        <Content Remove="Assets\app_icon_32.png" />
-    </ItemGroup>
     
     <ItemGroup>
       <Content Remove="Assets\as_ico_win11.ico" />
@@ -39,6 +35,8 @@
 
     <ItemGroup>
         <None Remove="Themes\Generic.xaml" />
+        <None Remove="Views\CalendarPage.xaml" />
+        <None Remove="Views\MoreInfoWindow.xaml" />
     </ItemGroup>
     <ItemGroup>
       <COMReference Include="UIAutomationClient">
@@ -80,6 +78,16 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\AwqatSalaat.Common\AwqatSalaat.Common.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Page Update="Views\CalendarPage.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Page>
+    </ItemGroup>
+    <ItemGroup>
+      <Page Update="Views\MoreInfoWindow.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Page>
     </ItemGroup>
     <ItemGroup>
       <Page Update="Themes\Generic.xaml">

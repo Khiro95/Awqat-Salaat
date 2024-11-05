@@ -442,4 +442,32 @@
   <data name="Data.AdhanSound.Adhan2" xml:space="preserve">
     <value>أذان 2</value>
   </data>
+  <data name="UI.Calendar.Hijri" xml:space="preserve">
+    <value>هجري</value>
+  </data>
+  <data name="UI.Calendar.Gregorian" xml:space="preserve">
+    <value>ميلادي</value>
+  </data>
+  <data name="UI.Calendar.NoData" xml:space="preserve">
+    <value>لا توجد بيانات.
+اختر التقويم وأدخل العام والشهر المرغوبين ثم انقر على تحديث</value>
+  </data>
+  <data name="UI.Panel.MoreInfo" xml:space="preserve">
+    <value>المزيد من المعلومات</value>
+  </data>
+  <data name="UI.Window.Close" xml:space="preserve">
+    <value>إغلاق</value>
+  </data>
+  <data name="UI.Window.Minimize" xml:space="preserve">
+    <value>تصغير</value>
+  </data>
+  <data name="UI.Window.Maximize" xml:space="preserve">
+    <value>تكبير</value>
+  </data>
+  <data name="UI.Window.Restore" xml:space="preserve">
+    <value>إستعادة</value>
+  </data>
+  <data name="UI.Calendar.Title" xml:space="preserve">
+    <value>الرزنامة</value>
+  </data>
 </root>

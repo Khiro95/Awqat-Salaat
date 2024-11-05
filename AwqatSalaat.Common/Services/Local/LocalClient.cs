@@ -29,7 +29,7 @@ namespace AwqatSalaat.Services.Local
 
                 if (req.GetEntireMonth)
                 {
-                    data.Times = GetPrayerTimesForMonth(req.Date, coordinates, parameters, tzinfo);
+                    data.Times = GetPrayerTimesForMonth(req, coordinates, parameters, tzinfo);
                 }
                 else
                 {
@@ -46,11 +46,11 @@ namespace AwqatSalaat.Services.Local
             }
         }
 
-        private static Dictionary<DateTime, Data.PrayerTimes> GetPrayerTimesForMonth(DateTime date, Coordinates coordinates, CalculationParameters parameters, TimeZoneInfo timeZone)
+        private static Dictionary<DateTime, Data.PrayerTimes> GetPrayerTimesForMonth(LocalRequest req, Coordinates coordinates, CalculationParameters parameters, TimeZoneInfo timeZone)
         {
             var dict = new Dictionary<DateTime, Data.PrayerTimes>();
 
-            for (DateTime current = new DateTime(date.Year, date.Month, 1); current.Month == date.Month; current = current.AddDays(1))
+            foreach (DateTime current in req.GetDates())
             {
                 dict.Add(current, GetPrayerTimesForDate(current, coordinates, parameters, timeZone));
             }

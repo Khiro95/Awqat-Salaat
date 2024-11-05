@@ -96,6 +96,12 @@ namespace AwqatSalaat.Interop
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool SetForegroundWindow([In] IntPtr hWnd);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern uint GetWindowLong(IntPtr hwnd, int index);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern uint SetWindowLong(IntPtr hwnd, int index, uint newStyle);
     }
 
     public static class Dwmapi

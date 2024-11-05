@@ -69,8 +69,8 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" TargetName="Bd" Value="{DynamicResource ThemeColors.ControlDisabledBackgroundColor}"/>
-                            <Setter Property="TextBlock.Foreground" TargetName="Bd" Value="{DynamicResource ThemeColors.ControlDisabledForegroundColor}"/>
+                            <Setter Property="Background" TargetName="Bd" Value="{DynamicResource ThemeColors.ControlDisabledBackgroundBrush}"/>
+                            <Setter Property="TextBlock.Foreground" TargetName="Bd" Value="{DynamicResource ThemeColors.ControlDisabledForegroundBrush}"/>
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>

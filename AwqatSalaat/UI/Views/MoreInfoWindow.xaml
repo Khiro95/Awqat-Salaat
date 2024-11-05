@@ -1,0 +1,41 @@
+﻿<controls:AcrylicWindow x:Class="AwqatSalaat.UI.Views.MoreInfoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="clr-namespace:AwqatSalaat.UI"
+        xmlns:local="clr-namespace:AwqatSalaat.UI.Views"
+        xmlns:controls="clr-namespace:AwqatSalaat.UI.Controls"
+        xmlns:mk="clr-namespace:AwqatSalaat.Markup"
+        xmlns:vm="clr-namespace:AwqatSalaat.ViewModels;assembly=AwqatSalaat.Common"
+        mc:Ignorable="d"
+        Title="MoreInfoWindow" Height="600" Width="1000"
+        Foreground="{DynamicResource ThemeColors.TextPrimaryBrush}"
+        FontSize="14"
+        WindowStartupLocation="CenterScreen"
+        UseLayoutRounding="True"
+        EnableAcrylicEffect="True"
+        BorderThickness="0"
+        d:Background="#192025">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemeDictionary>
+                    <d:ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="../Themes/Dark.xaml"/>
+                    </d:ResourceDictionary.MergedDictionaries>
+                </ui:ThemeDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid d:Background="Transparent">
+        <TabControl x:Name="tabControl" TabStripPlacement="Left" HorizontalContentAlignment="Left">
+            <controls:TabItemEx Header="{mk:L11n UI.Calendar.Title}" Glyph="&#xE787;">
+                <DockPanel>
+                    <TextBlock Text="{mk:L11n UI.Calendar.Title}" FontSize="24" FontWeight="Medium" Margin="16,8" DockPanel.Dock="Top"/>
+                    <local:CalendarView/>
+                </DockPanel>
+            </controls:TabItemEx>
+        </TabControl>
+    </Grid>
+</controls:AcrylicWindow>

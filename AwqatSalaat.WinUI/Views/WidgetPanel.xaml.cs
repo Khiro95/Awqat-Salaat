@@ -77,6 +77,11 @@ namespace AwqatSalaat.WinUI.Views
             AudioPlayer.CurrentSession?.End();
         }
 
+        private void MoreInfo_Click(object sender, RoutedEventArgs e)
+        {
+            MoreInfoWindow.Open();
+        }
+
         private void LocationPanel_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             // if Height changed then the size has changed because of orientation change

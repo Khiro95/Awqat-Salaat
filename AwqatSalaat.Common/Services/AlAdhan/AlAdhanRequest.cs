@@ -46,7 +46,9 @@ namespace AwqatSalaat.Services.AlAdhan
             }
 
             var endpointParameters = GetEntireMonth
-                ? $"calendar{endpointSuffix}/{Date.Year}/{Date.Month}"
+                ? UseHijri
+                    ? $"hijriCalendar{endpointSuffix}/{HijriYear}/{HijriMonth}"
+                    : $"calendar{endpointSuffix}/{Date.Year}/{Date.Month}"
                 : $"timings{endpointSuffix}/{Date.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)}";
 
             return $"https://api.aladhan.com/v1/{endpointParameters}?{query}";
