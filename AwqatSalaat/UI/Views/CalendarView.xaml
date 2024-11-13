@@ -191,7 +191,7 @@
                          Height="2"
                          MinWidth="100"
                          VerticalAlignment="Bottom"
-                         Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisConverter}}"
+                         Visibility="{Binding IsBusy, Converter={StaticResource BoolVisConverter}}"
                          d:Visibility="Visible"/>
         </Grid>
     </Grid>
