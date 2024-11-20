@@ -29,11 +29,17 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid d:Background="Transparent">
-        <TabControl x:Name="tabControl" TabStripPlacement="Left" HorizontalContentAlignment="Left">
+        <TabControl x:Name="tabControl" TabStripPlacement="Left" HorizontalContentAlignment="Left" Margin="0,16,0,0">
             <controls:TabItemEx Header="{mk:L11n UI.Calendar.Title}" Glyph="&#xE787;">
                 <DockPanel>
                     <TextBlock Text="{mk:L11n UI.Calendar.Title}" FontSize="24" FontWeight="Medium" Margin="16,8" DockPanel.Dock="Top"/>
                     <local:CalendarView/>
+                </DockPanel>
+            </controls:TabItemEx>
+            <controls:TabItemEx Header="{mk:L11n UI.Learn.Title}" Glyph="&#xE736;">
+                <DockPanel>
+                    <TextBlock Text="{mk:L11n UI.Learn.Title}" FontSize="24" FontWeight="Medium" Margin="16,8" DockPanel.Dock="Top"/>
+                    <local:LearnView/>
                 </DockPanel>
             </controls:TabItemEx>
         </TabControl>

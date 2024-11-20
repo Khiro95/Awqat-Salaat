@@ -51,8 +51,13 @@
                 </NavigationView.Resources>
                 <NavigationView.MenuItems>
                     <NavigationViewItem x:Name="calendarItem" Icon="Calendar" Content="{mk:L11n Key=UI.Calendar.Title}" IsSelected="True"/>
+                    <NavigationViewItem x:Name="learnItem" Content="{mk:L11n Key=UI.Learn.Title}">
+                        <NavigationViewItem.Icon>
+                            <FontIcon Glyph="&#xE736;" />
+                        </NavigationViewItem.Icon>
+                    </NavigationViewItem>
                 </NavigationView.MenuItems>
-                <Frame x:Name="contentFrame" Margin="24,16"/>
+                <Frame x:Name="contentFrame" Margin="0,16,0,0"/>
             </controls:NavigaionViewEx>
         </Grid>
     </Page>

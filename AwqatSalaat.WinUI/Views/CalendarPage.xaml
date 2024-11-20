@@ -13,6 +13,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="Transparent"
+    Margin="24,0,24,16"
     IsEnabled="{x:Bind ViewModel.IsBusy, Converter={StaticResource BooleanInvertedConverter}}"
     x:DefaultBindMode="OneWay">
     <Page.Resources>

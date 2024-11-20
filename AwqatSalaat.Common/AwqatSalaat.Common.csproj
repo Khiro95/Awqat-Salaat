@@ -7,10 +7,32 @@
 
   <ItemGroup>
     <None Remove="Assets\countries.json" />
+    <None Remove="Assets\dhuhr_end_en.png" />
+    <None Remove="Assets\dhuhr_start_en.png" />
+    <None Remove="Assets\prayers_times_ar.rtf" />
+    <None Remove="Assets\prayers_times_en.rtf" />
+    <None Remove="Assets\dhuhr_end_ar.png" />
+    <None Remove="Assets\dhuhr_start_ar.png" />
+    <None Remove="Assets\fake_dawn.jpg" />
+    <None Remove="Assets\red_twilight.jpg" />
+    <None Remove="Assets\sunrise.jpg" />
+    <None Remove="Assets\sunset.jpg" />
+    <None Remove="Assets\true_dawn.jpg" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Assets\countries.json" />
+    <EmbeddedResource Include="Assets\dhuhr_end_en.png" />
+    <EmbeddedResource Include="Assets\dhuhr_start_en.png" />
+    <EmbeddedResource Include="Assets\prayers_times_ar.rtf" />
+    <EmbeddedResource Include="Assets\prayers_times_en.rtf" />
+    <EmbeddedResource Include="Assets\dhuhr_end_ar.png" />
+    <EmbeddedResource Include="Assets\dhuhr_start_ar.png" />
+    <EmbeddedResource Include="Assets\fake_dawn.jpg" />
+    <EmbeddedResource Include="Assets\red_twilight.jpg" />
+    <EmbeddedResource Include="Assets\sunrise.jpg" />
+    <EmbeddedResource Include="Assets\sunset.jpg" />
+    <EmbeddedResource Include="Assets\true_dawn.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +40,15 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
     <PackageReference Include="TimeZoneConverter" Version="6.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Fonts\UthmanTN_v2-0.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Fonts\UthmanicHafs_v2-1.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

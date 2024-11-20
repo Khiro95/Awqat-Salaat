@@ -27,6 +27,7 @@ namespace AwqatSalaat.WinUI.Views
         }
 
         private bool rtlLayoutFixed;
+        private long tokenOnHeaderChanged;
 
         public MoreInfoWindow()
         {
@@ -38,7 +39,7 @@ namespace AwqatSalaat.WinUI.Views
             titleBar.FlowDirection = isRtlUI ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
 
             Activated += MoreInfoWindow_Activated;
-            nav.RegisterPropertyChangedCallback(NavigationView.HeaderProperty, OnHeaderChanged);
+            tokenOnHeaderChanged = nav.RegisterPropertyChangedCallback(NavigationView.HeaderProperty, OnHeaderChanged);
             LocaleManager.Default.CurrentChanged += LocaleManager_CurrentChanged;
 
             UpdateDirection();
@@ -107,6 +108,10 @@ namespace AwqatSalaat.WinUI.Views
             {
                 pageType = typeof(CalendarPage);
             }
+            else if (args.SelectedItemContainer == learnItem)
+            {
+                pageType = typeof(LearnPage);
+            }
 
             contentFrame.NavigateToType(pageType, null, navOptions);
             UpdateTitle();
@@ -126,6 +131,12 @@ namespace AwqatSalaat.WinUI.Views
             }
 
             LocaleManager.Default.CurrentChanged -= LocaleManager_CurrentChanged;
+            nav.UnregisterPropertyChangedCallback(NavigationView.HeaderProperty, tokenOnHeaderChanged);
+
+            if (contentFrame.Content is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
         }
 
         private void FixWindowRtlLayout()

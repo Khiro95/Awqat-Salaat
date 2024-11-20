@@ -470,4 +470,7 @@
   <data name="UI.Calendar.Title" xml:space="preserve">
     <value>الرزنامة</value>
   </data>
+  <data name="UI.Learn.Title" xml:space="preserve">
+    <value>تعلم أوقات الصلوات</value>
+  </data>
 </root>

@@ -416,6 +416,15 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Learn Prayers Times.
+        /// </summary>
+        public static string UI_Learn_Title {
+            get {
+                return ResourceManager.GetString("UI.Learn.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Correspond to.
         /// </summary>
         public static string UI_Panel_CorrespondTo {
