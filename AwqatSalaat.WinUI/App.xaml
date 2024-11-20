@@ -21,7 +21,7 @@
                     <SolidColorBrush x:Key="FillCriticalBrush" Color="{StaticResource FillCriticalColor}"/>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Light">
-                    <Color x:Key="TextHighlightColor">#BF8F30</Color>
+                    <Color x:Key="TextHighlightColor">#9C6D17</Color>
                     <Color x:Key="FillCriticalColor">#BA5D5D</Color>
 
                     <SolidColorBrush x:Key="TextHighlightBrush" Color="{StaticResource TextHighlightColor}"/>

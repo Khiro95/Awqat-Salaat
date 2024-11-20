@@ -16,7 +16,7 @@
     <Color x:Key="ThemeColors.TextOnAccentColor">#FFFFFF</Color>
     <Color x:Key="ThemeColors.TextOnAccentDarkColor">#FFFFFF</Color>
 
-    <Color x:Key="ThemeColors.TextHighlightColor">#BF8F30</Color>
+    <Color x:Key="ThemeColors.TextHighlightColor">#9C6D17</Color>
 
     <Color x:Key="ThemeColors.ControlBackgroundColor">#10000000</Color>
     <Color x:Key="ThemeColors.ControlForegroundColor">#000000</Color>
