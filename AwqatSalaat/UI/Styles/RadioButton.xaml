@@ -5,7 +5,7 @@
         <Setter Property="Foreground" Value="{DynamicResource ThemeColors.ControlForegroundBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource ThemeColors.ControlBorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="FocusVisualStyle" Value="{DynamicResource DefaultVisualStyle}"/>
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource DefaultFocusVisual}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">

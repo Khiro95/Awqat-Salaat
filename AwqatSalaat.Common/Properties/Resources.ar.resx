@@ -473,4 +473,22 @@
   <data name="UI.Learn.Title" xml:space="preserve">
     <value>تعلم أوقات الصلوات</value>
   </data>
+  <data name="UI.Settings.Tabs.Times" xml:space="preserve">
+    <value>الأوقات</value>
+  </data>
+  <data name="UI.Settings.TimeAdjustment" xml:space="preserve">
+    <value>تعديل</value>
+  </data>
+  <data name="UI.Settings.TimeAdjustmentDescription" xml:space="preserve">
+    <value>تعديل وقت الصلاة بالمقدار المحدد من الدقائق</value>
+  </data>
+  <data name="UI.Settings.UseGlobal" xml:space="preserve">
+    <value>استعمال القيمة العامة</value>
+  </data>
+  <data name="UI.Settings.TimeVisibility" xml:space="preserve">
+    <value>الظهور</value>
+  </data>
+  <data name="UI.Settings.TimeVisibilityDescription" xml:space="preserve">
+    <value>عرض الوقت في لوحة الأداة</value>
+  </data>
 </root>

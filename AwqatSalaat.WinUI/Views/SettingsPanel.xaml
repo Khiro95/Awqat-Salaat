@@ -6,6 +6,7 @@
     xmlns:sys="using:System"
     xmlns:dt="using:AwqatSalaat.Data"
     xmlns:methods="using:AwqatSalaat.Services.Methods"
+    xmlns:cfg="using:AwqatSalaat.Configurations"
     xmlns:vm="using:AwqatSalaat.ViewModels"
     xmlns:mk="using:AwqatSalaat.WinUI.Markup"
     xmlns:converters="using:AwqatSalaat.WinUI.Converters"
@@ -142,21 +143,23 @@
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowCountdown}" Description="{mk:L11n Key=UI.Settings.ShowCountdownDescription}">
                                 <ToggleSwitch x:Name="countdownToggle" IsOn="{x:Bind ViewModel.Settings.ShowCountdown}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
                             </ctrl:SettingsItem>
-                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowSeconds}" Description="{mk:L11n Key=UI.Settings.ShowSecondsDescription}" IsEnabled="{x:Bind ViewModel.Settings.ShowCountdown}">
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowSeconds}" Description="{mk:L11n Key=UI.Settings.ShowSecondsDescription}" IsEnabled="{x:Bind ViewModel.Settings.ShowCountdown, Mode=OneWay}">
                                 <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.ShowSeconds}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
                             </ctrl:SettingsItem>
-                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.EnableCompactMode}" Description="{mk:L11n Key=UI.Settings.EnableCompactModeDescription}" IsEnabled="{x:Bind ViewModel.Settings.ShowCountdown}">
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.EnableCompactMode}" Description="{mk:L11n Key=UI.Settings.EnableCompactModeDescription}" IsEnabled="{x:Bind ViewModel.Settings.ShowCountdown, Mode=OneWay}">
                                 <ToggleSwitch x:Name="compactModeToggle" IsOn="{x:Bind ViewModel.Settings.UseCompactMode}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
                             </ctrl:SettingsItem>
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ReminderOffset}" Description="{mk:L11n Key=UI.Settings.ReminderOffsetDescription}">
                                 <NumberBox SpinButtonPlacementMode="Inline"
                                            Value="{x:Bind ViewModel.Settings.NotificationDistance}"
+                                           Minimum="0"
                                            Maximum="720"
                                            HorizontalAlignment="Left"/>
                             </ctrl:SettingsItem>
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ElapsedPeriod}" Description="{mk:L11n Key=UI.Settings.ElapsedPeriodDescription}">
                                 <NumberBox SpinButtonPlacementMode="Inline"
                                            Value="{x:Bind ViewModel.Settings.NotificationDistanceElapsed}"
+                                           Minimum="0"
                                            Maximum="30"
                                            HorizontalAlignment="Left"/>
                             </ctrl:SettingsItem>
@@ -165,7 +168,7 @@
                                     <ComboBox ItemsSource="{mk:Enums Type=dt:CalendarType}" SelectedItem="{Binding Settings.CalendarType, Mode=TwoWay}" Width="280">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
-                                                <ctrl:LocalizedEnumPresenter EnumValue="{Binding}" KeyFormat="Data.CalendarType.{0}"/>
+                                                <ctrl:LocalizedStringPresenter Value="{Binding}" KeyFormat="Data.CalendarType.{0}"/>
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
@@ -186,7 +189,7 @@
                                     <ComboBox ItemsSource="{mk:Enums Type=dt:AdhanSound}" SelectedItem="{Binding Settings.AdhanSound, Mode=TwoWay}" Width="280">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
-                                                <ctrl:LocalizedEnumPresenter EnumValue="{Binding}" KeyFormat="Data.AdhanSound.{0}"/>
+                                                <ctrl:LocalizedStringPresenter Value="{Binding}" KeyFormat="Data.AdhanSound.{0}"/>
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
@@ -217,7 +220,7 @@
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.NotificationSound}" Description="{mk:L11n Key=UI.Settings.NotificationSoundDescription}">
                                 <StackPanel>
                                     <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.EnableNotificationSound}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
-                                    <ContentControl Margin="8,8,0,0" HorizontalContentAlignment="Stretch" IsEnabled="{x:Bind ViewModel.Settings.EnableNotificationSound}" IsTabStop="False">
+                                    <ContentControl Margin="8,8,0,0" HorizontalContentAlignment="Stretch" IsEnabled="{x:Bind ViewModel.Settings.EnableNotificationSound, Mode=OneWay}" IsTabStop="False">
                                         <Grid ColumnDefinitions="Auto,*,Auto,Auto">
                                             <TextBlock Text="{mk:L11n Key=UI.Settings.File}" VerticalAlignment="Center"/>
                                             <TextBox Text="{x:Bind ViewModel.Settings.NotificationSoundFile, UpdateSourceTrigger=PropertyChanged}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1"/>
@@ -228,6 +231,41 @@
                                 </StackPanel>
                             </ctrl:SettingsItem>
                         </StackPanel>
+                    </NavigationViewItem.Tag>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="timesTab" Content="{mk:L11n Key=UI.Settings.Tabs.Times}">
+                    <NavigationViewItem.Tag>
+                        <ItemsControl x:Name="timesPanel" ItemsSource="{x:Bind ViewModel.PrayerConfigs, Mode=OneWay}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="cfg:PrayerConfig">
+                                    <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,8,0,0" Expanding="Expander_Expanding">
+                                        <Expander.Header>
+                                            <ctrl:LocalizedStringPresenter Value="{x:Bind Key, Mode=OneWay}" KeyFormat="Data.Salaat.{0}"/>
+                                        </Expander.Header>
+                                        <StackPanel>
+                                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.TimeAdjustment}" Description="{mk:L11n Key=UI.Settings.TimeAdjustmentDescription}" Margin="0">
+                                                <NumberBox Minimum="-10" Maximum="10" Value="{x:Bind Adjustment}" SpinButtonPlacementMode="Inline" HorizontalAlignment="Left"/>
+                                            </ctrl:SettingsItem>
+                                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ReminderOffset}" Description="{mk:L11n Key=UI.Settings.ReminderOffsetDescription}" Visibility="{x:Bind IsPrincipal, Mode=OneWay}">
+                                                <StackPanel>
+                                                    <ToggleSwitch IsOn="{x:Bind GlobalReminderOffset}" OnContent="{mk:L11n Key=UI.Settings.UseGlobal}" OffContent="{mk:L11n Key=UI.Settings.UseGlobal}"/>
+                                                    <NumberBox Value="{x:Bind ReminderOffset}" Minimum="0" Maximum="720" SpinButtonPlacementMode="Inline" HorizontalAlignment="Left" Margin="0,10,0,0" IsEnabled="{x:Bind GlobalReminderOffset, Converter={StaticResource BooleanInvertedConverter}, Mode=OneWay}"/>
+                                                </StackPanel>
+                                            </ctrl:SettingsItem>
+                                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ElapsedPeriod}" Description="{mk:L11n Key=UI.Settings.ElapsedPeriodDescription}" Visibility="{x:Bind IsPrincipal, Mode=OneWay}">
+                                                <StackPanel>
+                                                    <ToggleSwitch IsOn="{x:Bind GlobalElapsedTime, Mode=TwoWay}" OnContent="{mk:L11n Key=UI.Settings.UseGlobal}" OffContent="{mk:L11n Key=UI.Settings.UseGlobal}"/>
+                                                    <NumberBox Value="{x:Bind ElapsedTime}" Minimum="0" Maximum="30" SpinButtonPlacementMode="Inline" HorizontalAlignment="Left" Margin="0,10,0,0" IsEnabled="{x:Bind GlobalElapsedTime, Converter={StaticResource BooleanInvertedConverter}, Mode=OneWay}"/>
+                                                </StackPanel>
+                                            </ctrl:SettingsItem>
+                                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.TimeVisibility}" Description="{mk:L11n Key=UI.Settings.TimeVisibilityDescription}" Visibility="{x:Bind IsPrincipal, Converter={StaticResource BooleanToVisibilityInvertedConverter}, Mode=OneWay}">
+                                                <ToggleSwitch IsOn="{x:Bind IsVisible}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                                            </ctrl:SettingsItem>
+                                        </StackPanel>
+                                    </Expander>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </NavigationViewItem.Tag>
                 </NavigationViewItem>
                 <NavigationViewItem x:Name="serviceTab" Content="{mk:L11n Key=UI.Settings.Tabs.Service}">
@@ -241,7 +279,7 @@
                                               Width="200">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
-                                                <ctrl:LocalizedEnumPresenter EnumValue="{Binding}" KeyFormat="Data.PrayerTimesService.{0}"/>
+                                                <ctrl:LocalizedStringPresenter Value="{Binding}" KeyFormat="Data.PrayerTimesService.{0}"/>
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
@@ -255,7 +293,7 @@
                                 <ComboBox ItemsSource="{mk:Enums Type=dt:School}" SelectedItem="{Binding Settings.School, Mode=TwoWay}" Width="300">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
-                                            <ctrl:LocalizedEnumPresenter EnumValue="{Binding}" KeyFormat="Data.JuristicSchool.{0}"/>
+                                            <ctrl:LocalizedStringPresenter Value="{Binding}" KeyFormat="Data.JuristicSchool.{0}"/>
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
@@ -383,7 +421,7 @@
                                         <TextBlock Text="{mk:L11n Key=UI.Settings.Longitude}" Grid.Row="2"/>
                                         <TextBox Text="{x:Bind ViewModel.Settings.Longitude, Converter={StaticResource DecimalConverter}}" Grid.Column="1" Grid.Row="2"/>
                                         <Button Content="{mk:L11n Key=UI.Settings.Check}" Command="{x:Bind ViewModel.Locator.Check, Mode=OneWay}" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                        <Grid Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Visibility="{x:Bind ViewModel.Locator.PendingCheck}" x:DefaultBindMode="OneWay">
+                                        <Grid x:DefaultBindMode="OneWay" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Visibility="{x:Bind ViewModel.Locator.PendingCheck}">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition/>
                                                 <ColumnDefinition Width="Auto"/>
@@ -395,7 +433,7 @@
                                             <Grid>
                                                 <TextBlock Text="{Binding Locator.PendingPlace.DisplayName}" VerticalAlignment="Center" MaxWidth="400" TextWrapping="Wrap" FlowDirection="LeftToRight"/>
                                                 <Grid Visibility="{x:Bind ViewModel.Locator.IsChecking, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
-                                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{x:Bind ViewModel.Locator.HasCheckResult, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
+                                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{x:Bind ViewModel.Locator.HasCheckResult, Converter={StaticResource BooleanToVisibilityInvertedConverter}, Mode=OneWay}">
                                                         <TextBlock Text="{mk:L11n Key=UI.Panel.Error}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" Visibility="{x:Bind ViewModel.Locator.HasError}"/>
                                                         <TextBlock x:Name="checkStatusTextBlock" Text="{mk:L11n Key=UI.Settings.NoResult}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
                                                     </StackPanel>

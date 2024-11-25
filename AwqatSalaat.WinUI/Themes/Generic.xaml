@@ -173,10 +173,10 @@
     </Style>
     <Style TargetType="controls:SettingsItem" BasedOn="{StaticResource DefaultSettingsItemStyle}"/>
 
-    <Style TargetType="controls:LocalizedEnumPresenter">
+    <Style TargetType="controls:LocalizedStringPresenter">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="controls:LocalizedEnumPresenter">
+                <ControlTemplate TargetType="controls:LocalizedStringPresenter">
                     <TextBlock x:Name="textBlock"/>
                 </ControlTemplate>
             </Setter.Value>

@@ -5,6 +5,7 @@ using AwqatSalaat.WinUI.Helpers;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
+using Microsoft.UI.Xaml.Media;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -109,9 +110,9 @@ namespace AwqatSalaat.WinUI.Views
         
         private void OnVisibilityChanged(DependencyObject sender, DependencyProperty dp)
         {
-            // change selection when collapsed to hide the transition from previous tab to general tab
             if (Visibility == Visibility.Collapsed)
             {
+                // change selection when collapsed to hide the transition from previous tab to general tab
                 nav.SelectedItem = generalTab;
 
                 // When the widget switch to/from compact mode when editing some setting,
@@ -119,6 +120,8 @@ namespace AwqatSalaat.WinUI.Views
                 // the toggle will not show up visually correct. This is well observed for On->Off transition.
                 FixToggleSwitchVisualBug(countdownToggle);
                 FixToggleSwitchVisualBug(compactModeToggle);
+
+                CollapseExpanders(null);
             }
         }
 
@@ -253,6 +256,29 @@ namespace AwqatSalaat.WinUI.Views
             {
                 keepFlyoutOpen = false;
                 IsHitTestVisible = true;
+            }
+        }
+
+        private void Expander_Expanding(Expander sender, ExpanderExpandingEventArgs args)
+        {
+            CollapseExpanders(sender);
+        }
+
+        private void CollapseExpanders(Expander exception)
+        {
+            foreach (var item in timesPanel.Items)
+            {
+                var container = timesPanel.ItemContainerGenerator.ContainerFromItem(item);
+
+                if (container != null)
+                {
+                    var expander = VisualTreeHelper.GetChild(container, 0) as Expander;
+
+                    if (expander != exception)
+                    {
+                        expander.IsExpanded = false;
+                    }
+                }
             }
         }
     }

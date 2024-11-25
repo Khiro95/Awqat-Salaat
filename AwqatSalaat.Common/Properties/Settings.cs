@@ -1,7 +1,9 @@
-﻿using AwqatSalaat.Services.AlAdhan;
+﻿using AwqatSalaat.Configurations;
+using AwqatSalaat.Services.AlAdhan;
 using AwqatSalaat.Services.IslamicFinder;
 using AwqatSalaat.Services.Methods;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.IO;
@@ -17,12 +19,17 @@ namespace AwqatSalaat.Properties
         private string _notificationSoundFilePath;
         private string _adhanSoundFilePath;
         private string _adhanFajrSoundFilePath;
+        private bool _isLoaded;
+        private bool _ignorePropertyChanged;
+        private readonly Dictionary<string, PrayerConfig> _prayerConfigs = new Dictionary<string, PrayerConfig>();
 
         static Settings()
         {
             var assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             s_assemblyDirectory = Path.GetDirectoryName(assemblyPath);
         }
+
+        public PrayerConfig GetPrayerConfig(string key) => _prayerConfigs[key];
 
         public CalculationMethod CalculationMethod
         {
@@ -112,6 +119,10 @@ namespace AwqatSalaat.Properties
             {
                 UpdateAdhanFajrSoundFilePath();
             }
+            else if (e.PropertyName.StartsWith("Config_") && !_ignorePropertyChanged)
+            {
+                UpdateSinglePrayerConfig(e.PropertyName);
+            }
         }
 
         protected override void OnSettingsLoaded(object sender, SettingsLoadedEventArgs e)
@@ -149,7 +160,10 @@ namespace AwqatSalaat.Properties
             UpdateAdhanSoundFilePath();
             UpdateAdhanFajrSoundFilePath();
 
+            UpdatePrayerConfigs();
+
             base.OnSettingsLoaded(sender, e);
+            _isLoaded = true;
         }
 
         protected override void OnSettingsSaving(object sender, CancelEventArgs e)
@@ -261,6 +275,70 @@ namespace AwqatSalaat.Properties
                     AdhanSoundFile = @"Sounds\kholafa_08041446.mp3";
                     AdhanFajrSoundFile = @"Sounds\kholafa_08041446_full.mp3";
                     break;
+            }
+        }
+
+        private void UpdatePrayerConfigs()
+        {
+            foreach (var prop in Properties.OfType<SettingsProperty>())
+            {
+                if (prop.Name.StartsWith("Config_"))
+                {
+                    UpdateSinglePrayerConfig(prop.Name);
+                }
+            }
+        }
+
+        private void UpdateSinglePrayerConfig(string propertyName)
+        {
+            string key = propertyName.Split('_')[1];
+
+            if (!_prayerConfigs.TryGetValue(key, out var config))
+            {
+                config = new PrayerConfig(key);
+                config.PropertyChanged += PrayerConfig_PropertyChanged;
+                _prayerConfigs[key] = config;
+            }
+
+            config.OnSettingsPropertyChanged(propertyName, this[propertyName]);
+        }
+
+        private void PrayerConfig_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (_isLoaded)
+            {
+                var config = (PrayerConfig)sender;
+                var setting = $"Config_{config.Key}_{e.PropertyName}";
+                _ignorePropertyChanged = true;
+
+                if (e.PropertyName == nameof(PrayerConfig.Adjustment))
+                {
+                    this[setting] = (sbyte)config.Adjustment;
+                }
+                else if (config.IsPrincipal)
+                {
+                    switch (e.PropertyName)
+                    {
+                        case nameof(PrayerConfig.ReminderOffset):
+                            this[setting] = config.ReminderOffset;
+                            break;
+                        case nameof(PrayerConfig.ElapsedTime):
+                            this[setting] = config.ElapsedTime;
+                            break;
+                        case nameof(PrayerConfig.GlobalReminderOffset):
+                            this[setting] = config.GlobalReminderOffset;
+                            break;
+                        case nameof(PrayerConfig.GlobalElapsedTime):
+                            this[setting] = config.GlobalElapsedTime;
+                            break;
+                    }
+                }
+                else if (e.PropertyName == nameof(PrayerConfig.IsVisible))
+                {
+                    this[setting] = config.IsVisible;
+                }
+
+                _ignorePropertyChanged = false;
             }
         }
     }

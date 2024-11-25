@@ -1038,6 +1038,60 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Times.
+        /// </summary>
+        public static string UI_Settings_Tabs_Times {
+            get {
+                return ResourceManager.GetString("UI.Settings.Tabs.Times", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adjustment.
+        /// </summary>
+        public static string UI_Settings_TimeAdjustment {
+            get {
+                return ResourceManager.GetString("UI.Settings.TimeAdjustment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adjust the time of salaat by the specified minutes.
+        /// </summary>
+        public static string UI_Settings_TimeAdjustmentDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.TimeAdjustmentDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Visibility.
+        /// </summary>
+        public static string UI_Settings_TimeVisibility {
+            get {
+                return ResourceManager.GetString("UI.Settings.TimeVisibility", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show the time in the panel of the widget.
+        /// </summary>
+        public static string UI_Settings_TimeVisibilityDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.TimeVisibilityDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use global value.
+        /// </summary>
+        public static string UI_Settings_UseGlobal {
+            get {
+                return ResourceManager.GetString("UI.Settings.UseGlobal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zip code.
         /// </summary>
         public static string UI_Settings_ZipCode {

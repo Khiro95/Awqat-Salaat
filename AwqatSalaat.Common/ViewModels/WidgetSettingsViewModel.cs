@@ -1,7 +1,9 @@
-﻿using AwqatSalaat.Data;
+﻿using AwqatSalaat.Configurations;
+using AwqatSalaat.Data;
 using AwqatSalaat.Helpers;
 using AwqatSalaat.Services.GitHub;
 using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Settings = AwqatSalaat.Properties.Settings;
@@ -54,6 +56,7 @@ namespace AwqatSalaat.ViewModels
         public RelayCommand Save { get; }
         public RelayCommand Cancel { get; }
         public LocatorViewModel Locator { get; } = new LocatorViewModel();
+        public ObservableCollection<PrayerConfig> PrayerConfigs { get; }
 
         public event Action<bool> Updated;
 
@@ -83,6 +86,16 @@ namespace AwqatSalaat.ViewModels
                 {
                     OnPropertyChanged(nameof(CountdownFormat));
                 }
+            };
+
+            PrayerConfigs = new ObservableCollection<PrayerConfig>
+            {
+                Settings.GetPrayerConfig(nameof(PrayerTimes.Fajr)),
+                Settings.GetPrayerConfig(nameof(PrayerTimes.Shuruq)),
+                Settings.GetPrayerConfig(nameof(PrayerTimes.Dhuhr)),
+                Settings.GetPrayerConfig(nameof(PrayerTimes.Asr)),
+                Settings.GetPrayerConfig(nameof(PrayerTimes.Maghrib)),
+                Settings.GetPrayerConfig(nameof(PrayerTimes.Isha)),
             };
         }
 

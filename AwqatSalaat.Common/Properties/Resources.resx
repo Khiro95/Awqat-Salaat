@@ -462,4 +462,22 @@ Choose the calendar and set the desired year and month then click on Refresh</va
   <data name="UI.Learn.Title" xml:space="preserve">
     <value>Learn Prayers Times</value>
   </data>
+  <data name="UI.Settings.Tabs.Times" xml:space="preserve">
+    <value>Times</value>
+  </data>
+  <data name="UI.Settings.TimeAdjustment" xml:space="preserve">
+    <value>Adjustment</value>
+  </data>
+  <data name="UI.Settings.TimeAdjustmentDescription" xml:space="preserve">
+    <value>Adjust the time of salaat by the specified minutes</value>
+  </data>
+  <data name="UI.Settings.UseGlobal" xml:space="preserve">
+    <value>Use global value</value>
+  </data>
+  <data name="UI.Settings.TimeVisibility" xml:space="preserve">
+    <value>Visibility</value>
+  </data>
+  <data name="UI.Settings.TimeVisibilityDescription" xml:space="preserve">
+    <value>Show the time in the panel of the widget</value>
+  </data>
 </root>

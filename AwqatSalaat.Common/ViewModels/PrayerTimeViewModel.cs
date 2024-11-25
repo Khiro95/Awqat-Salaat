@@ -1,4 +1,6 @@
-﻿using AwqatSalaat.Helpers;
+﻿using AwqatSalaat.Configurations;
+using AwqatSalaat.Extensions;
+using AwqatSalaat.Helpers;
 using System;
 using System.Threading;
 
@@ -6,12 +8,14 @@ namespace AwqatSalaat.ViewModels
 {
     public class PrayerTimeViewModel : ObservableObject
     {
-        private DateTime time;
+        private DateTime time, apiTime;
         private bool isNext;
         private bool isActive;
         private bool isNotificationDismissed;
+        private bool isVisible = true;
         private PrayerTimeState state;
         private Timer timer;
+        private readonly PrayerConfig config;
 
         private bool IsInEnteredNotificationPeriod => !IsShuruq && IsEntered && DistanceElapsed > 0 && !isNotificationDismissed && Elapsed.TotalMinutes <= DistanceElapsed;
         private bool IsInNearNotificationPeriod => !IsShuruq && isNext && Distance > 0 && !IsEntered && !isNotificationDismissed && Countdown.TotalMinutes <= Distance;
@@ -19,11 +23,12 @@ namespace AwqatSalaat.ViewModels
         public string Name => LocaleManager.Default.Get($"Data.Salaat.{Key}");
         public string Key { get; }
         public bool IsShuruq { get; }
+        public bool IsVisible { get => isVisible; private set => SetProperty(ref isVisible, value); }
         public DateTime Time { get => time; private set => SetProperty(ref time, value); }
         public bool IsNext { get => isNext; set { isNext = value; UpdateState(); } }
         public bool IsActive { get => isActive; set => Activate(value); }
-        public ushort Distance { get; set; }
-        public byte DistanceElapsed { get; set; }
+        public ushort Distance { get; private set; }
+        public byte DistanceElapsed { get; private set; }
         public TimeSpan Countdown => time - TimeStamp.Now;
         public TimeSpan Elapsed => TimeStamp.Now - time;
         public bool IsEntered => time < TimeStamp.Now;
@@ -47,14 +52,25 @@ namespace AwqatSalaat.ViewModels
         {
             IsShuruq = key == nameof(Data.PrayerTimes.Shuruq);
             Key = key;
+            config = Properties.Settings.Default.GetPrayerConfig(key);
+            InvalidateConfig();
             DismissNotification = new RelayCommand(DismissExecute, o => IsInNearNotificationPeriod || IsInEnteredNotificationPeriod);
             LocaleManager.Default.CurrentChanged += (_, __) => OnPropertyChanged(nameof(Name));
         }
 
         public void SetTime(DateTime apiTime)
         {
-            Time = apiTime;
+            this.apiTime = apiTime;
+            Time = apiTime.AddMinutes(config.Adjustment);
             UpdateState();
+        }
+
+        public void InvalidateConfig()
+        {
+            Time = apiTime.AddMinutes(config.Adjustment);
+            Distance = config.EffectiveReminderOffset();
+            DistanceElapsed = config.EffectiveElapsedTime();
+            IsVisible = config.IsVisible;
         }
 
         private void Activate(bool active)

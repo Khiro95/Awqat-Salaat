@@ -1,4 +1,5 @@
 ﻿using AwqatSalaat.Data;
+using AwqatSalaat.Extensions;
 using AwqatSalaat.Helpers;
 using AwqatSalaat.Services;
 using AwqatSalaat.Services.AlAdhan;
@@ -41,6 +42,7 @@ namespace AwqatSalaat.ViewModels
         public DateTime DisplayedDate { get => displayedDate; private set => SetProperty(ref displayedDate, value); }
         public string Country { get => country; private set => SetProperty(ref country, value); }
         public string City { get => city; private set => SetProperty(ref city, value); }
+        public WidgetSettingsViewModel WidgetSettings { get; } = new WidgetSettingsViewModel();
         public ObservableCollection<PrayerTimeViewModel> Items { get; } = new ObservableCollection<PrayerTimeViewModel>()
         {
             new PrayerTimeViewModel(nameof(PrayerTimes.Fajr)),
@@ -50,7 +52,6 @@ namespace AwqatSalaat.ViewModels
             new PrayerTimeViewModel(nameof(PrayerTimes.Maghrib)),
             new PrayerTimeViewModel(nameof(PrayerTimes.Isha)),
         };
-        public WidgetSettingsViewModel WidgetSettings { get; } = new WidgetSettingsViewModel();
         public RelayCommand Refresh { get; }
         public RelayCommand OpenSettings { get; }
 
@@ -95,8 +96,7 @@ namespace AwqatSalaat.ViewModels
         {
             foreach (var time in Items)
             {
-                time.Distance = WidgetSettings.Settings.NotificationDistance;
-                time.DistanceElapsed = WidgetSettings.Settings.NotificationDistanceElapsed;
+                time.InvalidateConfig();
             }
 
             if (hasServiceSettingsChanged)
@@ -196,7 +196,7 @@ namespace AwqatSalaat.ViewModels
             }
 
             // Sorting doesn't hurt here, we only have 5 items :)
-            Next = Items.Where(i => !i.IsEntered && !i.IsShuruq).OrderBy(i => i.Countdown.TotalSeconds).FirstOrDefault();
+            Next = Items.Where(i => !i.IsEntered && !i.IsShuruq && i.IsVisible).OrderBy(i => i.Countdown.TotalSeconds).FirstOrDefault();
 
             if (next != null)
             {
@@ -216,7 +216,7 @@ namespace AwqatSalaat.ViewModels
             // Check if we should display Shuruq time since it cannot be marked as "Next"
             if (time is null && next?.Key == nameof(PrayerTimes.Dhuhr))
             {
-                DisplayedTime = Items.SingleOrDefault(i => i.State == PrayerTimeState.ShuruqComing) ?? next;
+                DisplayedTime = Items.SingleOrDefault(i => i.State == PrayerTimeState.ShuruqComing && i.IsVisible) ?? next;
             }
             else
             {
@@ -281,8 +281,10 @@ namespace AwqatSalaat.ViewModels
 
                 var apiResponse = await serviceClient.GetDataAsync(request);
 
-                // If Isha has entered, then we look for the next day
-                if (DisplayedDate == TimeStamp.Date && TimeStamp.Now > apiResponse.Times[TimeStamp.Date].Max(t => t.Value).AddMinutes(WidgetSettings.Settings.NotificationDistanceElapsed))
+                var ishaConfig = WidgetSettings.Settings.GetPrayerConfig(nameof(PrayerTimes.Isha));
+                var ishaTime = apiResponse.Times[DisplayedDate].Max(t => t.Value).AddMinutes(ishaConfig.Adjustment + ishaConfig.EffectiveElapsedTime());
+                // If Isha has already entered, then we look for the next day
+                if (DisplayedDate == TimeStamp.Date && TimeStamp.Now > ishaTime)
                 {
                     DisplayedDate = TimeStamp.NextDate;
 

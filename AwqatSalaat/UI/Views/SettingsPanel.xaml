@@ -62,7 +62,8 @@
             </ObjectDataProvider>
 
             <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
-            <converters:LocalizedEnumConverter x:Key="LocalizedEnumConverter"/>
+            <converters:LocalizedStringConverter x:Key="LocalizedStringConverter"/>
+            <converters:BoolInverterConverter x:Key="BoolInverterConverter"/>
             <converters:BoolToVisibilityInvertedConverter x:Key="BoolToVisibilityInvertedConverter"/>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
@@ -138,7 +139,7 @@
                                 <ComboBox ItemsSource="{Binding Source={StaticResource CalendarTypeEnum}}" SelectedItem="{Binding CalendarType}" Width="200" HorizontalAlignment="Left">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.CalendarType.{0}'}"/>
+                                            <TextBlock Text="{Binding Converter={StaticResource LocalizedStringConverter}, ConverterParameter='Data.CalendarType.{0}'}"/>
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
@@ -163,7 +164,7 @@
                                 <ComboBox ItemsSource="{Binding Source={StaticResource AdhanSoundEnum}}" SelectedItem="{Binding AdhanSound}" Width="200" HorizontalAlignment="Left">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.AdhanSound.{0}'}"/>
+                                            <TextBlock Text="{Binding Converter={StaticResource LocalizedStringConverter}, ConverterParameter='Data.AdhanSound.{0}'}"/>
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
@@ -215,6 +216,38 @@
                     </StackPanel>
                 </ScrollViewer>
             </controls:TabItemEx>
+            <controls:TabItemEx Header="{mk:L11n UI.Settings.Tabs.Times}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl x:Name="timesPanel" ItemsSource="{Binding PrayerConfigs}" Margin="8,16,8,8">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Expander Header="{Binding Key, Converter={StaticResource LocalizedStringConverter}, ConverterParameter='Data.Salaat.{0}'}" Margin="0,4" Expanded="Expander_Expanded" d:IsExpanded="True">
+                                    <StackPanel Margin="8">
+                                        <controls:SettingsItem Header="{mk:L11n UI.Settings.TimeAdjustment}" Description="{mk:L11n UI.Settings.TimeAdjustmentDescription}" Margin="0">
+                                            <controls:NumericUpDown Minimum="-10" Maximum="10" Value="{Binding Adjustment}" Width="100" HorizontalAlignment="Left"/>
+                                        </controls:SettingsItem>
+                                        <controls:SettingsItem Header="{mk:L11n UI.Settings.ReminderOffset}" Description="{mk:L11n UI.Settings.ReminderOffsetDescription}" Visibility="{Binding IsPrincipal, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <StackPanel>
+                                                <CheckBox Content="{mk:L11n UI.Settings.UseGlobal}" IsChecked="{Binding GlobalReminderOffset}"/>
+                                                <controls:NumericUpDown Value="{Binding ReminderOffset}" Maximum="720" Width="100" HorizontalAlignment="Left" Margin="0,10,0,0" IsEnabled="{Binding GlobalReminderOffset, Converter={StaticResource BoolInverterConverter}}"/>
+                                            </StackPanel>
+                                        </controls:SettingsItem>
+                                        <controls:SettingsItem Header="{mk:L11n UI.Settings.ElapsedPeriod}" Description="{mk:L11n UI.Settings.ElapsedPeriodDescription}" Visibility="{Binding IsPrincipal, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <StackPanel>
+                                                <CheckBox Content="{mk:L11n UI.Settings.UseGlobal}" IsChecked="{Binding GlobalElapsedTime}"/>
+                                                <controls:NumericUpDown Value="{Binding ElapsedTime}" Maximum="30" Width="100" HorizontalAlignment="Left" Margin="0,10,0,0" IsEnabled="{Binding GlobalElapsedTime, Converter={StaticResource BoolInverterConverter}}"/>
+                                            </StackPanel>
+                                        </controls:SettingsItem>
+                                        <controls:SettingsItem Header="{mk:L11n UI.Settings.TimeVisibility}" Description="{mk:L11n UI.Settings.TimeVisibilityDescription}" Visibility="{Binding IsPrincipal, Converter={StaticResource BoolToVisibilityInvertedConverter}}">
+                                            <CheckBox IsChecked="{Binding IsVisible}"/>
+                                        </controls:SettingsItem>
+                                    </StackPanel>
+                                </Expander>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </controls:TabItemEx>
             <controls:TabItemEx Header="{mk:L11n UI.Settings.Tabs.Service}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel DataContext="{Binding Settings}" Margin="8,16,8,8">
@@ -223,7 +256,7 @@
                                 <ComboBox ItemsSource="{Binding Source={StaticResource PrayerTimesServiceEnum}}" SelectedItem="{Binding Service}" Width="200" HorizontalAlignment="Left">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.PrayerTimesService.{0}'}"/>
+                                            <TextBlock Text="{Binding Converter={StaticResource LocalizedStringConverter}, ConverterParameter='Data.PrayerTimesService.{0}'}"/>
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
@@ -247,7 +280,7 @@
                             <ComboBox ItemsSource="{Binding Source={StaticResource SchoolEnum}}" SelectedItem="{Binding School}" Width="300" HorizontalAlignment="Left">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.JuristicSchool.{0}'}"/>
+                                        <TextBlock Text="{Binding Converter={StaticResource LocalizedStringConverter}, ConverterParameter='Data.JuristicSchool.{0}'}"/>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>

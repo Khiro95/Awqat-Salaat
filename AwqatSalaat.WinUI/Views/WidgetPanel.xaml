@@ -75,7 +75,8 @@
                                     Time="{x:Bind Time}"
                                     TimeString="{x:Bind converters:CustomDateTimeConverter.FormatShortTime(Time, ash:LocaleManager.Default.CurrentCulture)}"
                                     PrayerName="{x:Bind Name}"
-                                    DismissCommand="{x:Bind DismissNotification}"/>
+                                    DismissCommand="{x:Bind DismissNotification}"
+                                    Visibility="{x:Bind IsVisible}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

@@ -5,16 +5,19 @@ using System.Windows.Data;
 
 namespace AwqatSalaat.UI.Converters
 {
-    class LocalizedEnumConverter : IValueConverter
+    class LocalizedStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is Enum && parameter is string format && !string.IsNullOrEmpty(format))
+            if (value is null)
             {
+                return null;
+            }
+            else
+            {
+                string format = (parameter as string) ?? "{0}";
                 return LocaleManager.Default.Get(string.Format(format, value));
             }
-
-            return null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

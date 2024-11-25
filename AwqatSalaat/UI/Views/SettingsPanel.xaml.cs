@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace AwqatSalaat.UI.Views
 {
@@ -48,6 +49,11 @@ namespace AwqatSalaat.UI.Views
         private void SettingsPanel_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             tabControl.SelectedIndex = (bool)e.NewValue ? 0 : -1;
+
+            if (!(bool)e.NewValue)
+            {
+                CollapseExpanders(null);
+            }
         }
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
@@ -143,6 +149,29 @@ namespace AwqatSalaat.UI.Views
             {
                 ParentPopup.StaysOpen = false;
                 ParentPopup.IsTopMost = true;
+            }
+        }
+
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            CollapseExpanders(sender as Expander);
+        }
+
+        private void CollapseExpanders(Expander exception)
+        {
+            foreach (var item in timesPanel.Items)
+            {
+                var container = timesPanel.ItemContainerGenerator.ContainerFromItem(item);
+
+                if (container != null)
+                {
+                    var expander = VisualTreeHelper.GetChild(container, 0) as Expander;
+
+                    if (expander != exception)
+                    {
+                        expander.IsExpanded = false;
+                    }
+                }
             }
         }
     }
