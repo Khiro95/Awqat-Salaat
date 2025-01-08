@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace AwqatSalaat.UI.Views
 {
@@ -99,7 +98,7 @@ namespace AwqatSalaat.UI.Views
                                 {
                                     Width = 400,
                                     Margin = new Thickness(4),
-                                    Source = GetImageFromCommonResources(imgFile),
+                                    Source = CommonResourcesHelper.GetImage(imgFile),
                                 };
                                 var container = new InlineUIContainer
                                 {
@@ -164,14 +163,6 @@ namespace AwqatSalaat.UI.Views
             foreach ((var run, var newText) in toUpdate)
             {
                 run.Text = newText;
-            }
-        }
-
-        private static ImageSource GetImageFromCommonResources(string file)
-        {
-            using (var stream = CommonResources.Get(file))
-            {
-                return BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
             }
         }
     }

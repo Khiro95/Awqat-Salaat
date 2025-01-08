@@ -491,4 +491,25 @@
   <data name="UI.Settings.TimeVisibilityDescription" xml:space="preserve">
     <value>عرض الوقت في لوحة الأداة</value>
   </data>
+  <data name="UI.Calendar.DocumentTitle" xml:space="preserve">
+    <value>رزنامة مواقيت الصلاة</value>
+  </data>
+  <data name="UI.Calendar.GeneratedBy" xml:space="preserve">
+    <value>مولدة بواسطة أداة</value>
+  </data>
+  <data name="UI.Calendar.Export" xml:space="preserve">
+    <value>تصدير</value>
+  </data>
+  <data name="UI.Calendar.Preview" xml:space="preserve">
+    <value>معاينة</value>
+  </data>
+  <data name="UI.Calendar.Theme" xml:space="preserve">
+    <value>المظهر</value>
+  </data>
+  <data name="UI.Calendar.ExportPNG" xml:space="preserve">
+    <value>تصدير كـPNG</value>
+  </data>
+  <data name="UI.Calendar.Print" xml:space="preserve">
+    <value>طباعة</value>
+  </data>
 </root>

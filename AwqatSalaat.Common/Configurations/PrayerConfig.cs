@@ -1,5 +1,4 @@
 ﻿using AwqatSalaat.Helpers;
-using System.Runtime.CompilerServices;
 
 namespace AwqatSalaat.Configurations
 {

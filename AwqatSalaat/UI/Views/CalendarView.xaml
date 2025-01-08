@@ -103,10 +103,16 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
             </StackPanel>
-            <Button Command="{Binding Refresh}" Margin="16,0" VerticalAlignment="Center" HorizontalAlignment="Left" Padding="4,2" Grid.Column="2" Grid.RowSpan="3">
+            <Button Command="{Binding Refresh}" Margin="16,0" VerticalAlignment="Center" HorizontalAlignment="Left" MinWidth="80" Padding="4,2" Grid.Column="2" Grid.Row="0">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="&#xE72C;" FontSize="16" FontFamily="Segoe MDL2 Assets" Foreground="{DynamicResource ThemeColors.GlyphForegroundBrush}" VerticalAlignment="Center"/>
                     <TextBlock Text="{mk:L11n UI.Panel.Refresh}" Margin="4,0,0,0"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="16,0" VerticalAlignment="Center" HorizontalAlignment="Left" MinWidth="80" Padding="4,2" Grid.Column="2" Grid.Row="2" Click="ExportClick" IsEnabled="{Binding Result.HasData}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xEE71;" FontSize="16" FontFamily="Segoe MDL2 Assets" Foreground="{DynamicResource ThemeColors.GlyphForegroundBrush}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{mk:L11n UI.Calendar.Export}" Margin="4,0,0,0"/>
                 </StackPanel>
             </Button>
         </Grid>
@@ -140,7 +146,7 @@
                     </Grid>
                 </Border>
                 <ListBox x:Name="listBox"
-                         ItemsSource="{Binding PrayerTimes}"
+                         ItemsSource="{Binding Result.PrayerTimes}"
                          AlternationCount="2"
                          BorderThickness="0"
                          Background="Transparent"

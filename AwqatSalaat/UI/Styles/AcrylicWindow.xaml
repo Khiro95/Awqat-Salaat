@@ -93,9 +93,11 @@
                                 <ContentPresenter Content="{TemplateBinding FunctionBarContent}"/>
                             </Border>
                             <StackPanel x:Name="TitleBarButtonsArea" Orientation="Horizontal" Grid.Column="2" WindowChrome.IsHitTestVisibleInChrome="True">
-                                <Button ToolTip="{mk:L11n UI.Window.Minimize}" Width="45" Height="29" Content="M0,5.5h10" Style="{StaticResource WindowTitleBarButton}" Command="{Binding Source={x:Static SystemCommands.MinimizeWindowCommand}}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
-                                <Button x:Name="maxBtn" ToolTip="{mk:L11n UI.Window.Maximize}" Width="45" Height="29" Content="M0,0.5h9.5v9h-9v-9" Style="{StaticResource WindowTitleBarButton}" Command="{Binding Source={x:Static SystemCommands.MaximizeWindowCommand}}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
-                                <Button x:Name="rstBtn" ToolTip="{mk:L11n UI.Window.Restore}" Width="45" Height="29" Content="M0.5,9.5h7v-7h-7v7ZM2.5,2v-1.5h7v7h-1.5" Style="{StaticResource WindowTitleBarButton}" Command="{Binding Source={x:Static SystemCommands.RestoreWindowCommand}}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
+                                <StackPanel x:Name="sizeBtns" Orientation="Horizontal">
+                                    <Button ToolTip="{mk:L11n UI.Window.Minimize}" Width="45" Height="29" Content="M0,5.5h10" Style="{StaticResource WindowTitleBarButton}" Command="{Binding Source={x:Static SystemCommands.MinimizeWindowCommand}}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
+                                    <Button x:Name="maxBtn" ToolTip="{mk:L11n UI.Window.Maximize}" Width="45" Height="29" Content="M0,0.5h9.5v9h-9v-9" Style="{StaticResource WindowTitleBarButton}" Command="{Binding Source={x:Static SystemCommands.MaximizeWindowCommand}}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
+                                    <Button x:Name="rstBtn" ToolTip="{mk:L11n UI.Window.Restore}" Width="45" Height="29" Content="M0.5,9.5h7v-7h-7v7ZM2.5,2v-1.5h7v7h-1.5" Style="{StaticResource WindowTitleBarButton}" Command="{Binding Source={x:Static SystemCommands.RestoreWindowCommand}}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"/>
+                                </StackPanel>
                                 <Button ToolTip="{mk:L11n UI.Window.Close}" Width="45" Height="29" Content="M0,0 L10,10ZM0,10L10,0" Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                                     <Button.Style>
                                         <Style TargetType="Button" BasedOn="{StaticResource WindowTitleBarButton}">
@@ -118,6 +120,9 @@
                                     <SolidColorBrush Color="{Binding TintColor, RelativeSource={RelativeSource TemplatedParent}}" Opacity="{Binding TintOpacity, RelativeSource={RelativeSource TemplatedParent}}"/>
                                 </Setter.Value>
                             </Setter>
+                        </Trigger>
+                        <Trigger Property="ResizeMode" Value="NoResize">
+                            <Setter TargetName="sizeBtns" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
                         <Trigger Property="WindowState" Value="Maximized">
                             <Setter Property="WindowChrome.WindowChrome" Value="{StaticResource MaxWC}"/>

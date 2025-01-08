@@ -31,8 +31,7 @@ namespace AwqatSalaat.ViewModels
         public bool UseGregorianCalendar { get => useGregorianCalendar; set => SetProperty(ref useGregorianCalendar, value); }
         public bool UseHijriCalendar { get => useHijriCalendar; set => SetProperty(ref useHijriCalendar, value); }
         public bool IsBusy { get => isBusy; set => SetProperty(ref isBusy, value); }
-        public ObservableCollection<CalendarRecord> PrayerTimes { get; } = new ObservableCollection<CalendarRecord>();
-        public bool HasData => PrayerTimes?.Count > 0;
+        public CalendarResult Result { get; } = new CalendarResult();
         public ICommand Refresh { get; }
 
         private Properties.Settings Settings => Properties.Settings.Default;
@@ -40,11 +39,13 @@ namespace AwqatSalaat.ViewModels
         public CalendarViewModel()
         {
             Refresh = new RelayCommand(RefreshExecute);
-            gregorianYear = TimeStamp.Date.Year;
-            gregorianMonth = TimeStamp.Date.Month;
+
+            var currentDate = TimeStamp.Date;
+            gregorianYear = currentDate.Year;
+            gregorianMonth = currentDate.Month;
             var cal = GetHijriCalendar();
-            hijriYear = cal.GetYear(TimeStamp.Date);
-            hijriMonth = cal.GetMonth(TimeStamp.Date);
+            hijriYear = cal.GetYear(currentDate);
+            hijriMonth = cal.GetMonth(currentDate);
         }
 
         private async void RefreshExecute(object obj)
@@ -53,11 +54,11 @@ namespace AwqatSalaat.ViewModels
             {
                 IsBusy = true;
 
-                PopulateData(null);
+                Result.PopulateData(null, false, null);
 
                 IServiceClient serviceClient = GetServiceClient(Settings.Service);
                 DateTime dateTime;
-                Calendar calendar = null;
+                Calendar calendar = GetHijriCalendar();
 
                 if (useGregorianCalendar)
                 {
@@ -65,7 +66,6 @@ namespace AwqatSalaat.ViewModels
                 }
                 else
                 {
-                    calendar = GetHijriCalendar();
                     dateTime = calendar.ToDateTime(hijriYear, hijriMonth, 1, 0, 0, 0, 0, calendar.Eras[0]);
                 }
 
@@ -90,7 +90,7 @@ namespace AwqatSalaat.ViewModels
                     times = FilterHijriRecords(times, HijriMonth, calendar);
                 }
 
-                PopulateData(times);
+                Result.PopulateData(times, UseHijriCalendar, calendar);
             }
             catch (Exception ex)
             {
@@ -136,25 +136,6 @@ namespace AwqatSalaat.ViewModels
         private Dictionary<DateTime, PrayerTimes> FilterHijriRecords(Dictionary<DateTime, PrayerTimes> data, int month, Calendar calendar)
         {
             return data.Where(kv => calendar.GetMonth(kv.Key) == month).ToDictionary(kv => kv.Key, kv => kv.Value);
-        }
-
-        private void PopulateData(Dictionary<DateTime, PrayerTimes> data)
-        {
-            if (HasData)
-            {
-                PrayerTimes.Clear();
-            }
-
-            if (data?.Count > 0)
-            {
-                foreach (var time in data.OrderBy(kv => kv.Key))
-                {
-                    var record = new CalendarRecord(time.Key, time.Value);
-                    PrayerTimes.Add(record);
-                }
-            }
-
-            OnPropertyChanged(nameof(HasData));
         }
 
         private IServiceClient GetServiceClient(PrayerTimesService service)
@@ -245,6 +226,45 @@ namespace AwqatSalaat.ViewModels
         {
             Date = date;
             Times = times;
+        }
+    }
+
+    public class CalendarResult : ObservableObject
+    {
+        private bool isHijriMonth;
+        private DateTime? firstDate, lastDate;
+
+        public bool IsHijriMonth { get => isHijriMonth; private set => SetProperty(ref isHijriMonth, value); }
+        public DateTime? FirstDate { get => firstDate; private set => SetProperty(ref firstDate, value); }
+        public DateTime? LastDate { get => lastDate; private set => SetProperty(ref lastDate, value); }
+        public Calendar HijriCalendar { get; private set; }
+        public ObservableCollection<CalendarRecord> PrayerTimes { get; } = new ObservableCollection<CalendarRecord>();
+        public bool HasData => PrayerTimes?.Count > 0;
+
+        internal void PopulateData(Dictionary<DateTime, PrayerTimes> data, bool isHijri, Calendar hijriCalendar)
+        {
+            if (HasData)
+            {
+                PrayerTimes.Clear();
+                FirstDate = null;
+                LastDate = null;
+            }
+
+            if (data?.Count > 0)
+            {
+                foreach (var time in data.OrderBy(kv => kv.Key))
+                {
+                    var record = new CalendarRecord(time.Key, time.Value);
+                    PrayerTimes.Add(record);
+                }
+
+                IsHijriMonth = isHijri;
+                HijriCalendar = hijriCalendar;
+                FirstDate = PrayerTimes[0].Date;
+                LastDate = PrayerTimes[PrayerTimes.Count - 1].Date;
+            }
+
+            OnPropertyChanged(nameof(HasData));
         }
     }
 }

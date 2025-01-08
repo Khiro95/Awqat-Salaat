@@ -1,7 +1,6 @@
 ﻿using AwqatSalaat.Helpers;
 using AwqatSalaat.ViewModels;
 using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -25,12 +24,12 @@ namespace AwqatSalaat.UI.Views
         public CalendarView()
         {
             InitializeComponent();
-            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+            ViewModel.Result.PropertyChanged += Result_PropertyChanged;
         }
 
-        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void Result_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(CalendarViewModel.HasData))
+            if (e.PropertyName == nameof(CalendarResult.HasData))
             {
                 UpdateInViewDate(listBox);
 
@@ -52,9 +51,9 @@ namespace AwqatSalaat.UI.Views
         {
             if (listBox.HasItems)
             {
-                DateTime first = ViewModel.PrayerTimes.First().Date;
+                DateTime first = ViewModel.Result.PrayerTimes[0].Date;
 
-                foreach (var time in ViewModel.PrayerTimes)
+                foreach (var time in ViewModel.Result.PrayerTimes)
                 {
                     var container = listBox.ItemContainerGenerator.ContainerFromItem(time) as ListBoxItem;
 
@@ -77,6 +76,16 @@ namespace AwqatSalaat.UI.Views
             Rect bounds = element.TransformToAncestor(container).TransformBounds(new Rect(0.0, 0.0, element.ActualWidth, element.ActualHeight));
             Rect rect = new Rect(0.0, 0.0, container.ActualWidth, container.ActualHeight);
             return rect.Contains(bounds.TopLeft) || rect.Contains(bounds.BottomRight);
+        }
+
+        private void ExportClick(object sender, RoutedEventArgs e)
+        {
+            var window = new CalendarExportWindow()
+            {
+                DataContext = new CalendarExportViewModel { CalendarResult = ViewModel.Result },
+                Owner = Window.GetWindow(this)
+            };
+            window.ShowDialog();
         }
     }
 
