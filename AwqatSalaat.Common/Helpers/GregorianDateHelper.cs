@@ -30,5 +30,15 @@ namespace AwqatSalaat.Helpers
 
             return dateTime.ToString(format, culture.DateTimeFormat);
         }
+
+        public static string FormatN(DateTime? dateTime, string format, string language)
+        {
+            if (dateTime.HasValue)
+            {
+                return Format(dateTime.Value, format, language);
+            }
+            
+            return string.Empty;
+        }
     }
 }

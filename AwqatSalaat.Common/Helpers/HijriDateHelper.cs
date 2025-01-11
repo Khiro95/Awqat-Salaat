@@ -118,6 +118,16 @@ namespace AwqatSalaat.Helpers
             s_HijriCalendar.HijriAdjustment = Settings.Default.HijriAdjustment;
         }
 
+        public static string FormatN(DateTime? dateTime, string format, string language)
+        {
+            if (dateTime.HasValue)
+            {
+                return Format(dateTime.Value, format, language);
+            }
+
+            return string.Empty;
+        }
+
         public static string Format(DateTime dateTime, string format, string language)
         {
             if (string.IsNullOrEmpty(language))

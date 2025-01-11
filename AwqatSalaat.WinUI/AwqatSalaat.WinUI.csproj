@@ -35,6 +35,8 @@
 
     <ItemGroup>
         <None Remove="Themes\Generic.xaml" />
+        <None Remove="Views\CalendarDocument.xaml" />
+        <None Remove="Views\CalendarExportWindow.xaml" />
         <None Remove="Views\CalendarPage.xaml" />
         <None Remove="Views\LearnPage.xaml" />
         <None Remove="Views\MoreInfoWindow.xaml" />
@@ -79,6 +81,16 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\AwqatSalaat.Common\AwqatSalaat.Common.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Page Update="Views\CalendarDocument.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Page>
+    </ItemGroup>
+    <ItemGroup>
+      <Page Update="Views\CalendarExportWindow.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Page>
     </ItemGroup>
     <ItemGroup>
       <Page Update="Views\LearnPage.xaml">

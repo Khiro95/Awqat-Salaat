@@ -82,14 +82,20 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
             </StackPanel>
-            <Button Command="{Binding Refresh}" Margin="16,0" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="2" Grid.RowSpan="3">
+            <Button Command="{Binding Refresh}" Margin="16,0" VerticalAlignment="Center" HorizontalAlignment="Left" MinWidth="94" Grid.Column="2" Grid.Row="0">
                 <StackPanel Orientation="Horizontal">
                     <FontIcon Glyph="&#xE72C;" FontSize="16" VerticalAlignment="Center"/>
                     <TextBlock Text="{mk:L11n Key=UI.Panel.Refresh}" Margin="8,0,0,0"/>
                 </StackPanel>
             </Button>
+            <Button Margin="16,0" VerticalAlignment="Center" HorizontalAlignment="Left" MinWidth="94" Grid.Column="2" Grid.Row="2" Click="Export_Click" IsEnabled="{x:Bind ViewModel.Result.HasData}">
+                <StackPanel Orientation="Horizontal">
+                    <FontIcon Glyph="&#xEE71;" FontSize="16" VerticalAlignment="Center"/>
+                    <TextBlock Text="{mk:L11n Key=UI.Calendar.Export}" Margin="8,0,0,0"/>
+                </StackPanel>
+            </Button>
         </Grid>
-        <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" CornerRadius="{ThemeResource ControlCornerRadius}" BorderThickness="1" Margin="0,16,0,0" Grid.Row="1" Visibility="{Binding HasData, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" CornerRadius="{ThemeResource ControlCornerRadius}" BorderThickness="1" Margin="0,16,0,0" Grid.Row="1" Visibility="{Binding Result.HasData, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -124,7 +130,7 @@
                 </Border>
                 <controls:ListBoxEx x:Name="listBox"
                                     Grid.Row="1"
-                                    ItemsSource="{x:Bind ViewModel.PrayerTimes}"
+                                    ItemsSource="{x:Bind ViewModel.Result.PrayerTimes}"
                                     CornerRadius="0,0,4,4"
                                     BorderThickness="0"
                                     Background="Transparent"
@@ -179,7 +185,7 @@
             </Grid>
         </Border>
         <Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
-            <TextBlock Text="{mk:L11n Key=UI.Calendar.NoData}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" TextAlignment="Center" Visibility="{Binding HasData, Converter={StaticResource BooleanToVisibilityInvertedConverter}}"/>
+            <TextBlock Text="{mk:L11n Key=UI.Calendar.NoData}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" TextAlignment="Center" Visibility="{Binding Result.HasData, Converter={StaticResource BooleanToVisibilityInvertedConverter}}"/>
         </Grid>
         <Grid Grid.Row="1" VerticalAlignment="Top" Margin="0,16,0,0" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ProgressBar IsIndeterminate="True"

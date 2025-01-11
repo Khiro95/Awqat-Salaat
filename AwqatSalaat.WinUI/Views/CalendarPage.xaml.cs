@@ -3,7 +3,6 @@ using AwqatSalaat.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
-using System.Linq;
 using Windows.Foundation;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -29,7 +28,7 @@ namespace AwqatSalaat.WinUI.Views
         public CalendarPage()
         {
             this.InitializeComponent();
-            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+            ViewModel.Result.PropertyChanged += Result_PropertyChanged;
             listBox.Loaded += ListBox_Loaded;
 
             // Workaround for a bug https://github.com/microsoft/microsoft-ui-xaml/issues/4035
@@ -60,9 +59,9 @@ namespace AwqatSalaat.WinUI.Views
             }
         }
 
-        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void Result_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(CalendarViewModel.HasData))
+            if (e.PropertyName == nameof(CalendarResult.HasData))
             {
                 UpdateInViewDate(listBox);
 
@@ -77,9 +76,9 @@ namespace AwqatSalaat.WinUI.Views
         {
             if (listBox.Items.Count > 0)
             {
-                DateTime first = ViewModel.PrayerTimes.First().Date;
+                DateTime first = ViewModel.Result.PrayerTimes[0].Date;
 
-                foreach (var time in ViewModel.PrayerTimes)
+                foreach (var time in ViewModel.Result.PrayerTimes)
                 {
                     var container = listBox.ItemContainerGenerator.ContainerFromItem(time) as ListBoxItem;
 
@@ -94,7 +93,7 @@ namespace AwqatSalaat.WinUI.Views
             }
         }
 
-        private bool IsUserVisible(FrameworkElement element, FrameworkElement container)
+        private static bool IsUserVisible(FrameworkElement element, FrameworkElement container)
         {
             if (element.Visibility == Visibility.Collapsed)
                 return false;
@@ -102,6 +101,14 @@ namespace AwqatSalaat.WinUI.Views
             Rect bounds = element.TransformToVisual(container).TransformBounds(new Rect(0.0, 0.0, element.ActualWidth, element.ActualHeight));
             Rect rect = new Rect(0.0, 0.0, container.ActualWidth, container.ActualHeight);
             return rect.Contains(new Point(bounds.Left, bounds.Top)) || rect.Contains(new Point(bounds.Right, bounds.Bottom));
+        }
+
+        private void Export_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = new CalendarExportViewModel { CalendarResult = ViewModel.Result };
+            var window = new CalendarExportWindow(vm);
+            window.AppWindow.ResizeClient(new Windows.Graphics.SizeInt32(385, 675));
+            window.Activate();
         }
     }
 
