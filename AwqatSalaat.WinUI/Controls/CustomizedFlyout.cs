@@ -15,6 +15,7 @@ namespace AwqatSalaat.WinUI.Controls
         private bool hasClosed;
         private bool isFirstTime = true;
         private Control flyoutPresenter;
+        private ElementTheme? requestedTheme;
 
         public bool ClosedBecauseOfResize { get; private set; }
 
@@ -23,6 +24,18 @@ namespace AwqatSalaat.WinUI.Controls
             this.Opened += CustomizedFlyout_Opened;
             //this.Closing += CustomizedFlyout_Closing;
             this.Closed += CustomizedFlyout_Closed;
+        }
+
+        public void SetPresenterTheme(ElementTheme theme)
+        {
+            if (flyoutPresenter is not null)
+            {
+                flyoutPresenter.RequestedTheme = theme;
+            }
+            else
+            {
+                requestedTheme = theme;
+            }
         }
         
         protected override Control CreatePresenter()
@@ -41,6 +54,12 @@ namespace AwqatSalaat.WinUI.Controls
             if (presenter.MaxWidth > maxPresenterWidth)
             {
                 presenter.MaxWidth = maxPresenterWidth;
+            }
+
+            if (requestedTheme.HasValue)
+            {
+                presenter.RequestedTheme = requestedTheme.Value;
+                requestedTheme = null;
             }
 
             flyoutPresenter = presenter;

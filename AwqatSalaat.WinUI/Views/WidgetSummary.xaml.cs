@@ -7,8 +7,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using System;
 using Windows.Foundation;
-using Windows.Media.Core;
-using Windows.Media.Playback;
+using Windows.UI.ViewManagement;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -20,12 +19,13 @@ namespace AwqatSalaat.WinUI.Views
         private const string NearNotificationTag = "NearNotification";
         private const string AdhanSoundTag = "Adhan";
 
+        private static readonly UISettings uiSettings = new UISettings();
+
 #if DEBUG
         public static WidgetSummary Current { get; private set; }
 #endif
 
         private bool shouldBeCompactHorizontally;
-        private bool isPlayingSound;
         private DisplayMode currentDisplayMode = DisplayMode.Default;
         private AudioPlayerSession currentAudioSession;
 
@@ -40,7 +40,7 @@ namespace AwqatSalaat.WinUI.Views
             Current = this;
             Properties.Settings.Default.IsConfigured = false;
 #endif
-            this.Loaded += (_, _) => UpdateDisplayMode();
+            this.Loaded += WidgetSummary_Loaded;
             this.Unloaded += WidgetSummary_Unloaded;
             ViewModel.WidgetSettings.Updated += WidgetSettings_Updated;
             ViewModel.WidgetSettings.Settings.PropertyChanged += Settings_PropertyChanged;
@@ -48,9 +48,45 @@ namespace AwqatSalaat.WinUI.Views
             ViewModel.NearNotificationStopped += ViewModel_NearNotificationStopped;
             ViewModel.AdhanRequested += ViewModel_AdhanRequested;
             LocaleManager.Default.CurrentChanged += LocaleManager_CurrentChanged;
+            uiSettings.ColorValuesChanged += UISettings_ColorValuesChanged;
 
             UpdateDirection();
             UpdateNotificationSound();
+        }
+
+        private void UISettings_ColorValuesChanged(UISettings sender, object args)
+        {
+            DispatcherQueue.TryEnqueue(UpdateThemes);
+        }
+
+        private void UpdateThemes()
+        {
+            if (SystemInfos.IsAccentColorOnTaskBar() == true)
+            {
+                // When accent color is used, we have to figure out the theme based on the color
+                var accent = uiSettings.GetColorValue(UIColorType.Accent);
+                bool colorIsDark = (5 * accent.G + 2 * accent.R + accent.B) <= 8 * 200;
+                this.RequestedTheme = colorIsDark ? ElementTheme.Dark : ElementTheme.Light;
+            }
+            else
+            {
+                // We use "system theme" instead of "apps theme" because the taskbar uses the former
+                this.RequestedTheme = SystemInfos.IsLightThemeUsed() == true ? ElementTheme.Light : ElementTheme.Dark;
+            }
+
+            if (Parent is FrameworkElement parent)
+            {
+                // The flyouts are independent of the taskbar so they should respect "apps theme" (we get it from the parent)
+                var theme = parent.ActualTheme == this.ActualTheme ? ElementTheme.Default : parent.ActualTheme;
+                flyout.SetPresenterTheme(theme);
+                (btngrid.ContextFlyout as CustomizedMenuFlyout)?.SetPresenterTheme(theme);
+            }
+        }
+
+        private void WidgetSummary_Loaded(object sender, RoutedEventArgs e)
+        {
+            UpdateThemes();
+            UpdateDisplayMode();
         }
 
         private void WidgetSummary_Unloaded(object sender, RoutedEventArgs e)
@@ -61,6 +97,7 @@ namespace AwqatSalaat.WinUI.Views
             ViewModel.NearNotificationStopped -= ViewModel_NearNotificationStopped;
             ViewModel.AdhanRequested -= ViewModel_AdhanRequested;
             LocaleManager.Default.CurrentChanged -= LocaleManager_CurrentChanged;
+            uiSettings.ColorValuesChanged -= UISettings_ColorValuesChanged;
 
             currentAudioSession?.End();
         }
@@ -168,7 +205,7 @@ namespace AwqatSalaat.WinUI.Views
 
             return base.ArrangeOverride(finalSize);
         }
-        
+
         private void UpdateDisplayMode()
         {
             if (!this.IsLoaded)
@@ -197,7 +234,7 @@ namespace AwqatSalaat.WinUI.Views
             {
                 return;
             }
-            
+
             bool success = VisualStateManager.GoToState(this, displayMode.ToString(), false);
 
             if (success)
