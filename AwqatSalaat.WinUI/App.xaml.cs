@@ -105,18 +105,30 @@ namespace AwqatSalaat.WinUI
 
             var dispatcher = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
 
+            InitializeWidget(dispatcher);
+        }
+
+        private void InitializeWidget(Microsoft.UI.Dispatching.DispatcherQueue dispatcherQueue)
+        {
             try
             {
-                TaskBarManager.Initialize(dispatcher);
+                TaskBarManager.Initialize(dispatcherQueue);
             }
             catch (WidgetNotInjectedException ex)
             {
-                ShowError(ex.Message);
+                var result = Helpers.MessageBox.Error(ex.Message, Interop.MessageBoxButtons.MB_RETRYCANCEL);
+
+                if (result == Interop.MessageBoxResult.IDRETRY)
+                {
+                    InitializeWidget(dispatcherQueue);
+                    return;
+                }
+
                 // Calling Environment.Exit(ExitCodes.CouldNotInjectWidget) directly make the widget crash for some reason.
                 // The workaround is to call Exit() then asynchonously call Environment.Exit(ExitCodes.CouldNotInjectWidget)
                 // to override exit code; otherwise exit code will be 0x0
                 Exit();
-                System.Threading.Tasks.Task.Delay(50).ContinueWith(task => Environment.Exit(ExitCodes.CouldNotInjectWidget));
+                System.Threading.Tasks.Task.Delay(50).ContinueWith(_ => Environment.Exit(ExitCodes.CouldNotInjectWidget));
             }
         }
 

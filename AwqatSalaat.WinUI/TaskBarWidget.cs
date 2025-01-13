@@ -47,6 +47,7 @@ namespace AwqatSalaat.WinUI
         private int draggingInnerOffsetX;
         private int lastCursorPositionX;
         private bool initialized;
+        private bool destroyed;
         private bool disposedValue;
 
         public IntPtr Handle => hwnd != IntPtr.Zero ? hwnd : throw new InvalidOperationException("The widget is not initialized.");
@@ -145,6 +146,8 @@ namespace AwqatSalaat.WinUI
 
                 System.Threading.Thread.Sleep(1000);
             }
+
+            Dispose();
             
             throw new WidgetNotInjectedException("Could not inject the widget into the taskbar.\nThe taskbar may be in use.");
         }
@@ -174,6 +177,7 @@ namespace AwqatSalaat.WinUI
         {
             appWindow.Destroying -= AppWindow_Destroying;
             Destroying?.Invoke(this, EventArgs.Empty);
+            destroyed = true;
         }
 
         public void Show() => appWindow.Show(false);
@@ -540,6 +544,12 @@ namespace AwqatSalaat.WinUI
                 if (disposing)
                 {
                     // TODO: dispose managed state (managed objects)
+
+                    if (!destroyed)
+                    {
+                        appWindow?.Destroy();
+                    }
+
                     widgetSummary.DisplayModeChanged -= WidgetSummary_DisplayModeChanged;
                     taskbarWatcher.TaskbarChangedNotificationStarted -= TaskbarWatcher_TaskbarChangedNotificationStarted;
                     taskbarWatcher.TaskbarChangedNotificationCompleted -= TaskbarWatcher_TaskbarChangedNotificationCompleted;

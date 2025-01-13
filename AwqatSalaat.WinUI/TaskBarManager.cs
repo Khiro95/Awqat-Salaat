@@ -42,33 +42,36 @@ namespace AwqatSalaat.WinUI
         {
             dispatcher = dispatcherQueue;
 
-            showItem = new PopupMenuItem("Show", (_, _) => dispatcher.TryEnqueue(ShowWidgetExecute));
-            hideItem = new PopupMenuItem("Hide", (_, _) => dispatcher.TryEnqueue(HideWidgetExecute));
-            repositionItem = new PopupMenuItem("Re-position", (_, _) => taskBarWidget?.UpdatePosition(true));
-            manualPositionItem = new PopupMenuItem("Manual position", (_, _) => dispatcher.TryEnqueue(() => taskBarWidget?.StartDragging()));
-            quitItem = new PopupMenuItem("Quit", (_, _) => dispatcher.TryEnqueue(() => App.Quit.Execute(null)));
-
-            trayIcon = new TrayIconWithContextMenu()
+            if (trayIcon is null)
             {
-                ContextMenu = new PopupMenu
-                {
-                    Items =
-                    {
-                        showItem,
-                        hideItem,
-                        new PopupMenuSeparator(),
-                        repositionItem,
-                        manualPositionItem,
-                        new PopupMenuSeparator(),
-                        quitItem,
-                    }
-                },
-                Icon = AppIcon.Handle,
-            };
+                showItem = new PopupMenuItem("Show", (_, _) => dispatcher.TryEnqueue(ShowWidgetExecute));
+                hideItem = new PopupMenuItem("Hide", (_, _) => dispatcher.TryEnqueue(HideWidgetExecute));
+                repositionItem = new PopupMenuItem("Re-position", (_, _) => taskBarWidget?.UpdatePosition(true));
+                manualPositionItem = new PopupMenuItem("Manual position", (_, _) => dispatcher.TryEnqueue(() => taskBarWidget?.StartDragging()));
+                quitItem = new PopupMenuItem("Quit", (_, _) => dispatcher.TryEnqueue(() => App.Quit.Execute(null)));
 
-            UpdateTrayIconLocalization();
-            trayIcon.MessageWindow.TaskbarCreated += (_, _) => dispatcher.TryEnqueue(OnTaskbarCreated);
-            trayIcon.Create();
+                trayIcon = new TrayIconWithContextMenu()
+                {
+                    ContextMenu = new PopupMenu
+                    {
+                        Items =
+                        {
+                            showItem,
+                            hideItem,
+                            new PopupMenuSeparator(),
+                            repositionItem,
+                            manualPositionItem,
+                            new PopupMenuSeparator(),
+                            quitItem,
+                        }
+                    },
+                    Icon = AppIcon.Handle,
+                };
+
+                UpdateTrayIconLocalization();
+                trayIcon.MessageWindow.TaskbarCreated += (_, _) => dispatcher.TryEnqueue(OnTaskbarCreated);
+                trayIcon.Create();
+            }
 
             ShowWidgetExecute();
         }
@@ -89,9 +92,9 @@ namespace AwqatSalaat.WinUI
             {
                 var widget = new TaskBarWidget();
 
-                widget.Destroying += Widget_Destroying;
-
                 widget.Initialize();
+
+                widget.Destroying += Widget_Destroying;
 
                 widget.Show();
 
