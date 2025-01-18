@@ -43,7 +43,7 @@ namespace AwqatSalaat.WinUI.Views
             this.Loaded += WidgetSummary_Loaded;
             this.Unloaded += WidgetSummary_Unloaded;
             ViewModel.WidgetSettings.Updated += WidgetSettings_Updated;
-            ViewModel.WidgetSettings.Settings.PropertyChanged += Settings_PropertyChanged;
+            ViewModel.WidgetSettings.Realtime.PropertyChanged += Settings_PropertyChanged;
             ViewModel.NearNotificationStarted += ViewModel_NearNotificationStarted;
             ViewModel.NearNotificationStopped += ViewModel_NearNotificationStopped;
             ViewModel.AdhanRequested += ViewModel_AdhanRequested;
@@ -91,7 +91,7 @@ namespace AwqatSalaat.WinUI.Views
 
         private void WidgetSummary_Unloaded(object sender, RoutedEventArgs e)
         {
-            ViewModel.WidgetSettings.Settings.PropertyChanged -= Settings_PropertyChanged;
+            ViewModel.WidgetSettings.Realtime.PropertyChanged -= Settings_PropertyChanged;
             ViewModel.WidgetSettings.Updated -= WidgetSettings_Updated;
             ViewModel.NearNotificationStarted -= ViewModel_NearNotificationStarted;
             ViewModel.NearNotificationStopped -= ViewModel_NearNotificationStopped;
@@ -217,15 +217,15 @@ namespace AwqatSalaat.WinUI.Views
 
             if (shouldBeCompactHorizontally)
             {
-                displayMode = ViewModel.WidgetSettings.Settings.ShowCountdown
+                displayMode = ViewModel.WidgetSettings.Realtime.ShowCountdown
                     ? DisplayMode.CompactHorizontal
                     : DisplayMode.CompactHorizontalNoCountdown;
             }
-            else if (!ViewModel.WidgetSettings.Settings.ShowCountdown)
+            else if (!ViewModel.WidgetSettings.Realtime.ShowCountdown)
             {
                 displayMode = DisplayMode.CompactNoCountdown;
             }
-            else if (ViewModel.WidgetSettings.Settings.UseCompactMode)
+            else if (ViewModel.WidgetSettings.Realtime.UseCompactMode)
             {
                 displayMode = DisplayMode.Compact;
             }
@@ -276,7 +276,7 @@ namespace AwqatSalaat.WinUI.Views
 
         private void UpdateDirection()
         {
-            var dir = Properties.Resources.Culture.TextInfo.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+            var dir = LocaleManager.Default.CurrentCulture.TextInfo.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
             btngrid.FlowDirection = dir;
             flyoutContent.FlowDirection = dir;
         }

@@ -129,7 +129,7 @@
             <VisualStateGroup x:Name="CountdownStates">
                 <VisualState x:Name="WithSeconds">
                     <VisualState.StateTriggers>
-                        <StateTrigger IsActive="{x:Bind ViewModel.WidgetSettings.Settings.ShowSeconds}"/>
+                        <StateTrigger IsActive="{x:Bind ViewModel.WidgetSettings.Realtime.ShowSeconds}"/>
                     </VisualState.StateTriggers>
                     <Storyboard>
                         <DoubleAnimation EnableDependentAnimation="True" Storyboard.TargetName="gap" Storyboard.TargetProperty="MaxWidth" From="0" To="6" Duration="0:0:.1"/>
@@ -137,7 +137,7 @@
                 </VisualState>
                 <VisualState x:Name="WithoutSeconds">
                     <VisualState.StateTriggers>
-                        <StateTrigger IsActive="{x:Bind ViewModel.WidgetSettings.Settings.ShowSeconds, Converter={StaticResource BooleanInvertedConverter}}"/>
+                        <StateTrigger IsActive="{x:Bind ViewModel.WidgetSettings.Realtime.ShowSeconds, Converter={StaticResource BooleanInvertedConverter}}"/>
                     </VisualState.StateTriggers>
                     <Storyboard>
                         <DoubleAnimation EnableDependentAnimation="True" Storyboard.TargetName="gap" Storyboard.TargetProperty="MaxWidth" To="0" Duration="0:0:.1"/>

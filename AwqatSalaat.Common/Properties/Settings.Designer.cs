@@ -98,18 +98,6 @@ namespace AwqatSalaat.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ApiCache {
-            get {
-                return ((string)(this["ApiCache"]));
-            }
-            set {
-                this["ApiCache"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string DisplayLanguage {
             get {
                 return ((string)(this["DisplayLanguage"]));

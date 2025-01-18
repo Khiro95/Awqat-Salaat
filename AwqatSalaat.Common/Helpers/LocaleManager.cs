@@ -66,7 +66,6 @@ namespace AwqatSalaat.Helpers
             _current = locale;
             CurrentCulture = new CultureInfo(locale);
             Properties.Resources.Culture = CurrentCulture;
-            Properties.Settings.Default.DisplayLanguage = locale;
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Current)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentCulture)));

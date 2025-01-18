@@ -93,7 +93,7 @@ namespace AwqatSalaat.UI.Views
             };
             this.Loaded += (_, __) => UpdateDisplayMode();
             this.Unloaded += WidgetSummary_Unloaded;
-            ViewModel.WidgetSettings.Settings.PropertyChanged += Settings_PropertyChanged;
+            ViewModel.WidgetSettings.Realtime.PropertyChanged += Settings_PropertyChanged;
             ViewModel.WidgetSettings.Updated += WidgetSettings_Updated;
             ViewModel.NearNotificationStarted += ViewModel_NearNotificationStarted;
             ViewModel.NearNotificationStopped += ViewModel_NearNotificationStopped;
@@ -107,7 +107,7 @@ namespace AwqatSalaat.UI.Views
 
         private void WidgetSummary_Unloaded(object sender, RoutedEventArgs e)
         {
-            ViewModel.WidgetSettings.Settings.PropertyChanged -= Settings_PropertyChanged;
+            ViewModel.WidgetSettings.Realtime.PropertyChanged -= Settings_PropertyChanged;
             ViewModel.WidgetSettings.Updated -= WidgetSettings_Updated;
             ViewModel.NearNotificationStarted -= ViewModel_NearNotificationStarted;
             ViewModel.NearNotificationStopped -= ViewModel_NearNotificationStopped;
@@ -210,15 +210,15 @@ namespace AwqatSalaat.UI.Views
 
             if (shouldBeCompactHorizontally)
             {
-                displayMode = ViewModel.WidgetSettings.Settings.ShowCountdown
+                displayMode = ViewModel.WidgetSettings.Realtime.ShowCountdown
                     ? DisplayMode.CompactHorizontal
                     : DisplayMode.CompactHorizontalNoCountdown;
             }
-            else if (!ViewModel.WidgetSettings.Settings.ShowCountdown)
+            else if (!ViewModel.WidgetSettings.Realtime.ShowCountdown)
             {
                 displayMode = DisplayMode.CompactNoCountdown;
             }
-            else if (Orientation == Orientation.Vertical || ViewModel.WidgetSettings.Settings.UseCompactMode)
+            else if (Orientation == Orientation.Vertical || ViewModel.WidgetSettings.Realtime.UseCompactMode)
             {
                 displayMode = DisplayMode.Compact;
             }
@@ -239,7 +239,7 @@ namespace AwqatSalaat.UI.Views
 
         private void UpdateCountdownState()
         {
-            if (ViewModel.WidgetSettings.Settings.ShowSeconds)
+            if (ViewModel.WidgetSettings.Realtime.ShowSeconds)
             {
                 VisualStateManager.GoToState(this, "WithSeconds", false);
             }
@@ -251,8 +251,8 @@ namespace AwqatSalaat.UI.Views
 
         private void UpdateDirection()
         {
-            this.FlowDirection = Properties.Resources.Culture.TextInfo.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
-            this.Language = System.Windows.Markup.XmlLanguage.GetLanguage(Properties.Resources.Culture.IetfLanguageTag);
+            this.FlowDirection = LocaleManager.Default.CurrentCulture.TextInfo.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+            this.Language = System.Windows.Markup.XmlLanguage.GetLanguage(LocaleManager.Default.CurrentCulture.IetfLanguageTag);
         }
 
         private void UpdateNotificationSound()

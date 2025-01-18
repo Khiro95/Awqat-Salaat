@@ -22,39 +22,38 @@ namespace AwqatSalaat.ViewModels
         private Place selectedPlace;
         private Place pendingPlace;
         private CancellationTokenSource cancellationTokenSource;
-
-        private Settings Settings => Settings.Default;
+        private readonly Settings settings;
 
         public bool DetectByCountryCode
         {
-            get => Settings.LocationDetection == LocationDetectionMode.ByCountryCode;
+            get => settings.LocationDetection == LocationDetectionMode.ByCountryCode;
             set
             {
                 if (value)
                 {
-                    Settings.LocationDetection = LocationDetectionMode.ByCountryCode;
+                    settings.LocationDetection = LocationDetectionMode.ByCountryCode;
                 }
             }
         }
         public bool DetectByCoordinates
         {
-            get => Settings.LocationDetection == LocationDetectionMode.ByCoordinates;
+            get => settings.LocationDetection == LocationDetectionMode.ByCoordinates;
             set
             {
                 if (value)
                 {
-                    Settings.LocationDetection = LocationDetectionMode.ByCoordinates;
+                    settings.LocationDetection = LocationDetectionMode.ByCoordinates;
                 }
             }
         }
         public bool DetectByQuery
         {
-            get => Settings.LocationDetection == LocationDetectionMode.ByQuery;
+            get => settings.LocationDetection == LocationDetectionMode.ByQuery;
             set
             {
                 if (value)
                 {
-                    Settings.LocationDetection = LocationDetectionMode.ByQuery;
+                    settings.LocationDetection = LocationDetectionMode.ByQuery;
                 }
             }
         }
@@ -75,18 +74,19 @@ namespace AwqatSalaat.ViewModels
         public ICommand ConfirmCheck { get; }
         public ICommand CancelCheck { get; }
 
-        public LocatorViewModel()
+        public LocatorViewModel(Settings settings)
         {
             Check = new RelayCommand(o => CheckExecute());
             ConfirmCheck = new RelayCommand(ConfirmCheckExecute);
             CancelCheck = new RelayCommand(CancelCheckExecute);
 
-            Settings.PropertyChanged += Settings_PropertyChanged;
+            this.settings = settings;
+            settings.PropertyChanged += Settings_PropertyChanged;
         }
 
         private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Settings.LocationDetection))
+            if (e.PropertyName == nameof(settings.LocationDetection))
             {
                 OnPropertyChanged(nameof(DetectByCountryCode));
                 OnPropertyChanged(nameof(DetectByCoordinates));
@@ -126,7 +126,7 @@ namespace AwqatSalaat.ViewModels
                 PendingCheck = true;
 
                 cancellationTokenSource = new CancellationTokenSource();
-                var result = await NominatimClient.Reverse(Settings.Latitude, Settings.Longitude, cancellationTokenSource.Token);
+                var result = await NominatimClient.Reverse(settings.Latitude, settings.Longitude, cancellationTokenSource.Token);
 
                 if (IsValidPlace(result))
                 {
@@ -196,11 +196,16 @@ namespace AwqatSalaat.ViewModels
                 return;
             }
 
-            Settings.CountryCode = place.Address.CountryCode.ToUpper();
-            Settings.City = place.Address.City;
-            Settings.ZipCode = null;
-            Settings.Latitude = place.Latitude;
-            Settings.Longitude = place.Longitude;
+            settings.CountryCode = place.Address.CountryCode.ToUpper();
+            settings.City = place.Address.City;
+            settings.ZipCode = null;
+            settings.Latitude = place.Latitude;
+            settings.Longitude = place.Longitude;
+        }
+
+        ~LocatorViewModel()
+        {
+            settings.PropertyChanged -= Settings_PropertyChanged;
         }
     }
 }

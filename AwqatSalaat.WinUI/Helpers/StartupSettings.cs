@@ -17,11 +17,13 @@ namespace AwqatSalaat.WinUI.Helpers
         public bool CanSetLaunchOnStartup { get => canSetLaunchOnStartup; private set => SetProperty(ref canSetLaunchOnStartup, value); }
         public bool LaunchOnStartup { get => canSetLaunchOnStartup && launchOnStartup; set => SetProperty(ref launchOnStartup, value); }
 #else
+        private readonly Properties.Settings settings;
+
         public bool CanSetLaunchOnStartup => true;
         public bool LaunchOnStartup
         {
-            get => Properties.Settings.Default.LaunchOnWindowsStartup;
-            set => Properties.Settings.Default.LaunchOnWindowsStartup = value;
+            get => settings.LaunchOnWindowsStartup;
+            set => settings.LaunchOnWindowsStartup = value;
         }
 #endif
 
@@ -34,14 +36,15 @@ namespace AwqatSalaat.WinUI.Helpers
             LaunchOnStartup = canSetLaunchOnStartup && startupTask.State == StartupTaskState.Enabled;
         }
 #else
-        public StartupSettings()
+        public StartupSettings(Properties.Settings settings)
         {
-            Properties.Settings.Default.PropertyChanged += Settings_PropertyChanged;
+            this.settings = settings;
+            settings.PropertyChanged += Settings_PropertyChanged;
         }
 
         private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Properties.Settings.Default.LaunchOnWindowsStartup))
+            if (e.PropertyName == nameof(Properties.Settings.LaunchOnWindowsStartup))
             {
                 OnPropertyChanged(nameof(LaunchOnStartup));
             }
@@ -49,7 +52,7 @@ namespace AwqatSalaat.WinUI.Helpers
 
         ~StartupSettings()
         {
-            Properties.Settings.Default.PropertyChanged -= Settings_PropertyChanged;
+            settings.PropertyChanged -= Settings_PropertyChanged;
         }
 #endif
 

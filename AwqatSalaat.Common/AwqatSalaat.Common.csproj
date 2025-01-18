@@ -55,6 +55,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\PersistentCache.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PersistentCache.settings</DependentUpon>
+    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -75,6 +80,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Properties\PersistentCache.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>PersistentCache.Designer.cs</LastGenOutput>
+    </None>
     <None Update="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

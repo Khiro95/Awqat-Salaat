@@ -110,17 +110,17 @@ namespace AwqatSalaat.UI.Views
 
         private void BrowseNotificationSound_Click(object sender, RoutedEventArgs e)
         {
-            BrowseSoundFile(ViewModel.Settings.NotificationSoundFilePath, (s, f) => s.NotificationSoundFile = f);
+            BrowseSoundFile(ViewModel.Realtime.NotificationSoundFilePath, (s, f) => s.NotificationSoundFile = f);
         }
 
         private void BrowseAdhanSound_Click(object sender, RoutedEventArgs e)
         {
-            BrowseSoundFile(ViewModel.Settings.AdhanSoundFilePath, (s, f) => s.AdhanSoundFile = f);
+            BrowseSoundFile(ViewModel.Realtime.AdhanSoundFilePath, (s, f) => s.AdhanSoundFile = f);
         }
 
         private void BrowseAdhanFajrSound_Click(object sender, RoutedEventArgs e)
         {
-            BrowseSoundFile(ViewModel.Settings.AdhanFajrSoundFilePath, (s, f) => s.AdhanFajrSoundFile = f);
+            BrowseSoundFile(ViewModel.Realtime.AdhanFajrSoundFilePath, (s, f) => s.AdhanFajrSoundFile = f);
         }
 
         private void BrowseSoundFile(string initialPath, Action<Properties.Settings, string> fileSetter)
@@ -142,7 +142,7 @@ namespace AwqatSalaat.UI.Views
 
                 if (openFileDialog.ShowDialog() == true)
                 {
-                    fileSetter(ViewModel.Settings, openFileDialog.FileName);
+                    fileSetter(ViewModel.Realtime, openFileDialog.FileName);
                 }
             }
             finally

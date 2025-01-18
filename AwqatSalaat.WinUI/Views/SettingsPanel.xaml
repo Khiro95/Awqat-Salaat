@@ -141,31 +141,31 @@
                                 <ToggleSwitch IsOn="{x:Bind StartupSettings.LaunchOnStartup}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
                             </ctrl:SettingsItem>
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowCountdown}" Description="{mk:L11n Key=UI.Settings.ShowCountdownDescription}">
-                                <ToggleSwitch x:Name="countdownToggle" IsOn="{x:Bind ViewModel.Settings.ShowCountdown}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                                <ToggleSwitch x:Name="countdownToggle" IsOn="{x:Bind ViewModel.Realtime.ShowCountdown}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
                             </ctrl:SettingsItem>
-                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowSeconds}" Description="{mk:L11n Key=UI.Settings.ShowSecondsDescription}" IsEnabled="{x:Bind ViewModel.Settings.ShowCountdown, Mode=OneWay}">
-                                <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.ShowSeconds}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowSeconds}" Description="{mk:L11n Key=UI.Settings.ShowSecondsDescription}" IsEnabled="{x:Bind ViewModel.Realtime.ShowCountdown, Mode=OneWay}">
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.Realtime.ShowSeconds}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
                             </ctrl:SettingsItem>
-                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.EnableCompactMode}" Description="{mk:L11n Key=UI.Settings.EnableCompactModeDescription}" IsEnabled="{x:Bind ViewModel.Settings.ShowCountdown, Mode=OneWay}">
-                                <ToggleSwitch x:Name="compactModeToggle" IsOn="{x:Bind ViewModel.Settings.UseCompactMode}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.EnableCompactMode}" Description="{mk:L11n Key=UI.Settings.EnableCompactModeDescription}" IsEnabled="{x:Bind ViewModel.Realtime.ShowCountdown, Mode=OneWay}">
+                                <ToggleSwitch x:Name="compactModeToggle" IsOn="{x:Bind ViewModel.Realtime.UseCompactMode}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
                             </ctrl:SettingsItem>
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ReminderOffset}" Description="{mk:L11n Key=UI.Settings.ReminderOffsetDescription}">
                                 <NumberBox SpinButtonPlacementMode="Inline"
-                                           Value="{x:Bind ViewModel.Settings.NotificationDistance}"
+                                           Value="{x:Bind ViewModel.Realtime.NotificationDistance}"
                                            Minimum="0"
                                            Maximum="720"
                                            HorizontalAlignment="Left"/>
                             </ctrl:SettingsItem>
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ElapsedPeriod}" Description="{mk:L11n Key=UI.Settings.ElapsedPeriodDescription}">
                                 <NumberBox SpinButtonPlacementMode="Inline"
-                                           Value="{x:Bind ViewModel.Settings.NotificationDistanceElapsed}"
+                                           Value="{x:Bind ViewModel.Realtime.NotificationDistanceElapsed}"
                                            Minimum="0"
                                            Maximum="30"
                                            HorizontalAlignment="Left"/>
                             </ctrl:SettingsItem>
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Calendar}" Description="{mk:L11n Key=UI.Settings.CalendarDescription}">
                                 <StackPanel Orientation="Horizontal">
-                                    <ComboBox ItemsSource="{mk:Enums Type=dt:CalendarType}" SelectedItem="{Binding Settings.CalendarType, Mode=TwoWay}" Width="280">
+                                    <ComboBox ItemsSource="{mk:Enums Type=dt:CalendarType}" SelectedItem="{Binding Realtime.CalendarType, Mode=TwoWay}" Width="280">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <ctrl:LocalizedStringPresenter Value="{Binding}" KeyFormat="Data.CalendarType.{0}"/>
@@ -175,18 +175,18 @@
                                     <StackPanel Orientation="Horizontal" Visibility="{x:Bind hijriAdjustBox.IsEnabled, Mode=OneWay}" Margin="16,0,0,0">
                                         <TextBlock Text="{mk:L11n Key=UI.Settings.HijriCalendarAdjustment}" VerticalAlignment="Center"/>
                                         <NumberBox x:Name="hijriAdjustBox"
-                                                   Value="{x:Bind ViewModel.Settings.HijriAdjustment}"
+                                                   Value="{x:Bind ViewModel.Realtime.HijriAdjustment}"
                                                    SpinButtonPlacementMode="Inline"
                                                    Minimum="-2"
                                                    Maximum="2"
                                                    Margin="8,0,0,0"
-                                                   IsEnabled="{x:Bind ViewModel.Settings.CalendarType, Converter={StaticResource EnumEqualityConverter}, ConverterParameter='Hijri', Mode=OneWay}"/>
+                                                   IsEnabled="{x:Bind ViewModel.Realtime.CalendarType, Converter={StaticResource EnumEqualityConverter}, ConverterParameter='Hijri', Mode=OneWay}"/>
                                     </StackPanel>
                                 </StackPanel>
                             </ctrl:SettingsItem>
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.AdhanSound}" Description="{mk:L11n Key=UI.Settings.AdhanSoundDescription}">
                                 <StackPanel>
-                                    <ComboBox ItemsSource="{mk:Enums Type=dt:AdhanSound}" SelectedItem="{Binding Settings.AdhanSound, Mode=TwoWay}" Width="280">
+                                    <ComboBox ItemsSource="{mk:Enums Type=dt:AdhanSound}" SelectedItem="{Binding Realtime.AdhanSound, Mode=TwoWay}" Width="280">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <ctrl:LocalizedStringPresenter Value="{Binding}" KeyFormat="Data.AdhanSound.{0}"/>
@@ -206,25 +206,25 @@
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="{mk:L11n Key=UI.Settings.AdhanFileStandard}" VerticalAlignment="Center"/>
-                                        <TextBox Text="{x:Bind ViewModel.Settings.AdhanSoundFile}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1" IsEnabled="{x:Bind ViewModel.Settings.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
-                                        <ctrl:SoundPreviewButton File="{x:Bind ViewModel.Settings.AdhanSoundFilePath, Mode=OneWay}" IdleToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipIdle}" PlayingToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipPlaying}" Grid.Column="2"/>
-                                        <Button Content="{mk:L11n Key=UI.Settings.Browse}" Click="BrowseAdhanSound_Click" Grid.Column="3" Margin="8,0,0,0" IsEnabled="{x:Bind ViewModel.Settings.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
+                                        <TextBox Text="{x:Bind ViewModel.Realtime.AdhanSoundFile}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1" IsEnabled="{x:Bind ViewModel.Realtime.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
+                                        <ctrl:SoundPreviewButton File="{x:Bind ViewModel.Realtime.AdhanSoundFilePath, Mode=OneWay}" IdleToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipIdle}" PlayingToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipPlaying}" Grid.Column="2"/>
+                                        <Button Content="{mk:L11n Key=UI.Settings.Browse}" Click="BrowseAdhanSound_Click" Grid.Column="3" Margin="8,0,0,0" IsEnabled="{x:Bind ViewModel.Realtime.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
 
                                         <TextBlock Text="{mk:L11n Key=UI.Settings.AdhanFileFajr}" VerticalAlignment="Center" Grid.Row="2"/>
-                                        <TextBox Text="{x:Bind ViewModel.Settings.AdhanFajrSoundFile}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1" Grid.Row="2" IsEnabled="{x:Bind ViewModel.Settings.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
-                                        <ctrl:SoundPreviewButton File="{x:Bind ViewModel.Settings.AdhanFajrSoundFilePath, Mode=OneWay}" IdleToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipIdle}" PlayingToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipPlaying}" Grid.Column="2" Grid.Row="3"/>
-                                        <Button Content="{mk:L11n Key=UI.Settings.Browse}" Click="BrowseAdhanFajrSound_Click" Grid.Column="3" Grid.Row="3" Margin="8,0,0,0" IsEnabled="{x:Bind ViewModel.Settings.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
+                                        <TextBox Text="{x:Bind ViewModel.Realtime.AdhanFajrSoundFile}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1" Grid.Row="2" IsEnabled="{x:Bind ViewModel.Realtime.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
+                                        <ctrl:SoundPreviewButton File="{x:Bind ViewModel.Realtime.AdhanFajrSoundFilePath, Mode=OneWay}" IdleToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipIdle}" PlayingToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipPlaying}" Grid.Column="2" Grid.Row="3"/>
+                                        <Button Content="{mk:L11n Key=UI.Settings.Browse}" Click="BrowseAdhanFajrSound_Click" Grid.Column="3" Grid.Row="3" Margin="8,0,0,0" IsEnabled="{x:Bind ViewModel.Realtime.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
                                     </Grid>
                                 </StackPanel>
                             </ctrl:SettingsItem>
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.NotificationSound}" Description="{mk:L11n Key=UI.Settings.NotificationSoundDescription}">
                                 <StackPanel>
-                                    <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.EnableNotificationSound}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
-                                    <ContentControl Margin="8,8,0,0" HorizontalContentAlignment="Stretch" IsEnabled="{x:Bind ViewModel.Settings.EnableNotificationSound, Mode=OneWay}" IsTabStop="False">
+                                    <ToggleSwitch IsOn="{x:Bind ViewModel.Realtime.EnableNotificationSound}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                                    <ContentControl Margin="8,8,0,0" HorizontalContentAlignment="Stretch" IsEnabled="{x:Bind ViewModel.Realtime.EnableNotificationSound, Mode=OneWay}" IsTabStop="False">
                                         <Grid ColumnDefinitions="Auto,*,Auto,Auto">
                                             <TextBlock Text="{mk:L11n Key=UI.Settings.File}" VerticalAlignment="Center"/>
-                                            <TextBox Text="{x:Bind ViewModel.Settings.NotificationSoundFile, UpdateSourceTrigger=PropertyChanged}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1"/>
-                                            <ctrl:SoundPreviewButton File="{x:Bind ViewModel.Settings.NotificationSoundFilePath, Mode=OneWay}" IdleToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipIdle}" PlayingToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipPlaying}" Grid.Column="2" Grid.Row="3"/>
+                                            <TextBox Text="{x:Bind ViewModel.Realtime.NotificationSoundFile, UpdateSourceTrigger=PropertyChanged}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1"/>
+                                            <ctrl:SoundPreviewButton File="{x:Bind ViewModel.Realtime.NotificationSoundFilePath, Mode=OneWay}" IdleToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipIdle}" PlayingToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipPlaying}" Grid.Column="2" Grid.Row="3"/>
                                             <Button Content="{mk:L11n Key=UI.Settings.Browse}" Click="BrowseNotificationSound_Click" VerticalAlignment="Center" Grid.Column="3" Margin="8,0,0,0"/>
                                         </Grid>
                                     </ContentControl>
@@ -275,7 +275,7 @@
                                 <StackPanel>
                                     <ComboBox PlaceholderText="Pick a service"
                                               ItemsSource="{mk:Enums Type=dt:PrayerTimesService}"
-                                              SelectedItem="{Binding Settings.Service, Mode=TwoWay}"
+                                              SelectedItem="{Binding Realtime.Service, Mode=TwoWay}"
                                               Width="200">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
@@ -283,14 +283,14 @@
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
-                                    <StackPanel Orientation="Horizontal" Margin="2,2,0,0" Visibility="{x:Bind ViewModel.Settings.Service, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter='Local', Mode=OneWay}">
+                                    <StackPanel Orientation="Horizontal" Margin="2,2,0,0" Visibility="{x:Bind ViewModel.Realtime.Service, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter='Local', Mode=OneWay}">
                                         <FontIcon Glyph="&#xE7BA;" FontSize="12" Foreground="{ThemeResource TextHighlightBrush}" VerticalAlignment="Center"/>
                                         <TextBlock x:Name="localServiceNote" Text="{mk:L11n Key=UI.Settings.LocalServiceNote}" FontSize="12" Foreground="{ThemeResource TextHighlightBrush}" Margin="4,0,0,0"/>
                                     </StackPanel>
                                 </StackPanel>
                             </ctrl:SettingsItem>
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.JuristicSchool}" Description="{mk:L11n Key=UI.Settings.JuristicSchoolDescription}">
-                                <ComboBox ItemsSource="{mk:Enums Type=dt:School}" SelectedItem="{Binding Settings.School, Mode=TwoWay}" Width="300">
+                                <ComboBox ItemsSource="{mk:Enums Type=dt:School}" SelectedItem="{Binding Realtime.School, Mode=TwoWay}" Width="300">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <ctrl:LocalizedStringPresenter Value="{Binding}" KeyFormat="Data.JuristicSchool.{0}"/>
@@ -301,7 +301,7 @@
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Method}" Description="{mk:L11n Key=UI.Settings.MethodDescription}">
                                 <ComboBox PlaceholderText="Pick a method"
                                           ItemsSource="{x:Bind methods:CalculationMethod.AvailableMethods, Mode=OneTime}"
-                                          SelectedItem="{Binding Settings.CalculationMethod, Mode=TwoWay}"
+                                          SelectedItem="{Binding Realtime.CalculationMethod, Mode=TwoWay}"
                                           HorizontalAlignment="Stretch">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
@@ -335,7 +335,7 @@
                                         <ComboBox x:Name="countryComboBox"
                                                   ItemsSource="{x:Bind vm:WidgetSettingsViewModel.AvailableCountries, Mode=OneTime}"
                                                   SelectedValuePath="Code"
-                                                  SelectedValue="{x:Bind ViewModel.Settings.CountryCode, Mode=TwoWay}"
+                                                  SelectedValue="{x:Bind ViewModel.Realtime.CountryCode, Mode=TwoWay}"
                                                   HorizontalAlignment="Stretch"
                                                   FlowDirection="LeftToRight"
                                                   Grid.Column="1">
@@ -349,9 +349,9 @@
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
                                         <TextBlock Text="{mk:L11n Key=UI.Settings.City}" Grid.Row="2"/>
-                                        <TextBox Text="{x:Bind ViewModel.Settings.City, UpdateSourceTrigger=PropertyChanged}" Width="200" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
+                                        <TextBox Text="{x:Bind ViewModel.Realtime.City, UpdateSourceTrigger=PropertyChanged}" Width="200" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
                                         <TextBlock Text="{mk:L11n Key=UI.Settings.ZipCode}" Grid.Row="4"/>
-                                        <TextBox Text="{x:Bind ViewModel.Settings.ZipCode, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="1"/>
+                                        <TextBox Text="{x:Bind ViewModel.Realtime.ZipCode, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="1"/>
                                     </Grid>
                                 </ctrl:SettingsItem>
                             </RadioButton>
@@ -417,9 +417,9 @@
                                             <RowDefinition MinHeight="48"/>
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="{mk:L11n Key=UI.Settings.Latitude}"/>
-                                        <TextBox Text="{x:Bind ViewModel.Settings.Latitude, Converter={StaticResource DecimalConverter}}" Grid.Column="1"/>
+                                        <TextBox Text="{x:Bind ViewModel.Realtime.Latitude, Converter={StaticResource DecimalConverter}}" Grid.Column="1"/>
                                         <TextBlock Text="{mk:L11n Key=UI.Settings.Longitude}" Grid.Row="2"/>
-                                        <TextBox Text="{x:Bind ViewModel.Settings.Longitude, Converter={StaticResource DecimalConverter}}" Grid.Column="1" Grid.Row="2"/>
+                                        <TextBox Text="{x:Bind ViewModel.Realtime.Longitude, Converter={StaticResource DecimalConverter}}" Grid.Column="1" Grid.Row="2"/>
                                         <Button Content="{mk:L11n Key=UI.Settings.Check}" Command="{x:Bind ViewModel.Locator.Check, Mode=OneWay}" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                         <Grid x:DefaultBindMode="OneWay" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Visibility="{x:Bind ViewModel.Locator.PendingCheck}">
                                             <Grid.ColumnDefinitions>

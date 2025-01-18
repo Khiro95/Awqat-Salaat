@@ -280,7 +280,7 @@ namespace AwqatSalaat.Properties
 
         private void UpdatePrayerConfigs()
         {
-            foreach (var prop in Properties.OfType<SettingsProperty>())
+            foreach (SettingsProperty prop in Properties)
             {
                 if (prop.Name.StartsWith("Config_"))
                 {

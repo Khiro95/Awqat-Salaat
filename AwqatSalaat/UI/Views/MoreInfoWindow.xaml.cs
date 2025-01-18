@@ -47,8 +47,8 @@ namespace AwqatSalaat.UI.Views
 
         private void UpdateDirection()
         {
-            this.FlowDirection = Properties.Resources.Culture.TextInfo.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
-            this.Language = System.Windows.Markup.XmlLanguage.GetLanguage(Properties.Resources.Culture.IetfLanguageTag);
+            this.FlowDirection = LocaleManager.Default.CurrentCulture.TextInfo.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+            this.Language = System.Windows.Markup.XmlLanguage.GetLanguage(LocaleManager.Default.CurrentCulture.IetfLanguageTag);
         }
 
         private void UpdateTitle() => Title = (tabControl.SelectedItem as TabItemEx)?.Header + $" - {LocaleManager.Default.Get("Data.AppName")}";

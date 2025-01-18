@@ -81,7 +81,7 @@ namespace AwqatSalaat.ViewModels
                 SettingsUpdated(false);
                 UpdateServiceClient();
 
-                var cached = JsonConvert.DeserializeObject<ServiceData>(WidgetSettings.Settings.ApiCache ?? "");
+                var cached = JsonConvert.DeserializeObject<ServiceData>(Properties.PersistentCache.Default.ApiData ?? "");
 
                 if (cached != null)
                 {
@@ -104,8 +104,8 @@ namespace AwqatSalaat.ViewModels
                 UpdateServiceClient();
 
                 latestData = null;
-                WidgetSettings.Settings.ApiCache = null;
-                WidgetSettings.Settings.Save();
+                Properties.PersistentCache.Default.ApiData = null;
+                Properties.PersistentCache.Default.Save();
                 RefreshData();
             }
 
@@ -300,8 +300,8 @@ namespace AwqatSalaat.ViewModels
                 if (WidgetSettings.Settings.Service != PrayerTimesService.Local)
                 {
                     // Cache the result for offline use, just in case
-                    WidgetSettings.Settings.ApiCache = JsonConvert.SerializeObject(apiResponse);
-                    WidgetSettings.Settings.Save();
+                    Properties.PersistentCache.Default.ApiData = JsonConvert.SerializeObject(apiResponse);
+                    Properties.PersistentCache.Default.Save();
                 }
             }
             catch (NetworkException nex)

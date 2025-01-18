@@ -112,7 +112,7 @@
         <TabControl x:Name="tabControl">
             <controls:TabItemEx Header="{mk:L11n UI.Settings.Tabs.General}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel DataContext="{Binding Settings}" Margin="8,16,8,8">
+                    <StackPanel DataContext="{Binding Realtime}" Margin="8,16,8,8">
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.Language}" Description="{mk:L11n UI.Settings.LanguageDescription}" Margin="0">
                             <StackPanel Orientation="Horizontal" DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext}" FlowDirection="LeftToRight" HorizontalAlignment="Left">
                                 <RadioButton Content="English" IsChecked="{Binding UseEnglish}" d:IsChecked="True" Margin="0,0,64,0"/>
@@ -250,7 +250,7 @@
             </controls:TabItemEx>
             <controls:TabItemEx Header="{mk:L11n UI.Settings.Tabs.Service}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel DataContext="{Binding Settings}" Margin="8,16,8,8">
+                    <StackPanel DataContext="{Binding Realtime}" Margin="8,16,8,8">
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.ServiceProvider}" Description="{mk:L11n UI.Settings.ServiceProviderDescription}" Margin="0">
                             <StackPanel>
                                 <ComboBox ItemsSource="{Binding Source={StaticResource PrayerTimesServiceEnum}}" SelectedItem="{Binding Service}" Width="200" HorizontalAlignment="Left">
@@ -320,7 +320,7 @@
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="{mk:L11n UI.Settings.CountryCode}"/>
-                                    <ComboBox ItemsSource="{Binding Source={x:Static vm:WidgetSettingsViewModel.AvailableCountries}}" SelectedValue="{Binding Settings.CountryCode}" SelectedValuePath="Code" FlowDirection="LeftToRight" Grid.Column="1">
+                                    <ComboBox ItemsSource="{Binding Source={x:Static vm:WidgetSettingsViewModel.AvailableCountries}}" SelectedValue="{Binding Realtime.CountryCode}" SelectedValuePath="Code" FlowDirection="LeftToRight" Grid.Column="1">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
                                                 <DockPanel>
@@ -331,9 +331,9 @@
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
                                     <TextBlock Text="{mk:L11n UI.Settings.City}" Grid.Row="2"/>
-                                    <TextBox Text="{Binding Settings.City}" Width="200" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
+                                    <TextBox Text="{Binding Realtime.City}" Width="200" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
                                     <TextBlock Text="{mk:L11n UI.Settings.ZipCode}" Grid.Row="4"/>
-                                    <TextBox Text="{Binding Settings.ZipCode}" Width="100" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="1"/>
+                                    <TextBox Text="{Binding Realtime.ZipCode}" Width="100" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="1"/>
                                 </Grid>
                             </controls:SettingsItem>
                         </RadioButton>
@@ -408,9 +408,9 @@
                                         <RowDefinition MinHeight="32"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="{mk:L11n UI.Settings.Latitude}"/>
-                                    <TextBox Text="{Binding Settings.Latitude}" Grid.Column="1"/>
+                                    <TextBox Text="{Binding Realtime.Latitude}" Grid.Column="1"/>
                                     <TextBlock Text="{mk:L11n UI.Settings.Longitude}" Grid.Row="2"/>
-                                    <TextBox Text="{Binding Settings.Longitude}" Grid.Column="1" Grid.Row="2"/>
+                                    <TextBox Text="{Binding Realtime.Longitude}" Grid.Column="1" Grid.Row="2"/>
                                     <Button Content="{mk:L11n UI.Settings.Check}" Command="{Binding Locator.Check}" Width="50" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                     <DockPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Visibility="{Binding Locator.PendingCheck, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" Margin="8,0,0,0" VerticalAlignment="Center">

@@ -20,9 +20,6 @@
     <Setting Name="NotificationDistance" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
-    <Setting Name="ApiCache" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="DisplayLanguage" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

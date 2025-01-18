@@ -39,7 +39,7 @@ namespace AwqatSalaat.WinUI.Views
         private WidgetSettingsViewModel ViewModel => DataContext as WidgetSettingsViewModel;
 
         public Flyout ParentFlyout { get; set; }
-        public StartupSettings StartupSettings { get; } = new StartupSettings();
+        public StartupSettings StartupSettings { get; private set; }
 
         public SettingsPanel()
         {
@@ -67,6 +67,9 @@ namespace AwqatSalaat.WinUI.Views
             if (!loadedFirstTime)
             {
                 loadedFirstTime = true;
+                StartupSettings = new StartupSettings(ViewModel.Realtime);
+                Bindings.Update();
+
                 this.ViewModel.Updated += _ => StartupSettings.Commit();
 
                 if (ParentFlyout is not null)
@@ -249,7 +252,7 @@ namespace AwqatSalaat.WinUI.Views
 
                 if (file != null)
                 {
-                    fileSetter(ViewModel.Settings, file.Path);
+                    fileSetter(ViewModel.Realtime, file.Path);
                 }
             }
             finally
