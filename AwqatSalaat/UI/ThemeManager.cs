@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AwqatSalaat.Helpers;
+using System;
 
 namespace AwqatSalaat.UI
 {
@@ -41,7 +42,21 @@ namespace AwqatSalaat.UI
 
         public static void SyncWithSystemTheme()
         {
-            ThemeKey theme = Helpers.SystemInfos.IsLightThemeUsed() == true ? ThemeKey.Light : ThemeKey.Dark;
+            ThemeKey theme;
+
+            if (SystemInfos.IsAccentColorOnTaskBar() == true)
+            {
+                // When accent color is used, we have to figure out the theme based on the color
+                var accent = SystemInfos.GetAccentColor();
+                bool colorIsDark = (5 * accent.g + 2 * accent.r + accent.b) <= 8 * 200;
+                theme = colorIsDark ? ThemeKey.Dark : ThemeKey.Light;
+            }
+            else
+            {
+                // We use "system theme" instead of "apps theme" because the taskbar uses the former
+                theme = SystemInfos.IsLightThemeUsed() == true ? ThemeKey.Light : ThemeKey.Dark;
+            }
+
             SetTheme(theme);
         }
     }

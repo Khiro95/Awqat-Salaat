@@ -130,5 +130,34 @@ namespace AwqatSalaat.Helpers
                 return Convert.ToInt32(osBuildNumberValue);
             }
         }
+
+        // https://stackoverflow.com/a/50848113/4644774
+        public static (byte r, byte g, byte b, byte a) GetAccentColor()
+        {
+            if (IsWindows10_19H1_OrLater)
+            {
+                using (RegistryKey dwmKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\DWM"))
+                {
+                    if (dwmKey != null)
+                    {
+                        var accentColor = Convert.ToInt32(dwmKey.GetValue("AccentColor", 0xff000000));
+                        return ParseDWordColor(accentColor);
+                    }
+                }
+            }
+
+            return (0, 0, 0, 0);
+        }
+
+        private static (byte r, byte g, byte b, byte a) ParseDWordColor(int color)
+        {
+            byte
+                a = (byte)((color >> 24) & 0xFF),
+                b = (byte)((color >> 16) & 0xFF),
+                g = (byte)((color >> 8) & 0xFF),
+                r = (byte)((color >> 0) & 0xFF);
+
+            return (r, g, b, a);
+        }
     }
 }
