@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace AwqatSalaat.Services.IslamicFinder
+namespace AwqatSalaat.Services.SalahHour
 {
-    public class IslamicFinderClient : IServiceClient
+    public class SalahHourClient : IServiceClient
     {
         public async Task<ServiceData> GetDataAsync(IRequest request)
         {
-            var req = (IslamicFinderRequest)request;
+            var req = (SalahHourRequest)request;
 
             if (req.GetEntireMonth)
             {
@@ -53,21 +53,21 @@ namespace AwqatSalaat.Services.IslamicFinder
 
                         if (string.IsNullOrEmpty(responseBody))
                         {
-                            throw new IslamicFinderApiException("Islamic Finder service did not respond with data.");
+                            throw new SalahHourApiException("Islamic Finder service did not respond with data.");
                         }
 
                         T apiResponse = JsonConvert.DeserializeObject<T>(responseBody);
 
                         if (!apiResponse.Success)
                         {
-                            throw new IslamicFinderApiException(apiResponse.Message);
+                            throw new SalahHourApiException(apiResponse.Message);
                         }
 
                         return apiResponse;
                     }
                     else
                     {
-                        throw new IslamicFinderApiException($"Something went wrong: {httpResponse.ReasonPhrase} (StatusCode={httpResponse.StatusCode})");
+                        throw new SalahHourApiException($"Something went wrong: {httpResponse.ReasonPhrase} (StatusCode={httpResponse.StatusCode})");
                     }
                 }
             }

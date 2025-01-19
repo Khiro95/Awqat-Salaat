@@ -11,7 +11,7 @@
     <Setting Name="ZipCode" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="Method" Type="AwqatSalaat.Services.IslamicFinder.IslamicFinderMethod" Scope="User">
+    <Setting Name="Method" Type="AwqatSalaat.Services.SalahHour.SalahHourMethod" Scope="User">
       <Value Profile="(Default)">MWL</Value>
     </Setting>
     <Setting Name="ShowCountdown" Type="System.Boolean" Scope="User">
@@ -30,7 +30,7 @@
       <Value Profile="(Default)">MWL</Value>
     </Setting>
     <Setting Name="Service" Type="AwqatSalaat.Data.PrayerTimesService" Scope="User">
-      <Value Profile="(Default)">IslamicFinder</Value>
+      <Value Profile="(Default)">SalahHour</Value>
     </Setting>
     <Setting Name="LaunchOnWindowsStartup" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

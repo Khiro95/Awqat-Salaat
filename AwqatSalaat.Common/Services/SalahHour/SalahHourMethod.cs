@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace AwqatSalaat.Services.IslamicFinder
+namespace AwqatSalaat.Services.SalahHour
 {
-    public enum IslamicFinderMethod : byte
+    public enum SalahHourMethod : byte
     {
         // Values 0 and 7 are omitted, we don't support Shia
 

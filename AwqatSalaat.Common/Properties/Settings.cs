@@ -1,6 +1,6 @@
 ﻿using AwqatSalaat.Configurations;
 using AwqatSalaat.Services.AlAdhan;
-using AwqatSalaat.Services.IslamicFinder;
+using AwqatSalaat.Services.SalahHour;
 using AwqatSalaat.Services.Methods;
 using System;
 using System.Collections.Generic;
@@ -130,7 +130,7 @@ namespace AwqatSalaat.Properties
             // CalculationMethod is added in v3.1, so we have to migrate previous settings
             if (string.IsNullOrEmpty(MethodString))
             {
-                if (Service == Data.PrayerTimesService.IslamicFinder)
+                if (Service == Data.PrayerTimesService.SalahHour)
                 {
                     MigrateToCalculationMethod(Method);
                 }
@@ -176,11 +176,11 @@ namespace AwqatSalaat.Properties
             base.OnSettingsSaving(sender, e);
         }
 
-        private void MigrateToCalculationMethod(IslamicFinderMethod islamicFinderMethod)
+        private void MigrateToCalculationMethod(SalahHourMethod islamicFinderMethod)
         {
             var method = CalculationMethod.AvailableMethods
-                .OfType<IIslamicFinderMethod>()
-                .Single(m => m.IslamicFinderMethod == islamicFinderMethod);
+                .OfType<ISalahHourMethod>()
+                .Single(m => m.SalahHourMethod == islamicFinderMethod);
 
             var calculationMethod = (CalculationMethod)method;
             MethodString = calculationMethod.Id;

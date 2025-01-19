@@ -2,7 +2,7 @@
 using AwqatSalaat.Helpers;
 using AwqatSalaat.Services;
 using AwqatSalaat.Services.AlAdhan;
-using AwqatSalaat.Services.IslamicFinder;
+using AwqatSalaat.Services.SalahHour;
 using AwqatSalaat.Services.Local;
 using System;
 using System.Collections.Generic;
@@ -142,8 +142,8 @@ namespace AwqatSalaat.ViewModels
         {
             switch (service)
             {
-                case PrayerTimesService.IslamicFinder:
-                    return new IslamicFinderClient();
+                case PrayerTimesService.SalahHour:
+                    return new SalahHourClient();
                 case PrayerTimesService.AlAdhan:
                     return new AlAdhanClient();
                 case PrayerTimesService.Local:
@@ -159,8 +159,8 @@ namespace AwqatSalaat.ViewModels
 
             switch (Settings.Service)
             {
-                case PrayerTimesService.IslamicFinder:
-                    request = new IslamicFinderRequest
+                case PrayerTimesService.SalahHour:
+                    request = new SalahHourRequest
                     {
                         CountryCode = Settings.CountryCode,
                         ZipCode = Settings.ZipCode,

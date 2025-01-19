@@ -62,9 +62,9 @@ namespace AwqatSalaat.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("MWL")]
-        public global::AwqatSalaat.Services.IslamicFinder.IslamicFinderMethod Method {
+        public global::AwqatSalaat.Services.SalahHour.SalahHourMethod Method {
             get {
-                return ((global::AwqatSalaat.Services.IslamicFinder.IslamicFinderMethod)(this["Method"]));
+                return ((global::AwqatSalaat.Services.SalahHour.SalahHourMethod)(this["Method"]));
             }
             set {
                 this["Method"] = value;
@@ -133,7 +133,7 @@ namespace AwqatSalaat.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("IslamicFinder")]
+        [global::System.Configuration.DefaultSettingValueAttribute("SalahHour")]
         public global::AwqatSalaat.Data.PrayerTimesService Service {
             get {
                 return ((global::AwqatSalaat.Data.PrayerTimesService)(this["Service"]));

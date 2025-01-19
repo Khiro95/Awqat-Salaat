@@ -395,8 +395,8 @@ Try switching to other service by going to</value>
   <data name="Data.PrayerTimesService.AlAdhan" xml:space="preserve">
     <value>Al Adhan</value>
   </data>
-  <data name="Data.PrayerTimesService.IslamicFinder" xml:space="preserve">
-    <value>Islamic Finder</value>
+  <data name="Data.PrayerTimesService.SalahHour" xml:space="preserve">
+    <value>Salah Hour</value>
   </data>
   <data name="UI.Settings.AdhanSound" xml:space="preserve">
     <value>Adhan sound</value>

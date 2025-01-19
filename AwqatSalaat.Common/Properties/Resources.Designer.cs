@@ -160,20 +160,20 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Islamic Finder.
-        /// </summary>
-        public static string Data_PrayerTimesService_IslamicFinder {
-            get {
-                return ResourceManager.GetString("Data.PrayerTimesService.IslamicFinder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Local (offline).
         /// </summary>
         public static string Data_PrayerTimesService_Local {
             get {
                 return ResourceManager.GetString("Data.PrayerTimesService.Local", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Salah Hour.
+        /// </summary>
+        public static string Data_PrayerTimesService_SalahHour {
+            get {
+                return ResourceManager.GetString("Data.PrayerTimesService.SalahHour", resourceCulture);
             }
         }
         

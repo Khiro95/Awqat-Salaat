@@ -12,7 +12,7 @@
              xmlns:mk="clr-namespace:AwqatSalaat.Markup"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:data="clr-namespace:AwqatSalaat.Data;assembly=AwqatSalaat.Common"
-             xmlns:api1="clr-namespace:AwqatSalaat.Services.IslamicFinder;assembly=AwqatSalaat.Common"
+             xmlns:api1="clr-namespace:AwqatSalaat.Services.SalahHour;assembly=AwqatSalaat.Common"
              xmlns:api2="clr-namespace:AwqatSalaat.Services.AlAdhan;assembly=AwqatSalaat.Common"
              mc:Ignorable="d"
              d:DesignHeight="1000" d:DesignWidth="800" d:Background="#192025">
@@ -30,9 +30,9 @@
                 <ResourceDictionary Source="../Assets/Vectors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <ObjectDataProvider x:Key="IslamicFinderMethodEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider x:Key="SalahHourMethodEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
                 <ObjectDataProvider.MethodParameters>
-                    <x:Type Type="{x:Type api1:IslamicFinderMethod}"/>
+                    <x:Type Type="{x:Type api1:SalahHourMethod}"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
             <ObjectDataProvider x:Key="AlAdhanMethodEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">

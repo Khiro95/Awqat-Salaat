@@ -3,7 +3,7 @@ using AwqatSalaat.Helpers;
 using System;
 using System.Collections.Generic;
 
-namespace AwqatSalaat.Services.IslamicFinder
+namespace AwqatSalaat.Services.SalahHour
 {
     internal class SingleDayResponse : Response
     {

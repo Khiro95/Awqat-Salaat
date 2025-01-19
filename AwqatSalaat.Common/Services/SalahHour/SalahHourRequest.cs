@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using System.Web;
 
-namespace AwqatSalaat.Services.IslamicFinder
+namespace AwqatSalaat.Services.SalahHour
 {
-    public class IslamicFinderRequest : WebRequestBase
+    public class SalahHourRequest : WebRequestBase
     {
         public string CountryCode { get; set; }
         public string ZipCode { get; set; }
@@ -31,9 +31,9 @@ namespace AwqatSalaat.Services.IslamicFinder
                 query["zipcode"] = ZipCode;
             }
 
-            if (Method is IIslamicFinderMethod method)
+            if (Method is ISalahHourMethod method)
             {
-                query["method"] = method.IslamicFinderMethod.ToString("D");
+                query["method"] = method.SalahHourMethod.ToString("D");
             }
             else
             {
@@ -45,7 +45,7 @@ namespace AwqatSalaat.Services.IslamicFinder
                 query["isha_value"] = Method.Isha.Value.ToString("F1", CultureInfo.InvariantCulture);
             }
 
-            return $"https://www.islamicfinder.us/index.php/api/prayer_times?{query}";
+            return $"https://www.salahhour.com/index.php/api/prayer_times?{query}";
         }
     }
 }

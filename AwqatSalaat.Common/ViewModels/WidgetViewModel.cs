@@ -3,7 +3,7 @@ using AwqatSalaat.Extensions;
 using AwqatSalaat.Helpers;
 using AwqatSalaat.Services;
 using AwqatSalaat.Services.AlAdhan;
-using AwqatSalaat.Services.IslamicFinder;
+using AwqatSalaat.Services.SalahHour;
 using AwqatSalaat.Services.Local;
 using Newtonsoft.Json;
 using System;
@@ -361,7 +361,7 @@ namespace AwqatSalaat.ViewModels
             string country = null;
             string city = null;
 
-            if (WidgetSettings.Settings.Service == PrayerTimesService.IslamicFinder)
+            if (WidgetSettings.Settings.Service == PrayerTimesService.SalahHour)
             {
                 country = responseLocation?.Country;
                 city = responseLocation?.City;
@@ -380,8 +380,8 @@ namespace AwqatSalaat.ViewModels
         {
             switch (WidgetSettings.Settings.Service)
             {
-                case PrayerTimesService.IslamicFinder:
-                    serviceClient = new IslamicFinderClient();
+                case PrayerTimesService.SalahHour:
+                    serviceClient = new SalahHourClient();
                     break;
                 case PrayerTimesService.AlAdhan:
                     serviceClient = new AlAdhanClient();
@@ -401,8 +401,8 @@ namespace AwqatSalaat.ViewModels
 
             switch (settings.Service)
             {
-                case PrayerTimesService.IslamicFinder:
-                    request = new IslamicFinderRequest
+                case PrayerTimesService.SalahHour:
+                    request = new SalahHourRequest
                     {
                         CountryCode = settings.CountryCode,
                         ZipCode = settings.ZipCode,

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AwqatSalaat.Services.IslamicFinder
+namespace AwqatSalaat.Services.SalahHour
 {
     public class EntireMonthResponse : Response
     {

@@ -2,7 +2,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace AwqatSalaat.Services.IslamicFinder
+namespace AwqatSalaat.Services.SalahHour
 {
     public abstract class Response
     {

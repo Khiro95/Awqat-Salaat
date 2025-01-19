@@ -1,10 +1,10 @@
 ﻿using AwqatSalaat.Data;
 
-namespace AwqatSalaat.Services.IslamicFinder
+namespace AwqatSalaat.Services.SalahHour
 {
     public class Settings
     {
-        public IslamicFinderMethod Method { get; set; }
+        public SalahHourMethod Method { get; set; }
         public string TimeZone { get; set; }
         public Location Location { get; set; }
     }
