@@ -10,6 +10,7 @@ namespace AwqatSalaat.WinUI.Helpers
 {
     public class StartupSettings : ObservableObject
     {
+        private readonly Properties.Settings settings;
 #if PACKAGED
         private bool launchOnStartup;
         private bool canSetLaunchOnStartup;
@@ -17,7 +18,6 @@ namespace AwqatSalaat.WinUI.Helpers
         public bool CanSetLaunchOnStartup { get => canSetLaunchOnStartup; private set => SetProperty(ref canSetLaunchOnStartup, value); }
         public bool LaunchOnStartup { get => canSetLaunchOnStartup && launchOnStartup; set => SetProperty(ref launchOnStartup, value); }
 #else
-        private readonly Properties.Settings settings;
 
         public bool CanSetLaunchOnStartup => true;
         public bool LaunchOnStartup
@@ -26,6 +26,14 @@ namespace AwqatSalaat.WinUI.Helpers
             set => settings.LaunchOnWindowsStartup = value;
         }
 #endif
+
+        public StartupSettings(Properties.Settings settings)
+        {
+            this.settings = settings;
+#if !PACKAGED
+            settings.PropertyChanged += Settings_PropertyChanged;
+#endif
+        }
 
 #if PACKAGED
         public async Task VerifyStartupTask()
@@ -36,12 +44,6 @@ namespace AwqatSalaat.WinUI.Helpers
             LaunchOnStartup = canSetLaunchOnStartup && startupTask.State == StartupTaskState.Enabled;
         }
 #else
-        public StartupSettings(Properties.Settings settings)
-        {
-            this.settings = settings;
-            settings.PropertyChanged += Settings_PropertyChanged;
-        }
-
         private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(Properties.Settings.LaunchOnWindowsStartup))
