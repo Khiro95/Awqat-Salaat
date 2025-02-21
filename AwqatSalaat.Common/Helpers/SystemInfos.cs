@@ -18,6 +18,7 @@ namespace AwqatSalaat.Helpers
         private const int Windows10_19H1_BuildNumber = 18362;
         private const int Windows11_Min_BuildNumber = 22000;
 
+        public static int OSBuildNumber => osBuildNumber;
         public static bool IsWindows7 => osBuildNumber == Windows7BuildNumber;
         public static bool IsWindows8 => osBuildNumber == Windows8BuildNumber;
         public static bool IsWindows81 => osBuildNumber == Windows81BuildNumber;

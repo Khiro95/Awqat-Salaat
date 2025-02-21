@@ -1,5 +1,6 @@
 ﻿using AwqatSalaat.Data;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace AwqatSalaat.Services.AlAdhan
         public async Task<ServiceData> GetDataAsync(IRequest request)
         {
             var req = (AlAdhanRequest)request;
+            Log.Debug("[Al-Adhan] Getting data for request: {@request}", req);
 
             if (req.GetEntireMonth)
             {
@@ -34,7 +36,10 @@ namespace AwqatSalaat.Services.AlAdhan
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    var httpResponse = await client.GetAsync(request.GetUrl());
+                    var url = request.GetUrl();
+                    Log.Debug($"[Al-Adhan] Getting data from: {url}");
+                    var httpResponse = await client.GetAsync(url);
+                    Log.Debug($"[Al-Adhan] Response status code: {httpResponse.StatusCode}");
 
                     if (httpResponse.IsSuccessStatusCode)
                     {

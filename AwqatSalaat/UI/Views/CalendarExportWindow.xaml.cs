@@ -1,6 +1,7 @@
 ﻿using AwqatSalaat.Helpers;
 using AwqatSalaat.UI.Controls;
 using Microsoft.Win32;
+using Serilog;
 using System;
 using System.IO;
 using System.Windows;
@@ -48,6 +49,8 @@ namespace AwqatSalaat.UI.Views
 
         private void Export_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("Clicked on Export as PNG");
+
             if (saveFileDialog is null)
             {
                 saveFileDialog = new SaveFileDialog();
@@ -58,6 +61,7 @@ namespace AwqatSalaat.UI.Views
 
             if (saveFileDialog.ShowDialog(this) == false)
             {
+                Log.Information("Export canceled");
                 return;
             }
 
@@ -71,16 +75,27 @@ namespace AwqatSalaat.UI.Views
                 encoder.Frames.Add(BitmapFrame.Create(target));
                 encoder.Save(fileStream);
             }
+
+            Log.Information("Export done");
         }
 
         private void Print_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("Clicked on Print");
             PrintDialog printDialog = new PrintDialog();
 
             if (printDialog.ShowDialog() == true)
             {
                 printDialog.PrintVisual(doc, "Awqat Salaat - Calendar");
+                Log.Information("Print request queued");
             }
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            Log.Information("Closed Calendar export window");
+            LocaleManager.Default.CurrentChanged -= LocaleManager_CurrentChanged;
+            base.OnClosed(e);
         }
     }
 }

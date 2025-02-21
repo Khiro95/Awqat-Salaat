@@ -1,3 +1,4 @@
+using AwqatSalaat.Helpers;
 using AwqatSalaat.Interop;
 using AwqatSalaat.Services.Nominatim;
 using AwqatSalaat.ViewModels;
@@ -6,7 +7,10 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
+using Serilog;
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -20,10 +24,10 @@ namespace AwqatSalaat.WinUI.Views
 {
     public sealed partial class SettingsPanel : UserControl
     {
-        private static readonly string Version = typeof(SettingsPanel).Assembly
+        public static readonly string Version = typeof(SettingsPanel).Assembly
             .GetCustomAttribute<AssemblyFileVersionAttribute>()?
             .Version;
-        private static readonly string Architecture = Environment.Is64BitProcess ? "64-bit" : "32-bit";
+        public static readonly string Architecture = Environment.Is64BitProcess ? "64-bit" : "32-bit";
 
 #if PACKAGED
         static SettingsPanel()
@@ -64,6 +68,8 @@ namespace AwqatSalaat.WinUI.Views
 
         private void SettingsPanel_Loaded(object sender, RoutedEventArgs e)
         {
+            Log.Information("Settings panel loaded");
+
             if (!loadedFirstTime)
             {
                 loadedFirstTime = true;
@@ -113,7 +119,10 @@ namespace AwqatSalaat.WinUI.Views
         
         private void OnVisibilityChanged(DependencyObject sender, DependencyProperty dp)
         {
-            if (Visibility == Visibility.Collapsed)
+            bool isVisible = Visibility == Visibility.Visible;
+            Log.Information("Settings panel became " + (isVisible ? "visible" : "invisible"));
+
+            if (!isVisible)
             {
                 // change selection when collapsed to hide the transition from previous tab to general tab
                 nav.SelectedItem = generalTab;
@@ -151,6 +160,7 @@ namespace AwqatSalaat.WinUI.Views
 
         private void ContactHyperlink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
         {
+            Log.Information("Clicked on Contact link");
             // https://github.com/microsoft/microsoft-ui-xaml/issues/4438
             Windows.System.Launcher.LaunchUriAsync(new Uri("mailto:khiro95.gh@gmail.com"));
         }
@@ -159,6 +169,7 @@ namespace AwqatSalaat.WinUI.Views
         {
             try
             {
+                Log.Information("Clicked on Check for updates");
                 keepFlyoutOpen = true;
                 var current = System.Version.Parse(Version);
 #if DEBUG
@@ -207,6 +218,7 @@ namespace AwqatSalaat.WinUI.Views
             }
             catch (Exception ex)
             {
+                Log.Error(ex, $"Checking for updates failed: {ex.Message}");
                 MessageBox.Error(Properties.Resources.Dialog_CheckingUpdatesFailed + $"\nError: {ex.Message}");
             }
             finally
@@ -221,16 +233,19 @@ namespace AwqatSalaat.WinUI.Views
 
         private async void BrowseNotificationSound_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("Clicked on Browse for notification sound");
             await BrowseSoundFileAsync((s, f) => s.NotificationSoundFile = f);
         }
 
         private async void BrowseAdhanSound_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("Clicked on Browse for adhan sound");
             await BrowseSoundFileAsync((s, f) => s.AdhanSoundFile = f);
         }
 
         private async void BrowseAdhanFajrSound_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("Clicked on Browse for adhan Fajr sound");
             await BrowseSoundFileAsync((s, f) => s.AdhanFajrSoundFile = f);
         }
 
@@ -283,6 +298,17 @@ namespace AwqatSalaat.WinUI.Views
                     }
                 }
             }
+        }
+
+        private void ShowLogsFileClick(object sender, RoutedEventArgs e)
+        {
+            if (!File.Exists(LogManager.LogsPath))
+            {
+                MessageBox.Info(Properties.Resources.Dialog_LogsFileNotFound);
+                return;
+            }
+
+            Process.Start("explorer.exe", $"/select,\"{LogManager.LogsPath}\"");
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AwqatSalaat.Helpers;
 using H.NotifyIcon.Core;
 using Microsoft.UI.Dispatching;
+using Serilog;
 using System;
 using System.Windows.Input;
 
@@ -27,10 +28,26 @@ namespace AwqatSalaat.WinUI
 
         static TaskBarManager()
         {
-            ShowWidget = new RelayCommand(static o => ShowWidgetExecute());
-            HideWidget = new RelayCommand(static o => HideWidgetExecute());
-            RepositionWidget = new RelayCommand(static o => taskBarWidget?.UpdatePosition(true));
-            ManuallyPositionWidget = new RelayCommand(static o => taskBarWidget?.StartDragging());
+            ShowWidget = new RelayCommand(static o =>
+            {
+                Log.Information("Clicked on Show");
+                ShowWidgetExecute();
+            });
+            HideWidget = new RelayCommand(static o =>
+            {
+                Log.Information("Clicked on Hide");
+                HideWidgetExecute();
+            });
+            RepositionWidget = new RelayCommand(static o =>
+            {
+                Log.Information("Clicked on Re-position");
+                taskBarWidget?.UpdatePosition(true);
+            });
+            ManuallyPositionWidget = new RelayCommand(static o =>
+            {
+                Log.Information("Clicked on Manual position");
+                taskBarWidget?.StartDragging();
+            });
 
             App.Quitting += App_Quitting;
             LocaleManager.Default.CurrentChanged += (_, _) => UpdateTrayIconLocalization();
@@ -44,11 +61,32 @@ namespace AwqatSalaat.WinUI
 
             if (trayIcon is null)
             {
-                showItem = new PopupMenuItem("Show", (_, _) => dispatcher.TryEnqueue(ShowWidgetExecute));
-                hideItem = new PopupMenuItem("Hide", (_, _) => dispatcher.TryEnqueue(HideWidgetExecute));
-                repositionItem = new PopupMenuItem("Re-position", (_, _) => taskBarWidget?.UpdatePosition(true));
-                manualPositionItem = new PopupMenuItem("Manual position", (_, _) => dispatcher.TryEnqueue(() => taskBarWidget?.StartDragging()));
-                quitItem = new PopupMenuItem("Quit", (_, _) => dispatcher.TryEnqueue(() => App.Quit.Execute(null)));
+                Log.Information("Creating system tray icon");
+                showItem = new PopupMenuItem("Show", (_, _) =>
+                {
+                    Log.Information("Clicked on Show from tray icon");
+                    dispatcher.TryEnqueue(ShowWidgetExecute);
+                });
+                hideItem = new PopupMenuItem("Hide", (_, _) =>
+                {
+                    Log.Information("Clicked on Hide from tray icon");
+                    dispatcher.TryEnqueue(HideWidgetExecute);
+                });
+                repositionItem = new PopupMenuItem("Re-position", (_, _) =>
+                {
+                    Log.Information("Clicked on Re-position from tray icon");
+                    taskBarWidget?.UpdatePosition(true);
+                });
+                manualPositionItem = new PopupMenuItem("Manual position", (_, _) =>
+                {
+                    Log.Information("Clicked on Manual position from tray icon");
+                    dispatcher.TryEnqueue(() => taskBarWidget?.StartDragging());
+                });
+                quitItem = new PopupMenuItem("Quit", (_, _) =>
+                {
+                    Log.Information("Clicked on Quit from tray icon");
+                    dispatcher.TryEnqueue(() => App.Quit.Execute(null));
+                });
 
                 trayIcon = new TrayIconWithContextMenu()
                 {
@@ -80,6 +118,7 @@ namespace AwqatSalaat.WinUI
         {
             using (trayIcon)
             {
+                Log.Information("Removing tray icon");
                 trayIcon.TryRemove();
             }
 
@@ -88,8 +127,11 @@ namespace AwqatSalaat.WinUI
 
         private static void ShowWidgetExecute()
         {
+            Log.Information("Showing widget");
+
             if (taskBarWidget is null)
             {
+                Log.Information("Creating widget");
                 var widget = new TaskBarWidget();
 
                 widget.Initialize();
@@ -106,14 +148,18 @@ namespace AwqatSalaat.WinUI
 
         private static void HideWidgetExecute()
         {
+            Log.Information("Hiding widget");
+
             if (taskBarWidget is not null)
             {
                 using (taskBarWidget)
                 {
+                    Log.Information("Destroying widget");
                     taskBarWidget.Destroy();
                 }
 
                 taskBarWidget = null;
+                Log.Information("Widget destroyed");
             }
         }
 
@@ -127,11 +173,13 @@ namespace AwqatSalaat.WinUI
         {
             try
             {
+                Log.Information("Taskbar created");
                 _ = trayIcon.TryRemove();
                 trayIcon.Create();
             }
             catch (Exception ex)
             {
+                Log.Warning(ex, $"Something went wrong while creating tray icon after taskbar creation: {ex.Message}");
 #if DEBUG
                 throw;
 #endif
@@ -143,6 +191,7 @@ namespace AwqatSalaat.WinUI
 
         private static void UpdateTrayMenuItemsStates(bool isWidgetVisible)
         {
+            Log.Information($"Updating tray icon menu states. (widget visible: {isWidgetVisible})");
             showItem.Enabled = !isWidgetVisible;
             hideItem.Enabled = isWidgetVisible;
             repositionItem.Enabled = isWidgetVisible;

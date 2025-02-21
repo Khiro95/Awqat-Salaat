@@ -1,6 +1,7 @@
 ﻿using AwqatSalaat.Helpers;
 using AwqatSalaat.UI.Controls;
 using AwqatSalaat.ViewModels;
+using Serilog;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -94,8 +95,11 @@ namespace AwqatSalaat.UI.Views
 
         private void UpdateDisplayedDates()
         {
+            Log.Information("[Calendar document] Updating displayed dates");
+
             if (Source is CalendarResult result && result.HijriCalendar != null)
             {
+                Log.Information($"First date={result.FirstDate:u}, Last date={result.LastDate:u}");
                 var calendar = result.HijriCalendar;
                 var currentDate = TimeStamp.Date;
                 var firstHijriMonth = calendar.GetMonth(result.FirstDate ?? currentDate);

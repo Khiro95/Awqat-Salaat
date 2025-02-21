@@ -1,6 +1,7 @@
 ﻿using AwqatSalaat.Configurations;
 using AwqatSalaat.Extensions;
 using AwqatSalaat.Helpers;
+using Serilog;
 using System;
 using System.Threading;
 
@@ -37,9 +38,12 @@ namespace AwqatSalaat.ViewModels
             get => state;
             set
             {
+                var current = state;
+
                 if (SetProperty(ref state, value))
                 {
                     DismissNotification.RaiseCanExecuteChanged();
+                    Log.Debug($"Updated state for: {Key}. From={current}, To={value}");
                 }
             }
         }
@@ -62,6 +66,7 @@ namespace AwqatSalaat.ViewModels
         {
             this.apiTime = apiTime;
             Time = apiTime.AddMinutes(config.Adjustment);
+            Log.Debug($"Updating time for: {Key}. API time={apiTime:u}, Final time={Time:u}");
             UpdateState();
         }
 
@@ -75,6 +80,7 @@ namespace AwqatSalaat.ViewModels
 
         private void Activate(bool active)
         {
+            Log.Debug($"Updating time activation for: {Key}. From={isActive}, To={active}");
             isActive = active;
 
             if (active)
@@ -92,6 +98,7 @@ namespace AwqatSalaat.ViewModels
 
         private void DismissExecute(object obj)
         {
+            Log.Debug($"Dismiss invoked for: {Key}");
             isNotificationDismissed = true;
             TimerTick(null);
         }
@@ -123,6 +130,7 @@ namespace AwqatSalaat.ViewModels
 
                     if (shouldRaiseEvents)
                     {
+                        Log.Debug($"Raising Entered event for: {Key} ({state})");
                         Entered?.Invoke(this, EventArgs.Empty);
                     }
                 }
@@ -137,9 +145,11 @@ namespace AwqatSalaat.ViewModels
                     {
                         if (previousState != PrayerTimeState.EnteredRecently)
                         {
+                            Log.Debug($"Raising Entered event for: {Key} ({state})");
                             Entered?.Invoke(this, EventArgs.Empty);
                         }
 
+                        Log.Debug($"Raising EnteredNotificationDone event for: {Key} ({state})");
                         EnteredNotificationDone?.Invoke(this, EventArgs.Empty);
                     }
                 }

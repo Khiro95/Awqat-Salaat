@@ -2,6 +2,7 @@ using AwqatSalaat.ViewModels;
 using AwqatSalaat.WinUI.Media;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Serilog;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -26,6 +27,7 @@ namespace AwqatSalaat.WinUI.Views
 
         private void WidgetPanel_Loaded(object sender, RoutedEventArgs e)
         {
+            Log.Information("Widget panel loaded");
             AudioPlayer.Started += AudioPlayer_Started;
             AudioPlayer.Stopped += AudioPlayer_Stopped;
 
@@ -34,6 +36,7 @@ namespace AwqatSalaat.WinUI.Views
 
         private void WidgetPanel_Unloaded(object sender, RoutedEventArgs e)
         {
+            Log.Information("Widget panel unloaded");
             AudioPlayer.Started -= AudioPlayer_Started;
             AudioPlayer.Stopped -= AudioPlayer_Stopped;
         }
@@ -74,16 +77,19 @@ namespace AwqatSalaat.WinUI.Views
 #endif
         private void StopSound_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("Clicked on Stop Sound");
             AudioPlayer.CurrentSession?.End();
         }
 
         private void MoreInfo_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("Clicked on More Info");
             MoreInfoWindow.Open();
         }
 
         private void LocationPanel_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            Log.Information("Location panel's size changed");
             // if Height changed then the size has changed because of orientation change
             if (e.PreviousSize.Height != e.NewSize.Height && e.PreviousSize.Height > 0)
             {

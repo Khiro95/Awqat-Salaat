@@ -6,6 +6,7 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Printing;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +53,7 @@ namespace AwqatSalaat.WinUI.Views
 
         private void CalendarExportWindow_Closed(object sender, WindowEventArgs args)
         {
+            Log.Information("Calendar export window closed");
             LocaleManager.Default.CurrentChanged -= LocaleManager_CurrentChanged;
             UnregisterForPrinting();
         }
@@ -71,6 +73,8 @@ namespace AwqatSalaat.WinUI.Views
 
         private async void Export_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("Clicked on Export as PNG");
+
             // Render to an image at the current system scale and retrieve pixel contents
             RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap();
             viewbox.Height = ExportHeight;
@@ -93,6 +97,7 @@ namespace AwqatSalaat.WinUI.Views
             // Verify the user selected a file
             if (saveFile is null)
             {
+                Log.Information("Export canceled");
                 return;
             }
 
@@ -112,10 +117,14 @@ namespace AwqatSalaat.WinUI.Views
 
                 await encoder.FlushAsync();
             }
+
+            Log.Information("Export done");
         }
 
         private async void Print_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("Clicked on Print");
+
             if (PrintManager.IsSupported())
             {
                 try
@@ -125,6 +134,7 @@ namespace AwqatSalaat.WinUI.Views
                 }
                 catch (Exception ex)
                 {
+                    Log.Error(ex, $"Print failed: {ex.Message}");
                     string caption = $"{LocaleManager.Default.Get("UI.Calendar.Print")} - {LocaleManager.Default.Get("Data.AppName")}";
                     MessageBox.Error(ex.Message, caption);
                 }
@@ -135,6 +145,8 @@ namespace AwqatSalaat.WinUI.Views
 
         private void CalendarExportWindow_Activated(object sender, WindowActivatedEventArgs args)
         {
+            Log.Information("Calendar export window activated");
+
             if (!centered)
             {
                 Center(this);
@@ -213,8 +225,13 @@ namespace AwqatSalaat.WinUI.Views
 
         private void PrintTask_Completed(PrintTask sender, PrintTaskCompletedEventArgs args)
         {
-            if (args.Completion == PrintTaskCompletion.Failed)
+            if (args.Completion == PrintTaskCompletion.Submitted)
             {
+                Log.Information("Print task submitted");
+            }
+            else if (args.Completion == PrintTaskCompletion.Failed)
+            {
+                Log.Warning("Print task failed");
                 string caption = $"{LocaleManager.Default.Get("UI.Calendar.Print")} - {LocaleManager.Default.Get("Data.AppName")}";
                 MessageBox.Warning("Print failed!", caption);
             }

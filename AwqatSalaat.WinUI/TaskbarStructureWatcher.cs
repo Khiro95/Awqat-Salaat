@@ -2,6 +2,7 @@
 using AwqatSalaat.Interop;
 using Microsoft.UI;
 using Microsoft.UI.Windowing;
+using Serilog;
 using System;
 using System.Management;
 using System.Security.Principal;
@@ -101,10 +102,12 @@ namespace AwqatSalaat.WinUI
             widgetsButtonEnabled = SystemInfos.IsTaskBarWidgetsEnabled();
             taskbarCentered = SystemInfos.IsTaskBarCentered();
             taskbarHidden = IsTaskbarHidden();
+            rebarGap = GetReBarGap();
+
+            Log.Information($"Creating taskbar watcher. Taskbar hidden={taskbarHidden}, Taskbar centered={taskbarCentered}, Gap={rebarGap}, Widgets enabled={widgetsButtonEnabled}");
+
             RegisterEventHandlers();
             CreateRegistryWatcher();
-
-            rebarGap = GetReBarGap();
         }
 
         private int GetReBarGap()
@@ -212,10 +215,12 @@ namespace AwqatSalaat.WinUI
                         IsTaskbarWidgetsEnabled = widgetsButtonEnabled
                     };
                     updateContext = new UpdateContext(args);
+                    Log.Debug("Raising TaskbarChangedNotificationStarted with: {@args}", args);
                     TaskbarChangedNotificationStarted?.Invoke(this, args);
 
                     if (args.Canceled)
                     {
+                        Log.Debug("TaskbarChangedNotificationStarted was canceled");
                         updateContext = null;
                         return;
                     }
@@ -246,6 +251,7 @@ namespace AwqatSalaat.WinUI
                 // If the task didn't succeed then it means we canceled it to replace it with a more recent one.
                 if (delayTask.IsCompletedSuccessfully)
                 {
+                    Log.Debug("Raising TaskbarChangedNotificationCompleted with: {@args}", updateContext.EventArgs);
                     TaskbarChangedNotificationCompleted?.Invoke(this, updateContext.EventArgs);
                     updateCancellation?.Dispose();
                     updateCancellation = null;
@@ -256,6 +262,8 @@ namespace AwqatSalaat.WinUI
 
         private void RegisterEventHandlers()
         {
+            Log.Information("Registering event handlers in taskbar watcher");
+
             if (taskbarElement is not null)
             {
                 IUIAutomationCacheRequest cacheReq = pUIAutomation.CreateCacheRequest();
@@ -268,6 +276,8 @@ namespace AwqatSalaat.WinUI
 
         private void UnregisterEventHandlers()
         {
+            Log.Information("Unregistering event handlers in taskbar watcher");
+
             if (taskbarElement is not null)
             {
                 pUIAutomation.RemoveAllEventHandlers();
@@ -276,6 +286,7 @@ namespace AwqatSalaat.WinUI
 
         private void CreateRegistryWatcher()
         {
+            Log.Information("Creating registry watcher");
             var currentUser = WindowsIdentity.GetCurrent();
 
             WqlEventQuery query = new WqlEventQuery(
@@ -298,6 +309,7 @@ namespace AwqatSalaat.WinUI
             // We are only interested in registry notifications for widgets button change when taskbar is left-aligned
             if ((isWidgetsButtonEnabled != widgetsButtonEnabled) && !isTaskbarCentered)
             {
+                Log.Information("Detected registry change for Widgets button");
                 widgetsButtonEnabled = isWidgetsButtonEnabled;
                 RaiseNotification(TaskbarChangeReason.WidgetsButton);
             }
@@ -305,6 +317,7 @@ namespace AwqatSalaat.WinUI
 
         public void Dispose()
         {
+            Log.Information("Disposing taskbar watcher");
             Task.Run(UnregisterEventHandlers);
             watcher?.Dispose();
         }

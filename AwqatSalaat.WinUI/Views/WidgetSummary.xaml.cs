@@ -5,6 +5,7 @@ using AwqatSalaat.WinUI.Media;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
+using Serilog;
 using System;
 using Windows.Foundation;
 using Windows.UI.ViewManagement;
@@ -65,6 +66,7 @@ namespace AwqatSalaat.WinUI.Views
             {
                 // When accent color is used, we have to figure out the theme based on the color
                 var accent = uiSettings.GetColorValue(UIColorType.Accent);
+                Log.Information($"Accent color on taskbar: R={accent.R}, G={accent.G}, B={accent.B}");
                 bool colorIsDark = (5 * accent.G + 2 * accent.R + accent.B) <= 8 * 200;
                 this.RequestedTheme = colorIsDark ? ElementTheme.Dark : ElementTheme.Light;
             }
@@ -74,23 +76,28 @@ namespace AwqatSalaat.WinUI.Views
                 this.RequestedTheme = SystemInfos.IsLightThemeUsed() == true ? ElementTheme.Light : ElementTheme.Dark;
             }
 
+            Log.Information($"Updated theme: {this.RequestedTheme}");
+
             if (Parent is FrameworkElement parent)
             {
                 // The flyouts are independent of the taskbar so they should respect "apps theme" (we get it from the parent)
                 var theme = parent.ActualTheme == this.ActualTheme ? ElementTheme.Default : parent.ActualTheme;
                 flyout.SetPresenterTheme(theme);
                 (btngrid.ContextFlyout as CustomizedMenuFlyout)?.SetPresenterTheme(theme);
+                Log.Information($"Updated flyouts theme: {theme}");
             }
         }
 
         private void WidgetSummary_Loaded(object sender, RoutedEventArgs e)
         {
+            Log.Information("Widget summary loaded");
             UpdateThemes();
             UpdateDisplayMode();
         }
 
         private void WidgetSummary_Unloaded(object sender, RoutedEventArgs e)
         {
+            Log.Information("Widget summary unloaded");
             ViewModel.WidgetSettings.Realtime.PropertyChanged -= Settings_PropertyChanged;
             ViewModel.WidgetSettings.Updated -= WidgetSettings_Updated;
             ViewModel.NearNotificationStarted -= ViewModel_NearNotificationStarted;
@@ -114,6 +121,7 @@ namespace AwqatSalaat.WinUI.Views
         {
             DispatcherQueue.TryEnqueue(() =>
             {
+                Log.Information("Adhan requested" + (isFajrTime ? " for fajr" : ""));
                 var file = isFajrTime
                         ? ViewModel.WidgetSettings.Settings.AdhanFajrSoundFilePath
                         : ViewModel.WidgetSettings.Settings.AdhanSoundFilePath;
@@ -175,11 +183,13 @@ namespace AwqatSalaat.WinUI.Views
 
         private void Flyout_Opened(object sender, object e)
         {
+            Log.Information("Flyout opened");
             //flyoutContent.Focus(FocusState.Programmatic);
         }
 
         private void Flyout_Closed(object sender, object e)
         {
+            Log.Information("Flyout closed");
             var customFlyout = (CustomizedFlyout)sender;
 
             if (!customFlyout.ClosedBecauseOfResize)

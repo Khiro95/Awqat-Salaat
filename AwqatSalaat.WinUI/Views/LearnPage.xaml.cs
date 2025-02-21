@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,6 +41,7 @@ namespace AwqatSalaat.WinUI.Views
         public void Dispose()
         {
             LocaleManager.Default.CurrentChanged -= LocaleManager_CurrentChanged;
+            Log.Information("Learn page disposed");
         }
 
         private void LocaleManager_CurrentChanged(object sender, EventArgs e)
@@ -56,6 +58,7 @@ namespace AwqatSalaat.WinUI.Views
 
         private void LoadRtf()
         {
+            Log.Information("Loading rtf file");
             richBlock.Blocks.Clear();
             var richTB = new RichEditBox();
 

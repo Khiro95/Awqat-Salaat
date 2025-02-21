@@ -3,6 +3,7 @@ using AwqatSalaat.Interop;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
+using Serilog;
 using System;
 using System.Threading.Tasks;
 using WinRT.Interop;
@@ -21,6 +22,7 @@ namespace AwqatSalaat.WinUI.Views
 
         public static void Open()
         {
+            Log.Information("Opening MoreInfoWindow");
             current = current ?? new MoreInfoWindow();
 
             current.Activate();
@@ -125,6 +127,8 @@ namespace AwqatSalaat.WinUI.Views
 
         private void MoreInfoWindow_Closed(object sender, WindowEventArgs args)
         {
+            Log.Information("Closed MoreInfoWindow");
+
             if (current == this)
             {
                 current = null;

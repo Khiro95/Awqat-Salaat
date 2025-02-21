@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace AwqatSalaat.ViewModels
 {
@@ -73,7 +74,7 @@ namespace AwqatSalaat.ViewModels
             }
 
             Refresh = new RelayCommand(o => RefreshData(), o => !isRefreshing);
-            OpenSettings = new RelayCommand(o => WidgetSettings.IsOpen = true, o => !isRefreshing);
+            OpenSettings = new RelayCommand(o => OpenSettingsExecute(), o => !isRefreshing);
             WidgetSettings.Updated += SettingsUpdated;
 
             if (WidgetSettings.Settings.IsConfigured)
@@ -85,6 +86,7 @@ namespace AwqatSalaat.ViewModels
 
                 if (cached != null)
                 {
+                    Log.Debug("Loading data from cache");
                     OnDataLoaded(cached);
                 }
 
@@ -92,8 +94,16 @@ namespace AwqatSalaat.ViewModels
             }
         }
 
+        private void OpenSettingsExecute()
+        {
+            Log.Information("Opening settings");
+            WidgetSettings.IsOpen = true;
+        }
+
         private void SettingsUpdated(bool hasServiceSettingsChanged)
         {
+            Log.Information("Settings updated" + (hasServiceSettingsChanged ? " (service settings changed)" : ""));
+
             foreach (var time in Items)
             {
                 time.InvalidateConfig();
@@ -104,6 +114,7 @@ namespace AwqatSalaat.ViewModels
                 UpdateServiceClient();
 
                 latestData = null;
+                Log.Debug("Clearing cache");
                 Properties.PersistentCache.Default.ApiData = null;
                 Properties.PersistentCache.Default.Save();
                 RefreshData();
@@ -115,6 +126,7 @@ namespace AwqatSalaat.ViewModels
         private void TimeEntered(object sender, EventArgs e)
         {
             PrayerTimeViewModel prayerTime = (PrayerTimeViewModel)sender;
+            Log.Information($"Time entered: {prayerTime.Key}");
 
             if (prayerTime.Key != nameof(PrayerTimes.Isha))
             {
@@ -134,10 +146,12 @@ namespace AwqatSalaat.ViewModels
         private void TimeEnteredNotificationDone(object sender, EventArgs e)
         {
             PrayerTimeViewModel prayerTime = (PrayerTimeViewModel)sender;
+            Log.Information($"Time entered and elapsed time done: {prayerTime.Key}");
 
             // time jumps happen when PC enter sleep/hibernate mode then wakeup after hours
             bool timeJumped = displayedDate != TimeStamp.Date;
             var nextDate = timeJumped ? TimeStamp.Date : TimeStamp.NextDate;
+            Log.Information($"Time jumped? {timeJumped}");
 
             if (prayerTime.Key == nameof(PrayerTimes.Isha) || timeJumped)
             {
@@ -160,6 +174,8 @@ namespace AwqatSalaat.ViewModels
 
             if (e.PropertyName == nameof(PrayerTimeViewModel.State))
             {
+                Log.Debug($"Time state changed: Key={prayerTime.Key}, State={prayerTime.State}");
+
                 if (prayerTime.State == PrayerTimeState.Near)
                 {
                     OnNearNotificationStarted();
@@ -173,6 +189,8 @@ namespace AwqatSalaat.ViewModels
 
         private bool Update()
         {
+            Log.Information("Start updating times");
+
             if (latestData?.Count > 0 && latestData.ContainsKey(displayedDate))
             {
                 foreach (var time in latestData[displayedDate])
@@ -185,11 +203,14 @@ namespace AwqatSalaat.ViewModels
                 return true;
             }
 
+            Log.Information("Updating times failed. Missing data");
             return false;
         }
 
         private void UpdateNext()
         {
+            Log.Information($"Updating Next from: {next?.Key}");
+
             if (next != null)
             {
                 next.IsNext = false;
@@ -202,10 +223,14 @@ namespace AwqatSalaat.ViewModels
             {
                 next.IsNext = true;
             }
+
+            Log.Information($"Updated Next time to: {next?.Key}");
         }
 
         private void UpdateDisplayedTime(bool skipLookup)
         {
+            Log.Information($"Updating DisplayedTime from: {displayedTime?.Key}");
+
             if (displayedTime != null)
             {
                 displayedTime.IsActive = false;
@@ -234,6 +259,8 @@ namespace AwqatSalaat.ViewModels
                 }
             }
 
+            Log.Information($"Updated DisplayedTime to: {displayedTime?.Key}");
+
             FixTimeJumpSideEffect();
         }
 
@@ -243,6 +270,8 @@ namespace AwqatSalaat.ViewModels
 
             foreach (var item in needFix)
             {
+                Log.Debug($"Fixing time jump effect for: {item.Key}");
+
                 if (item.Key == nameof(PrayerTimes.Isha))
                 {
                     // Isha time is special since it lead to changing the date and updating all the times
@@ -259,6 +288,7 @@ namespace AwqatSalaat.ViewModels
         private bool OnDataLoaded(ServiceData response)
         {
             latestData = response.Times;
+            Log.Information("Data loaded");
 
             UpdateDisplayedLocation(response?.Location);
 
@@ -274,6 +304,7 @@ namespace AwqatSalaat.ViewModels
 
             try
             {
+                Log.Information("Start refreshing data");
                 ErrorMessage = null;
                 IsRefreshing = true;
 
@@ -286,10 +317,12 @@ namespace AwqatSalaat.ViewModels
                 // If Isha has already entered, then we look for the next day
                 if (DisplayedDate == TimeStamp.Date && TimeStamp.Now > ishaTime)
                 {
+                    Log.Information("Switching to next day");
                     DisplayedDate = TimeStamp.NextDate;
 
                     if (TimeStamp.Date.Month != TimeStamp.NextDate.Month)
                     {
+                        Log.Information("Fetching data for next month");
                         request = BuildRequest(TimeStamp.NextDate, true);
                         apiResponse = await serviceClient.GetDataAsync(request);
                     }
@@ -300,12 +333,15 @@ namespace AwqatSalaat.ViewModels
                 if (WidgetSettings.Settings.Service != PrayerTimesService.Local)
                 {
                     // Cache the result for offline use, just in case
+                    Log.Debug("Caching api response");
                     Properties.PersistentCache.Default.ApiData = JsonConvert.SerializeObject(apiResponse);
                     Properties.PersistentCache.Default.Save();
                 }
             }
             catch (NetworkException nex)
             {
+                Log.Error(nex, $"Refreshing data failed: {nex.Message}");
+
                 if (!WidgetSettings.Settings.IsConfigured || latestData is null)
                 {
                     ErrorMessage = nex.Message;
@@ -313,6 +349,8 @@ namespace AwqatSalaat.ViewModels
             }
             catch (Exception ex)
             {
+                Log.Error(ex, $"Refreshing data failed: {ex.Message}");
+
                 if (next != null)
                 {
                     next.IsNext = false;
@@ -335,6 +373,7 @@ namespace AwqatSalaat.ViewModels
             finally
             {
                 IsRefreshing = false;
+                Log.Information("End refreshing data");
             }
         }
 
@@ -342,6 +381,7 @@ namespace AwqatSalaat.ViewModels
         {
             if (!isNotificationActive)
             {
+                Log.Information($"Start notification for coming time: {next?.Key}");
                 isNotificationActive = true;
                 NearNotificationStarted?.Invoke();
             }
@@ -351,6 +391,7 @@ namespace AwqatSalaat.ViewModels
         {
             if (isNotificationActive)
             {
+                Log.Information($"Stop notification for coming time: {next?.Key}");
                 isNotificationActive = false;
                 NearNotificationStopped?.Invoke();
             }
@@ -378,6 +419,8 @@ namespace AwqatSalaat.ViewModels
 
         private void UpdateServiceClient()
         {
+            Log.Debug($"Creating client for service: {WidgetSettings.Settings.Service}");
+
             switch (WidgetSettings.Settings.Service)
             {
                 case PrayerTimesService.SalahHour:
@@ -396,6 +439,7 @@ namespace AwqatSalaat.ViewModels
 
         private IRequest BuildRequest(DateTime date, bool getEntireMonth)
         {
+            Log.Debug($"Building request for service: {WidgetSettings.Settings.Service}");
             RequestBase request;
             var settings = WidgetSettings.Settings;
 
@@ -435,6 +479,7 @@ namespace AwqatSalaat.ViewModels
                 request.UseCoordinates = true;
             }
 
+            Log.Debug("Request built: {@request}", request);
             return request;
         }
     }

@@ -6,6 +6,7 @@ using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml.Hosting;
 using Microsoft.UI.Xaml.Input;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -63,6 +64,7 @@ namespace AwqatSalaat.WinUI
             var dpi = User32.GetDpiForWindow(hwndShell);
             dpiScale = dpi / 96d;
             WidgetHostWidth = (int)Math.Ceiling(dpiScale * DefaultWidgetHostWidth);
+            Log.Debug($"Widget constructor: DPI={dpi}, Width={WidgetHostWidth}, Taskbar RTL={IsRtlUI}");
 
             taskbarWatcher = new TaskbarStructureWatcher(hwndShell, hwndReBar);
             taskbarWatcher.TaskbarChangedNotificationStarted += TaskbarWatcher_TaskbarChangedNotificationStarted;
@@ -71,6 +73,7 @@ namespace AwqatSalaat.WinUI
 
         public void Initialize()
         {
+            Log.Information("Initializing widget host");
             host = new DesktopWindowXamlSource();
 
             hwnd = CreateHostWindow(hwndShell);
@@ -83,6 +86,7 @@ namespace AwqatSalaat.WinUI
 
             var taskbarRect = SystemInfos.GetTaskBarBounds();
             appWindow.ResizeClient(new SizeInt32(WidgetHostWidth, taskbarRect.bottom - taskbarRect.top));
+            Log.Debug("Taskbar rect: {@rect}", taskbarRect);
 
             host.Initialize(id);
             host.SiteBridge.ResizePolicy = Microsoft.UI.Content.ContentSizePolicy.ResizeContentToParentWindow;
@@ -99,6 +103,7 @@ namespace AwqatSalaat.WinUI
             UpdatePositionImpl(TaskbarChangeReason.None);
 
             initialized = true;
+            Log.Information("Widget host initialization done");
         }
 
         private void TaskbarWatcher_TaskbarChangedNotificationStarted(object sender, TaskbarChangedEventArgs e)
@@ -114,6 +119,7 @@ namespace AwqatSalaat.WinUI
             // -1 means the user didn't set manual position
             if (savedOffsetX == -1 && e.Reason == TaskbarChangeReason.Alignment)
             {
+                Log.Debug("Exciting an animation (hide) due to taskbar alignment change");
                 // This only to make the widget show an animation :)
                 widgetSummary.DispatcherQueue.TryEnqueue(() => (host.Content as GridEx).Children.Clear());
             }
@@ -133,14 +139,17 @@ namespace AwqatSalaat.WinUI
 
         private void InjectIntoTaskbar()
         {
+            Log.Information("Attempting to inject widget into taskbar");
             int attempts = 0;
 
             while (attempts++ <= 3)
             {
+                Log.Debug($"Attempt #{attempts} to inject the widget");
                 var result = User32.SetParent(hwnd, hwndShell);
 
                 if (result != IntPtr.Zero)
                 {
+                    Log.Information("Widget injected successfully");
                     return;
                 }
 
@@ -154,6 +163,7 @@ namespace AwqatSalaat.WinUI
 
         private void WidgetSummary_DisplayModeChanged(DisplayMode displayMode)
         {
+            Log.Information($"Display mode changed: {displayMode}");
             int width = DefaultWidgetHostWidth;
 
             if (displayMode is DisplayMode.Compact or DisplayMode.CompactNoCountdown)
@@ -167,6 +177,7 @@ namespace AwqatSalaat.WinUI
             {
                 WidgetHostWidth = width;
 
+                Log.Debug($"Resizing widget host to new width: {width}");
                 appWindow.ResizeClient(new SizeInt32(WidgetHostWidth, appWindow.Size.Height));
 
                 UpdatePosition();
@@ -175,19 +186,29 @@ namespace AwqatSalaat.WinUI
 
         private void AppWindow_Destroying(AppWindow sender, object args)
         {
+            Log.Information("Widget host is being destroyed");
             appWindow.Destroying -= AppWindow_Destroying;
             Destroying?.Invoke(this, EventArgs.Empty);
             destroyed = true;
         }
 
-        public void Show() => appWindow.Show(false);
+        public void Show()
+        {
+            Log.Debug("Showing widget host's appwindow");
+            appWindow.Show(false);
+        }
 
-        public void Destroy() => appWindow.Destroy();
+        public void Destroy()
+        {
+            Log.Debug("Destroying widget host's appwindow");
+            appWindow.Destroy();
+        }
 
         public void UpdatePosition(bool force = false, TaskbarChangeReason reason = TaskbarChangeReason.None)
         {
             if (force && Properties.Settings.Default.CustomPosition != -1)
             {
+                Log.Information("Resetting widget position to auto mode");
                 Properties.Settings.Default.CustomPosition = -1;
 
                 if (Properties.Settings.Default.IsConfigured)
@@ -209,16 +230,21 @@ namespace AwqatSalaat.WinUI
 
         private void UpdatePositionImpl(TaskbarChangeReason changeReason, bool isCentered, bool isWidgetsEnabled)
         {
+            Log.Information($"Updating widget position. Reason={changeReason}, Taskbar centered={isCentered}, Widgets enabled={isWidgetsEnabled}");
             int offsetX = Properties.Settings.Default.CustomPosition;
 
             User32.GetWindowRect(hwndShell, out RECT taskbarRect);
+            Log.Debug("Current taskbar rect: {@rect}", taskbarRect);
 
             // -1 means the user didn't set manual position, so we have to find the best one
             if (offsetX == -1)
             {
+                Log.Debug("Updating position in auto mode");
                 var widgetsButton = isWidgetsEnabled ? taskbarWatcher.GetAutomationElement(WidgetsButtonAutomationId) : null;
                 var widgetsButtonBoundingRectangle = widgetsButton?.CurrentBoundingRectangle;
                 User32.GetWindowRect(hwndTrayNotify, out RECT trayNotifyRect);
+                Log.Debug("System tray rect: {@trayRect}", trayNotifyRect);
+                Log.Debug("Widgets button rect: {@widgetsButtonRect}", widgetsButtonBoundingRectangle);
 
                 if (isCentered)
                 {
@@ -257,9 +283,13 @@ namespace AwqatSalaat.WinUI
                     }
                 }
 
+                Log.Debug($"Estimated OffsetX based on alignment: {offsetX}");
+
                 try
                 {
+                    Log.Debug("Looking for other injected widgets");
                     List<IntPtr> wnds = GetOtherInjectedWindows();
+                    Log.Debug($"Count of other injected widgets: {wnds.Count}");
 
                     foreach (var wnd in wnds)
                     {
@@ -270,6 +300,8 @@ namespace AwqatSalaat.WinUI
                             continue;
                         }
 
+                        Log.Debug("Found an overlapping injected widget: {@bounds}", bounds);
+
                         if (isCentered == IsRtlUI)
                         {
                             offsetX = bounds.left - WidgetHostWidth;
@@ -279,9 +311,12 @@ namespace AwqatSalaat.WinUI
                             offsetX = bounds.right;
                         }
                     }
+
+                    Log.Debug($"Estimated OffsetX after looking for other injected widgets: {offsetX}");
                 }
                 catch (Exception ex)
                 {
+                    Log.Error(ex, $"Error occured while looking for other injected widgets: {ex.Message}");
 #if DEBUG
                     throw;
 #endif
@@ -295,10 +330,13 @@ namespace AwqatSalaat.WinUI
                 {
                     offsetX = Math.Clamp(offsetX, 0, trayNotifyRect.left - WidgetHostWidth);
                 }
+
+                Log.Debug($"Final OffsetX: {offsetX} (previous={currentOffsetX})");
             }
 
             User32.GetWindowRect(hwndReBar, out RECT barRect);
             int offsetY = barRect.top - taskbarRect.top;
+            Log.Debug($"Final OffsetY: {offsetY} (previous={currentOffsetY})");
 
             if (currentOffsetY != offsetY)
             {
@@ -319,6 +357,7 @@ namespace AwqatSalaat.WinUI
 
                 if (changeReason == TaskbarChangeReason.Alignment || grid.Children.Count == 0)
                 {
+                    Log.Debug("Exciting an animation (show) due to taskbar alignment change");
                     grid.Children.Add(widgetSummary);
                 }
             });
@@ -328,6 +367,7 @@ namespace AwqatSalaat.WinUI
         {
             if (!isDragging)
             {
+                Log.Information("Start dragging widget");
                 widgetSummary.IsHitTestVisible = false;
                 User32.SetCursorPos(appWindow.Position.X + appWindow.Size.Width / 2, appWindow.Position.Y + appWindow.Size.Height / 2);
                 host.Content.KeyUp += Content_KeyUp;
@@ -348,6 +388,7 @@ namespace AwqatSalaat.WinUI
         {
             if (isDragging)
             {
+                Log.Information("End dragging widget");
                 isDragging = false;
                 host.Content.ReleasePointerCaptures();
                 host.Content.KeyUp -= Content_KeyUp;
@@ -363,6 +404,7 @@ namespace AwqatSalaat.WinUI
                 }
                 else
                 {
+                    Log.Information($"New offset={appWindow.Position.X}; Old position={currentOffsetX}");
                     currentOffsetX = appWindow.Position.X;
                     Properties.Settings.Default.CustomPosition = currentOffsetX;
 
@@ -378,6 +420,7 @@ namespace AwqatSalaat.WinUI
         {
             if (e.Key == Windows.System.VirtualKey.Escape && isDragging)
             {
+                Log.Information("Pressed on Esc key while dragging widget");
                 EndDragging(true);
             }
         }
@@ -525,11 +568,13 @@ namespace AwqatSalaat.WinUI
 
                 if (area is "UserInteractionMode" or "ConvertibleSlateMode")
                 {
+                    Log.Information($"Detected Windows settings change: {area}");
                     UpdatePosition(reason: TaskbarChangeReason.TabletMode);
                 }
             }
             else if (msg == WindowMessage.WM_QUERYENDSESSION && ((lParam.ToInt32() & ENDSESSION_CLOSEAPP) == ENDSESSION_CLOSEAPP))
             {
+                Log.Information("The widget is asked to end session");
                 // The app is being updated so we should restart
                 Kernel32.RegisterApplicationRestart(null);
             }
@@ -543,6 +588,8 @@ namespace AwqatSalaat.WinUI
             {
                 if (disposing)
                 {
+                    Log.Information("Disposing widget host");
+
                     // TODO: dispose managed state (managed objects)
 
                     if (!destroyed)

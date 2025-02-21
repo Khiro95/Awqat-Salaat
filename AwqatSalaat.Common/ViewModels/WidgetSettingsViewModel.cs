@@ -2,6 +2,7 @@
 using AwqatSalaat.Data;
 using AwqatSalaat.Helpers;
 using AwqatSalaat.Services.GitHub;
+using Serilog;
 using System;
 using System.Collections.ObjectModel;
 using System.Configuration;
@@ -155,6 +156,7 @@ namespace AwqatSalaat.ViewModels
 
         private void SaveExecute(object obj)
         {
+            Log.Information("[Settings] Save invoked");
             var currentServiceSettings = (
                     Realtime.Service,
                     Realtime.School,
@@ -182,12 +184,14 @@ namespace AwqatSalaat.ViewModels
             CopySettings(fromOriginal: false);
             Settings.Save();
             IsOpen = false;
+            LogManager.InvalidateLogger();
             Cancel.RaiseCanExecuteChanged();
             Updated?.Invoke(serviceSettingsChanged);
         }
 
         private void CancelExecute(object obj)
         {
+            Log.Information("[Settings] Cancel invoked");
             CopySettings(fromOriginal: true);
             Locator.SearchQuery = null;
             SetLanguage(Settings.DisplayLanguage);

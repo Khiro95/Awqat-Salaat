@@ -1,5 +1,6 @@
 ﻿using AwqatSalaat.Helpers;
 using IWshRuntimeLibrary;
+using Serilog;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -42,6 +43,7 @@ namespace AwqatSalaat.WinUI.Helpers
             CanSetLaunchOnStartup = startupTask.State is StartupTaskState.Enabled or StartupTaskState.Disabled;
 
             LaunchOnStartup = canSetLaunchOnStartup && startupTask.State == StartupTaskState.Enabled;
+            Log.Information($"Verified startup task. State={startupTask.State}");
         }
 #else
         private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -60,6 +62,7 @@ namespace AwqatSalaat.WinUI.Helpers
 
         public async Task Commit()
         {
+            Log.Information($"Committing startup settings. LaunchOnStartup={LaunchOnStartup}");
 #if PACKAGED
             if (canSetLaunchOnStartup)
             {
@@ -67,10 +70,12 @@ namespace AwqatSalaat.WinUI.Helpers
 
                 if (launchOnStartup)
                 {
+                    Log.Information("Requesting to enable startup task");
                     await startupTask.RequestEnableAsync();
                 }
                 else
                 {
+                    Log.Information("Disabling startup task");
                     startupTask.Disable();
                 }
             }
@@ -90,15 +95,18 @@ namespace AwqatSalaat.WinUI.Helpers
                 shortcut.WorkingDirectory = Path.GetDirectoryName(moduleInfo.FileName);
                 shortcut.Description = $"Launch {moduleInfo.ProductName}";
                 shortcut.Save();
+                Log.Information("Created shortcut in Startup folder");
             }
             else
             {
                 try
                 {
+                    Log.Information("Deleting shortcut from Startup folder");
                     System.IO.File.Delete(shortcutPath);
                 }
                 catch (Exception ex)
                 {
+                    Log.Warning(ex, $"Deleting shortcut from Startup folder has failed: {ex.Message}");
 #if DEBUG
                     throw;
 #endif

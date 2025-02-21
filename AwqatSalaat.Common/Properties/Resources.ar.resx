@@ -512,4 +512,25 @@
   <data name="UI.Calendar.Print" xml:space="preserve">
     <value>طباعة</value>
   </data>
+  <data name="UI.Settings.EnableLogs" xml:space="preserve">
+    <value>تمكين السجل</value>
+  </data>
+  <data name="UI.Settings.EnableLogsDescription" xml:space="preserve">
+    <value>السماح بتسجيل معلومات عن سلوك الأداة. (مفيدة لتشخيص المشاكل)</value>
+  </data>
+  <data name="UI.Settings.EnableDebugLogs" xml:space="preserve">
+    <value>تمكين سجل البحث عن الأخطاء</value>
+  </data>
+  <data name="UI.Settings.EnableDebugLogsDescription" xml:space="preserve">
+    <value>احتواء معلومات مفصلة في السجلات.</value>
+  </data>
+  <data name="UI.Settings.DebugLogsNote" xml:space="preserve">
+    <value>سجلات البحث عن الأخطاء قد تحوي معلومات شخصية على غرار الموقع الذي تم إدخاله.</value>
+  </data>
+  <data name="UI.Settings.ShowLogsFile" xml:space="preserve">
+    <value>اظهار ملف السجلات</value>
+  </data>
+  <data name="Dialog.LogsFileNotFound" xml:space="preserve">
+    <value>ملف السجلات غير موجود. قد لا يكون تم إنشاءه بعد.</value>
+  </data>
 </root>

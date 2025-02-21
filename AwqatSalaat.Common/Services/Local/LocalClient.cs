@@ -1,5 +1,6 @@
 ﻿using Batoulapps.Adhan;
 using Batoulapps.Adhan.Internal;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace AwqatSalaat.Services.Local
         public Task<ServiceData> GetDataAsync(IRequest request)
         {
             var req = (LocalRequest)request;
+            Log.Debug("[Local] Getting data for request: {@request}", req);
 
             if (!req.UseCoordinates || req.Latitude == default && req.Longitude == default)
             {

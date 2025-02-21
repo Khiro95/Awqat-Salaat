@@ -250,6 +250,15 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The logs file does not exist. It may not be created yet..
+        /// </summary>
+        public static string Dialog_LogsFileNotFound {
+            get {
+                return ResourceManager.GetString("Dialog.LogsFileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A new release is available!
         ///Version: {0}
         ///
@@ -705,6 +714,15 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Debug logs may contain personal data such as the entered location..
+        /// </summary>
+        public static string UI_Settings_DebugLogsNote {
+            get {
+                return ResourceManager.GetString("UI.Settings.DebugLogsNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Elapsed time period.
         /// </summary>
         public static string UI_Settings_ElapsedPeriod {
@@ -737,6 +755,42 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_EnableCompactModeDescription {
             get {
                 return ResourceManager.GetString("UI.Settings.EnableCompactModeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable debug logging.
+        /// </summary>
+        public static string UI_Settings_EnableDebugLogs {
+            get {
+                return ResourceManager.GetString("UI.Settings.EnableDebugLogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include detailed informations in the logs..
+        /// </summary>
+        public static string UI_Settings_EnableDebugLogsDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.EnableDebugLogsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable logging.
+        /// </summary>
+        public static string UI_Settings_EnableLogs {
+            get {
+                return ResourceManager.GetString("UI.Settings.EnableLogs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allow logging informations about widget behavior. (Useful for diagnostics).
+        /// </summary>
+        public static string UI_Settings_EnableLogsDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.EnableLogsDescription", resourceCulture);
             }
         }
         
@@ -1043,6 +1097,15 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_ShowCountdownDescription {
             get {
                 return ResourceManager.GetString("UI.Settings.ShowCountdownDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show logs file.
+        /// </summary>
+        public static string UI_Settings_ShowLogsFile {
+            get {
+                return ResourceManager.GetString("UI.Settings.ShowLogsFile", resourceCulture);
             }
         }
         

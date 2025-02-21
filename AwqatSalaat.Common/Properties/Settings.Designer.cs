@@ -670,5 +670,29 @@ namespace AwqatSalaat.Properties {
                 this["Config_Isha_GlobalElapsedTime"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableLogs {
+            get {
+                return ((bool)(this["EnableLogs"]));
+            }
+            set {
+                this["EnableLogs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableDebugLogs {
+            get {
+                return ((bool)(this["EnableDebugLogs"]));
+            }
+            set {
+                this["EnableDebugLogs"] = value;
+            }
+        }
     }
 }

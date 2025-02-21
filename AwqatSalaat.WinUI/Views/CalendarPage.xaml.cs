@@ -2,6 +2,7 @@ using AwqatSalaat.Helpers;
 using AwqatSalaat.ViewModels;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Serilog;
 using System;
 using Windows.Foundation;
 
@@ -38,12 +39,14 @@ namespace AwqatSalaat.WinUI.Views
 
         private void ListBox_Loaded(object sender, RoutedEventArgs e)
         {
+            Log.Debug("Calendar page loaded");
             listBox.Loaded -= ListBox_Loaded;
             listBox.ViewChanged += ScrollViewer_ViewChanged;
         }
 
         private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
+            Log.Debug("[Calendar] Scroll changed");
             UpdateInViewDate(listBox);
         }
 
@@ -74,8 +77,11 @@ namespace AwqatSalaat.WinUI.Views
 
         private void UpdateInViewDate(ListBox listBox)
         {
+            Log.Debug("[Calendar] Updating displayed date");
+
             if (listBox.Items.Count > 0)
             {
+                Log.Debug($"listbox has {listBox.Items.Count} item(s)");
                 DateTime first = ViewModel.Result.PrayerTimes[0].Date;
 
                 foreach (var time in ViewModel.Result.PrayerTimes)
@@ -90,6 +96,7 @@ namespace AwqatSalaat.WinUI.Views
                 }
 
                 InViewDate = first;
+                Log.Debug($"Determined date: {first:u}");
             }
         }
 
@@ -105,6 +112,7 @@ namespace AwqatSalaat.WinUI.Views
 
         private void Export_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("Clicked on Calendar Export");
             var vm = new CalendarExportViewModel { CalendarResult = ViewModel.Result };
             var window = new CalendarExportWindow(vm);
             window.AppWindow.ResizeClient(new Windows.Graphics.SizeInt32(385, 675));

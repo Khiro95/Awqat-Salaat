@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Serilog;
 
 namespace AwqatSalaat.ViewModels
 {
@@ -52,6 +53,7 @@ namespace AwqatSalaat.ViewModels
         {
             try
             {
+                Log.Information("Start refreshing calendar");
                 IsBusy = true;
 
                 Result.PopulateData(null, false, null);
@@ -106,6 +108,7 @@ namespace AwqatSalaat.ViewModels
 
         private async Task AddMissingNegative(IServiceClient serviceClient, Dictionary<DateTime, PrayerTimes> data, DateTime dateTime, int count)
         {
+            Log.Debug("AddMissingNegative");
             var monthOffset = HijriMonth == 1 ? 11 : -1;
             var yearOffset = HijriMonth == 1 ? -1 : 0;
             var request = BuildRequest(dateTime.AddMonths(-1), monthOffset, yearOffset);
@@ -120,6 +123,7 @@ namespace AwqatSalaat.ViewModels
 
         private async Task AddMissingPositive(IServiceClient serviceClient, Dictionary<DateTime, PrayerTimes> data, DateTime dateTime)
         {
+            Log.Debug("AddMissingPositive");
             var last = data.Keys.Last();
             var monthOffset = HijriMonth == 12 ? -11 : 1;
             var yearOffset = HijriMonth == 12 ? 1 : 0;
@@ -140,6 +144,8 @@ namespace AwqatSalaat.ViewModels
 
         private IServiceClient GetServiceClient(PrayerTimesService service)
         {
+            Log.Debug($"[Calendar] Creating client for service: {service}");
+
             switch (service)
             {
                 case PrayerTimesService.SalahHour:
@@ -155,6 +161,7 @@ namespace AwqatSalaat.ViewModels
 
         private IRequest BuildRequest(DateTime date, int hijriMonthOffset = 0, int hijriYearOffset = 0)
         {
+            Log.Debug($"[Calendar] Building request for service: {Settings.Service}");
             RequestBase request;
 
             switch (Settings.Service)
@@ -199,6 +206,7 @@ namespace AwqatSalaat.ViewModels
                 request.UseCoordinates = true;
             }
 
+            Log.Debug("[Calendar] Request built: {@request}", request);
             return request;
         }
 

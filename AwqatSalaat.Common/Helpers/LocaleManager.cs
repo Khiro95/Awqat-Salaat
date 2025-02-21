@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -37,6 +38,8 @@ namespace AwqatSalaat.Helpers
 
         private void SetLocale(string locale)
         {
+            Log.Information($"Setting locale: {locale}");
+
             if (locale == _current)
             {
                 return;

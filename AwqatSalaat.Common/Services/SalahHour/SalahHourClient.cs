@@ -1,5 +1,6 @@
 ﻿using AwqatSalaat.Data;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -12,6 +13,7 @@ namespace AwqatSalaat.Services.SalahHour
         public async Task<ServiceData> GetDataAsync(IRequest request)
         {
             var req = (SalahHourRequest)request;
+            Log.Debug("[Salah-Hour] Getting data for request: {@request}", req);
 
             if (req.GetEntireMonth)
             {
@@ -46,7 +48,11 @@ namespace AwqatSalaat.Services.SalahHour
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    var httpResponse = await client.GetAsync(request.GetUrl());
+                    var url = request.GetUrl();
+                    Log.Debug($"[Salah-Hour] Getting data from: {url}");
+                    var httpResponse = await client.GetAsync(url);
+                    Log.Debug($"[Salah-Hour] Response status code: {httpResponse.StatusCode}");
+
                     if (httpResponse.IsSuccessStatusCode)
                     {
                         string responseBody = await httpResponse.Content.ReadAsStringAsync();

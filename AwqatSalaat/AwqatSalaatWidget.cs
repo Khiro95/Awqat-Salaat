@@ -1,6 +1,7 @@
 ﻿using AwqatSalaat.Helpers;
 using AwqatSalaat.UI.Views;
 using CSDeskBand;
+using Serilog;
 using System;
 using System.Net;
 using System.Runtime.InteropServices;
@@ -29,6 +30,8 @@ namespace AwqatSalaat
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12 | SecurityProtocolType.Ssl3;
 
+            InitLogger();
+
             int minHWidth = Properties.Settings.Default.UseCompactMode || !Properties.Settings.Default.ShowCountdown
                 ? CompactWidth
                 : DefaultWidth;
@@ -48,11 +51,13 @@ namespace AwqatSalaat
 
             uiElement.Dispatcher.UnhandledException += (s, e) =>
             {
+                Log.Fatal(e.Exception, e.Exception.Message);
                 MessageBoxEx.Error(e.Exception.Message + '\n' + e.Exception.InnerException?.Message);
             };
 
             uiElement.Dispatcher.UnhandledExceptionFilter += (s, e) =>
             {
+                Log.Fatal(e.Exception, e.Exception.Message);
                 e.RequestCatch = false;
                 MessageBoxEx.Error(e.Exception.Message + '\n' + e.Exception.InnerException?.Message);
             };
@@ -66,15 +71,20 @@ namespace AwqatSalaat
                 TaskbarInfo.Orientation == TaskbarOrientation.Vertical
                 ? System.Windows.Controls.Orientation.Vertical
                 : System.Windows.Controls.Orientation.Horizontal;
+
+            Log.Information($"Taskbar edge: {TaskbarInfo.Edge}");
+            Log.Information($"Taskbar orientation: {TaskbarInfo.Orientation}");
         }
 
         protected override void DeskbandOnClosed()
         {
             HwndSource?.Dispose();
+            Log.Information("Widget closed");
         }
 
         private void UiElement_DisplayModeChanged(DisplayMode displayMode)
         {
+            Log.Information($"Display mode changed: {displayMode}");
             int width;
 
             if (TaskbarInfo.Orientation == TaskbarOrientation.Horizontal)
@@ -96,6 +106,7 @@ namespace AwqatSalaat
             }
             
             uiElement.Width = width;
+            Log.Debug($"Widget width: {width}");
 
             const uint WM_COMMAND = 0x0111;
 
@@ -107,11 +118,13 @@ namespace AwqatSalaat
 
         private void TaskbarInfo_TaskbarEdgeChanged(object sender, TaskbarEdgeChangedEventArgs e)
         {
+            Log.Information($"Taskbar edge changed: {e.Edge}");
             uiElement.PanelPlacement = GetPlacement(e.Edge);
         }
 
         private void TaskbarInfo_TaskbarOrientationChanged(object sender, TaskbarOrientationChangedEventArgs e)
         {
+            Log.Information($"Taskbar orientation changed: {e.Orientation}");
             uiElement.Orientation =
                 e.Orientation == TaskbarOrientation.Vertical
                 ? System.Windows.Controls.Orientation.Vertical
@@ -148,6 +161,13 @@ namespace AwqatSalaat
             }
 
             return base.HwndSourceHook(hwnd, msg, wparam, lparam, ref handled);
+        }
+
+        private static void InitLogger()
+        {
+            LogManager.WidgetIdentity = $"Awqat Salaat v{SettingsPanel.Version} ({SettingsPanel.Architecture})";
+
+            LogManager.InvalidateLogger();
         }
     }
 }

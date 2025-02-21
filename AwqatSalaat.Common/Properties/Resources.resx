@@ -501,4 +501,25 @@ Choose the calendar and set the desired year and month then click on Refresh</va
   <data name="UI.Calendar.Print" xml:space="preserve">
     <value>Print</value>
   </data>
+  <data name="UI.Settings.EnableLogs" xml:space="preserve">
+    <value>Enable logging</value>
+  </data>
+  <data name="UI.Settings.EnableLogsDescription" xml:space="preserve">
+    <value>Allow logging informations about widget behavior. (Useful for diagnostics)</value>
+  </data>
+  <data name="UI.Settings.EnableDebugLogs" xml:space="preserve">
+    <value>Enable debug logging</value>
+  </data>
+  <data name="UI.Settings.EnableDebugLogsDescription" xml:space="preserve">
+    <value>Include detailed informations in the logs.</value>
+  </data>
+  <data name="UI.Settings.DebugLogsNote" xml:space="preserve">
+    <value>Debug logs may contain personal data such as the entered location.</value>
+  </data>
+  <data name="UI.Settings.ShowLogsFile" xml:space="preserve">
+    <value>Show logs file</value>
+  </data>
+  <data name="Dialog.LogsFileNotFound" xml:space="preserve">
+    <value>The logs file does not exist. It may not be created yet.</value>
+  </data>
 </root>

@@ -15,7 +15,7 @@
              xmlns:api1="clr-namespace:AwqatSalaat.Services.SalahHour;assembly=AwqatSalaat.Common"
              xmlns:api2="clr-namespace:AwqatSalaat.Services.AlAdhan;assembly=AwqatSalaat.Common"
              mc:Ignorable="d"
-             d:DesignHeight="1000" d:DesignWidth="800" d:Background="#192025">
+             d:DesignHeight="1200" d:DesignWidth="800" d:Background="#192025">
     <d:UserControl.DataContext>
         <vm:WidgetSettingsViewModel/>
     </d:UserControl.DataContext>
@@ -211,6 +211,23 @@
                                     <controls:SoundPreviewButton File="{Binding NotificationSoundFilePath}" DockPanel.Dock="Right"/>
                                     <TextBox Text="{Binding NotificationSoundFile}" Margin="8,0" FlowDirection="LeftToRight"/>
                                 </DockPanel>
+                            </StackPanel>
+                        </controls:SettingsItem>
+                        <controls:SettingsItem Header="{mk:L11n UI.Settings.EnableLogs}" Description="{mk:L11n UI.Settings.EnableLogsDescription}">
+                            <CheckBox IsChecked="{Binding EnableLogs}"/>
+                        </controls:SettingsItem>
+                        <TextBlock Margin="0,8,0,0">
+                            <Hyperlink Click="ShowLogsFileClick">
+                                <Run Text="{mk:L11n UI.Settings.ShowLogsFile}"/>
+                            </Hyperlink>
+                        </TextBlock>
+                        <controls:SettingsItem Header="{mk:L11n UI.Settings.EnableDebugLogs}" Description="{mk:L11n UI.Settings.EnableDebugLogsDescription}" IsEnabled="{Binding EnableLogs}">
+                            <StackPanel>
+                                <CheckBox IsChecked="{Binding EnableDebugLogs}"/>
+                                <StackPanel Orientation="Horizontal" TextBlock.FontSize="12" TextBlock.Foreground="{DynamicResource ThemeColors.TextHighlightBrush}" Margin="2,4,0,0">
+                                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{mk:L11n UI.Settings.DebugLogsNote}" Margin="4,0,0,0"/>
+                                </StackPanel>
                             </StackPanel>
                         </controls:SettingsItem>
                     </StackPanel>

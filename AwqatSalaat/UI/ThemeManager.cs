@@ -1,4 +1,5 @@
 ﻿using AwqatSalaat.Helpers;
+using Serilog;
 using System;
 
 namespace AwqatSalaat.UI
@@ -50,12 +51,15 @@ namespace AwqatSalaat.UI
                 var accent = SystemInfos.GetAccentColor();
                 bool colorIsDark = (5 * accent.g + 2 * accent.r + accent.b) <= 8 * 200;
                 theme = colorIsDark ? ThemeKey.Dark : ThemeKey.Light;
+                Log.Information($"Accent color on taskbar: R={accent.r}, G={accent.g}, B={accent.b}");
             }
             else
             {
                 // We use "system theme" instead of "apps theme" because the taskbar uses the former
                 theme = SystemInfos.IsLightThemeUsed() == true ? ThemeKey.Light : ThemeKey.Dark;
             }
+
+            Log.Information($"Setting theme: {theme}");
 
             SetTheme(theme);
         }

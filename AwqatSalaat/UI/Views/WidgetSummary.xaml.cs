@@ -1,6 +1,7 @@
 ﻿using AwqatSalaat.Helpers;
 using AwqatSalaat.Media;
 using AwqatSalaat.ViewModels;
+using Serilog;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -73,11 +74,14 @@ namespace AwqatSalaat.UI.Views
 
             popup.Opened += (_, __) =>
             {
+                Log.Information("Popup opened");
                 var src = HwndSource.FromVisual(popup.Child) as HwndSource;
                 (src.RootVisual as UIElement)?.Focus();
             };
             popup.Closed += (_, __) =>
             {
+                Log.Information("Popup closed");
+
                 if (ViewModel.WidgetSettings.IsOpen && ViewModel.WidgetSettings.Settings.IsConfigured)
                 {
                     ViewModel.WidgetSettings.Cancel.Execute(null);
@@ -87,11 +91,12 @@ namespace AwqatSalaat.UI.Views
             {
                 if (e.Key == System.Windows.Input.Key.Escape)
                 {
+                    Log.Information("Pressed on Esc key");
                     toggle.IsChecked = false;
                     e.Handled = true;
                 }
             };
-            this.Loaded += (_, __) => UpdateDisplayMode();
+            this.Loaded += WidgetSummary_Loaded;
             this.Unloaded += WidgetSummary_Unloaded;
             ViewModel.WidgetSettings.Realtime.PropertyChanged += Settings_PropertyChanged;
             ViewModel.WidgetSettings.Updated += WidgetSettings_Updated;
@@ -105,8 +110,15 @@ namespace AwqatSalaat.UI.Views
             UpdateNotificationSound();
         }
 
+        private void WidgetSummary_Loaded(object sender, RoutedEventArgs e)
+        {
+            Log.Information("Widget summary loaded");
+            UpdateDisplayMode();
+        }
+
         private void WidgetSummary_Unloaded(object sender, RoutedEventArgs e)
         {
+            Log.Information("Widget summary unloaded");
             ViewModel.WidgetSettings.Realtime.PropertyChanged -= Settings_PropertyChanged;
             ViewModel.WidgetSettings.Updated -= WidgetSettings_Updated;
             ViewModel.NearNotificationStarted -= ViewModel_NearNotificationStarted;
@@ -133,6 +145,7 @@ namespace AwqatSalaat.UI.Views
         {
             Dispatcher.BeginInvoke(new Action(() =>
             {
+                Log.Information("Adhan requested" + (isFajrTime ? " for fajr" : ""));
                 var file = isFajrTime
                         ? ViewModel.WidgetSettings.Settings.AdhanFajrSoundFilePath
                         : ViewModel.WidgetSettings.Settings.AdhanSoundFilePath;

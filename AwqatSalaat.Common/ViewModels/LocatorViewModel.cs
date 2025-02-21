@@ -2,6 +2,7 @@
 using AwqatSalaat.Helpers;
 using AwqatSalaat.Properties;
 using AwqatSalaat.Services.Nominatim;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -101,6 +102,7 @@ namespace AwqatSalaat.ViewModels
 
         private void ConfirmCheckExecute(object obj)
         {
+            Log.Debug("ConfirmCheck invoked");
             SetPlace(pendingPlace);
             PendingPlace = null;
             PendingCheck = false;
@@ -108,6 +110,7 @@ namespace AwqatSalaat.ViewModels
 
         private void CancelCheckExecute(object obj)
         {
+            Log.Debug("CancelCheck invoked");
             cancellationTokenSource?.Cancel();
             PendingCheck = false;
 
@@ -116,6 +119,7 @@ namespace AwqatSalaat.ViewModels
 
         private async Task CheckExecute()
         {
+            Log.Debug("Check invoked");
             cancellationTokenSource?.Cancel();
 
             try
@@ -135,6 +139,7 @@ namespace AwqatSalaat.ViewModels
             }
             catch (NominatimException nx)
             {
+                Log.Error(nx, $"Checking coords failed: {nx.Message}");
                 Error = nx.Message;
             }
             finally
@@ -146,6 +151,7 @@ namespace AwqatSalaat.ViewModels
 
         private async Task Query(string query)
         {
+            Log.Debug($"Querying for a location: {query}");
             cancellationTokenSource?.Cancel();
 
             try
@@ -159,10 +165,12 @@ namespace AwqatSalaat.ViewModels
                     cancellationTokenSource = new CancellationTokenSource();
                     var result = await NominatimClient.Search(query, cancellationTokenSource.Token);
                     Places = result?.Where(IsValidPlace).ToArray();
+                    Log.Debug("Found: " + (places is null ? "None" : $"{places.Count} places"));
                 }
             }
             catch (NominatimException nx)
             {
+                Log.Error(nx, $"Querying failed: {nx.Message}");
                 Error = nx.Message;
             }
             finally
@@ -188,6 +196,7 @@ namespace AwqatSalaat.ViewModels
 
         private void SetPlace(Place place)
         {
+            Log.Debug("Setting place {@place}", place);
             selectedPlace = place;
             OnPropertyChanged(nameof(SelectedPlace));
 

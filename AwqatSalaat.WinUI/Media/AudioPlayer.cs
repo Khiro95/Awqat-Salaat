@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.IO;
 using Windows.Media.Core;
 using Windows.Media.Playback;
@@ -19,6 +20,9 @@ namespace AwqatSalaat.WinUI.Media
         {
             Stop();
 
+            Log.Information($"Requested to play an audio (tag: {session.Tag})");
+            Log.Debug("Audio session: {@session}", session);
+
             if (File.Exists(session.File))
             {
                 s_mediaPlayer.MediaEnded += MediaPlayer_MediaEnded;
@@ -34,6 +38,7 @@ namespace AwqatSalaat.WinUI.Media
                 return true;
             }
 
+            Log.Information("Audio file not found");
             return false;
         }
 
@@ -43,8 +48,9 @@ namespace AwqatSalaat.WinUI.Media
 
         private static void Stop()
         {
-            if (s_currentSession != null)
+            if (s_currentSession is not null)
             {
+                Log.Information($"Stopping audio (tag: {s_currentSession.Tag})");
                 s_currentSession.Ended -= Session_Ended;
                 s_currentSession.End();
                 s_currentSession = null;

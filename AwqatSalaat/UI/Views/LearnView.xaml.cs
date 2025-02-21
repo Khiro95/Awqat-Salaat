@@ -1,4 +1,5 @@
 ﻿using AwqatSalaat.Helpers;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -44,6 +45,7 @@ namespace AwqatSalaat.UI.Views
 
         private void LearnView_Loaded(object sender, RoutedEventArgs e)
         {
+            Log.Information("Learn page loaded");
             LocaleManager.Default.CurrentChanged += LocaleManager_CurrentChanged;
 
             if (lastLocale != LocaleManager.Default.Current)
@@ -54,6 +56,7 @@ namespace AwqatSalaat.UI.Views
 
         private void LearnView_Unloaded(object sender, RoutedEventArgs e)
         {
+            Log.Information("Learn page unloaded");
             LocaleManager.Default.CurrentChanged -= LocaleManager_CurrentChanged;
         }
 
@@ -64,6 +67,7 @@ namespace AwqatSalaat.UI.Views
 
         private void LoadRtf()
         {
+            Log.Information("Loading rtf file");
             lastLocale = LocaleManager.Default.Current;
             flowDoc.Blocks.Clear();
 

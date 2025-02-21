@@ -4,6 +4,7 @@ using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using Serilog;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -192,8 +193,11 @@ namespace AwqatSalaat.WinUI.Views
 
         private void UpdateDisplayedDates()
         {
+            Log.Information("[Calendar document] Updating displayed dates");
+
             if (Source is CalendarResult result && result.HijriCalendar != null)
             {
+                Log.Information($"First date={result.FirstDate:u}, Last date={result.LastDate:u}");
                 var calendar = result.HijriCalendar;
                 var currentDate = TimeStamp.Date;
                 var firstHijriMonth = calendar.GetMonth(result.FirstDate ?? currentDate);

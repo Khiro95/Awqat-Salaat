@@ -1,5 +1,6 @@
 ﻿using AwqatSalaat.Helpers;
 using AwqatSalaat.UI.Controls;
+using Serilog;
 using System;
 using System.Windows;
 
@@ -14,6 +15,7 @@ namespace AwqatSalaat.UI.Views
 
         public static void Open()
         {
+            Log.Information("Opening MoreInfoWindow");
             current = current ?? new MoreInfoWindow();
             current.Show();
 
@@ -55,6 +57,8 @@ namespace AwqatSalaat.UI.Views
 
         protected override void OnClosed(EventArgs e)
         {
+            Log.Information("Closed MoreInfoWindow");
+
             if (current == this)
             {
                 current = null;
