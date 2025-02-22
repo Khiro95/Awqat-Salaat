@@ -51,6 +51,8 @@ namespace AwqatSalaat.WinUI
             this.InitializeComponent();
             UnhandledException += App_UnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+            DispatcherShutdownMode = DispatcherShutdownMode.OnExplicitShutdown;
         }
 
         private static void ExitIfOtherInstanceIsRunning()
