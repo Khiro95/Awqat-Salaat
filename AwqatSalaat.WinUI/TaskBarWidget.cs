@@ -559,7 +559,6 @@ namespace AwqatSalaat.WinUI
 
         private IntPtr WindowProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam)
         {
-            const int ENDSESSION_CLOSEAPP = 0x00000001;
             var msg = (WindowMessage)uMsg;
 
             if (msg == WindowMessage.WM_SETTINGCHANGE && lParam != IntPtr.Zero)
@@ -571,12 +570,6 @@ namespace AwqatSalaat.WinUI
                     Log.Information($"Detected Windows settings change: {area}");
                     UpdatePosition(reason: TaskbarChangeReason.TabletMode);
                 }
-            }
-            else if (msg == WindowMessage.WM_QUERYENDSESSION && ((lParam.ToInt32() & ENDSESSION_CLOSEAPP) == ENDSESSION_CLOSEAPP))
-            {
-                Log.Information("The widget is asked to end session");
-                // The app is being updated so we should restart
-                Kernel32.RegisterApplicationRestart(null);
             }
 
             return User32.DefWindowProc(hWnd, uMsg, wParam, lParam);

@@ -1,8 +1,10 @@
 ﻿using AwqatSalaat.Helpers;
+using AwqatSalaat.Interop;
 using H.NotifyIcon.Core;
 using Microsoft.UI.Dispatching;
 using Serilog;
 using System;
+using System.Runtime.InteropServices;
 using System.Windows.Input;
 
 namespace AwqatSalaat.WinUI
@@ -108,10 +110,67 @@ namespace AwqatSalaat.WinUI
 
                 UpdateTrayIconLocalization();
                 trayIcon.MessageWindow.TaskbarCreated += (_, _) => dispatcher.TryEnqueue(OnTaskbarCreated);
+                trayIcon.Created += TrayIcon_Created;
                 trayIcon.Create();
             }
 
             ShowWidgetExecute();
+        }
+
+        private static void TrayIcon_Created(object sender, EventArgs e)
+        {
+            //Unfortunately, we can't handle WM_QUERYENDSESSION and WM_ENDSESSION messages in widget's window procedure because it has a parent.
+            //So instead of creating an other hidden top-level window, we subclass the window of the tray icon
+            //which receives WM_QUERYENDSESSION and WM_ENDSESSION messages. Two birds with one stone :)
+            SubclassTrayIconWindow();
+        }
+
+        private static WndProc newWndProc;
+        private static IntPtr oldWndProcPtr;
+        private static IntPtr previousTrayIconWindowHandle = IntPtr.Zero;
+
+        private static void SubclassTrayIconWindow()
+        {
+            const int GWLP_WNDPROC = -4;
+
+            if (trayIcon.WindowHandle != previousTrayIconWindowHandle)
+            {
+                Log.Information("Subclassing tray icon's message window");
+                newWndProc = new WndProc(SubclassWindowProc);
+                var procPtr = Marshal.GetFunctionPointerForDelegate(newWndProc);
+                var oldPtr = User32.SetWindowLongPtr(trayIcon.WindowHandle, GWLP_WNDPROC, procPtr);
+
+                if (oldPtr == IntPtr.Zero)
+                {
+                    var error = Marshal.GetLastWin32Error();
+                    Log.Warning($"Could not subclass tray icon window. Error=0x{error:X2}");
+                    return;
+                }
+
+                oldWndProcPtr = oldPtr;
+                previousTrayIconWindowHandle = trayIcon.WindowHandle;
+            }
+        }
+
+        private static IntPtr SubclassWindowProc(IntPtr hWnd, uint uMsg, IntPtr wParam, IntPtr lParam)
+        {
+            const int ENDSESSION_CLOSEAPP = 0x00000001;
+            var msg = (WindowMessage)uMsg;
+
+            if (msg == WindowMessage.WM_QUERYENDSESSION && ((lParam.ToInt32() & ENDSESSION_CLOSEAPP) == ENDSESSION_CLOSEAPP))
+            {
+                Log.Information("The widget is queried for session ending");
+                // The app is being updated so we should restart
+                Kernel32.RegisterApplicationRestart(null);
+                return new IntPtr(1); // true
+            }
+            else if (msg == WindowMessage.WM_ENDSESSION && wParam.ToInt32() == 1 && ((lParam.ToInt32() & ENDSESSION_CLOSEAPP) == ENDSESSION_CLOSEAPP))
+            {
+                Log.Information("The widget is asked to end session");
+                dispatcher.TryEnqueue(() => App.Quit.Execute(null));
+            }
+
+            return User32.CallWindowProc(oldWndProcPtr, hWnd, uMsg, wParam, lParam);
         }
 
         private static void App_Quitting()

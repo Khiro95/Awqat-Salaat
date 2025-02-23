@@ -102,6 +102,12 @@ namespace AwqatSalaat.Interop
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern uint SetWindowLong(IntPtr hwnd, int index, uint newStyle);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr SetWindowLongPtr(IntPtr hwnd, int index, IntPtr newStyle);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr CallWindowProc([In] IntPtr lpPrevWndFunc, [In] IntPtr hWnd, [In] uint Msg, [In] IntPtr wParam, [In] IntPtr lParam);
     }
 
     public static class Dwmapi
@@ -388,6 +394,7 @@ namespace AwqatSalaat.Interop
     {
         WM_SETREDRAW = 0x000B,
         WM_QUERYENDSESSION = 0x0011,
+        WM_ENDSESSION = 0x0016,
         WM_SETTINGCHANGE = 0x001A
     }
 
