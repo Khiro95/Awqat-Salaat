@@ -179,15 +179,17 @@ namespace AwqatSalaat.WinUI.Views
                 ViewModel.IsCheckingNewVersion = true;
 
                 var storeContext = Windows.Services.Store.StoreContext.GetDefault();
+                InitializeWithWindow.Initialize(storeContext, App.MainHandle);
                 var updates = await storeContext.GetAppAndOptionalStorePackageUpdatesAsync();
 
                 ViewModel.IsCheckingNewVersion = false;
 
-                if (updates.Count > 1)
+                if (updates.Count > 0)
                 {
-                    var version = updates[0].Package.Id.Version;
-                    var versionString = string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
-                    var result = MessageBox.Question(string.Format(Properties.Resources.Dialog_NewUpdateAvailableFormat, versionString));
+                    // We can't get the version of the new package in Microsoft Store so we skip this info :(
+                    var lines = Properties.Resources.Dialog_NewUpdateAvailableFormat.Split(Environment.NewLine);
+                    var newMessage = Properties.Resources.Dialog_NewUpdateAvailableFormat.Replace(lines[1] + Environment.NewLine, "");
+                    var result = MessageBox.Question(newMessage);
 
                     if (result == MessageBoxResult.IDYES)
                     {
