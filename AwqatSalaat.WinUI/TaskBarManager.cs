@@ -157,14 +157,14 @@ namespace AwqatSalaat.WinUI
             const int ENDSESSION_CLOSEAPP = 0x00000001;
             var msg = (WindowMessage)uMsg;
 
-            if (msg == WindowMessage.WM_QUERYENDSESSION && ((lParam.ToInt32() & ENDSESSION_CLOSEAPP) == ENDSESSION_CLOSEAPP))
+            if (msg == WindowMessage.WM_QUERYENDSESSION && ((lParam.ToInt64() & ENDSESSION_CLOSEAPP) == ENDSESSION_CLOSEAPP))
             {
                 Log.Information("The widget is queried for session ending");
                 // The app is being updated so we should restart
                 Kernel32.RegisterApplicationRestart(null);
                 return new IntPtr(1); // true
             }
-            else if (msg == WindowMessage.WM_ENDSESSION && wParam.ToInt32() == 1 && ((lParam.ToInt32() & ENDSESSION_CLOSEAPP) == ENDSESSION_CLOSEAPP))
+            else if (msg == WindowMessage.WM_ENDSESSION && wParam.ToInt64() == 1 && ((lParam.ToInt64() & ENDSESSION_CLOSEAPP) == ENDSESSION_CLOSEAPP))
             {
                 Log.Information("The widget is asked to end session");
                 dispatcher.TryEnqueue(() => App.Quit.Execute(null));
