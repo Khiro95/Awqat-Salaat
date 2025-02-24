@@ -134,7 +134,8 @@ namespace AwqatSalaat.ViewModels
             }
 
             // Make sure there is no time jump and that adhan is desired
-            if (prayerTime.Time.Date == TimeStamp.Date
+            if (!prayerTime.IsShuruq
+                && prayerTime.Time.Date == TimeStamp.Date
                 && prayerTime.Time.Hour == TimeStamp.Now.Hour
                 && prayerTime.Time.Minute == TimeStamp.Now.Minute
                 && WidgetSettings.Settings.AdhanSound != AdhanSound.None)
