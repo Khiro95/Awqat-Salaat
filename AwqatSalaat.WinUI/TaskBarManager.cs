@@ -122,7 +122,17 @@ namespace AwqatSalaat.WinUI
             //Unfortunately, we can't handle WM_QUERYENDSESSION and WM_ENDSESSION messages in widget's window procedure because it has a parent.
             //So instead of creating an other hidden top-level window, we subclass the window of the tray icon
             //which receives WM_QUERYENDSESSION and WM_ENDSESSION messages. Two birds with one stone :)
-            SubclassTrayIconWindow();
+            try
+            {
+                SubclassTrayIconWindow();
+            }
+            catch (Exception ex)
+            {
+                Log.Warning($"Could not subclass tray icon window: {ex.Message}");
+#if DEBUG
+                throw;
+#endif
+            }
         }
 
         private static WndProc newWndProc;
@@ -138,7 +148,9 @@ namespace AwqatSalaat.WinUI
                 Log.Information("Subclassing tray icon's message window");
                 newWndProc = new WndProc(SubclassWindowProc);
                 var procPtr = Marshal.GetFunctionPointerForDelegate(newWndProc);
-                var oldPtr = User32.SetWindowLongPtr(trayIcon.WindowHandle, GWLP_WNDPROC, procPtr);
+                var oldPtr = IntPtr.Size == 8
+                    ? User32.SetWindowLongPtr(trayIcon.WindowHandle, GWLP_WNDPROC, procPtr)
+                    : (IntPtr)User32.SetWindowLong(trayIcon.WindowHandle, GWLP_WNDPROC, (uint)procPtr.ToInt32());
 
                 if (oldPtr == IntPtr.Zero)
                 {
