@@ -25,6 +25,7 @@ namespace AwqatSalaat.Media
             if (File.Exists(session.File))
             {
                 s_mediaPlayer.MediaEnded += MediaPlayer_MediaEnded;
+                s_mediaPlayer.MediaFailed += MediaPlayer_MediaFailed;
                 s_mediaPlayer.Open(new Uri(session.File));
                 s_mediaPlayer.Position = TimeSpan.Zero;
                 s_mediaPlayer.Play();
@@ -54,6 +55,12 @@ namespace AwqatSalaat.Media
             }
         }
 
+        private static void MediaPlayer_MediaFailed(object sender, ExceptionEventArgs e)
+        {
+            Log.Warning($"Failed to play audio. Error=0x{e.ErrorException.HResult:X2}");
+            Stop();
+        }
+
         private static void Stop()
         {
             if (s_currentSession != null)
@@ -63,6 +70,7 @@ namespace AwqatSalaat.Media
                 s_currentSession.End();
                 s_currentSession = null;
                 s_mediaPlayer.MediaEnded -= MediaPlayer_MediaEnded;
+                s_mediaPlayer.MediaFailed -= MediaPlayer_MediaFailed;
                 s_mediaPlayer.Close();
 
                 Stopped?.Invoke();

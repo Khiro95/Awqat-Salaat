@@ -4,7 +4,7 @@ namespace AwqatSalaat.Media
 {
     internal class AudioPlayerSession
     {
-        private bool _endeding;
+        private bool _ending;
 
         public string File { get; }
         public string Tag { get; }
@@ -21,11 +21,11 @@ namespace AwqatSalaat.Media
 
         public void End()
         {
-            if (!_endeding)
+            if (!_ending)
             {
-                _endeding = true;
+                _ending = true;
                 Ended?.Invoke();
-                _endeding = false;
+                _ending = false;
             }
         }
     }

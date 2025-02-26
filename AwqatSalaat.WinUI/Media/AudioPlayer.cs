@@ -26,6 +26,7 @@ namespace AwqatSalaat.WinUI.Media
             if (File.Exists(session.File))
             {
                 s_mediaPlayer.MediaEnded += MediaPlayer_MediaEnded;
+                s_mediaPlayer.MediaFailed += MediaPlayer_MediaFailed;
                 s_mediaPlayer.Position = TimeSpan.Zero;
                 s_mediaPlayer.IsLoopingEnabled = session.Loop;
                 s_mediaPlayer.Source = MediaSource.CreateFromUri(new Uri(session.File));
@@ -46,6 +47,12 @@ namespace AwqatSalaat.WinUI.Media
 
         private static void MediaPlayer_MediaEnded(MediaPlayer sender, object args) => Stop();
 
+        private static void MediaPlayer_MediaFailed(MediaPlayer sender, MediaPlayerFailedEventArgs args)
+        {
+            Log.Warning($"Failed to play audio. Error=0x{args.ExtendedErrorCode.HResult:X2}");
+            Stop();
+        }
+
         private static void Stop()
         {
             if (s_currentSession is not null)
@@ -55,6 +62,7 @@ namespace AwqatSalaat.WinUI.Media
                 s_currentSession.End();
                 s_currentSession = null;
                 s_mediaPlayer.MediaEnded -= MediaPlayer_MediaEnded;
+                s_mediaPlayer.MediaFailed -= MediaPlayer_MediaFailed;
                 (s_mediaPlayer.Source as IDisposable)?.Dispose();
                 s_mediaPlayer.Source = null;
 
