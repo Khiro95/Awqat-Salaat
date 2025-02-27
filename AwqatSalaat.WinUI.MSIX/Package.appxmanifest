@@ -11,7 +11,7 @@
   <Identity
     Name="Khiro.AwqatSalaatWinUI"
     Publisher="CN=C005A407-3926-439C-B560-3187F3293A86"
-    Version="3.3.1.0" />
+    Version="4.0.0.0" />
 
   <Properties>
     <DisplayName>Awqat Salaat WinUI</DisplayName>
