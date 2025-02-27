@@ -9,7 +9,7 @@
 الأداة تدعم أيضا الإشعار المرئي عندما يقترب وقت الصلاة القادمة من حد قابل للضبط.
 
 حاليا الأداة تستعمل خدمتين للحصول على أوقات الصلوات إعتمادا على إعدادات المستخدم:
-- [واجهة برمجة التطبيقات (Prayer Times API)  من طرف منصة الباحث الإسلامي](http://www.islamicfinder.us/index.php/api)
+- [واجهة برمجة التطبيقات (Prayer Times API)  من طرف منصة مواقيت الصلاة](http://www.salahhour.com/index.php/api)
 - [واجهة برمجة التطبيقات (Prayer Times API)  من طرف منصة الأذان](https://aladhan.com/prayer-times-api)
 
 > [!caution]
@@ -51,7 +51,7 @@
 #### المتطلبات (غير ضرورية لنسخة متجر مايكروسوفت)
 
 - [.NET Desktop Runtime 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
-- [Windows App Runtime 1.5](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/downloads)
+- [Windows App Runtime 1.5](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/downloads-archive#windows-app-sdk-15)
 > [!note]
 > إذا ظهر لك خطأ حول عدم وجود Windows App Runtime بعد تثبيته، فقم بالذهاب إلى صفحة التحميل وقم بتحميل *Redistributable* بدلا من Installer، ثم افتح الأرشيف وقم بتثبيت الحزمة `MSIX\win10-x64 (or x86)\Microsoft.WindowsAppRuntime.DDLM.1.5.msix`
 
@@ -120,6 +120,9 @@
 #### اشعار الوقت المنقضي
 ![إشعار أداة أوقات الصلاة بدخول وقت الصلاة الحالية](images/elapsed_win10_ar.png)
 
+#### رزنامة مواقيت الصلاة
+![أداة أوقات الصلاة تعرض رزنامة مواقيت الصلاة](images/calendar_win10_ar.png)
+
 ### نظام ويندوز 11 (WinUI)
 
 > [!note]
@@ -139,6 +142,9 @@
 
 #### اشعار الوقت المنقضي
 ![إشعار أداة أوقات الصلاة WinUI بدخول وقت الصلاة الحالية](images/elapsed_win11_ar.png)
+
+#### رزنامة مواقيت الصلاة
+![أداة أوقات الصلاة تعرض رزنامة مواقيت الصلاة](images/calendar_win11_ar.png)
 
 ## البناء
 
@@ -165,8 +171,9 @@
 
 - [مكتبة CSDeskBand:](https://github.com/dsafa/CSDeskBand) مكتبة تبسط إنشاء أدوات DeskBand باستخدام تكنولوجيا WinForms أو WPF.
 - [مكتبة H.NotifyIcon:](https://github.com/HavenDV/H.NotifyIcon) مكتبة تبسط إنشاء أيقونات علبة النظام.
-- [الباحث الإسلامي:](https://www.islamicfinder.us/index.php/api) توفر هذه المنصة خدمة واجهة برمجة تطبيقات بسيطة للحصول على أوقات الصلوات.
+- [مواقيت الصلاة:](https://www.salahhour.com/index.php/api) توفر هذه المنصة خدمة واجهة برمجة تطبيقات بسيطة للحصول على أوقات الصلوات.
 - [الأذان:](https://aladhan.com/prayer-times-api) توفر هذه المنصة خدمة واجهة برمجة تطبيقات مرنة للحصول على أوقات الصلوات.
+- [مكتبة Adhan-csharp:](https://github.com/davidpet86/Adhan-csharp) توفر ترجمة بلغة C# لمكتبة [Adhan](https://github.com/batoulapps/Adhan) التي توفر خدمة حساب وقت الصلاة بدقة عالية.
 - [خدمة Nominatim:](https://nominatim.org/) خدمة ترميز جغرافي مفتوحة المصدر.
 
 ## اتصال
