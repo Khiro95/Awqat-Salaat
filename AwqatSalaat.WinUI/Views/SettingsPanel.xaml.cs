@@ -1,3 +1,4 @@
+using AwqatSalaat.Helpers;
 using AwqatSalaat.Interop;
 using AwqatSalaat.Services.Nominatim;
 using AwqatSalaat.ViewModels;
@@ -5,7 +6,11 @@ using AwqatSalaat.WinUI.Helpers;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
+using Microsoft.UI.Xaml.Media;
+using Serilog;
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -19,10 +24,10 @@ namespace AwqatSalaat.WinUI.Views
 {
     public sealed partial class SettingsPanel : UserControl
     {
-        private static readonly string Version = typeof(SettingsPanel).Assembly
+        public static readonly string Version = typeof(SettingsPanel).Assembly
             .GetCustomAttribute<AssemblyFileVersionAttribute>()?
             .Version;
-        private static readonly string Architecture = Environment.Is64BitProcess ? "64-bit" : "32-bit";
+        public static readonly string Architecture = Environment.Is64BitProcess ? "64-bit" : "32-bit";
 
 #if PACKAGED
         static SettingsPanel()
@@ -38,7 +43,7 @@ namespace AwqatSalaat.WinUI.Views
         private WidgetSettingsViewModel ViewModel => DataContext as WidgetSettingsViewModel;
 
         public Flyout ParentFlyout { get; set; }
-        public StartupSettings StartupSettings { get; } = new StartupSettings();
+        public StartupSettings StartupSettings { get; private set; }
 
         public SettingsPanel()
         {
@@ -52,13 +57,25 @@ namespace AwqatSalaat.WinUI.Views
             version.Text = "v" + (Version ?? "{ERROR}");
             architecture.Text = Architecture;
             SetImageSource();
+
+            nav.SelectionChanged += Nav_SelectionChanged;
+        }
+
+        private void Nav_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            contentContainer.Content = args.SelectedItemContainer.Tag;
         }
 
         private void SettingsPanel_Loaded(object sender, RoutedEventArgs e)
         {
+            Log.Information("Settings panel loaded");
+
             if (!loadedFirstTime)
             {
                 loadedFirstTime = true;
+                StartupSettings = new StartupSettings(ViewModel.Realtime);
+                Bindings.Update();
+
                 this.ViewModel.Updated += _ => StartupSettings.Commit();
 
                 if (ParentFlyout is not null)
@@ -86,19 +103,28 @@ namespace AwqatSalaat.WinUI.Views
 
         private async Task SetImageSource()
         {
-            var path = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-            var file = await StorageFile.GetFileFromPathAsync(path);
-            var iconThumbnail = await file.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.SingleItem, 32);
-            var bi = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage();
-            bi.SetSource(iconThumbnail);
-            icon.Source = bi;
+#if PACKAGED
+            var resourceContext = new Windows.ApplicationModel.Resources.Core.ResourceContext();
+            resourceContext.QualifierValues["targetsize"] = "32";
+            var namedResource = Windows.ApplicationModel.Resources.Core.ResourceManager.Current.MainResourceMap[@"Files/Images/applist.png"];
+            var resourceCandidate = namedResource.Resolve(resourceContext);
+            var imageFileStream = await resourceCandidate.GetValueAsStreamAsync();
+            var bitmapImage = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage();
+            bitmapImage.SetSourceAsync(imageFileStream);
+            icon.Source = bitmapImage;
+#else
+            icon.Source = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/app_icon_32.png"));
+#endif
         }
         
         private void OnVisibilityChanged(DependencyObject sender, DependencyProperty dp)
         {
-            // change selection when collapsed to hide the transition from previous tab to general tab
-            if (Visibility == Visibility.Collapsed)
+            bool isVisible = Visibility == Visibility.Visible;
+            Log.Information("Settings panel became " + (isVisible ? "visible" : "invisible"));
+
+            if (!isVisible)
             {
+                // change selection when collapsed to hide the transition from previous tab to general tab
                 nav.SelectedItem = generalTab;
 
                 // When the widget switch to/from compact mode when editing some setting,
@@ -106,6 +132,8 @@ namespace AwqatSalaat.WinUI.Views
                 // the toggle will not show up visually correct. This is well observed for On->Off transition.
                 FixToggleSwitchVisualBug(countdownToggle);
                 FixToggleSwitchVisualBug(compactModeToggle);
+
+                CollapseExpanders(null);
             }
         }
 
@@ -132,6 +160,7 @@ namespace AwqatSalaat.WinUI.Views
 
         private void ContactHyperlink_Click(Hyperlink sender, HyperlinkClickEventArgs args)
         {
+            Log.Information("Clicked on Contact link");
             // https://github.com/microsoft/microsoft-ui-xaml/issues/4438
             Windows.System.Launcher.LaunchUriAsync(new Uri("mailto:khiro95.gh@gmail.com"));
         }
@@ -140,6 +169,7 @@ namespace AwqatSalaat.WinUI.Views
         {
             try
             {
+                Log.Information("Clicked on Check for updates");
                 keepFlyoutOpen = true;
                 var current = System.Version.Parse(Version);
 #if DEBUG
@@ -149,15 +179,17 @@ namespace AwqatSalaat.WinUI.Views
                 ViewModel.IsCheckingNewVersion = true;
 
                 var storeContext = Windows.Services.Store.StoreContext.GetDefault();
+                InitializeWithWindow.Initialize(storeContext, App.MainHandle);
                 var updates = await storeContext.GetAppAndOptionalStorePackageUpdatesAsync();
 
                 ViewModel.IsCheckingNewVersion = false;
 
-                if (updates.Count > 1)
+                if (updates.Count > 0)
                 {
-                    var version = updates[0].Package.Id.Version;
-                    var versionString = string.Format("{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
-                    var result = MessageBox.Question(string.Format(Properties.Resources.Dialog_NewUpdateAvailableFormat, versionString));
+                    // We can't get the version of the new package in Microsoft Store so we skip this info :(
+                    var lines = Properties.Resources.Dialog_NewUpdateAvailableFormat.Split(Environment.NewLine);
+                    var newMessage = Properties.Resources.Dialog_NewUpdateAvailableFormat.Replace(lines[1] + Environment.NewLine, "");
+                    var result = MessageBox.Question(newMessage);
 
                     if (result == MessageBoxResult.IDYES)
                     {
@@ -188,6 +220,7 @@ namespace AwqatSalaat.WinUI.Views
             }
             catch (Exception ex)
             {
+                Log.Error(ex, $"Checking for updates failed: {ex.Message}");
                 MessageBox.Error(Properties.Resources.Dialog_CheckingUpdatesFailed + $"\nError: {ex.Message}");
             }
             finally
@@ -200,7 +233,25 @@ namespace AwqatSalaat.WinUI.Views
             }
         }
 
-        private async void BrowseSound_Click(object sender, RoutedEventArgs e)
+        private async void BrowseNotificationSound_Click(object sender, RoutedEventArgs e)
+        {
+            Log.Information("Clicked on Browse for notification sound");
+            await BrowseSoundFileAsync((s, f) => s.NotificationSoundFile = f);
+        }
+
+        private async void BrowseAdhanSound_Click(object sender, RoutedEventArgs e)
+        {
+            Log.Information("Clicked on Browse for adhan sound");
+            await BrowseSoundFileAsync((s, f) => s.AdhanSoundFile = f);
+        }
+
+        private async void BrowseAdhanFajrSound_Click(object sender, RoutedEventArgs e)
+        {
+            Log.Information("Clicked on Browse for adhan Fajr sound");
+            await BrowseSoundFileAsync((s, f) => s.AdhanFajrSoundFile = f);
+        }
+
+        private async Task BrowseSoundFileAsync(Action<Properties.Settings, string> fileSetter)
         {
             try
             {
@@ -218,7 +269,7 @@ namespace AwqatSalaat.WinUI.Views
 
                 if (file != null)
                 {
-                    ViewModel.Settings.NotificationSoundFile = file.Path;
+                    fileSetter(ViewModel.Realtime, file.Path);
                 }
             }
             finally
@@ -226,6 +277,40 @@ namespace AwqatSalaat.WinUI.Views
                 keepFlyoutOpen = false;
                 IsHitTestVisible = true;
             }
+        }
+
+        private void Expander_Expanding(Expander sender, ExpanderExpandingEventArgs args)
+        {
+            CollapseExpanders(sender);
+        }
+
+        private void CollapseExpanders(Expander exception)
+        {
+            foreach (var item in timesPanel.Items)
+            {
+                var container = timesPanel.ItemContainerGenerator.ContainerFromItem(item);
+
+                if (container != null)
+                {
+                    var expander = VisualTreeHelper.GetChild(container, 0) as Expander;
+
+                    if (expander != exception)
+                    {
+                        expander.IsExpanded = false;
+                    }
+                }
+            }
+        }
+
+        private void ShowLogsFileClick(object sender, RoutedEventArgs e)
+        {
+            if (!File.Exists(LogManager.LogsPath))
+            {
+                MessageBox.Info(Properties.Resources.Dialog_LogsFileNotFound);
+                return;
+            }
+
+            Process.Start("explorer.exe", $"/select,\"{LogManager.LogsPath}\"");
         }
     }
 }

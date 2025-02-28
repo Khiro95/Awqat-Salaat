@@ -7,20 +7,61 @@
 
   <ItemGroup>
     <None Remove="Assets\countries.json" />
+    <None Remove="Assets\dhuhr_end_en.png" />
+    <None Remove="Assets\dhuhr_start_en.png" />
+    <None Remove="Assets\prayers_times_ar.rtf" />
+    <None Remove="Assets\prayers_times_en.rtf" />
+    <None Remove="Assets\dhuhr_end_ar.png" />
+    <None Remove="Assets\dhuhr_start_ar.png" />
+    <None Remove="Assets\fake_dawn.jpg" />
+    <None Remove="Assets\red_twilight.jpg" />
+    <None Remove="Assets\sunrise.jpg" />
+    <None Remove="Assets\sunset.jpg" />
+    <None Remove="Assets\true_dawn.jpg" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Assets\countries.json" />
+    <EmbeddedResource Include="Assets\dhuhr_end_en.png" />
+    <EmbeddedResource Include="Assets\dhuhr_start_en.png" />
+    <EmbeddedResource Include="Assets\prayers_times_ar.rtf" />
+    <EmbeddedResource Include="Assets\prayers_times_en.rtf" />
+    <EmbeddedResource Include="Assets\dhuhr_end_ar.png" />
+    <EmbeddedResource Include="Assets\dhuhr_start_ar.png" />
+    <EmbeddedResource Include="Assets\fake_dawn.jpg" />
+    <EmbeddedResource Include="Assets\red_twilight.jpg" />
+    <EmbeddedResource Include="Assets\sunrise.jpg" />
+    <EmbeddedResource Include="Assets\sunset.jpg" />
+    <EmbeddedResource Include="Assets\true_dawn.jpg" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Serilog" Version="4.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
     <PackageReference Include="TimeZoneConverter" Version="6.1.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Fonts\Symbols1_Ver02.otf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Fonts\UthmanTN_v2-0.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Fonts\UthmanicHafs_v2-1.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\PersistentCache.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PersistentCache.settings</DependentUpon>
+    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -41,11 +82,27 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Properties\PersistentCache.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>PersistentCache.Designer.cs</LastGenOutput>
+    </None>
     <None Update="Properties\Settings.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Update="Sounds\birds_chirping.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Sounds\kholafa_08041446.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Sounds\kholafa_08041446_full.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Sounds\kholafa_13041446.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Sounds\kholafa_13041446_full.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

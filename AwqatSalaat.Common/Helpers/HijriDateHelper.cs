@@ -13,8 +13,20 @@ namespace AwqatSalaat.Helpers
         private static readonly DateTimeFormatInfo s_EnglishHijriDateTimeFormatInfo;
         private static readonly HijriCalendar s_HijriCalendar = new HijriCalendar();
 
+        public static MonthRecord[] HijriMonths { get; }
+
         static HijriDateHelper()
         {
+            var calendar = new UmAlQuraCalendar();
+            HijriMonths = new MonthRecord[12];
+
+            for (int i = 1; i <= 12; i++)
+            {
+                // Here 15 is a safe choice to make sure both HijriCaledar and UmAlQuraCalendar
+                // return same month when we convert later
+                HijriMonths[i - 1] = new MonthRecord(i, calendar.ToDateTime(1446, i, 15, 0, 0, 0, 0));
+            }
+
             var englishHijriMonths = new string[]
             {
                 "Muharram",
@@ -104,6 +116,16 @@ namespace AwqatSalaat.Helpers
             Settings.Default.SettingsLoaded += (_, __) => s_HijriCalendar.HijriAdjustment = Settings.Default.HijriAdjustment;
             Settings.Default.SettingsSaving += (_, __) => s_HijriCalendar.HijriAdjustment = Settings.Default.HijriAdjustment;
             s_HijriCalendar.HijriAdjustment = Settings.Default.HijriAdjustment;
+        }
+
+        public static string FormatN(DateTime? dateTime, string format, string language)
+        {
+            if (dateTime.HasValue)
+            {
+                return Format(dateTime.Value, format, language);
+            }
+
+            return string.Empty;
         }
 
         public static string Format(DateTime dateTime, string format, string language)

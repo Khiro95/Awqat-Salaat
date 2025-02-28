@@ -16,7 +16,7 @@
     <Color x:Key="ThemeColors.TextOnAccentColor">#FFFFFF</Color>
     <Color x:Key="ThemeColors.TextOnAccentDarkColor">#FFFFFF</Color>
 
-    <Color x:Key="ThemeColors.TextHighlightColor">#BF8F30</Color>
+    <Color x:Key="ThemeColors.TextHighlightColor">#9C6D17</Color>
 
     <Color x:Key="ThemeColors.ControlBackgroundColor">#10000000</Color>
     <Color x:Key="ThemeColors.ControlForegroundColor">#000000</Color>
@@ -33,6 +33,7 @@
     <Color x:Key="ThemeColors.GlyphForegroundColor">#A0000000</Color>
 
     <Color x:Key="ThemeColors.DefaultAcrylicTintColor">#FCFCFC</Color>
+    <Color x:Key="ThemeColors.WindowAcrylicOverlayColor">#C0F0F0F0</Color>
 
 
     <!-- Brushes -->
@@ -67,5 +68,6 @@
     <SolidColorBrush x:Key="ThemeColors.GlyphForegroundBrush" Color="{StaticResource ThemeColors.GlyphForegroundColor}"/>
 
     <SolidColorBrush x:Key="ThemeColors.DefaultAcrylicTintBrush" Color="{StaticResource ThemeColors.DefaultAcrylicTintColor}"/>
+    <SolidColorBrush x:Key="ThemeColors.WindowAcrylicOverlayBrush" Color="{StaticResource ThemeColors.WindowAcrylicOverlayColor}"/>
 
 </ResourceDictionary>

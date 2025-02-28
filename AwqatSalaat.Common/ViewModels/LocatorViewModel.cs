@@ -2,6 +2,7 @@
 using AwqatSalaat.Helpers;
 using AwqatSalaat.Properties;
 using AwqatSalaat.Services.Nominatim;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,39 +23,38 @@ namespace AwqatSalaat.ViewModels
         private Place selectedPlace;
         private Place pendingPlace;
         private CancellationTokenSource cancellationTokenSource;
-
-        private Settings Settings => Settings.Default;
+        private readonly Settings settings;
 
         public bool DetectByCountryCode
         {
-            get => Settings.LocationDetection == LocationDetectionMode.ByCountryCode;
+            get => settings.LocationDetection == LocationDetectionMode.ByCountryCode;
             set
             {
                 if (value)
                 {
-                    Settings.LocationDetection = LocationDetectionMode.ByCountryCode;
+                    settings.LocationDetection = LocationDetectionMode.ByCountryCode;
                 }
             }
         }
         public bool DetectByCoordinates
         {
-            get => Settings.LocationDetection == LocationDetectionMode.ByCoordinates;
+            get => settings.LocationDetection == LocationDetectionMode.ByCoordinates;
             set
             {
                 if (value)
                 {
-                    Settings.LocationDetection = LocationDetectionMode.ByCoordinates;
+                    settings.LocationDetection = LocationDetectionMode.ByCoordinates;
                 }
             }
         }
         public bool DetectByQuery
         {
-            get => Settings.LocationDetection == LocationDetectionMode.ByQuery;
+            get => settings.LocationDetection == LocationDetectionMode.ByQuery;
             set
             {
                 if (value)
                 {
-                    Settings.LocationDetection = LocationDetectionMode.ByQuery;
+                    settings.LocationDetection = LocationDetectionMode.ByQuery;
                 }
             }
         }
@@ -75,18 +75,19 @@ namespace AwqatSalaat.ViewModels
         public ICommand ConfirmCheck { get; }
         public ICommand CancelCheck { get; }
 
-        public LocatorViewModel()
+        public LocatorViewModel(Settings settings)
         {
             Check = new RelayCommand(o => CheckExecute());
             ConfirmCheck = new RelayCommand(ConfirmCheckExecute);
             CancelCheck = new RelayCommand(CancelCheckExecute);
 
-            Settings.PropertyChanged += Settings_PropertyChanged;
+            this.settings = settings;
+            settings.PropertyChanged += Settings_PropertyChanged;
         }
 
         private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Settings.LocationDetection))
+            if (e.PropertyName == nameof(settings.LocationDetection))
             {
                 OnPropertyChanged(nameof(DetectByCountryCode));
                 OnPropertyChanged(nameof(DetectByCoordinates));
@@ -101,6 +102,7 @@ namespace AwqatSalaat.ViewModels
 
         private void ConfirmCheckExecute(object obj)
         {
+            Log.Debug("ConfirmCheck invoked");
             SetPlace(pendingPlace);
             PendingPlace = null;
             PendingCheck = false;
@@ -108,6 +110,7 @@ namespace AwqatSalaat.ViewModels
 
         private void CancelCheckExecute(object obj)
         {
+            Log.Debug("CancelCheck invoked");
             cancellationTokenSource?.Cancel();
             PendingCheck = false;
 
@@ -116,6 +119,7 @@ namespace AwqatSalaat.ViewModels
 
         private async Task CheckExecute()
         {
+            Log.Debug("Check invoked");
             cancellationTokenSource?.Cancel();
 
             try
@@ -126,7 +130,7 @@ namespace AwqatSalaat.ViewModels
                 PendingCheck = true;
 
                 cancellationTokenSource = new CancellationTokenSource();
-                var result = await NominatimClient.Reverse(Settings.Latitude, Settings.Longitude, cancellationTokenSource.Token);
+                var result = await NominatimClient.Reverse(settings.Latitude, settings.Longitude, cancellationTokenSource.Token);
 
                 if (IsValidPlace(result))
                 {
@@ -135,6 +139,7 @@ namespace AwqatSalaat.ViewModels
             }
             catch (NominatimException nx)
             {
+                Log.Error(nx, $"Checking coords failed: {nx.Message}");
                 Error = nx.Message;
             }
             finally
@@ -146,6 +151,7 @@ namespace AwqatSalaat.ViewModels
 
         private async Task Query(string query)
         {
+            Log.Debug($"Querying for a location: {query}");
             cancellationTokenSource?.Cancel();
 
             try
@@ -159,10 +165,12 @@ namespace AwqatSalaat.ViewModels
                     cancellationTokenSource = new CancellationTokenSource();
                     var result = await NominatimClient.Search(query, cancellationTokenSource.Token);
                     Places = result?.Where(IsValidPlace).ToArray();
+                    Log.Debug("Found: " + (places is null ? "None" : $"{places.Count} places"));
                 }
             }
             catch (NominatimException nx)
             {
+                Log.Error(nx, $"Querying failed: {nx.Message}");
                 Error = nx.Message;
             }
             finally
@@ -188,6 +196,7 @@ namespace AwqatSalaat.ViewModels
 
         private void SetPlace(Place place)
         {
+            Log.Debug("Setting place {@place}", place);
             selectedPlace = place;
             OnPropertyChanged(nameof(SelectedPlace));
 
@@ -196,11 +205,16 @@ namespace AwqatSalaat.ViewModels
                 return;
             }
 
-            Settings.CountryCode = place.Address.CountryCode.ToUpper();
-            Settings.City = place.Address.City;
-            Settings.ZipCode = null;
-            Settings.Latitude = place.Latitude;
-            Settings.Longitude = place.Longitude;
+            settings.CountryCode = place.Address.CountryCode.ToUpper();
+            settings.City = place.Address.City;
+            settings.ZipCode = null;
+            settings.Latitude = place.Latitude;
+            settings.Longitude = place.Longitude;
+        }
+
+        ~LocatorViewModel()
+        {
+            settings.PropertyChanged -= Settings_PropertyChanged;
         }
     }
 }

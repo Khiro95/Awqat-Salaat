@@ -1,3 +1,23 @@
+### v4.0
+
+- Add an offline service to calculate prayer times.
+- Add adhan.
+- Add per-time settings.
+- Add prayers calendar which can be printed or exported as a PNG image.
+- Add an informational page to learn how prayers times are determined.
+- Add logging. (Disabled by default)
+- Rename **Islamic Finder** service to **Salah Hour**.
+- Adapt to taskbar color when it uses accent color.
+- Avoid infecting current settings while making changes in Settings panel.
+- Allow the user to retry injecting the widget if that failed. (WinUI only)
+- Improve highlighted text color for the light theme.
+- Make the widget close itself during update/uninstall and restart after update. (WinUI only)
+- Improve interaction with `UIAutomation`. (WinUI only)
+- Enable animations in Settings panel. (WinUI only)
+- Improve UX of radio button. (Deskband only)
+- Fix translation issue in dropdowns. (WinUI only)
+- Fix updates detection from Microsoft Store. (WinUI only)
+
 ### v3.3.1
 
 - Fix crashing after failing to inject the widget into the taskbar. (WinUI only)

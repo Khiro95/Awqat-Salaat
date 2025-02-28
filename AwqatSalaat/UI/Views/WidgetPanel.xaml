@@ -44,7 +44,9 @@
         <StackPanel Orientation="Horizontal" Grid.Column="1">
             <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE713;" Command="{Binding OpenSettings}" ToolTip="{mk:L11n UI.Panel.Settings}" d:IsEnabled="False"/>
             <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE72C;" Command="{Binding Refresh}" ToolTip="{mk:L11n UI.Panel.Refresh}"/>
+            <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE946;" Click="MoreInfo_Click" ToolTip="{mk:L11n UI.Panel.MoreInfo}"/>
             <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE793;" x:Name="themeBtn"/>
+            <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE74F;" Foreground="{DynamicResource ThemeColors.TextHighlightBrush}" ToolTip="{mk:L11n UI.Panel.StopSound}" x:Name="stopSoundButton" Click="StopSound_Click"/>
         </StackPanel>
         <Grid Grid.Row="1" Grid.ColumnSpan="2" Visibility="{Binding HasError, Converter={StaticResource BoolVisInvConverter}}">
             <Grid Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisInvConverter}}">
@@ -70,7 +72,7 @@
                 <ItemsControl ItemsSource="{Binding Items}" Grid.Row="2" Grid.IsSharedSizeScope="True">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border>
+                            <Border Visibility="{Binding IsVisible, Converter={StaticResource BoolVisConverter}}">
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Style.Triggers>

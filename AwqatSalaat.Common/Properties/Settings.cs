@@ -1,7 +1,9 @@
-﻿using AwqatSalaat.Services.AlAdhan;
-using AwqatSalaat.Services.IslamicFinder;
+﻿using AwqatSalaat.Configurations;
+using AwqatSalaat.Services.AlAdhan;
+using AwqatSalaat.Services.SalahHour;
 using AwqatSalaat.Services.Methods;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.IO;
@@ -15,12 +17,19 @@ namespace AwqatSalaat.Properties
 
         private CalculationMethod _calculationMethod;
         private string _notificationSoundFilePath;
+        private string _adhanSoundFilePath;
+        private string _adhanFajrSoundFilePath;
+        private bool _isLoaded;
+        private bool _ignorePropertyChanged;
+        private readonly Dictionary<string, PrayerConfig> _prayerConfigs = new Dictionary<string, PrayerConfig>();
 
         static Settings()
         {
             var assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             s_assemblyDirectory = Path.GetDirectoryName(assemblyPath);
         }
+
+        public PrayerConfig GetPrayerConfig(string key) => _prayerConfigs[key];
 
         public CalculationMethod CalculationMethod
         {
@@ -53,6 +62,32 @@ namespace AwqatSalaat.Properties
             }
         }
 
+        public string AdhanSoundFilePath
+        {
+            get => _adhanSoundFilePath;
+            private set
+            {
+                if (!string.Equals(_adhanSoundFilePath, value, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    _adhanSoundFilePath = value;
+                    base.OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(AdhanSoundFilePath)));
+                }
+            }
+        }
+
+        public string AdhanFajrSoundFilePath
+        {
+            get => _adhanFajrSoundFilePath;
+            private set
+            {
+                if (!string.Equals(_adhanFajrSoundFilePath, value, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    _adhanFajrSoundFilePath = value;
+                    base.OnPropertyChanged(this, new PropertyChangedEventArgs(nameof(AdhanFajrSoundFilePath)));
+                }
+            }
+        }
+
         protected override void OnSettingChanging(object sender, SettingChangingEventArgs e)
         {
             e.Cancel = object.Equals(this[e.SettingName], e.NewValue);
@@ -70,7 +105,23 @@ namespace AwqatSalaat.Properties
             }
             else if (e.PropertyName == nameof(NotificationSoundFile) || e.PropertyName == nameof(EnableNotificationSound))
             {
-                UpdateSoundFilePath();
+                UpdateNotificationSoundFilePath();
+            }
+            else if (e.PropertyName == nameof(AdhanSound))
+            {
+                InvalidateAdhanFiles();
+            }
+            else if (e.PropertyName == nameof(AdhanSoundFile))
+            {
+                UpdateAdhanSoundFilePath();
+            }
+            else if (e.PropertyName == nameof(AdhanFajrSoundFile))
+            {
+                UpdateAdhanFajrSoundFilePath();
+            }
+            else if (e.PropertyName.StartsWith("Config_") && !_ignorePropertyChanged)
+            {
+                UpdateSinglePrayerConfig(e.PropertyName);
             }
         }
 
@@ -79,7 +130,7 @@ namespace AwqatSalaat.Properties
             // CalculationMethod is added in v3.1, so we have to migrate previous settings
             if (string.IsNullOrEmpty(MethodString))
             {
-                if (Service == Data.PrayerTimesService.IslamicFinder)
+                if (Service == Data.PrayerTimesService.SalahHour)
                 {
                     MigrateToCalculationMethod(Method);
                 }
@@ -103,9 +154,16 @@ namespace AwqatSalaat.Properties
                 CountryCode = CountryCode.ToUpper();
             }
 
-            UpdateSoundFilePath();
+            InvalidateAdhanFiles();
+
+            UpdateNotificationSoundFilePath();
+            UpdateAdhanSoundFilePath();
+            UpdateAdhanFajrSoundFilePath();
+
+            UpdatePrayerConfigs();
 
             base.OnSettingsLoaded(sender, e);
+            _isLoaded = true;
         }
 
         protected override void OnSettingsSaving(object sender, CancelEventArgs e)
@@ -118,11 +176,11 @@ namespace AwqatSalaat.Properties
             base.OnSettingsSaving(sender, e);
         }
 
-        private void MigrateToCalculationMethod(IslamicFinderMethod islamicFinderMethod)
+        private void MigrateToCalculationMethod(SalahHourMethod islamicFinderMethod)
         {
             var method = CalculationMethod.AvailableMethods
-                .OfType<IIslamicFinderMethod>()
-                .Single(m => m.IslamicFinderMethod == islamicFinderMethod);
+                .OfType<ISalahHourMethod>()
+                .Single(m => m.SalahHourMethod == islamicFinderMethod);
 
             var calculationMethod = (CalculationMethod)method;
             MethodString = calculationMethod.Id;
@@ -138,7 +196,7 @@ namespace AwqatSalaat.Properties
             MethodString = calculationMethod.Id;
         }
 
-        private void UpdateSoundFilePath()
+        private void UpdateNotificationSoundFilePath()
         {
             if (!EnableNotificationSound || string.IsNullOrEmpty(NotificationSoundFile))
             {
@@ -146,28 +204,141 @@ namespace AwqatSalaat.Properties
             }
             else
             {
-                try
+                TrySetSoundFilePath(NotificationSoundFile, (s, p) => s.NotificationSoundFilePath = p);
+            }
+        }
+
+        private void UpdateAdhanSoundFilePath()
+        {
+            if (AdhanSound == Data.AdhanSound.None || AdhanSound == Data.AdhanSound.Custom && string.IsNullOrEmpty(AdhanSoundFile))
+            {
+                AdhanSoundFilePath = null;
+            }
+            else
+            {
+                TrySetSoundFilePath(AdhanSoundFile, (s, p) => s.AdhanSoundFilePath = p);
+            }
+        }
+
+        private void UpdateAdhanFajrSoundFilePath()
+        {
+            if (AdhanSound == Data.AdhanSound.None || AdhanSound == Data.AdhanSound.Custom && string.IsNullOrEmpty(AdhanFajrSoundFile))
+            {
+                AdhanFajrSoundFilePath = null;
+            }
+            else
+            {
+                TrySetSoundFilePath(AdhanFajrSoundFile, (s, p) => s.AdhanFajrSoundFilePath = p);
+            }
+        }
+
+        private void TrySetSoundFilePath(string file, Action<Settings, string> pathSetter)
+        {
+            try
+            {
+                string path = null;
+
+                if (Path.IsPathRooted(file))
                 {
-                    string path = null;
-
-                    if (Path.IsPathRooted(NotificationSoundFile))
-                    {
-                        // Use Path.GetFullPath to make sure we always have a drive letter
-                        path = Path.GetFullPath(NotificationSoundFile);
-                    }
-                    else
-                    {
-                        path = Path.Combine(s_assemblyDirectory, NotificationSoundFile);
-                    }
-
-                    NotificationSoundFilePath = File.Exists(path) ? path : null;
+                    // Use Path.GetFullPath to make sure we always have a drive letter
+                    path = Path.GetFullPath(file);
                 }
-                catch (Exception ex)
+                else
                 {
+                    // The path is relative
+                    path = Path.Combine(s_assemblyDirectory, file);
+                }
+
+                pathSetter(this, File.Exists(path) ? path : null);
+            }
+            catch (Exception ex)
+            {
 #if DEBUG
-                    throw;
+                throw;
 #endif
+            }
+        }
+
+        private void InvalidateAdhanFiles()
+        {
+            switch (AdhanSound)
+            {
+                case Data.AdhanSound.None:
+                    AdhanSoundFile = null;
+                    AdhanFajrSoundFile = null;
+                    break;
+                case Data.AdhanSound.Adhan1:
+                    AdhanSoundFile = @"Sounds\kholafa_13041446.mp3";
+                    AdhanFajrSoundFile = @"Sounds\kholafa_13041446_full.mp3";
+                    break;
+                case Data.AdhanSound.Adhan2:
+                    AdhanSoundFile = @"Sounds\kholafa_08041446.mp3";
+                    AdhanFajrSoundFile = @"Sounds\kholafa_08041446_full.mp3";
+                    break;
+            }
+        }
+
+        private void UpdatePrayerConfigs()
+        {
+            foreach (SettingsProperty prop in Properties)
+            {
+                if (prop.Name.StartsWith("Config_"))
+                {
+                    UpdateSinglePrayerConfig(prop.Name);
                 }
+            }
+        }
+
+        private void UpdateSinglePrayerConfig(string propertyName)
+        {
+            string key = propertyName.Split('_')[1];
+
+            if (!_prayerConfigs.TryGetValue(key, out var config))
+            {
+                config = new PrayerConfig(key);
+                config.PropertyChanged += PrayerConfig_PropertyChanged;
+                _prayerConfigs[key] = config;
+            }
+
+            config.OnSettingsPropertyChanged(propertyName, this[propertyName]);
+        }
+
+        private void PrayerConfig_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (_isLoaded)
+            {
+                var config = (PrayerConfig)sender;
+                var setting = $"Config_{config.Key}_{e.PropertyName}";
+                _ignorePropertyChanged = true;
+
+                if (e.PropertyName == nameof(PrayerConfig.Adjustment))
+                {
+                    this[setting] = (sbyte)config.Adjustment;
+                }
+                else if (config.IsPrincipal)
+                {
+                    switch (e.PropertyName)
+                    {
+                        case nameof(PrayerConfig.ReminderOffset):
+                            this[setting] = config.ReminderOffset;
+                            break;
+                        case nameof(PrayerConfig.ElapsedTime):
+                            this[setting] = config.ElapsedTime;
+                            break;
+                        case nameof(PrayerConfig.GlobalReminderOffset):
+                            this[setting] = config.GlobalReminderOffset;
+                            break;
+                        case nameof(PrayerConfig.GlobalElapsedTime):
+                            this[setting] = config.GlobalElapsedTime;
+                            break;
+                    }
+                }
+                else if (e.PropertyName == nameof(PrayerConfig.IsVisible))
+                {
+                    this[setting] = config.IsVisible;
+                }
+
+                _ignorePropertyChanged = false;
             }
         }
     }

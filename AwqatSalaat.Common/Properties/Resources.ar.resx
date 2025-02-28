@@ -403,4 +403,134 @@
     <value>الخدمة متوقفة؟
 جرب التبديل إلى خدمة أخرى بالذهاب إلى</value>
   </data>
+  <data name="UI.Settings.LocalServiceNote" xml:space="preserve">
+    <value>الخدمة المحلية تحتاج إلى احداثيات. تأكد من إدخالها في إعدادات الموقع</value>
+  </data>
+  <data name="Data.PrayerTimesService.Local" xml:space="preserve">
+    <value>محلية (بدون اتصال)</value>
+  </data>
+  <data name="UI.Settings.AdhanSound" xml:space="preserve">
+    <value>صوت الأذان</value>
+  </data>
+  <data name="UI.Settings.AdhanSoundDescription" xml:space="preserve">
+    <value>صوت الأذان الذي يتم تشغيله عند دخول وقت الصلاة</value>
+  </data>
+  <data name="UI.Settings.AdhanFileStandard" xml:space="preserve">
+    <value>ملف الأذان القياسي</value>
+  </data>
+  <data name="UI.Settings.AdhanFileFajr" xml:space="preserve">
+    <value>ملف أذان الفجر</value>
+  </data>
+  <data name="Data.AdhanSound.None" xml:space="preserve">
+    <value>لا شيء</value>
+  </data>
+  <data name="Data.AdhanSound.Custom" xml:space="preserve">
+    <value>مخصص</value>
+  </data>
+  <data name="Data.AdhanSound.Adhan1" xml:space="preserve">
+    <value>أذان 1</value>
+  </data>
+  <data name="UI.Controls.SoundPreview.ToolTipIdle" xml:space="preserve">
+    <value>تشغيل معاينة</value>
+  </data>
+  <data name="UI.Controls.SoundPreview.ToolTipPlaying" xml:space="preserve">
+    <value>إيقاف</value>
+  </data>
+  <data name="UI.Panel.StopSound" xml:space="preserve">
+    <value>إيقاف الصوت</value>
+  </data>
+  <data name="Data.AdhanSound.Adhan2" xml:space="preserve">
+    <value>أذان 2</value>
+  </data>
+  <data name="UI.Calendar.Hijri" xml:space="preserve">
+    <value>هجري</value>
+  </data>
+  <data name="UI.Calendar.Gregorian" xml:space="preserve">
+    <value>ميلادي</value>
+  </data>
+  <data name="UI.Calendar.NoData" xml:space="preserve">
+    <value>لا توجد بيانات.
+اختر التقويم وأدخل العام والشهر المرغوبين ثم انقر على تحديث</value>
+  </data>
+  <data name="UI.Panel.MoreInfo" xml:space="preserve">
+    <value>المزيد من المعلومات</value>
+  </data>
+  <data name="UI.Window.Close" xml:space="preserve">
+    <value>إغلاق</value>
+  </data>
+  <data name="UI.Window.Minimize" xml:space="preserve">
+    <value>تصغير</value>
+  </data>
+  <data name="UI.Window.Maximize" xml:space="preserve">
+    <value>تكبير</value>
+  </data>
+  <data name="UI.Window.Restore" xml:space="preserve">
+    <value>إستعادة</value>
+  </data>
+  <data name="UI.Calendar.Title" xml:space="preserve">
+    <value>الرزنامة</value>
+  </data>
+  <data name="UI.Learn.Title" xml:space="preserve">
+    <value>تعلم أوقات الصلوات</value>
+  </data>
+  <data name="UI.Settings.Tabs.Times" xml:space="preserve">
+    <value>الأوقات</value>
+  </data>
+  <data name="UI.Settings.TimeAdjustment" xml:space="preserve">
+    <value>تعديل</value>
+  </data>
+  <data name="UI.Settings.TimeAdjustmentDescription" xml:space="preserve">
+    <value>تعديل وقت الصلاة بالمقدار المحدد من الدقائق</value>
+  </data>
+  <data name="UI.Settings.UseGlobal" xml:space="preserve">
+    <value>استعمال القيمة العامة</value>
+  </data>
+  <data name="UI.Settings.TimeVisibility" xml:space="preserve">
+    <value>الظهور</value>
+  </data>
+  <data name="UI.Settings.TimeVisibilityDescription" xml:space="preserve">
+    <value>عرض الوقت في لوحة الأداة</value>
+  </data>
+  <data name="UI.Calendar.DocumentTitle" xml:space="preserve">
+    <value>رزنامة مواقيت الصلاة</value>
+  </data>
+  <data name="UI.Calendar.GeneratedBy" xml:space="preserve">
+    <value>مولدة بواسطة أداة</value>
+  </data>
+  <data name="UI.Calendar.Export" xml:space="preserve">
+    <value>تصدير</value>
+  </data>
+  <data name="UI.Calendar.Preview" xml:space="preserve">
+    <value>معاينة</value>
+  </data>
+  <data name="UI.Calendar.Theme" xml:space="preserve">
+    <value>المظهر</value>
+  </data>
+  <data name="UI.Calendar.ExportPNG" xml:space="preserve">
+    <value>تصدير كـPNG</value>
+  </data>
+  <data name="UI.Calendar.Print" xml:space="preserve">
+    <value>طباعة</value>
+  </data>
+  <data name="UI.Settings.EnableLogs" xml:space="preserve">
+    <value>تمكين السجل</value>
+  </data>
+  <data name="UI.Settings.EnableLogsDescription" xml:space="preserve">
+    <value>السماح بتسجيل معلومات عن سلوك الأداة. (مفيدة لتشخيص المشاكل)</value>
+  </data>
+  <data name="UI.Settings.EnableDebugLogs" xml:space="preserve">
+    <value>تمكين سجل البحث عن الأخطاء</value>
+  </data>
+  <data name="UI.Settings.EnableDebugLogsDescription" xml:space="preserve">
+    <value>احتواء معلومات مفصلة في السجلات.</value>
+  </data>
+  <data name="UI.Settings.DebugLogsNote" xml:space="preserve">
+    <value>سجلات البحث عن الأخطاء قد تحوي معلومات شخصية على غرار الموقع الذي تم إدخاله.</value>
+  </data>
+  <data name="UI.Settings.ShowLogsFile" xml:space="preserve">
+    <value>اظهار ملف السجلات</value>
+  </data>
+  <data name="Dialog.LogsFileNotFound" xml:space="preserve">
+    <value>ملف السجلات غير موجود. قد لا يكون تم إنشاءه بعد.</value>
+  </data>
 </root>

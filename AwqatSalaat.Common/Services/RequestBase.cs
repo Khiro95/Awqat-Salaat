@@ -12,8 +12,9 @@ namespace AwqatSalaat.Services
         public bool GetEntireMonth { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
+        public int HijriYear { get; set; }
+        public int HijriMonth { get; set; }
         public bool UseCoordinates { get; set; }
-
-        public abstract string GetUrl();
+        public bool UseHijri { get; set; }
     }
 }

@@ -1,64 +1,66 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
-		Microsoft ResX Schema
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
 
-		Version 1.3
-
-		The primary goals of this format is to allow a simple XML format 
-		that is mostly human readable. The generation and parsing of the 
-		various data types are done through the TypeConverter classes 
-		associated with the data types.
-
-		Example:
-
-		... ado.net/XML headers & schema ...
-		<resheader name="resmimetype">text/microsoft-resx</resheader>
-		<resheader name="version">1.3</resheader>
-		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-		<data name="Name1">this is my long string</data>
-		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-			[base64 mime encoded serialized .NET Framework object]
-		</data>
-		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-			[base64 mime encoded string representing a byte array form of the .NET Framework object]
-		</data>
-
-		There are any number of "resheader" rows that contain simple 
-		name/value pairs.
-
-		Each data row contains a name, and value. The row also contains a 
-		type or mimetype. Type corresponds to a .NET class that support 
-		text/value conversion through the TypeConverter architecture. 
-		Classes that don't support this are serialized and stored with the 
-		mimetype set.
-
-		The mimetype is used for serialized objects, and tells the 
-		ResXResourceReader how to depersist the object. This is currently not 
-		extensible. For a given mimetype the value must be set accordingly:
-
-		Note - application/x-microsoft.net.object.binary.base64 is the format 
-		that the ResXResourceWriter will generate, however the reader can 
-		read any of the formats listed below.
-
-		mimetype: application/x-microsoft.net.object.binary.base64
-		value   : The object must be serialized with 
-			: System.Serialization.Formatters.Binary.BinaryFormatter
-			: and then encoded with base64 encoding.
-
-		mimetype: application/x-microsoft.net.object.soap.base64
-		value   : The object must be serialized with 
-			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-			: and then encoded with base64 encoding.
-
-		mimetype: application/x-microsoft.net.object.bytearray.base64
-		value   : The object must be serialized into a byte array 
-			: using a System.ComponentModel.TypeConverter
-			: and then encoded with base64 encoding.
-	-->
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -68,9 +70,10 @@
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
                 <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
               <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
               <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
@@ -89,13 +92,13 @@
     <value>text/microsoft-resx</value>
   </resheader>
   <resheader name="version">
-    <value>1.3</value>
+    <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Data.Salaat.Fajr" xml:space="preserve">
     <value>Fajr</value>
@@ -382,5 +385,141 @@ Would you like to visit download page?</value>
   <data name="UI.Panel.ServiceDownHint" xml:space="preserve">
     <value>Service down?
 Try switching to other service by going to</value>
+  </data>
+  <data name="UI.Settings.LocalServiceNote" xml:space="preserve">
+    <value>The local service require coordinates. Make sure to set them in Location settings</value>
+  </data>
+  <data name="Data.PrayerTimesService.Local" xml:space="preserve">
+    <value>Local (offline)</value>
+  </data>
+  <data name="Data.PrayerTimesService.AlAdhan" xml:space="preserve">
+    <value>Al Adhan</value>
+  </data>
+  <data name="Data.PrayerTimesService.SalahHour" xml:space="preserve">
+    <value>Salah Hour</value>
+  </data>
+  <data name="UI.Settings.AdhanSound" xml:space="preserve">
+    <value>Adhan sound</value>
+  </data>
+  <data name="UI.Settings.AdhanSoundDescription" xml:space="preserve">
+    <value>Sound of Adhan to play when prayer time enter</value>
+  </data>
+  <data name="UI.Settings.AdhanFileStandard" xml:space="preserve">
+    <value>Standard Adhan file</value>
+  </data>
+  <data name="UI.Settings.AdhanFileFajr" xml:space="preserve">
+    <value>Fajr Adhan file</value>
+  </data>
+  <data name="Data.AdhanSound.None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Data.AdhanSound.Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="Data.AdhanSound.Adhan1" xml:space="preserve">
+    <value>Adhan 1</value>
+  </data>
+  <data name="UI.Controls.SoundPreview.ToolTipIdle" xml:space="preserve">
+    <value>Play Preview</value>
+  </data>
+  <data name="UI.Controls.SoundPreview.ToolTipPlaying" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="UI.Panel.StopSound" xml:space="preserve">
+    <value>Stop Sound</value>
+  </data>
+  <data name="Data.AdhanSound.Adhan2" xml:space="preserve">
+    <value>Adhan 2</value>
+  </data>
+  <data name="UI.Calendar.Hijri" xml:space="preserve">
+    <value>Hijri</value>
+  </data>
+  <data name="UI.Calendar.Gregorian" xml:space="preserve">
+    <value>Gregorian</value>
+  </data>
+  <data name="UI.Calendar.NoData" xml:space="preserve">
+    <value>No data.
+Choose the calendar and set the desired year and month then click on Refresh</value>
+  </data>
+  <data name="UI.Panel.MoreInfo" xml:space="preserve">
+    <value>More informations</value>
+  </data>
+  <data name="UI.Window.Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="UI.Window.Minimize" xml:space="preserve">
+    <value>Minimize</value>
+  </data>
+  <data name="UI.Window.Maximize" xml:space="preserve">
+    <value>Maximize</value>
+  </data>
+  <data name="UI.Window.Restore" xml:space="preserve">
+    <value>Restore</value>
+  </data>
+  <data name="UI.Calendar.Title" xml:space="preserve">
+    <value>Calendar</value>
+  </data>
+  <data name="UI.Learn.Title" xml:space="preserve">
+    <value>Learn Prayers Times</value>
+  </data>
+  <data name="UI.Settings.Tabs.Times" xml:space="preserve">
+    <value>Times</value>
+  </data>
+  <data name="UI.Settings.TimeAdjustment" xml:space="preserve">
+    <value>Adjustment</value>
+  </data>
+  <data name="UI.Settings.TimeAdjustmentDescription" xml:space="preserve">
+    <value>Adjust the time of salaat by the specified minutes</value>
+  </data>
+  <data name="UI.Settings.UseGlobal" xml:space="preserve">
+    <value>Use global value</value>
+  </data>
+  <data name="UI.Settings.TimeVisibility" xml:space="preserve">
+    <value>Visibility</value>
+  </data>
+  <data name="UI.Settings.TimeVisibilityDescription" xml:space="preserve">
+    <value>Show the time in the panel of the widget</value>
+  </data>
+  <data name="UI.Calendar.DocumentTitle" xml:space="preserve">
+    <value>Prayer Times Calendar</value>
+  </data>
+  <data name="UI.Calendar.GeneratedBy" xml:space="preserve">
+    <value>Generated by</value>
+  </data>
+  <data name="UI.Calendar.Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="UI.Calendar.Preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="UI.Calendar.Theme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="UI.Calendar.ExportPNG" xml:space="preserve">
+    <value>Export as PNG</value>
+  </data>
+  <data name="UI.Calendar.Print" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="UI.Settings.EnableLogs" xml:space="preserve">
+    <value>Enable logging</value>
+  </data>
+  <data name="UI.Settings.EnableLogsDescription" xml:space="preserve">
+    <value>Allow logging informations about widget behavior. (Useful for diagnostics)</value>
+  </data>
+  <data name="UI.Settings.EnableDebugLogs" xml:space="preserve">
+    <value>Enable debug logging</value>
+  </data>
+  <data name="UI.Settings.EnableDebugLogsDescription" xml:space="preserve">
+    <value>Include detailed informations in the logs.</value>
+  </data>
+  <data name="UI.Settings.DebugLogsNote" xml:space="preserve">
+    <value>Debug logs may contain personal data such as the entered location.</value>
+  </data>
+  <data name="UI.Settings.ShowLogsFile" xml:space="preserve">
+    <value>Show logs file</value>
+  </data>
+  <data name="Dialog.LogsFileNotFound" xml:space="preserve">
+    <value>The logs file does not exist. It may not be created yet.</value>
   </data>
 </root>

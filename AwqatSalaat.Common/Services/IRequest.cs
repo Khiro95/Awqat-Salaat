@@ -11,9 +11,10 @@ namespace AwqatSalaat.Services
         DateTime Date { get; }
         decimal Latitude { get; }
         decimal Longitude { get; }
+        int HijriYear { get; }
+        int HijriMonth { get; }
         bool UseCoordinates { get; }
+        bool UseHijri { get; }
         bool GetEntireMonth { get; }
-
-        string GetUrl();
     }
 }

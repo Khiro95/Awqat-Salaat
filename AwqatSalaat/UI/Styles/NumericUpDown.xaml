@@ -30,6 +30,9 @@
                     <Trigger Property="IsPressed" Value="True">
                         <Setter Property="Background" Value="{DynamicResource ThemeColors.ControlPressedBackgroundBrush}"/>
                     </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Foreground" Value="{DynamicResource ThemeColors.ControlDisabledForegroundBrush}"/>
+                    </Trigger>
                 </Style.Triggers>
             </Style>
         </Style.Resources>
@@ -75,11 +78,6 @@
                             </RepeatButton>
                         </Grid>
                     </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="False">
-
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

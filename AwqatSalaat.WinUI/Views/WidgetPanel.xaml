@@ -31,14 +31,20 @@
                 <RowDefinition MinHeight="294"/>
             </Grid.RowDefinitions>
             <TextBlock Text="{mk:L11n Key=Data.AppName}" VerticalAlignment="Center"/>
-            <CommandBar x:Name="commandBar" Grid.Column="1" OverflowButtonVisibility="Collapsed" Padding="0" Margin="-8">
+            <CommandBar x:Name="commandBar" Grid.Column="1" OverflowButtonVisibility="Collapsed" Padding="0" Margin="0,-8,-8,-8">
                 <AppBarButton IsCompact="True" Icon="Setting" Width="32" Margin="0" Command="{Binding OpenSettings}" ToolTipService.ToolTip="{mk:L11n Key=UI.Panel.Settings}"/>
                 <AppBarButton IsCompact="True" Icon="Refresh" Width="32" Margin="0" Command="{Binding Refresh}" ToolTipService.ToolTip="{mk:L11n Key=UI.Panel.Refresh}"/>
+                <AppBarButton IsCompact="True" Width="32" Margin="0" Click="MoreInfo_Click" ToolTipService.ToolTip="{mk:L11n Key=UI.Panel.MoreInfo}">
+                    <AppBarButton.Icon>
+                        <FontIcon FontSize="16" Glyph="&#xE946;" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
                 <AppBarButton IsCompact="True" Width="32" Margin="0" x:Name="themeBtn">
                     <AppBarButton.Icon>
                         <FontIcon FontSize="16" Glyph="&#xE793;" />
                     </AppBarButton.Icon>
                 </AppBarButton>
+                <AppBarButton IsCompact="True" Icon="Mute" Width="32" Margin="0" ToolTipService.ToolTip="{mk:L11n Key=UI.Panel.StopSound}" x:Name="stopSoundButton" Foreground="{ThemeResource TextHighlightBrush}" Click="StopSound_Click"/>
             </CommandBar>
             <Grid Grid.Row="1" Grid.ColumnSpan="2" Visibility="{x:Bind ViewModel.IsRefreshing, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
                 <Grid Visibility="{x:Bind ViewModel.HasError, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
@@ -69,7 +75,8 @@
                                     Time="{x:Bind Time}"
                                     TimeString="{x:Bind converters:CustomDateTimeConverter.FormatShortTime(Time, ash:LocaleManager.Default.CurrentCulture)}"
                                     PrayerName="{x:Bind Name}"
-                                    DismissCommand="{x:Bind DismissNotification}"/>
+                                    DismissCommand="{x:Bind DismissNotification}"
+                                    Visibility="{x:Bind IsVisible}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

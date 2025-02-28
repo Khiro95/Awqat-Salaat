@@ -1,7 +1,11 @@
-﻿using AwqatSalaat.Data;
+﻿using AwqatSalaat.Configurations;
+using AwqatSalaat.Data;
 using AwqatSalaat.Helpers;
 using AwqatSalaat.Services.GitHub;
+using Serilog;
 using System;
+using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Settings = AwqatSalaat.Properties.Settings;
@@ -12,24 +16,14 @@ namespace AwqatSalaat.ViewModels
     {
         private bool isOpen = !Settings.Default.IsConfigured;
         private bool isCheckingNewVersion;
-        private (
-            PrayerTimesService service,
-            School school,
-            string method,
-            string countryCode,
-            string city,
-            string zipCode,
-            decimal latitude,
-            decimal longitude,
-            LocationDetectionMode locationDetection)? _serviceSettingsBackup;
 
         public static Country[] AvailableCountries => CountriesProvider.GetCountries();
 
-        public bool IsOpen { get => isOpen; set => Open(value); }
+        public bool IsOpen { get => isOpen; set => SetProperty(ref isOpen, value); }
         public bool IsCheckingNewVersion { get => isCheckingNewVersion; set => SetProperty(ref isCheckingNewVersion, value); }
         public bool UseArabic
         {
-            get => Settings.DisplayLanguage == "ar";
+            get => Realtime.DisplayLanguage == "ar";
             set
             {
                 if (value)
@@ -40,7 +34,7 @@ namespace AwqatSalaat.ViewModels
         }
         public bool UseEnglish
         {
-            get => Settings.DisplayLanguage == "en";
+            get => Realtime.DisplayLanguage == "en";
             set
             {
                 if (value)
@@ -49,11 +43,15 @@ namespace AwqatSalaat.ViewModels
                 }
             }
         }
-        public string CountdownFormat => Settings.ShowSeconds ? "{0:hh\\:mm\\:ss}" : "{0:hh\\:mm}";
+        public string CountdownFormat => Realtime.ShowSeconds ? "{0:hh\\:mm\\:ss}" : "{0:hh\\:mm}";
         public Settings Settings => Settings.Default;
+
+        // realtime settings are binded to settings UI so changes are reflected immediately
+        public Settings Realtime { get; } = new Settings();
         public RelayCommand Save { get; }
         public RelayCommand Cancel { get; }
-        public LocatorViewModel Locator { get; } = new LocatorViewModel();
+        public LocatorViewModel Locator { get; }
+        public ObservableCollection<PrayerConfig> PrayerConfigs { get; }
 
         public event Action<bool> Updated;
 
@@ -72,17 +70,31 @@ namespace AwqatSalaat.ViewModels
                 Settings.DisplayLanguage = LocaleManager.Default.Current;
             }
 
-            Settings.PropertyChanged += (s, e) =>
+            CopySettings(fromOriginal: true);
+
+            Locator = new LocatorViewModel(Realtime);
+
+            Realtime.PropertyChanged += (s, e) =>
             {
-                if (e.PropertyName == nameof(Settings.DisplayLanguage))
+                if (e.PropertyName == nameof(Realtime.DisplayLanguage))
                 {
                     OnPropertyChanged(nameof(UseArabic));
                     OnPropertyChanged(nameof(UseEnglish));
                 }
-                else if (e.PropertyName == nameof(Settings.ShowSeconds))
+                else if (e.PropertyName == nameof(Realtime.ShowSeconds))
                 {
                     OnPropertyChanged(nameof(CountdownFormat));
                 }
+            };
+
+            PrayerConfigs = new ObservableCollection<PrayerConfig>
+            {
+                Realtime.GetPrayerConfig(nameof(PrayerTimes.Fajr)),
+                Realtime.GetPrayerConfig(nameof(PrayerTimes.Shuruq)),
+                Realtime.GetPrayerConfig(nameof(PrayerTimes.Dhuhr)),
+                Realtime.GetPrayerConfig(nameof(PrayerTimes.Asr)),
+                Realtime.GetPrayerConfig(nameof(PrayerTimes.Maghrib)),
+                Realtime.GetPrayerConfig(nameof(PrayerTimes.Isha)),
             };
         }
 
@@ -125,9 +137,38 @@ namespace AwqatSalaat.ViewModels
             }
         }
 
+        private void CopySettings(bool fromOriginal)
+        {
+            Settings source = fromOriginal ? Settings : Realtime;
+            Settings destination = fromOriginal ? Realtime : Settings;
+
+            foreach (SettingsProperty prop in Settings.Properties)
+            {
+                if (prop.Name == nameof(Settings.CustomPosition))
+                {
+                    // we are not interested in custom position here and we should not affect it
+                    continue;
+                }
+
+                destination[prop.Name] = source[prop.Name];
+            }
+        }
+
         private void SaveExecute(object obj)
         {
+            Log.Information("[Settings] Save invoked");
             var currentServiceSettings = (
+                    Realtime.Service,
+                    Realtime.School,
+                    Realtime.MethodString,
+                    Realtime.CountryCode,
+                    Realtime.City,
+                    Realtime.ZipCode,
+                    Realtime.Latitude,
+                    Realtime.Longitude,
+                    Realtime.LocationDetection
+                    );
+            var previousServiceSettings = (
                     Settings.Service,
                     Settings.School,
                     Settings.MethodString,
@@ -138,50 +179,30 @@ namespace AwqatSalaat.ViewModels
                     Settings.Longitude,
                     Settings.LocationDetection
                     );
-            bool serviceSettingsChanged = _serviceSettingsBackup != currentServiceSettings;
-            Settings.IsConfigured = true;
+            bool serviceSettingsChanged = previousServiceSettings != currentServiceSettings;
+            Realtime.IsConfigured = true;
+            CopySettings(fromOriginal: false);
             Settings.Save();
             IsOpen = false;
+            LogManager.InvalidateLogger();
             Cancel.RaiseCanExecuteChanged();
             Updated?.Invoke(serviceSettingsChanged);
         }
 
         private void CancelExecute(object obj)
         {
-            Settings.Reload();
+            Log.Information("[Settings] Cancel invoked");
+            CopySettings(fromOriginal: true);
             Locator.SearchQuery = null;
             SetLanguage(Settings.DisplayLanguage);
             IsOpen = false;
             Cancel.RaiseCanExecuteChanged();
         }
 
-        private void Open(bool value)
-        {
-            SetProperty(ref isOpen, value, nameof(IsOpen));
-
-            if (value)
-            {
-                _serviceSettingsBackup = (
-                    Settings.Service,
-                    Settings.School,
-                    Settings.MethodString,
-                    Settings.CountryCode,
-                    Settings.City,
-                    Settings.ZipCode,
-                    Settings.Latitude,
-                    Settings.Longitude,
-                    Settings.LocationDetection
-                    );
-            }
-            else
-            {
-                _serviceSettingsBackup = null;
-            }
-        }
-
         private void SetLanguage(string lang)
         {
             LocaleManager.Default.Current = lang;
+            Realtime.DisplayLanguage = lang;
         }
     }
 }

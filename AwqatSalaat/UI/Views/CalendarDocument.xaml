@@ -1,0 +1,177 @@
+﻿<controls:CalendarDocumentBase x:Class="AwqatSalaat.UI.Views.CalendarDocument"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AwqatSalaat.UI.Views"
+             xmlns:controls="clr-namespace:AwqatSalaat.UI.Controls"
+             xmlns:ui="clr-namespace:AwqatSalaat.UI"
+             xmlns:converters="clr-namespace:AwqatSalaat.UI.Converters"
+             xmlns:mk="clr-namespace:AwqatSalaat.Markup"
+             xmlns:vm="clr-namespace:AwqatSalaat.ViewModels;assembly=AwqatSalaat.Common"
+             mc:Ignorable="d" x:Name="doc"
+             Height="1123" Width="794" Background="White" UseLayoutRounding="True">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemeDictionary>
+                    <d:ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="../Themes/Dark.xaml"/>
+                    </d:ResourceDictionary.MergedDictionaries>
+                </ui:ThemeDictionary>
+                <ResourceDictionary Source="../Assets/Vectors.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <BooleanToVisibilityConverter x:Key="BoolVisConverter"/>
+            <converters:BoolToVisibilityInvertedConverter x:Key="BoolVisInvConverter"/>
+            <converters:BoolInverterConverter x:Key="BoolInverterConverter"/>
+            <converters:ShortTimeConverter x:Key="ShortTimeConverter"/>
+            <converters:HijriDateConverter x:Key="HijriDateConverter"/>
+            <converters:GregorianDateConverter x:Key="GregorianDateConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding ElementName=doc}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Border Background="{Binding SectionBackground}" BorderBrush="{Binding SectionBorder}" BorderThickness="0,0,0,4">
+            <Grid ClipToBounds="True">
+                <Polygon Points="0,0 200,0 220,25, 200,50 0,50" Stretch="Fill" Fill="{Binding SectionOverlayBackground}" Stroke="{Binding SectionOverlayBorder}" StrokeThickness="4" HorizontalAlignment="Left" Width="200" Margin="-4"/>
+                <Polygon Points="0,0 200,0 220,25, 200,50 0,50" Stretch="Fill" Fill="{Binding SectionOverlayBackground}" Stroke="{Binding SectionOverlayBorder}" StrokeThickness="4" HorizontalAlignment="Right" Width="200" Margin="-4">
+                    <Polygon.LayoutTransform>
+                        <ScaleTransform ScaleX="-1"/>
+                    </Polygon.LayoutTransform>
+                </Polygon>
+                <Grid Margin="4,8" TextElement.Foreground="{Binding SectionForeground}" MinHeight="60">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="2.5*"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.FontSize="18" TextBlock.FontWeight="Bold">
+                        <TextBlock x:Name="gmonth" Text="{Binding Source.FirstDate, Converter={StaticResource GregorianDateConverter}, ConverterParameter='MMMM', FallbackValue=G. MONTH}" Foreground="{Binding SectionOverlayForeground}"/>
+                        <TextBlock x:Name="gmonthSeparator" Text=" – " FontSize="14" Foreground="{Binding SectionOverlayForeground}" VerticalAlignment="Center" Visibility="Collapsed"/>
+                        <TextBlock x:Name="gmonth2" Text="{Binding Source.LastDate, Converter={StaticResource GregorianDateConverter}, ConverterParameter='MMMM', FallbackValue=G. MONTH}" FontSize="14" Foreground="{Binding SectionOverlayForeground}" Visibility="Collapsed"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.FontSize="18" TextBlock.FontWeight="SemiBold" Grid.Row="1">
+                        <TextBlock x:Name="gyear" Text="{Binding Source.FirstDate, Converter={StaticResource GregorianDateConverter}, ConverterParameter='yyyy', FallbackValue=G. YEAR}" Foreground="{Binding SectionOverlayForeground}"/>
+                        <TextBlock x:Name="gyearSeparator" Text=" – " FontSize="14" Foreground="{Binding SectionOverlayForeground}" VerticalAlignment="Center" Visibility="Collapsed"/>
+                        <TextBlock x:Name="gyear2" Text="{Binding Source.LastDate, Converter={StaticResource GregorianDateConverter}, ConverterParameter='yyyy', FallbackValue=G. YEAR}" Foreground="{Binding SectionOverlayForeground}" Visibility="Collapsed"/>
+                    </StackPanel>
+                    <TextBlock Text="{mk:L11n UI.Calendar.DocumentTitle}" FontSize="26" HorizontalAlignment="Center" Grid.Column="1"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1">
+                        <TextBlock Text="&#xE80F;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding LocationText, FallbackValue=LOCATION}" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel x:Name="hmonthContainer" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.FontSize="18" TextBlock.FontWeight="Bold" Grid.Column="2">
+                        <TextBlock x:Name="hmonth" Text="{Binding Source.FirstDate, Converter={StaticResource HijriDateConverter}, ConverterParameter='MMMM', FallbackValue=H. MONTH}" Foreground="{Binding SectionOverlayForeground}" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="hmonth2" Text="{Binding Source.LastDate, Converter={StaticResource HijriDateConverter}, ConverterParameter='MMMM', FallbackValue=H. MONTH2}" Foreground="{Binding SectionOverlayForeground}" FontSize="14" HorizontalAlignment="Center" Visibility="Collapsed"/>
+                    </StackPanel>
+                    <StackPanel x:Name="hmonthRTLContainer" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.FontSize="32" Grid.Column="2" Visibility="Collapsed">
+                        <TextBlock x:Name="hmonthRTL" Foreground="{Binding SectionOverlayForeground}" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="hmonthRTLSeparator" Text=" • " FontSize="14" Foreground="{Binding SectionOverlayForeground}" VerticalAlignment="Center" Visibility="Collapsed"/>
+                        <TextBlock x:Name="hmonth2RTL" Foreground="{Binding SectionOverlayForeground}" VerticalAlignment="Center" Visibility="Collapsed"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.FontSize="18" TextBlock.FontWeight="SemiBold" Grid.Row="1" Grid.Column="2">
+                        <TextBlock x:Name="hyear" Text="{Binding Source.FirstDate, Converter={StaticResource HijriDateConverter}, ConverterParameter='yyyy', FallbackValue=H. YEAR}" Foreground="{Binding SectionOverlayForeground}"/>
+                        <TextBlock x:Name="hyearSeparator" Text=" – " FontSize="14" Foreground="{Binding SectionOverlayForeground}" VerticalAlignment="Center" Visibility="Collapsed"/>
+                        <TextBlock x:Name="hyear2" Text="{Binding Source.LastDate, Converter={StaticResource HijriDateConverter}, ConverterParameter='yyyy', FallbackValue=H. YEAR}" Foreground="{Binding SectionOverlayForeground}" Visibility="Collapsed"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+        <Border BorderBrush="{Binding TableBorder}" BorderThickness="1" Margin="16" Grid.Row="1" VerticalAlignment="Center" TextElement.Foreground="{Binding TableForeground}">
+            <DockPanel>
+                <Border Background="{Binding TableHeaderBackground}" DockPanel.Dock="Top" Padding="0,6" TextElement.Foreground="{Binding TableHeaderForeground}" TextElement.FontWeight="Medium">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.2*"/>
+                            <ColumnDefinition Width="0.2*"/>
+                            <ColumnDefinition Width="0.2*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="0.1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{mk:L11n UI.Calendar.Gregorian}" HorizontalAlignment="Center" Grid.Column="1"/>
+                        <TextBlock Text="{mk:L11n UI.Calendar.Hijri}" HorizontalAlignment="Center" Grid.Column="2"/>
+                        <TextBlock Text="{mk:L11n Data.Salaat.Fajr}" HorizontalAlignment="Center" Grid.Column="3"/>
+                        <TextBlock Text="{mk:L11n Data.Salaat.Shuruq}" HorizontalAlignment="Center" Grid.Column="4"/>
+                        <TextBlock Text="{mk:L11n Data.Salaat.Dhuhr}" HorizontalAlignment="Center" Grid.Column="5"/>
+                        <TextBlock Text="{mk:L11n Data.Salaat.Asr}" HorizontalAlignment="Center" Grid.Column="6"/>
+                        <TextBlock Text="{mk:L11n Data.Salaat.Maghrib}" HorizontalAlignment="Center" Grid.Column="7"/>
+                        <TextBlock Text="{mk:L11n Data.Salaat.Isha}" HorizontalAlignment="Center" Grid.Column="8"/>
+                    </Grid>
+                </Border>
+                <ItemsControl ItemsSource="{Binding Source.PrayerTimes}" Background="Transparent" ClipToBounds="True">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Margin="0,-1,0,0"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="{Binding RelativeSource={RelativeSource AncestorType=local:CalendarDocument}, Path=TableRowSeparator}" BorderThickness="0,1,0,0">
+                                <Grid Margin="0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.2*"/>
+                                        <ColumnDefinition Width="0.2*"/>
+                                        <ColumnDefinition Width="0.2*"/>
+                                        <ColumnDefinition Width="0.1*"/>
+                                        <ColumnDefinition Width="0.1*"/>
+                                        <ColumnDefinition Width="0.1*"/>
+                                        <ColumnDefinition Width="0.1*"/>
+                                        <ColumnDefinition Width="0.1*"/>
+                                        <ColumnDefinition Width="0.1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="{Binding Date, StringFormat='dddd'}" Margin="16,0,0,0" Grid.Column="0"/>
+                                    <TextBlock Text="{Binding Date, Converter={StaticResource GregorianDateConverter}, ConverterParameter='dd MMMM'}" HorizontalAlignment="Center" Grid.Column="1"/>
+                                    <TextBlock Text="{Binding Date, Converter={StaticResource HijriDateConverter}, ConverterParameter='dd MMMM'}" HorizontalAlignment="Center" Grid.Column="2"/>
+                                    <TextBlock Text="{Binding Times.Fajr, Converter={StaticResource ShortTimeConverter}}" HorizontalAlignment="Center" Grid.Column="3"/>
+                                    <TextBlock Text="{Binding Times.Shuruq, Converter={StaticResource ShortTimeConverter}}" HorizontalAlignment="Center" Grid.Column="4"/>
+                                    <TextBlock Text="{Binding Times.Dhuhr, Converter={StaticResource ShortTimeConverter}}" HorizontalAlignment="Center" Grid.Column="5"/>
+                                    <TextBlock Text="{Binding Times.Asr, Converter={StaticResource ShortTimeConverter}}" HorizontalAlignment="Center" Grid.Column="6"/>
+                                    <TextBlock Text="{Binding Times.Maghrib, Converter={StaticResource ShortTimeConverter}}" HorizontalAlignment="Center" Grid.Column="7"/>
+                                    <TextBlock Text="{Binding Times.Isha, Converter={StaticResource ShortTimeConverter}}" HorizontalAlignment="Center" Grid.Column="8"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DockPanel>
+        </Border>
+        <Border Background="{Binding SectionBackground}" BorderBrush="{Binding SectionBorder}" BorderThickness="0,4,0,0" Padding="16" Grid.Row="2">
+            <DockPanel TextElement.Foreground="{Binding SectionForeground}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xEC87;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center"/>
+                    <TextBlock VerticalAlignment="Center" Margin="8,0,0,0">
+                        <Run Text="{mk:L11n UI.Calendar.GeneratedBy}"/>
+                        <Run Text="{mk:L11n Data.AppName}" Foreground="{Binding HighlightForeground}"/>
+                        <!--<Run Text="widget"/>-->
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                    <TextBlock Text="&#xE774;" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalAlignment="Center"/>
+                    <TextBlock Text="https://github.com/Khiro95/Awqat-Salaat" FlowDirection="LeftToRight" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                </StackPanel>
+                <Path Fill="{Binding SectionForeground}" Data="{StaticResource QR}" HorizontalAlignment="Center"/>
+            </DockPanel>
+        </Border>
+    </Grid>
+</controls:CalendarDocumentBase>

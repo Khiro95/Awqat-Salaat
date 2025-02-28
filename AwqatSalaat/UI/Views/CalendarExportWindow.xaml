@@ -1,0 +1,122 @@
+﻿<controls:AcrylicWindow x:Class="AwqatSalaat.UI.Views.CalendarExportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AwqatSalaat.UI.Views"
+        xmlns:controls="clr-namespace:AwqatSalaat.UI.Controls"
+        xmlns:ui="clr-namespace:AwqatSalaat.UI"
+        xmlns:converters="clr-namespace:AwqatSalaat.UI.Converters"
+        xmlns:mk="clr-namespace:AwqatSalaat.Markup"
+        xmlns:ash="clr-namespace:AwqatSalaat.Helpers;assembly=AwqatSalaat.Common"
+        xmlns:vm="clr-namespace:AwqatSalaat.ViewModels;assembly=AwqatSalaat.Common"
+        mc:Ignorable="d"
+        Title="Calendar Export" Height="700" Width="395"
+        Foreground="{DynamicResource ThemeColors.TextPrimaryBrush}"
+        FontSize="14"
+        WindowStartupLocation="CenterScreen"
+        UseLayoutRounding="True"
+        EnableAcrylicEffect="True"
+        BorderThickness="0"
+        ResizeMode="NoResize"
+        d:Background="#192025">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemeDictionary>
+                    <d:ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="../Themes/Dark.xaml"/>
+                    </d:ResourceDictionary.MergedDictionaries>
+                </ui:ThemeDictionary>
+            </ResourceDictionary.MergedDictionaries>
+
+            <CollectionViewSource x:Key="CalendarPalettes" Source="{x:Static ash:CalendarPalettes.Palettes}">
+                <CollectionViewSource.GroupDescriptions>
+                    <PropertyGroupDescription PropertyName="Group"/>
+                </CollectionViewSource.GroupDescriptions>
+            </CollectionViewSource>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.DataContext>
+        <vm:CalendarExportViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="16,0,8,0" MinWidth="100" Grid.Row="1">
+            <TextBlock Text="{mk:L11n UI.Settings.Tabs.Location}"/>
+            <TextBox Text="{Binding ElementName=doc, Path=LocationText}" Height="26" Margin="0,8,0,0"/>
+        </StackPanel>
+        <StackPanel Margin="8,0,16,0" MinWidth="100" Grid.Row="1" Grid.Column="1">
+            <TextBlock Text="{mk:L11n UI.Calendar.Theme}" />
+            <ComboBox Margin="0,8,0,0" ItemsSource="{Binding Source={StaticResource CalendarPalettes}}" SelectedItem="{Binding Palette}" HorizontalContentAlignment="Stretch" FlowDirection="LeftToRight">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{Binding SectionBackground}" BorderThickness="1" BorderBrush="{Binding SectionBorder}">
+                            <Grid ClipToBounds="True">
+                                <TextBlock Text="{Binding Name}" Foreground="{Binding SectionForeground}" FontSize="12" Margin="1"/>
+                                <Polygon Points="0,5 5,0 20,0, 20,10 5,10" Stretch="Fill" Fill="{Binding SectionOverlayBackground}" Stroke="{Binding SectionOverlayBorder}" StrokeThickness="1" HorizontalAlignment="Right" Width="20" Margin="-1"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                <ComboBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" Margin="4,0,4,4" Foreground="{DynamicResource ThemeColors.TextSecondaryBrush}"/>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="GroupItem">
+                                <Setter Property="Margin" Value="0,4"/>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </ComboBox.GroupStyle>
+            </ComboBox>
+        </StackPanel>
+        <Button Margin="16,16,8,16" Padding="4,2" Grid.Row="2" Click="Export_Click">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="&#xEE71;" FontSize="16" FontFamily="Segoe MDL2 Assets" Foreground="{DynamicResource ThemeColors.GlyphForegroundBrush}" VerticalAlignment="Center"/>
+                <TextBlock Text="{mk:L11n UI.Calendar.ExportPNG}" Margin="4,0,0,0"/>
+            </StackPanel>
+        </Button>
+        <Button Margin="8,16,16,16" Padding="4,2" Grid.Row="2" Grid.Column="1" Click="Print_Click">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="&#xE749;" FontSize="16" FontFamily="Segoe MDL2 Assets" Foreground="{DynamicResource ThemeColors.GlyphForegroundBrush}" VerticalAlignment="Center"/>
+                <TextBlock Text="{mk:L11n UI.Calendar.Print}" Margin="4,0,0,0"/>
+            </StackPanel>
+        </Button>
+        <DockPanel Margin="16" Grid.ColumnSpan="2">
+            <TextBlock Text="{mk:L11n UI.Calendar.Preview}" DockPanel.Dock="Top"/>
+            <Border BorderThickness="1" BorderBrush="{DynamicResource ThemeColors.ControlBorderBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,8,0,0">
+                <Viewbox FlowDirection="LeftToRight">
+                    <local:CalendarDocument x:Name="doc"
+                                    FlowDirection="{Binding RelativeSource={RelativeSource AncestorType=local:CalendarExportWindow}, Path=FlowDirection}"
+                                    Source="{Binding CalendarResult}"
+                                    Background="{Binding Palette.DocumentBackground}"
+                                    SectionBackground="{Binding Palette.SectionBackground}"
+                                    SectionForeground="{Binding Palette.SectionForeground}"
+                                    SectionBorder="{Binding Palette.SectionBorder}"
+                                    SectionOverlayBackground="{Binding Palette.SectionOverlayBackground}"
+                                    SectionOverlayForeground="{Binding Palette.SectionOverlayForeground}"
+                                    SectionOverlayBorder="{Binding Palette.SectionOverlayBorder}"
+                                    TableForeground="{Binding Palette.TableForeground}"
+                                    TableBorder="{Binding Palette.TableBorder}"
+                                    TableHeaderBackground="{Binding Palette.TableHeaderBackground}"
+                                    TableHeaderForeground="{Binding Palette.TableHeaderForeground}"
+                                    TableRowSeparator="{Binding Palette.TableRowSeparator}"
+                                    HighlightForeground="{Binding Palette.HighlightForeground}"/>
+                </Viewbox>
+            </Border>
+        </DockPanel>
+    </Grid>
+</controls:AcrylicWindow>

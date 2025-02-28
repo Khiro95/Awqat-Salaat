@@ -8,7 +8,7 @@ The widget can show the prayers times of the whole day and update automatically,
 This widget support visual notification when the time of the next prayer becomes close to a certain configurable limit.
 
 Actually, the widget uses two services to get the prayers times based on user settings:
-- [Islamic Finder's Prayer Times API](http://www.islamicfinder.us/index.php/api)
+- [Salah Hour's Prayer Times API](http://www.salahhour.com/index.php/api)
 - [Al-Adhan's Prayer Times API](https://aladhan.com/prayer-times-api)
 
 > [!caution]
@@ -50,7 +50,7 @@ This app bring Awqat Salaat to Windows 11 which wasn't supported in earlier vers
 #### Requirements (NOT necessary for Microsoft Store version)
 
 - [.NET Desktop Runtime 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
-- [Windows App Runtime 1.5](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/downloads)
+- [Windows App Runtime 1.5](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/downloads-archive#windows-app-sdk-15)
 > [!note]
 > If you get an error about missing Windows App Runtime after installing it, go to the download page and download *Redistributable* instead of Installer, open the zip
 > and install the package `MSIX\win10-x64 (or x86)\Microsoft.WindowsAppRuntime.DDLM.1.5.msix`
@@ -122,6 +122,9 @@ It's expected that the widget will not appear after the installation finish, so 
 #### Elapsed time notification
 ![Awqat Salaat widget notification for entered prayer time](images/elapsed_win10_en.png)
 
+#### Prayers calendar
+![Awqat Salaat widget displaying prayers calendar](images/calendar_win10_en.png)
+
 ### Windows 11 (WinUI)
 
 > [!note]
@@ -141,6 +144,9 @@ It's expected that the widget will not appear after the installation finish, so 
 
 #### Elapsed time notification
 ![Awqat Salaat WinUI widget notification for entered prayer time](images/elapsed_win11_en.png)
+
+#### Prayers calendar
+![Awqat Salaat widget displaying prayers calendar](images/calendar_win11_en.png)
 
 ## Build
 
@@ -167,8 +173,9 @@ For a list of changes, check the changelog [here](CHANGELOG.md).
 
 - [CSDeskBand:](https://github.com/dsafa/CSDeskBand) A library that simplifies the creation of DeskBands using WinForms or WPF.
 - [H.NotifyIcon:](https://github.com/HavenDV/H.NotifyIcon) A library that simplifies the creation of system tray icons.
-- [Islamic Finder:](https://www.islamicfinder.us/index.php/api) They provide a simple API for getting the prayers times.
+- [Salah Hour:](https://www.salahhour.com/index.php/api) They provide a simple API for getting the prayers times.
 - [Al-Adhan:](https://aladhan.com/prayer-times-api) They provide a flexible API for getting the prayers times.
+- [Adhan-csharp:](https://github.com/davidpet86/Adhan-csharp) A C# implementation of [Adhan](https://github.com/batoulapps/Adhan) which is a high precision prayer time library.
 - [Nominatim:](https://nominatim.org/) An open-source geocoding service.
 
 ## Contact

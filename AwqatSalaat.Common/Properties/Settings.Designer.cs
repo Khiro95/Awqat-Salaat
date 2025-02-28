@@ -12,7 +12,7 @@ namespace AwqatSalaat.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.12.0.0")]
     public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -62,9 +62,9 @@ namespace AwqatSalaat.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("MWL")]
-        public global::AwqatSalaat.Services.IslamicFinder.IslamicFinderMethod Method {
+        public global::AwqatSalaat.Services.SalahHour.SalahHourMethod Method {
             get {
-                return ((global::AwqatSalaat.Services.IslamicFinder.IslamicFinderMethod)(this["Method"]));
+                return ((global::AwqatSalaat.Services.SalahHour.SalahHourMethod)(this["Method"]));
             }
             set {
                 this["Method"] = value;
@@ -92,18 +92,6 @@ namespace AwqatSalaat.Properties {
             }
             set {
                 this["NotificationDistance"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ApiCache {
-            get {
-                return ((string)(this["ApiCache"]));
-            }
-            set {
-                this["ApiCache"] = value;
             }
         }
         
@@ -145,7 +133,7 @@ namespace AwqatSalaat.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("IslamicFinder")]
+        [global::System.Configuration.DefaultSettingValueAttribute("SalahHour")]
         public global::AwqatSalaat.Data.PrayerTimesService Service {
             get {
                 return ((global::AwqatSalaat.Data.PrayerTimesService)(this["Service"]));
@@ -320,6 +308,390 @@ namespace AwqatSalaat.Properties {
             }
             set {
                 this["CustomPosition"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AdhanSoundFile {
+            get {
+                return ((string)(this["AdhanSoundFile"]));
+            }
+            set {
+                this["AdhanSoundFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AdhanFajrSoundFile {
+            get {
+                return ((string)(this["AdhanFajrSoundFile"]));
+            }
+            set {
+                this["AdhanFajrSoundFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public global::AwqatSalaat.Data.AdhanSound AdhanSound {
+            get {
+                return ((global::AwqatSalaat.Data.AdhanSound)(this["AdhanSound"]));
+            }
+            set {
+                this["AdhanSound"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public sbyte Config_Fajr_Adjustment {
+            get {
+                return ((sbyte)(this["Config_Fajr_Adjustment"]));
+            }
+            set {
+                this["Config_Fajr_Adjustment"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public ushort Config_Fajr_ReminderOffset {
+            get {
+                return ((ushort)(this["Config_Fajr_ReminderOffset"]));
+            }
+            set {
+                this["Config_Fajr_ReminderOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public byte Config_Fajr_ElapsedTime {
+            get {
+                return ((byte)(this["Config_Fajr_ElapsedTime"]));
+            }
+            set {
+                this["Config_Fajr_ElapsedTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Config_Fajr_GlobalReminderOffset {
+            get {
+                return ((bool)(this["Config_Fajr_GlobalReminderOffset"]));
+            }
+            set {
+                this["Config_Fajr_GlobalReminderOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Config_Fajr_GlobalElapsedTime {
+            get {
+                return ((bool)(this["Config_Fajr_GlobalElapsedTime"]));
+            }
+            set {
+                this["Config_Fajr_GlobalElapsedTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Config_Shuruq_IsVisible {
+            get {
+                return ((bool)(this["Config_Shuruq_IsVisible"]));
+            }
+            set {
+                this["Config_Shuruq_IsVisible"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public sbyte Config_Shuruq_Adjustment {
+            get {
+                return ((sbyte)(this["Config_Shuruq_Adjustment"]));
+            }
+            set {
+                this["Config_Shuruq_Adjustment"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public sbyte Config_Dhuhr_Adjustment {
+            get {
+                return ((sbyte)(this["Config_Dhuhr_Adjustment"]));
+            }
+            set {
+                this["Config_Dhuhr_Adjustment"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public ushort Config_Dhuhr_ReminderOffset {
+            get {
+                return ((ushort)(this["Config_Dhuhr_ReminderOffset"]));
+            }
+            set {
+                this["Config_Dhuhr_ReminderOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public byte Config_Dhuhr_ElapsedTime {
+            get {
+                return ((byte)(this["Config_Dhuhr_ElapsedTime"]));
+            }
+            set {
+                this["Config_Dhuhr_ElapsedTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Config_Dhuhr_GlobalReminderOffset {
+            get {
+                return ((bool)(this["Config_Dhuhr_GlobalReminderOffset"]));
+            }
+            set {
+                this["Config_Dhuhr_GlobalReminderOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Config_Dhuhr_GlobalElapsedTime {
+            get {
+                return ((bool)(this["Config_Dhuhr_GlobalElapsedTime"]));
+            }
+            set {
+                this["Config_Dhuhr_GlobalElapsedTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public sbyte Config_Asr_Adjustment {
+            get {
+                return ((sbyte)(this["Config_Asr_Adjustment"]));
+            }
+            set {
+                this["Config_Asr_Adjustment"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public ushort Config_Asr_ReminderOffset {
+            get {
+                return ((ushort)(this["Config_Asr_ReminderOffset"]));
+            }
+            set {
+                this["Config_Asr_ReminderOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public byte Config_Asr_ElapsedTime {
+            get {
+                return ((byte)(this["Config_Asr_ElapsedTime"]));
+            }
+            set {
+                this["Config_Asr_ElapsedTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Config_Asr_GlobalReminderOffset {
+            get {
+                return ((bool)(this["Config_Asr_GlobalReminderOffset"]));
+            }
+            set {
+                this["Config_Asr_GlobalReminderOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Config_Asr_GlobalElapsedTime {
+            get {
+                return ((bool)(this["Config_Asr_GlobalElapsedTime"]));
+            }
+            set {
+                this["Config_Asr_GlobalElapsedTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public sbyte Config_Maghrib_Adjustment {
+            get {
+                return ((sbyte)(this["Config_Maghrib_Adjustment"]));
+            }
+            set {
+                this["Config_Maghrib_Adjustment"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public ushort Config_Maghrib_ReminderOffset {
+            get {
+                return ((ushort)(this["Config_Maghrib_ReminderOffset"]));
+            }
+            set {
+                this["Config_Maghrib_ReminderOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public byte Config_Maghrib_ElapsedTime {
+            get {
+                return ((byte)(this["Config_Maghrib_ElapsedTime"]));
+            }
+            set {
+                this["Config_Maghrib_ElapsedTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Config_Maghrib_GlobalReminderOffset {
+            get {
+                return ((bool)(this["Config_Maghrib_GlobalReminderOffset"]));
+            }
+            set {
+                this["Config_Maghrib_GlobalReminderOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Config_Maghrib_GlobalElapsedTime {
+            get {
+                return ((bool)(this["Config_Maghrib_GlobalElapsedTime"]));
+            }
+            set {
+                this["Config_Maghrib_GlobalElapsedTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public sbyte Config_Isha_Adjustment {
+            get {
+                return ((sbyte)(this["Config_Isha_Adjustment"]));
+            }
+            set {
+                this["Config_Isha_Adjustment"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public ushort Config_Isha_ReminderOffset {
+            get {
+                return ((ushort)(this["Config_Isha_ReminderOffset"]));
+            }
+            set {
+                this["Config_Isha_ReminderOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public byte Config_Isha_ElapsedTime {
+            get {
+                return ((byte)(this["Config_Isha_ElapsedTime"]));
+            }
+            set {
+                this["Config_Isha_ElapsedTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Config_Isha_GlobalReminderOffset {
+            get {
+                return ((bool)(this["Config_Isha_GlobalReminderOffset"]));
+            }
+            set {
+                this["Config_Isha_GlobalReminderOffset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Config_Isha_GlobalElapsedTime {
+            get {
+                return ((bool)(this["Config_Isha_GlobalElapsedTime"]));
+            }
+            set {
+                this["Config_Isha_GlobalElapsedTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableLogs {
+            get {
+                return ((bool)(this["EnableLogs"]));
+            }
+            set {
+                this["EnableLogs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableDebugLogs {
+            get {
+                return ((bool)(this["EnableDebugLogs"]));
+            }
+            set {
+                this["EnableDebugLogs"] = value;
             }
         }
     }

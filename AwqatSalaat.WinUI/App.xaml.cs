@@ -1,5 +1,7 @@
 ﻿using AwqatSalaat.Helpers;
+using AwqatSalaat.WinUI.Views;
 using Microsoft.UI.Xaml;
+using Serilog;
 using System;
 using System.Threading;
 using System.Windows.Input;
@@ -28,6 +30,8 @@ namespace AwqatSalaat.WinUI
 
         static App()
         {
+            InitLogger();
+
             ExitIfOtherInstanceIsRunning();
 
             Quit = new RelayCommand(static o => QuitExecute());
@@ -47,6 +51,8 @@ namespace AwqatSalaat.WinUI
             this.InitializeComponent();
             UnhandledException += App_UnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+            DispatcherShutdownMode = DispatcherShutdownMode.OnExplicitShutdown;
         }
 
         private static void ExitIfOtherInstanceIsRunning()
@@ -57,6 +63,7 @@ namespace AwqatSalaat.WinUI
 
             if (!created)
             {
+                Log.Information("Widget is already running");
                 ShowError(Properties.Resources.Dialog_AppAlreadyRunning);
                 Environment.Exit(ExitCodes.AlreadyRunning);
             }
@@ -64,11 +71,13 @@ namespace AwqatSalaat.WinUI
 
         private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
         {
+            Log.Fatal(e.Exception, e.Exception.Message);
             ShowUnhandledException(e.Exception);
         }
 
         private void CurrentDomain_UnhandledException(object sender, System.UnhandledExceptionEventArgs e)
         {
+            Log.Fatal(e.ExceptionObject as Exception, (e.ExceptionObject as Exception)?.Message);
             ShowUnhandledException(e.ExceptionObject);
         }
 
@@ -86,6 +95,7 @@ namespace AwqatSalaat.WinUI
 
         private static void QuitExecute()
         {
+            Log.Information("Quitting");
             Quitting?.Invoke();
             Current.Exit();
         }
@@ -105,19 +115,48 @@ namespace AwqatSalaat.WinUI
 
             var dispatcher = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
 
+            InitializeWidget(dispatcher);
+        }
+
+        private void InitializeWidget(Microsoft.UI.Dispatching.DispatcherQueue dispatcherQueue)
+        {
             try
             {
-                TaskBarManager.Initialize(dispatcher);
+                Log.Information("Initializing taskbar manager");
+                TaskBarManager.Initialize(dispatcherQueue);
             }
             catch (WidgetNotInjectedException ex)
             {
-                ShowError(ex.Message);
+                Log.Warning(ex, ex.Message);
+                var result = Helpers.MessageBox.Error(ex.Message, Interop.MessageBoxButtons.MB_RETRYCANCEL);
+
+                if (result == Interop.MessageBoxResult.IDRETRY)
+                {
+                    InitializeWidget(dispatcherQueue);
+                    return;
+                }
+
                 // Calling Environment.Exit(ExitCodes.CouldNotInjectWidget) directly make the widget crash for some reason.
                 // The workaround is to call Exit() then asynchonously call Environment.Exit(ExitCodes.CouldNotInjectWidget)
                 // to override exit code; otherwise exit code will be 0x0
                 Exit();
-                System.Threading.Tasks.Task.Delay(50).ContinueWith(task => Environment.Exit(ExitCodes.CouldNotInjectWidget));
+                System.Threading.Tasks.Task.Delay(50).ContinueWith(_ => Environment.Exit(ExitCodes.CouldNotInjectWidget));
             }
+        }
+
+        private static void InitLogger()
+        {
+            string identity = $"Awqat Salaat WinUI v{SettingsPanel.Version} ({SettingsPanel.Architecture})";
+#if PACKAGED
+            identity += " (Packaged)";
+#endif
+            LogManager.WidgetIdentity = identity;
+            //Serilog doesn't serialize fields so we need to transform the object to props-only object
+            LogManager.LoggerConfigurationHandler = config => config
+                .Destructure.ByTransforming<Interop.RECT>(r => new { r.top, r.right, r.bottom, r.left })
+                .Destructure.ByTransforming<UIAutomationClient.tagRECT>(r => new { r.top, r.right, r.bottom, r.left });
+
+            LogManager.InvalidateLogger();
         }
 
 #if DEBUG

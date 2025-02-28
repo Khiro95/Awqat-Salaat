@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="AwqatSalaat.UI.Views.LearnView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AwqatSalaat.UI.Views"
+             mc:Ignorable="d" 
+             d:Background="#192025"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="QuranAyah" TargetType="Paragraph">
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeColors.TextHighlightBrush}"/>
+        </Style>
+
+        <Style x:Key="Hadith" TargetType="Paragraph">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="{DynamicResource ThemeColors.TextSecondaryBrush}"/>
+        </Style>
+    </UserControl.Resources>
+    <ScrollViewer Margin="0,16,0,0" Padding="32,0">
+        <FlowDocumentScrollViewer x:Name="flowDocScroll" VerticalScrollBarVisibility="Hidden" IsHitTestVisible="False" FlowDirection="LeftToRight">
+            <FlowDocument Name="flowDoc" PageWidth="{Binding ElementName=flowDocScroll, Path=ActualWidth}"/>
+        </FlowDocumentScrollViewer>
+    </ScrollViewer>
+</UserControl>

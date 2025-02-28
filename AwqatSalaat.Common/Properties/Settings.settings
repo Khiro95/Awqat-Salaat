@@ -11,7 +11,7 @@
     <Setting Name="ZipCode" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="Method" Type="AwqatSalaat.Services.IslamicFinder.IslamicFinderMethod" Scope="User">
+    <Setting Name="Method" Type="AwqatSalaat.Services.SalahHour.SalahHourMethod" Scope="User">
       <Value Profile="(Default)">MWL</Value>
     </Setting>
     <Setting Name="ShowCountdown" Type="System.Boolean" Scope="User">
@@ -19,9 +19,6 @@
     </Setting>
     <Setting Name="NotificationDistance" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">10</Value>
-    </Setting>
-    <Setting Name="ApiCache" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DisplayLanguage" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -33,7 +30,7 @@
       <Value Profile="(Default)">MWL</Value>
     </Setting>
     <Setting Name="Service" Type="AwqatSalaat.Data.PrayerTimesService" Scope="User">
-      <Value Profile="(Default)">IslamicFinder</Value>
+      <Value Profile="(Default)">SalahHour</Value>
     </Setting>
     <Setting Name="LaunchOnWindowsStartup" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -76,6 +73,102 @@
     </Setting>
     <Setting Name="CustomPosition" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">-1</Value>
+    </Setting>
+    <Setting Name="AdhanSoundFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="AdhanFajrSoundFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="AdhanSound" Type="AwqatSalaat.Data.AdhanSound" Scope="User">
+      <Value Profile="(Default)">None</Value>
+    </Setting>
+    <Setting Name="Config_Fajr_Adjustment" Type="System.SByte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Config_Fajr_ReminderOffset" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="Config_Fajr_ElapsedTime" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Config_Fajr_GlobalReminderOffset" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Config_Fajr_GlobalElapsedTime" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Config_Shuruq_IsVisible" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Config_Shuruq_Adjustment" Type="System.SByte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Config_Dhuhr_Adjustment" Type="System.SByte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Config_Dhuhr_ReminderOffset" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="Config_Dhuhr_ElapsedTime" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Config_Dhuhr_GlobalReminderOffset" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Config_Dhuhr_GlobalElapsedTime" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Config_Asr_Adjustment" Type="System.SByte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Config_Asr_ReminderOffset" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="Config_Asr_ElapsedTime" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Config_Asr_GlobalReminderOffset" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Config_Asr_GlobalElapsedTime" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Config_Maghrib_Adjustment" Type="System.SByte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Config_Maghrib_ReminderOffset" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="Config_Maghrib_ElapsedTime" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Config_Maghrib_GlobalReminderOffset" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Config_Maghrib_GlobalElapsedTime" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Config_Isha_Adjustment" Type="System.SByte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Config_Isha_ReminderOffset" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="Config_Isha_ElapsedTime" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="Config_Isha_GlobalReminderOffset" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Config_Isha_GlobalElapsedTime" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="EnableLogs" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="EnableDebugLogs" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

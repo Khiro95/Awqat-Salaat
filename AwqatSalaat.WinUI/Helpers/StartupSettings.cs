@@ -1,5 +1,6 @@
 ﻿using AwqatSalaat.Helpers;
 using IWshRuntimeLibrary;
+using Serilog;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -10,6 +11,7 @@ namespace AwqatSalaat.WinUI.Helpers
 {
     public class StartupSettings : ObservableObject
     {
+        private readonly Properties.Settings settings;
 #if PACKAGED
         private bool launchOnStartup;
         private bool canSetLaunchOnStartup;
@@ -17,13 +19,22 @@ namespace AwqatSalaat.WinUI.Helpers
         public bool CanSetLaunchOnStartup { get => canSetLaunchOnStartup; private set => SetProperty(ref canSetLaunchOnStartup, value); }
         public bool LaunchOnStartup { get => canSetLaunchOnStartup && launchOnStartup; set => SetProperty(ref launchOnStartup, value); }
 #else
+
         public bool CanSetLaunchOnStartup => true;
         public bool LaunchOnStartup
         {
-            get => Properties.Settings.Default.LaunchOnWindowsStartup;
-            set => Properties.Settings.Default.LaunchOnWindowsStartup = value;
+            get => settings.LaunchOnWindowsStartup;
+            set => settings.LaunchOnWindowsStartup = value;
         }
 #endif
+
+        public StartupSettings(Properties.Settings settings)
+        {
+            this.settings = settings;
+#if !PACKAGED
+            settings.PropertyChanged += Settings_PropertyChanged;
+#endif
+        }
 
 #if PACKAGED
         public async Task VerifyStartupTask()
@@ -32,16 +43,12 @@ namespace AwqatSalaat.WinUI.Helpers
             CanSetLaunchOnStartup = startupTask.State is StartupTaskState.Enabled or StartupTaskState.Disabled;
 
             LaunchOnStartup = canSetLaunchOnStartup && startupTask.State == StartupTaskState.Enabled;
+            Log.Information($"Verified startup task. State={startupTask.State}");
         }
 #else
-        public StartupSettings()
-        {
-            Properties.Settings.Default.PropertyChanged += Settings_PropertyChanged;
-        }
-
         private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Properties.Settings.Default.LaunchOnWindowsStartup))
+            if (e.PropertyName == nameof(Properties.Settings.LaunchOnWindowsStartup))
             {
                 OnPropertyChanged(nameof(LaunchOnStartup));
             }
@@ -49,12 +56,13 @@ namespace AwqatSalaat.WinUI.Helpers
 
         ~StartupSettings()
         {
-            Properties.Settings.Default.PropertyChanged -= Settings_PropertyChanged;
+            settings.PropertyChanged -= Settings_PropertyChanged;
         }
 #endif
 
         public async Task Commit()
         {
+            Log.Information($"Committing startup settings. LaunchOnStartup={LaunchOnStartup}");
 #if PACKAGED
             if (canSetLaunchOnStartup)
             {
@@ -62,10 +70,12 @@ namespace AwqatSalaat.WinUI.Helpers
 
                 if (launchOnStartup)
                 {
+                    Log.Information("Requesting to enable startup task");
                     await startupTask.RequestEnableAsync();
                 }
                 else
                 {
+                    Log.Information("Disabling startup task");
                     startupTask.Disable();
                 }
             }
@@ -85,15 +95,18 @@ namespace AwqatSalaat.WinUI.Helpers
                 shortcut.WorkingDirectory = Path.GetDirectoryName(moduleInfo.FileName);
                 shortcut.Description = $"Launch {moduleInfo.ProductName}";
                 shortcut.Save();
+                Log.Information("Created shortcut in Startup folder");
             }
             else
             {
                 try
                 {
+                    Log.Information("Deleting shortcut from Startup folder");
                     System.IO.File.Delete(shortcutPath);
                 }
                 catch (Exception ex)
                 {
+                    Log.Warning(ex, $"Deleting shortcut from Startup folder has failed: {ex.Message}");
 #if DEBUG
                     throw;
 #endif

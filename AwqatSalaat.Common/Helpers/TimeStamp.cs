@@ -10,8 +10,9 @@ namespace AwqatSalaat.Helpers
             {
 #if DEBUG
                 return new DateTime(2023, 9, 13, 16, 00, 00);
-#endif
+#else
                 return DateTime.Now;
+#endif
             }
         }
 

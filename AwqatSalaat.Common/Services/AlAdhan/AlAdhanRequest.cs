@@ -4,7 +4,7 @@ using System.Web;
 
 namespace AwqatSalaat.Services.AlAdhan
 {
-    public class AlAdhanRequest : RequestBase
+    public class AlAdhanRequest : WebRequestBase
     {
         public string Country { get; set; }
         public string City { get; set; }
@@ -46,7 +46,9 @@ namespace AwqatSalaat.Services.AlAdhan
             }
 
             var endpointParameters = GetEntireMonth
-                ? $"calendar{endpointSuffix}/{Date.Year}/{Date.Month}"
+                ? UseHijri
+                    ? $"hijriCalendar{endpointSuffix}/{HijriYear}/{HijriMonth}"
+                    : $"calendar{endpointSuffix}/{Date.Year}/{Date.Month}"
                 : $"timings{endpointSuffix}/{Date.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)}";
 
             return $"https://api.aladhan.com/v1/{endpointParameters}?{query}";

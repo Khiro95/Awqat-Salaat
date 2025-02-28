@@ -18,6 +18,7 @@ namespace AwqatSalaat.Helpers
         private const int Windows10_19H1_BuildNumber = 18362;
         private const int Windows11_Min_BuildNumber = 22000;
 
+        public static int OSBuildNumber => osBuildNumber;
         public static bool IsWindows7 => osBuildNumber == Windows7BuildNumber;
         public static bool IsWindows8 => osBuildNumber == Windows8BuildNumber;
         public static bool IsWindows81 => osBuildNumber == Windows81BuildNumber;
@@ -57,6 +58,23 @@ namespace AwqatSalaat.Helpers
                     if (key != null)
                     {
                         int value = Convert.ToInt32(key.GetValue("SystemUsesLightTheme", 0));
+                        return value != 0;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static bool? IsAccentColorOnTaskBar()
+        {
+            if (IsWindows10_19H1_OrLater)
+            {
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
+                {
+                    if (key != null)
+                    {
+                        int value = Convert.ToInt32(key.GetValue("ColorPrevalence", 0));
                         return value != 0;
                     }
                 }
@@ -112,6 +130,35 @@ namespace AwqatSalaat.Helpers
                 var osBuildNumberValue = key.GetValue("CurrentBuildNumber");
                 return Convert.ToInt32(osBuildNumberValue);
             }
+        }
+
+        // https://stackoverflow.com/a/50848113/4644774
+        public static (byte r, byte g, byte b, byte a) GetAccentColor()
+        {
+            if (IsWindows10_19H1_OrLater)
+            {
+                using (RegistryKey dwmKey = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\DWM"))
+                {
+                    if (dwmKey != null)
+                    {
+                        var accentColor = Convert.ToInt32(dwmKey.GetValue("AccentColor", 0xff000000));
+                        return ParseDWordColor(accentColor);
+                    }
+                }
+            }
+
+            return (0, 0, 0, 0);
+        }
+
+        private static (byte r, byte g, byte b, byte a) ParseDWordColor(int color)
+        {
+            byte
+                a = (byte)((color >> 24) & 0xFF),
+                b = (byte)((color >> 16) & 0xFF),
+                g = (byte)((color >> 8) & 0xFF),
+                r = (byte)((color >> 0) & 0xFF);
+
+            return (r, g, b, a);
         }
     }
 }

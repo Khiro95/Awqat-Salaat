@@ -2,6 +2,7 @@
 using AwqatSalaat.Interop;
 using Microsoft.UI;
 using Microsoft.UI.Windowing;
+using Serilog;
 using System;
 using System.Management;
 using System.Security.Principal;
@@ -65,6 +66,7 @@ namespace AwqatSalaat.WinUI
         }
 
         private const int UIA_BoundingRectanglePropertyId = 30001;
+        private const int UIA_NamePropertyId = 30005;
         private const int UIA_AutomationIdPropertyId = 30011;
 
         private static readonly IUIAutomation pUIAutomation = new CUIAutomation();
@@ -92,14 +94,20 @@ namespace AwqatSalaat.WinUI
         {
             this.hwndTaskbar = hwndTaskbar;
             this.hwndReBar = hwndReBar;
-            taskbarElement = pUIAutomation.ElementFromHandle(hwndTaskbar);
+
+            IUIAutomationCacheRequest cacheReq = pUIAutomation.CreateCacheRequest();
+            cacheReq.AddProperty(UIA_NamePropertyId);
+            taskbarElement = pUIAutomation.ElementFromHandleBuildCache(hwndTaskbar, cacheReq);
+
             widgetsButtonEnabled = SystemInfos.IsTaskBarWidgetsEnabled();
             taskbarCentered = SystemInfos.IsTaskBarCentered();
             taskbarHidden = IsTaskbarHidden();
+            rebarGap = GetReBarGap();
+
+            Log.Information($"Creating taskbar watcher. Taskbar hidden={taskbarHidden}, Taskbar centered={taskbarCentered}, Gap={rebarGap}, Widgets enabled={widgetsButtonEnabled}");
+
             RegisterEventHandlers();
             CreateRegistryWatcher();
-
-            rebarGap = GetReBarGap();
         }
 
         private int GetReBarGap()
@@ -139,7 +147,7 @@ namespace AwqatSalaat.WinUI
 
         void IUIAutomationStructureChangedEventHandler.HandleStructureChangedEvent(IUIAutomationElement sender, StructureChangeType changeType, Array runtimeId)
         {
-            if (sender.CurrentName == taskbarElement.CurrentName)
+            if (sender.CachedName == taskbarElement.CachedName)
             {
                 RaiseNotification();
             }
@@ -147,7 +155,7 @@ namespace AwqatSalaat.WinUI
 
         void IUIAutomationPropertyChangedEventHandler.HandlePropertyChangedEvent(IUIAutomationElement sender, int propertyId, object newValue)
         {
-            if (sender.CurrentName == taskbarElement.CurrentName)
+            if (sender.CachedName == taskbarElement.CachedName)
             {
                 RaiseNotification();
             }
@@ -207,10 +215,12 @@ namespace AwqatSalaat.WinUI
                         IsTaskbarWidgetsEnabled = widgetsButtonEnabled
                     };
                     updateContext = new UpdateContext(args);
+                    Log.Debug("Raising TaskbarChangedNotificationStarted with: {@args}", args);
                     TaskbarChangedNotificationStarted?.Invoke(this, args);
 
                     if (args.Canceled)
                     {
+                        Log.Debug("TaskbarChangedNotificationStarted was canceled");
                         updateContext = null;
                         return;
                     }
@@ -241,6 +251,7 @@ namespace AwqatSalaat.WinUI
                 // If the task didn't succeed then it means we canceled it to replace it with a more recent one.
                 if (delayTask.IsCompletedSuccessfully)
                 {
+                    Log.Debug("Raising TaskbarChangedNotificationCompleted with: {@args}", updateContext.EventArgs);
                     TaskbarChangedNotificationCompleted?.Invoke(this, updateContext.EventArgs);
                     updateCancellation?.Dispose();
                     updateCancellation = null;
@@ -251,15 +262,22 @@ namespace AwqatSalaat.WinUI
 
         private void RegisterEventHandlers()
         {
+            Log.Information("Registering event handlers in taskbar watcher");
+
             if (taskbarElement is not null)
             {
-                pUIAutomation.AddStructureChangedEventHandler(taskbarElement, TreeScope.TreeScope_Subtree, null, this);
-                pUIAutomation.AddPropertyChangedEventHandler(taskbarElement, TreeScope.TreeScope_Children, null, this, new int[] { UIA_BoundingRectanglePropertyId });
+                IUIAutomationCacheRequest cacheReq = pUIAutomation.CreateCacheRequest();
+                cacheReq.AutomationElementMode = AutomationElementMode.AutomationElementMode_None;
+                cacheReq.AddProperty(UIA_NamePropertyId);
+                pUIAutomation.AddStructureChangedEventHandler(taskbarElement, TreeScope.TreeScope_Subtree, cacheReq, this);
+                pUIAutomation.AddPropertyChangedEventHandler(taskbarElement, TreeScope.TreeScope_Children, cacheReq, this, new int[] { UIA_BoundingRectanglePropertyId });
             }
         }
 
         private void UnregisterEventHandlers()
         {
+            Log.Information("Unregistering event handlers in taskbar watcher");
+
             if (taskbarElement is not null)
             {
                 pUIAutomation.RemoveAllEventHandlers();
@@ -268,6 +286,7 @@ namespace AwqatSalaat.WinUI
 
         private void CreateRegistryWatcher()
         {
+            Log.Information("Creating registry watcher");
             var currentUser = WindowsIdentity.GetCurrent();
 
             WqlEventQuery query = new WqlEventQuery(
@@ -290,6 +309,7 @@ namespace AwqatSalaat.WinUI
             // We are only interested in registry notifications for widgets button change when taskbar is left-aligned
             if ((isWidgetsButtonEnabled != widgetsButtonEnabled) && !isTaskbarCentered)
             {
+                Log.Information("Detected registry change for Widgets button");
                 widgetsButtonEnabled = isWidgetsButtonEnabled;
                 RaiseNotification(TaskbarChangeReason.WidgetsButton);
             }
@@ -297,6 +317,7 @@ namespace AwqatSalaat.WinUI
 
         public void Dispose()
         {
+            Log.Information("Disposing taskbar watcher");
             Task.Run(UnregisterEventHandlers);
             watcher?.Dispose();
         }

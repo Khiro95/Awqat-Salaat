@@ -2,12 +2,15 @@
 using AwqatSalaat.UI.Controls;
 using AwqatSalaat.ViewModels;
 using Microsoft.Win32;
+using Serilog;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace AwqatSalaat.UI.Views
 {
@@ -16,10 +19,10 @@ namespace AwqatSalaat.UI.Views
     /// </summary>
     public partial class SettingsPanel : UserControl
     {
-        private static readonly string Version = typeof(SettingsPanel).Assembly
+        public static readonly string Version = typeof(SettingsPanel).Assembly
             .GetCustomAttribute<AssemblyFileVersionAttribute>()?
             .Version;
-        private static readonly string Architecture = Environment.Is64BitProcess ? "64-bit" : "32-bit";
+        public static readonly string Architecture = Environment.Is64BitProcess ? "64-bit" : "32-bit";
 
         private OpenFileDialog openFileDialog;
 
@@ -47,48 +50,25 @@ namespace AwqatSalaat.UI.Views
 
         private void SettingsPanel_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if ((bool)e.NewValue)
+            bool isVisible = (bool)e.NewValue;
+            Log.Information("Settings panel became " + (isVisible ? "visible" : "invisible"));
+            tabControl.SelectedIndex = isVisible ? 0 : -1;
+
+            if (!isVisible)
             {
-                tabControl.SelectedIndex = 0;
+                CollapseExpanders(null);
             }
         }
 
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
+            Log.Information($"Navigate to {e.Uri.AbsoluteUri}");
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
-        }
-
-        private void BrowseSound_Click(object sender, RoutedEventArgs e)
-        {
-            if (openFileDialog is null)
-            {
-                openFileDialog = new OpenFileDialog()
-                {
-                    Filter = "Audio Files(*.wav;*.wma;*.mp3;*.aac)|*.wav;*.wma;*.mp3;*.aac;"
-                };
-            }
-
-            ParentPopup.StaysOpen = true;
-            ParentPopup.IsTopMost = false;
-
-            try
-            {
-                openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(ViewModel.Settings.NotificationSoundFilePath);
-
-                if (openFileDialog.ShowDialog() == true)
-                {
-                    ViewModel.Settings.NotificationSoundFile = openFileDialog.FileName;
-                }
-            }
-            finally
-            {
-                ParentPopup.StaysOpen = false;
-                ParentPopup.IsTopMost = true;
-            }
         }
 
         private async void CheckForUpdatesClick(object sender, RoutedEventArgs e)
         {
+            Log.Information("Clicked on Check for updates");
             // MessageBox will make the popup disappear so we have to force it to stay open temporarily
             var popup = Utils.GetOpenPopups().First();
             bool alteredPopup = false;
@@ -123,6 +103,7 @@ namespace AwqatSalaat.UI.Views
             }
             catch (Exception ex)
             {
+                Log.Error(ex, $"Checking for updates failed: {ex.Message}");
                 MessageBoxEx.Error(Properties.Resources.Dialog_CheckingUpdatesFailed + $"\nError: {ex.Message}");
             }
             finally
@@ -132,6 +113,87 @@ namespace AwqatSalaat.UI.Views
                     popup.StaysOpen = false;
                 }
             }
+        }
+
+        private void BrowseNotificationSound_Click(object sender, RoutedEventArgs e)
+        {
+            Log.Information("Clicked on Browse for notification sound");
+            BrowseSoundFile(ViewModel.Realtime.NotificationSoundFilePath, (s, f) => s.NotificationSoundFile = f);
+        }
+
+        private void BrowseAdhanSound_Click(object sender, RoutedEventArgs e)
+        {
+            Log.Information("Clicked on Browse for adhan sound");
+            BrowseSoundFile(ViewModel.Realtime.AdhanSoundFilePath, (s, f) => s.AdhanSoundFile = f);
+        }
+
+        private void BrowseAdhanFajrSound_Click(object sender, RoutedEventArgs e)
+        {
+            Log.Information("Clicked on Browse for adhan Fajr sound");
+            BrowseSoundFile(ViewModel.Realtime.AdhanFajrSoundFilePath, (s, f) => s.AdhanFajrSoundFile = f);
+        }
+
+        private void BrowseSoundFile(string initialPath, Action<Properties.Settings, string> fileSetter)
+        {
+            if (openFileDialog is null)
+            {
+                openFileDialog = new OpenFileDialog()
+                {
+                    Filter = "Audio Files(*.wav;*.wma;*.mp3;*.aac)|*.wav;*.wma;*.mp3;*.aac;"
+                };
+            }
+
+            ParentPopup.StaysOpen = true;
+            ParentPopup.IsTopMost = false;
+
+            try
+            {
+                openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(initialPath);
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    fileSetter(ViewModel.Realtime, openFileDialog.FileName);
+                }
+            }
+            finally
+            {
+                ParentPopup.StaysOpen = false;
+                ParentPopup.IsTopMost = true;
+            }
+        }
+
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            CollapseExpanders(sender as Expander);
+        }
+
+        private void CollapseExpanders(Expander exception)
+        {
+            foreach (var item in timesPanel.Items)
+            {
+                var container = timesPanel.ItemContainerGenerator.ContainerFromItem(item);
+
+                if (container != null)
+                {
+                    var expander = VisualTreeHelper.GetChild(container, 0) as Expander;
+
+                    if (expander != exception)
+                    {
+                        expander.IsExpanded = false;
+                    }
+                }
+            }
+        }
+
+        private void ShowLogsFileClick(object sender, RoutedEventArgs e)
+        {
+            if (!File.Exists(LogManager.LogsPath))
+            {
+                MessageBoxEx.Info(Properties.Resources.Dialog_LogsFileNotFound);
+                return;
+            }
+
+            Process.Start("explorer.exe", $"/select,\"{LogManager.LogsPath}\"");
         }
     }
 }

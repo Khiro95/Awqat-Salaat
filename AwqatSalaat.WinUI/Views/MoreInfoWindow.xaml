@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="AwqatSalaat.WinUI.Views.MoreInfoWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AwqatSalaat.WinUI.Views"
+    xmlns:controls="using:AwqatSalaat.WinUI.Controls"
+    xmlns:mk="using:AwqatSalaat.WinUI.Markup"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Window.SystemBackdrop>
+        <MicaBackdrop/>
+    </Window.SystemBackdrop>
+    <Page x:Name="root">
+        <Grid x:Name="grid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="WindowActivationStates">
+                    <VisualState x:Name="ActivatedState" />
+                    <VisualState x:Name="Deactivated">
+                        <VisualState.Setters>
+                            <Setter Target="appTitle.Foreground" Value="{ThemeResource TextFillColorTertiaryBrush}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+
+            <Border x:Name="titleBar" Margin="8,0" Height="40" Canvas.ZIndex="1">
+                <StackPanel Orientation="Horizontal">
+                    <Image x:Name="icon" Height="20" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="appTitle" Text="{x:Bind Title, Mode=OneWay}" FontSize="12" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+            <controls:NavigaionViewEx x:Name="nav"
+                            IsSettingsVisible="False"
+                            IsBackEnabled="False"
+                            IsBackButtonVisible="Collapsed"
+                            AlwaysShowHeader="True"
+                            Grid.RowSpan="2"
+                            Header="{Binding SelectedItem.Content, ElementName=nav}"
+                            SelectionChanged="NavigationView_SelectionChanged">
+                <NavigationView.Resources>
+                    <Thickness x:Key="NavigationViewPaneContentGridMargin">-1,43,-1,3</Thickness>
+                    <Thickness x:Key="NavigationViewHeaderMargin">24,32,0,0</Thickness>
+                    <Thickness x:Key="NavigationViewContentMargin">0,40,0,0</Thickness>
+                </NavigationView.Resources>
+                <NavigationView.MenuItems>
+                    <NavigationViewItem x:Name="calendarItem" Icon="Calendar" Content="{mk:L11n Key=UI.Calendar.Title}" IsSelected="True"/>
+                    <NavigationViewItem x:Name="learnItem" Content="{mk:L11n Key=UI.Learn.Title}">
+                        <NavigationViewItem.Icon>
+                            <FontIcon Glyph="&#xE736;" />
+                        </NavigationViewItem.Icon>
+                    </NavigationViewItem>
+                </NavigationView.MenuItems>
+                <Frame x:Name="contentFrame" Margin="0,16,0,0"/>
+            </controls:NavigaionViewEx>
+        </Grid>
+    </Page>
+</Window>

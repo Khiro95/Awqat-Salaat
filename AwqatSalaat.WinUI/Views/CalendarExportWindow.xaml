@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="AwqatSalaat.WinUI.Views.CalendarExportWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AwqatSalaat.WinUI.Views"
+    xmlns:mk="using:AwqatSalaat.WinUI.Markup"
+    xmlns:helpers="using:AwqatSalaat.WinUI.Helpers"
+    xmlns:ash="using:AwqatSalaat.Helpers"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="CalendarExportWindow">
+    <Window.SystemBackdrop>
+        <MicaBackdrop/>
+    </Window.SystemBackdrop>
+    <Grid x:Name="root">
+        <Grid.Resources>
+            <CollectionViewSource x:Key="CalendarPalettes" Source="{x:Bind ash:CalendarPalettes.Palettes}"/>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="16,0,8,0" MinWidth="100" Grid.Row="1">
+            <TextBlock Text="{mk:L11n Key=UI.Settings.Tabs.Location}"/>
+            <TextBox Text="{x:Bind doc.LocationText, Mode=TwoWay}" Height="26" Margin="0,8,0,0"/>
+        </StackPanel>
+        <StackPanel Margin="8,0,16,0" MinWidth="100" Grid.Row="1" Grid.Column="1">
+            <TextBlock Text="{mk:L11n Key=UI.Calendar.Theme}" />
+            <ComboBox x:Name="cb" Margin="0,8,0,0" ItemsSource="{Binding Source={StaticResource CalendarPalettes}}" SelectedItem="{x:Bind ViewModel.Palette, Mode=TwoWay}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" FlowDirection="LeftToRight">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{Binding SectionBackground}" BorderThickness="1" BorderBrush="{Binding SectionBorder}">
+                            <Grid helpers:Clip.ToBounds="True">
+                                <TextBlock Text="{Binding Name}" Foreground="{Binding SectionForeground}" FontSize="12" Margin="1"/>
+                                <Polygon Points="0,5 5,0 20,0, 20,10 5,10" Stretch="Fill" Fill="{Binding SectionOverlayBackground}" Stroke="{Binding SectionOverlayBorder}" StrokeThickness="1" HorizontalAlignment="Right" Width="20" Margin="-1"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+        <Button Margin="16,16,8,16" Padding="4,2" MinHeight="32" HorizontalAlignment="Stretch" Grid.Row="2" Click="Export_Click">
+            <StackPanel Orientation="Horizontal">
+                <FontIcon Glyph="&#xEE71;" FontSize="16" VerticalAlignment="Center"/>
+                <TextBlock Text="{mk:L11n Key=UI.Calendar.ExportPNG}" Margin="8,0,0,0"/>
+            </StackPanel>
+        </Button>
+        <Button x:Name="printButton" Margin="8,16,16,16" Padding="4,2" MinHeight="32" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1" Click="Print_Click">
+            <StackPanel Orientation="Horizontal">
+                <FontIcon Glyph="&#xE749;" FontSize="16" VerticalAlignment="Center"/>
+                <TextBlock Text="{mk:L11n Key=UI.Calendar.Print}" Margin="8,0,0,0"/>
+            </StackPanel>
+        </Button>
+        <StackPanel Margin="16,8,16,16" Grid.ColumnSpan="2">
+            <TextBlock Text="{mk:L11n Key=UI.Calendar.Preview}"/>
+            <Border BorderThickness="1" BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,8,0,0">
+                <Viewbox x:Name="viewbox" FlowDirection="LeftToRight">
+                    <local:CalendarDocument x:Name="doc" x:DefaultBindMode="OneWay"
+                            FlowDirection2="{x:Bind root.FlowDirection}"
+                            Source="{x:Bind ViewModel.CalendarResult}"
+                            Background="{x:Bind ViewModel.Palette.DocumentBackground}"
+                            SectionBackground="{x:Bind ViewModel.Palette.SectionBackground}"
+                            SectionForeground="{x:Bind ViewModel.Palette.SectionForeground}"
+                            SectionBorder="{x:Bind ViewModel.Palette.SectionBorder}"
+                            SectionOverlayBackground="{x:Bind ViewModel.Palette.SectionOverlayBackground}"
+                            SectionOverlayForeground="{x:Bind ViewModel.Palette.SectionOverlayForeground}"
+                            SectionOverlayBorder="{x:Bind ViewModel.Palette.SectionOverlayBorder}"
+                            TableForeground="{x:Bind ViewModel.Palette.TableForeground}"
+                            TableBorder="{x:Bind ViewModel.Palette.TableBorder}"
+                            TableHeaderBackground="{x:Bind ViewModel.Palette.TableHeaderBackground}"
+                            TableHeaderForeground="{x:Bind ViewModel.Palette.TableHeaderForeground}"
+                            TableRowSeparator="{x:Bind ViewModel.Palette.TableRowSeparator}"
+                            HighlightForeground="{x:Bind ViewModel.Palette.HighlightForeground}"/>
+                </Viewbox>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AwqatSalaat.Helpers;
+using AwqatSalaat.UI.Views;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +15,11 @@ namespace AwqatSalaat.Preview
     /// </summary>
     public partial class App : Application
     {
+        static App()
+        {
+            LogManager.WidgetIdentity = $"Awqat Salaat Preview v{SettingsPanel.Version} ({SettingsPanel.Architecture})";
+
+            LogManager.InvalidateLogger();
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -37,6 +38,8 @@ namespace AwqatSalaat.Helpers
 
         private void SetLocale(string locale)
         {
+            Log.Information($"Setting locale: {locale}");
+
             if (locale == _current)
             {
                 return;
@@ -66,7 +69,6 @@ namespace AwqatSalaat.Helpers
             _current = locale;
             CurrentCulture = new CultureInfo(locale);
             Properties.Resources.Culture = CurrentCulture;
-            Properties.Settings.Default.DisplayLanguage = locale;
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Current)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentCulture)));

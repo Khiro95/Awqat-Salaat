@@ -14,4 +14,7 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
+
+    <!-- https://github.com/firegiant/HeatWaveSupport/issues/73 -->
+    <Target Condition="'$(MSBuildProjectExtension)'=='.wixproj'" Name="CollectSuggestedVisualStudioComponentIds" />
 </Project>

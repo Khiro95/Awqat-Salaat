@@ -1,11 +1,12 @@
 ﻿using AwqatSalaat.Helpers;
+using AwqatSalaat.Media;
 using AwqatSalaat.ViewModels;
+using Serilog;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
-using System.Windows.Media;
 
 namespace AwqatSalaat.UI.Views
 {
@@ -14,10 +15,12 @@ namespace AwqatSalaat.UI.Views
     /// </summary>
     public partial class WidgetSummary : UserControl
     {
+        private const string NearNotificationTag = "NearNotification";
+        private const string AdhanSoundTag = "Adhan";
+
         private bool shouldBeCompactHorizontally;
-        private bool isPlayingSound;
         private DisplayMode currentDisplayMode = DisplayMode.Default;
-        private readonly MediaPlayer mediaPlayer = new MediaPlayer();
+        private AudioPlayerSession currentAudioSession;
 
         private WidgetViewModel ViewModel => DataContext as WidgetViewModel;
 
@@ -69,14 +72,16 @@ namespace AwqatSalaat.UI.Views
         {
             InitializeComponent();
 
-            mediaPlayer.MediaEnded += (_, __) => mediaPlayer.Position = TimeSpan.Zero;
             popup.Opened += (_, __) =>
             {
+                Log.Information("Popup opened");
                 var src = HwndSource.FromVisual(popup.Child) as HwndSource;
                 (src.RootVisual as UIElement)?.Focus();
             };
             popup.Closed += (_, __) =>
             {
+                Log.Information("Popup closed");
+
                 if (ViewModel.WidgetSettings.IsOpen && ViewModel.WidgetSettings.Settings.IsConfigured)
                 {
                     ViewModel.WidgetSettings.Cancel.Execute(null);
@@ -86,16 +91,18 @@ namespace AwqatSalaat.UI.Views
             {
                 if (e.Key == System.Windows.Input.Key.Escape)
                 {
+                    Log.Information("Pressed on Esc key");
                     toggle.IsChecked = false;
                     e.Handled = true;
                 }
             };
-            this.Loaded += (_, __) => UpdateDisplayMode();
+            this.Loaded += WidgetSummary_Loaded;
             this.Unloaded += WidgetSummary_Unloaded;
-            ViewModel.WidgetSettings.Settings.PropertyChanged += Settings_PropertyChanged;
+            ViewModel.WidgetSettings.Realtime.PropertyChanged += Settings_PropertyChanged;
             ViewModel.WidgetSettings.Updated += WidgetSettings_Updated;
             ViewModel.NearNotificationStarted += ViewModel_NearNotificationStarted;
             ViewModel.NearNotificationStopped += ViewModel_NearNotificationStopped;
+            ViewModel.AdhanRequested += ViewModel_AdhanRequested;
             LocaleManager.Default.CurrentChanged += LocaleManager_CurrentChanged;
 
             UpdateDirection();
@@ -103,15 +110,23 @@ namespace AwqatSalaat.UI.Views
             UpdateNotificationSound();
         }
 
+        private void WidgetSummary_Loaded(object sender, RoutedEventArgs e)
+        {
+            Log.Information("Widget summary loaded");
+            UpdateDisplayMode();
+        }
+
         private void WidgetSummary_Unloaded(object sender, RoutedEventArgs e)
         {
-            ViewModel.WidgetSettings.Settings.PropertyChanged -= Settings_PropertyChanged;
+            Log.Information("Widget summary unloaded");
+            ViewModel.WidgetSettings.Realtime.PropertyChanged -= Settings_PropertyChanged;
             ViewModel.WidgetSettings.Updated -= WidgetSettings_Updated;
             ViewModel.NearNotificationStarted -= ViewModel_NearNotificationStarted;
             ViewModel.NearNotificationStopped -= ViewModel_NearNotificationStopped;
+            ViewModel.AdhanRequested -= ViewModel_AdhanRequested;
             LocaleManager.Default.CurrentChanged -= LocaleManager_CurrentChanged;
 
-            mediaPlayer.Close();
+            currentAudioSession?.End();
         }
 
         private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -126,16 +141,26 @@ namespace AwqatSalaat.UI.Views
             }
         }
 
+        private void ViewModel_AdhanRequested(bool isFajrTime)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                Log.Information("Adhan requested" + (isFajrTime ? " for fajr" : ""));
+                var file = isFajrTime
+                        ? ViewModel.WidgetSettings.Settings.AdhanFajrSoundFilePath
+                        : ViewModel.WidgetSettings.Settings.AdhanSoundFilePath;
+                var session = new AudioPlayerSession(file, tag: AdhanSoundTag);
+                PlaySound(session);
+            }));
+        }
+
         private void ViewModel_NearNotificationStarted()
         {
             Dispatcher.BeginInvoke(new Action(() =>
             {
-                if (mediaPlayer.Source != null)
-                {
-                    mediaPlayer.Position = TimeSpan.Zero;
-                    mediaPlayer.Play();
-                    isPlayingSound = true;
-                }
+                var file = ViewModel.WidgetSettings.Settings.NotificationSoundFilePath;
+                var session = new AudioPlayerSession(file, tag: NearNotificationTag, loop: true);
+                PlaySound(session);
             }));
         }
 
@@ -143,9 +168,25 @@ namespace AwqatSalaat.UI.Views
         {
             Dispatcher.BeginInvoke(new Action(() =>
             {
-                mediaPlayer.Stop();
-                isPlayingSound = false;
+                currentAudioSession?.End();
             }));
+        }
+
+        private void PlaySound(AudioPlayerSession session)
+        {
+            bool started = AudioPlayer.Play(session);
+
+            if (started)
+            {
+                currentAudioSession = session;
+                session.Ended += AudioSession_Ended;
+            }
+        }
+
+        private void AudioSession_Ended()
+        {
+            currentAudioSession.Ended -= AudioSession_Ended;
+            currentAudioSession = null;
         }
 
         private void WidgetSettings_Updated(bool obj)
@@ -182,15 +223,15 @@ namespace AwqatSalaat.UI.Views
 
             if (shouldBeCompactHorizontally)
             {
-                displayMode = ViewModel.WidgetSettings.Settings.ShowCountdown
+                displayMode = ViewModel.WidgetSettings.Realtime.ShowCountdown
                     ? DisplayMode.CompactHorizontal
                     : DisplayMode.CompactHorizontalNoCountdown;
             }
-            else if (!ViewModel.WidgetSettings.Settings.ShowCountdown)
+            else if (!ViewModel.WidgetSettings.Realtime.ShowCountdown)
             {
                 displayMode = DisplayMode.CompactNoCountdown;
             }
-            else if (Orientation == Orientation.Vertical || ViewModel.WidgetSettings.Settings.UseCompactMode)
+            else if (Orientation == Orientation.Vertical || ViewModel.WidgetSettings.Realtime.UseCompactMode)
             {
                 displayMode = DisplayMode.Compact;
             }
@@ -211,7 +252,7 @@ namespace AwqatSalaat.UI.Views
 
         private void UpdateCountdownState()
         {
-            if (ViewModel.WidgetSettings.Settings.ShowSeconds)
+            if (ViewModel.WidgetSettings.Realtime.ShowSeconds)
             {
                 VisualStateManager.GoToState(this, "WithSeconds", false);
             }
@@ -223,35 +264,37 @@ namespace AwqatSalaat.UI.Views
 
         private void UpdateDirection()
         {
-            this.FlowDirection = Properties.Resources.Culture.TextInfo.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
-            this.Language = System.Windows.Markup.XmlLanguage.GetLanguage(Properties.Resources.Culture.IetfLanguageTag);
+            this.FlowDirection = LocaleManager.Default.CurrentCulture.TextInfo.IsRightToLeft ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+            this.Language = System.Windows.Markup.XmlLanguage.GetLanguage(LocaleManager.Default.CurrentCulture.IetfLanguageTag);
         }
 
         private void UpdateNotificationSound()
         {
             var filePath = ViewModel.WidgetSettings.Settings.NotificationSoundFilePath;
 
-            if (!string.Equals(mediaPlayer.Source?.AbsolutePath, filePath, StringComparison.InvariantCultureIgnoreCase))
+            // Do we have a running notification sound?
+            if (currentAudioSession?.Tag == NearNotificationTag)
             {
-                mediaPlayer.Close();
+                // Yes, we have
 
-                if (!string.IsNullOrEmpty(filePath))
+                // Did the file path change?
+                if (!string.Equals(currentAudioSession.File, filePath, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    mediaPlayer.Open(new Uri(filePath));
+                    // Yes,
+
+                    // Stop current sound
+                    currentAudioSession.End();
                 }
                 else
                 {
-                    isPlayingSound = false;
+                    return;
                 }
+            }
 
-                if (isPlayingSound)
-                {
-                    mediaPlayer.Play();
-                }
-                else if (ViewModel.DisplayedTime?.State == PrayerTimeState.Near)
-                {
-                    ViewModel_NearNotificationStarted();
-                }
+            // Start playing if we have notification
+            if (!string.IsNullOrEmpty(filePath) && ViewModel.DisplayedTime?.State == PrayerTimeState.Near)
+            {
+                ViewModel_NearNotificationStarted();
             }
         }
     }

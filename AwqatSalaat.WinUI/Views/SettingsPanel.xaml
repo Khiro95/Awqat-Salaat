@@ -6,6 +6,7 @@
     xmlns:sys="using:System"
     xmlns:dt="using:AwqatSalaat.Data"
     xmlns:methods="using:AwqatSalaat.Services.Methods"
+    xmlns:cfg="using:AwqatSalaat.Configurations"
     xmlns:vm="using:AwqatSalaat.ViewModels"
     xmlns:mk="using:AwqatSalaat.WinUI.Markup"
     xmlns:converters="using:AwqatSalaat.WinUI.Converters"
@@ -37,8 +38,8 @@
             <converters:BooleanToVisibilityInvertedConverter x:Key="BooleanToVisibilityInvertedConverter"/>
             <converters:DecimalConverter x:Key="DecimalConverter"/>
             <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
-            <converters:LocalizedEnumConverter x:Key="LocalizedEnumConverter"/>
             <converters:EnumEqualityConverter x:Key="EnumEqualityConverter"/>
+            <converters:EnumEqualityToVisibilityConverter x:Key="EnumEqualityToVisibilityConverter"/>
 
             <!-- This doesn't work at the moment, binding in style setters isn't supported yet :( -->
             <Style TargetType="ToggleSwitch" BasedOn="{StaticResource DefaultToggleSwitchStyle}">
@@ -127,284 +128,397 @@
                 </StackPanel>
             </NavigationView.PaneFooter>
             <NavigationView.MenuItems>
-                <NavigationViewItem x:Name="generalTab" Content="{mk:L11n Key=UI.Settings.Tabs.General}" IsSelected="True"/>
-                <NavigationViewItem x:Name="serviceTab" Content="{mk:L11n Key=UI.Settings.Tabs.Service}"/>
-                <NavigationViewItem x:Name="locationTab" Content="{mk:L11n Key=UI.Settings.Tabs.Location}"/>
-                <NavigationViewItem x:Name="aboutTab" Content="{mk:L11n Key=UI.Settings.Tabs.About}"/>
-            </NavigationView.MenuItems>
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <Grid Margin="8">
-                    <StackPanel Visibility="{x:Bind generalTab.IsSelected, Mode=OneWay}">
-                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Language}" Description="{mk:L11n Key=UI.Settings.LanguageDescription}" Margin="0,8,0,0">
-                            <RadioButtons MaxColumns="2" Margin="0,-8,0,0" FlowDirection="LeftToRight" HorizontalAlignment="Left">
-                                <RadioButton Content="English" GroupName="Language" IsChecked="{x:Bind ViewModel.UseEnglish}"/>
-                                <RadioButton Content="العربية" GroupName="Language" IsChecked="{x:Bind ViewModel.UseArabic}" FlowDirection="RightToLeft"/>
-                            </RadioButtons>
-                        </ctrl:SettingsItem>
-                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartup}" Description="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartupDescription}" IsEnabled="{x:Bind StartupSettings.CanSetLaunchOnStartup, Mode=OneWay}">
-                            <ToggleSwitch IsOn="{x:Bind StartupSettings.LaunchOnStartup}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
-                        </ctrl:SettingsItem>
-                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowCountdown}" Description="{mk:L11n Key=UI.Settings.ShowCountdownDescription}">
-                            <ToggleSwitch x:Name="countdownToggle" IsOn="{x:Bind ViewModel.Settings.ShowCountdown}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
-                        </ctrl:SettingsItem>
-                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowSeconds}" Description="{mk:L11n Key=UI.Settings.ShowSecondsDescription}" IsEnabled="{x:Bind ViewModel.Settings.ShowCountdown}">
-                            <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.ShowSeconds}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
-                        </ctrl:SettingsItem>
-                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.EnableCompactMode}" Description="{mk:L11n Key=UI.Settings.EnableCompactModeDescription}" IsEnabled="{x:Bind ViewModel.Settings.ShowCountdown}">
-                            <ToggleSwitch x:Name="compactModeToggle" IsOn="{x:Bind ViewModel.Settings.UseCompactMode}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
-                        </ctrl:SettingsItem>
-                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ReminderOffset}" Description="{mk:L11n Key=UI.Settings.ReminderOffsetDescription}">
-                            <NumberBox SpinButtonPlacementMode="Inline"
-                                   Value="{x:Bind ViewModel.Settings.NotificationDistance}"
-                                   Maximum="720"
-                                   HorizontalAlignment="Left"/>
-                        </ctrl:SettingsItem>
-                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ElapsedPeriod}" Description="{mk:L11n Key=UI.Settings.ElapsedPeriodDescription}">
-                            <NumberBox SpinButtonPlacementMode="Inline"
-                                   Value="{x:Bind ViewModel.Settings.NotificationDistanceElapsed}"
-                                   Maximum="30"
-                                   HorizontalAlignment="Left"/>
-                        </ctrl:SettingsItem>
-                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Calendar}" Description="{mk:L11n Key=UI.Settings.CalendarDescription}">
-                            <StackPanel Orientation="Horizontal">
-                                <ComboBox ItemsSource="{mk:Enums Type=dt:CalendarType}" SelectedItem="{Binding Settings.CalendarType, Mode=TwoWay}" Width="280">
-                                    <ComboBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.CalendarType.{0}'}"/>
-                                        </DataTemplate>
-                                    </ComboBox.ItemTemplate>
-                                </ComboBox>
-                                <StackPanel Orientation="Horizontal" Visibility="{x:Bind hijriAdjustBox.IsEnabled, Mode=OneWay}" Margin="16,0,0,0">
-                                    <TextBlock Text="{mk:L11n Key=UI.Settings.HijriCalendarAdjustment}" VerticalAlignment="Center"/>
-                                    <NumberBox x:Name="hijriAdjustBox"
-                                               Value="{x:Bind ViewModel.Settings.HijriAdjustment}"
-                                               SpinButtonPlacementMode="Inline"
-                                               Minimum="-2"
-                                               Maximum="2"
-                                               Margin="8,0,0,0"
-                                               IsEnabled="{x:Bind ViewModel.Settings.CalendarType, Converter={StaticResource EnumEqualityConverter}, ConverterParameter='Hijri', Mode=OneWay}"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </ctrl:SettingsItem>
-                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.NotificationSound}" Description="{mk:L11n Key=UI.Settings.NotificationSoundDescription}">
-                            <StackPanel>
-                                <ToggleSwitch IsOn="{x:Bind ViewModel.Settings.EnableNotificationSound}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
-                                <ContentControl Margin="8,8,0,0" HorizontalContentAlignment="Stretch" IsEnabled="{x:Bind ViewModel.Settings.EnableNotificationSound}" IsTabStop="False">
-                                    <Grid ColumnDefinitions="Auto,*,Auto">
-                                        <TextBlock Text="{mk:L11n Key=UI.Settings.File}" VerticalAlignment="Center"/>
-                                        <TextBox Text="{x:Bind ViewModel.Settings.NotificationSoundFile, UpdateSourceTrigger=PropertyChanged}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1"/>
-                                        <Button Content="{mk:L11n Key=UI.Settings.Browse}" Click="BrowseSound_Click" VerticalAlignment="Center" Grid.Column="2"/>
-                                    </Grid>
-                                </ContentControl>
-                            </StackPanel>
-                        </ctrl:SettingsItem>
-                    </StackPanel>
-                    <StackPanel Visibility="{x:Bind serviceTab.IsSelected, Mode=OneWay}">
-                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ServiceProvider}" Description="{mk:L11n Key=UI.Settings.ServiceProviderDescription}">
-                            <ComboBox PlaceholderText="Pick a service"
-                                  ItemsSource="{mk:Enums Type=dt:PrayerTimesService}"
-                                  SelectedItem="{Binding Settings.Service, Mode=TwoWay}"
-                                  Width="150">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </ctrl:SettingsItem>
-                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.JuristicSchool}" Description="{mk:L11n Key=UI.Settings.JuristicSchoolDescription}">
-                            <ComboBox ItemsSource="{mk:Enums Type=dt:School}" SelectedItem="{Binding Settings.School, Mode=TwoWay}" Width="300">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Converter={StaticResource LocalizedEnumConverter}, ConverterParameter='Data.JuristicSchool.{0}'}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </ctrl:SettingsItem>
-                        <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Method}" Description="{mk:L11n Key=UI.Settings.MethodDescription}">
-                            <ComboBox PlaceholderText="Pick a method"
-                                  ItemsSource="{x:Bind methods:CalculationMethod.AvailableMethods, Mode=OneTime}"
-                                  SelectedItem="{Binding Settings.CalculationMethod, Mode=TwoWay}"
-                                  HorizontalAlignment="Stretch">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <ctrl:ComboBoxItemPresenter PopupItemTemplate="{StaticResource CalculationMethodTemplate}"
-                                                                SelectedItemTemplate="{StaticResource CalculationMethodDisplayTemplate}"/>
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </ctrl:SettingsItem>
-                    </StackPanel>
-                    <StackPanel Visibility="{x:Bind locationTab.IsSelected, Mode=OneWay}">
-                        <RadioButton IsChecked="{x:Bind ViewModel.Locator.DetectByCountryCode}" GroupName="LocationMode" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
-                            <ctrl:SettingsItem Margin="0" Header="{mk:L11n Key=UI.Settings.LocationByCountryCode}" Description="{mk:L11n Key=UI.Settings.LocationByCountryCodeDescription}" IsEnabled="{x:Bind ViewModel.Locator.DetectByCountryCode, Mode=OneWay}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="150"/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition Height="8"/>
-                                        <RowDefinition/>
-                                        <RowDefinition Height="8"/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Text="{mk:L11n Key=UI.Settings.CountryCode}"/>
-                                    <ComboBox x:Name="countryComboBox"
-                                          ItemsSource="{x:Bind vm:WidgetSettingsViewModel.AvailableCountries, Mode=OneTime}"
-                                          SelectedValuePath="Code"
-                                          SelectedValue="{x:Bind ViewModel.Settings.CountryCode, Mode=TwoWay}"
-                                          HorizontalAlignment="Stretch"
-                                          FlowDirection="LeftToRight"
-                                          Grid.Column="1">
+                <NavigationViewItem x:Name="generalTab" Content="{mk:L11n Key=UI.Settings.Tabs.General}" IsSelected="True">
+                    <NavigationViewItem.Tag>
+                        <StackPanel>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Language}" Description="{mk:L11n Key=UI.Settings.LanguageDescription}" Margin="0,8,0,0">
+                                <RadioButtons MaxColumns="2" Margin="0,-8,0,0" FlowDirection="LeftToRight" HorizontalAlignment="Left">
+                                    <RadioButton Content="English" GroupName="Language" IsChecked="{x:Bind ViewModel.UseEnglish}"/>
+                                    <RadioButton Content="العربية" GroupName="Language" IsChecked="{x:Bind ViewModel.UseArabic}" FlowDirection="RightToLeft"/>
+                                </RadioButtons>
+                            </ctrl:SettingsItem>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartup}" Description="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartupDescription}" IsEnabled="{x:Bind StartupSettings.CanSetLaunchOnStartup, Mode=OneWay}">
+                                <ToggleSwitch IsOn="{x:Bind StartupSettings.LaunchOnStartup}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                            </ctrl:SettingsItem>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowCountdown}" Description="{mk:L11n Key=UI.Settings.ShowCountdownDescription}">
+                                <ToggleSwitch x:Name="countdownToggle" IsOn="{x:Bind ViewModel.Realtime.ShowCountdown}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                            </ctrl:SettingsItem>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowSeconds}" Description="{mk:L11n Key=UI.Settings.ShowSecondsDescription}" IsEnabled="{x:Bind ViewModel.Realtime.ShowCountdown, Mode=OneWay}">
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.Realtime.ShowSeconds}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                            </ctrl:SettingsItem>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.EnableCompactMode}" Description="{mk:L11n Key=UI.Settings.EnableCompactModeDescription}" IsEnabled="{x:Bind ViewModel.Realtime.ShowCountdown, Mode=OneWay}">
+                                <ToggleSwitch x:Name="compactModeToggle" IsOn="{x:Bind ViewModel.Realtime.UseCompactMode}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                            </ctrl:SettingsItem>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ReminderOffset}" Description="{mk:L11n Key=UI.Settings.ReminderOffsetDescription}">
+                                <NumberBox SpinButtonPlacementMode="Inline"
+                                           Value="{x:Bind ViewModel.Realtime.NotificationDistance}"
+                                           Minimum="0"
+                                           Maximum="720"
+                                           HorizontalAlignment="Left"/>
+                            </ctrl:SettingsItem>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ElapsedPeriod}" Description="{mk:L11n Key=UI.Settings.ElapsedPeriodDescription}">
+                                <NumberBox SpinButtonPlacementMode="Inline"
+                                           Value="{x:Bind ViewModel.Realtime.NotificationDistanceElapsed}"
+                                           Minimum="0"
+                                           Maximum="30"
+                                           HorizontalAlignment="Left"/>
+                            </ctrl:SettingsItem>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Calendar}" Description="{mk:L11n Key=UI.Settings.CalendarDescription}">
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox ItemsSource="{mk:Enums Type=dt:CalendarType}" SelectedItem="{Binding Realtime.CalendarType, Mode=TwoWay}" Width="280">
                                         <ComboBox.ItemTemplate>
                                             <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding Code}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Width="24"/>
-                                                    <TextBlock Text="{Binding Name}" Margin="8,0,0,0"/>
-                                                </StackPanel>
+                                                <ctrl:LocalizedStringPresenter Value="{Binding}" KeyFormat="Data.CalendarType.{0}"/>
                                             </DataTemplate>
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
-                                    <TextBlock Text="{mk:L11n Key=UI.Settings.City}" Grid.Row="2"/>
-                                    <TextBox Text="{x:Bind ViewModel.Settings.City, UpdateSourceTrigger=PropertyChanged}" Width="200" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
-                                    <TextBlock Text="{mk:L11n Key=UI.Settings.ZipCode}" Grid.Row="4"/>
-                                    <TextBox Text="{x:Bind ViewModel.Settings.ZipCode, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="1"/>
-                                </Grid>
+                                    <StackPanel Orientation="Horizontal" Visibility="{x:Bind hijriAdjustBox.IsEnabled, Mode=OneWay}" Margin="16,0,0,0">
+                                        <TextBlock Text="{mk:L11n Key=UI.Settings.HijriCalendarAdjustment}" VerticalAlignment="Center"/>
+                                        <NumberBox x:Name="hijriAdjustBox"
+                                                   Value="{x:Bind ViewModel.Realtime.HijriAdjustment}"
+                                                   SpinButtonPlacementMode="Inline"
+                                                   Minimum="-2"
+                                                   Maximum="2"
+                                                   Margin="8,0,0,0"
+                                                   IsEnabled="{x:Bind ViewModel.Realtime.CalendarType, Converter={StaticResource EnumEqualityConverter}, ConverterParameter='Hijri', Mode=OneWay}"/>
+                                    </StackPanel>
+                                </StackPanel>
                             </ctrl:SettingsItem>
-                        </RadioButton>
-                        <RadioButton IsChecked="{x:Bind ViewModel.Locator.DetectByQuery}" GroupName="LocationMode" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="0,16,0,0">
-                            <ctrl:SettingsItem Margin="0" Header="{mk:L11n Key=UI.Settings.LocationByQuery}" Description="{mk:L11n Key=UI.Settings.LocationByQueryDescription}" IsEnabled="{x:Bind ViewModel.Locator.DetectByQuery, Mode=OneWay}">
-                                <AutoSuggestBox PlaceholderText="{mk:L11n Key=UI.Settings.LocationByQueryHint}"
-                                            Text="{x:Bind ViewModel.Locator.SearchQuery}"
-                                            DisplayMemberPath="DisplayName"
-                                            AutoMaximizeSuggestionArea="True"
-                                            UpdateTextOnSelect="False"
-                                            SuggestionChosen="AutoSuggestBox_SuggestionChosen">
-                                    <AutoSuggestBox.Description>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{mk:L11n Key=UI.Settings.PoweredBy}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" FontSize="12"/>
-                                            <TextBlock Margin="4,0,0,0" FontSize="12">
-                                            <Hyperlink NavigateUri="https://nominatim.org/" ToolTipService.ToolTip="https://nominatim.org/">Nominatim</Hyperlink>
-                                            </TextBlock>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.AdhanSound}" Description="{mk:L11n Key=UI.Settings.AdhanSoundDescription}">
+                                <StackPanel>
+                                    <ComboBox ItemsSource="{mk:Enums Type=dt:AdhanSound}" SelectedItem="{Binding Realtime.AdhanSound, Mode=TwoWay}" Width="280">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <ctrl:LocalizedStringPresenter Value="{Binding}" KeyFormat="Data.AdhanSound.{0}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <Grid Margin="8,8,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="8"/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="{mk:L11n Key=UI.Settings.AdhanFileStandard}" VerticalAlignment="Center"/>
+                                        <TextBox Text="{x:Bind ViewModel.Realtime.AdhanSoundFile}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1" IsEnabled="{x:Bind ViewModel.Realtime.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
+                                        <ctrl:SoundPreviewButton File="{x:Bind ViewModel.Realtime.AdhanSoundFilePath, Mode=OneWay}" IdleToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipIdle}" PlayingToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipPlaying}" Grid.Column="2"/>
+                                        <Button Content="{mk:L11n Key=UI.Settings.Browse}" Click="BrowseAdhanSound_Click" Grid.Column="3" Margin="8,0,0,0" IsEnabled="{x:Bind ViewModel.Realtime.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
+
+                                        <TextBlock Text="{mk:L11n Key=UI.Settings.AdhanFileFajr}" VerticalAlignment="Center" Grid.Row="2"/>
+                                        <TextBox Text="{x:Bind ViewModel.Realtime.AdhanFajrSoundFile}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1" Grid.Row="2" IsEnabled="{x:Bind ViewModel.Realtime.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
+                                        <ctrl:SoundPreviewButton File="{x:Bind ViewModel.Realtime.AdhanFajrSoundFilePath, Mode=OneWay}" IdleToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipIdle}" PlayingToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipPlaying}" Grid.Column="2" Grid.Row="3"/>
+                                        <Button Content="{mk:L11n Key=UI.Settings.Browse}" Click="BrowseAdhanFajrSound_Click" Grid.Column="3" Grid.Row="3" Margin="8,0,0,0" IsEnabled="{x:Bind ViewModel.Realtime.AdhanSound, Converter={StaticResource EnumEqualityConverter}, ConverterParameter=Custom, Mode=OneWay}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </ctrl:SettingsItem>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.NotificationSound}" Description="{mk:L11n Key=UI.Settings.NotificationSoundDescription}">
+                                <StackPanel>
+                                    <ToggleSwitch IsOn="{x:Bind ViewModel.Realtime.EnableNotificationSound}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                                    <ContentControl Margin="8,8,0,0" HorizontalContentAlignment="Stretch" IsEnabled="{x:Bind ViewModel.Realtime.EnableNotificationSound, Mode=OneWay}" IsTabStop="False">
+                                        <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                                            <TextBlock Text="{mk:L11n Key=UI.Settings.File}" VerticalAlignment="Center"/>
+                                            <TextBox Text="{x:Bind ViewModel.Realtime.NotificationSoundFile, UpdateSourceTrigger=PropertyChanged}" Margin="8,0" FlowDirection="LeftToRight" Grid.Column="1"/>
+                                            <ctrl:SoundPreviewButton File="{x:Bind ViewModel.Realtime.NotificationSoundFilePath, Mode=OneWay}" IdleToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipIdle}" PlayingToolTip="{mk:L11n Key=UI.Controls.SoundPreview.ToolTipPlaying}" Grid.Column="2" Grid.Row="3"/>
+                                            <Button Content="{mk:L11n Key=UI.Settings.Browse}" Click="BrowseNotificationSound_Click" VerticalAlignment="Center" Grid.Column="3" Margin="8,0,0,0"/>
+                                        </Grid>
+                                    </ContentControl>
+                                </StackPanel>
+                            </ctrl:SettingsItem>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.EnableLogs}" Description="{mk:L11n Key=UI.Settings.EnableLogsDescription}">
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.Realtime.EnableLogs}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                            </ctrl:SettingsItem>
+                            <TextBlock Margin="0,8,0,0">
+                                <Hyperlink Click="ShowLogsFileClick">
+                                    <Run Text="{mk:L11n Key=UI.Settings.ShowLogsFile}"/>
+                                </Hyperlink>
+                            </TextBlock>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.EnableDebugLogs}" Description="{mk:L11n Key=UI.Settings.EnableDebugLogsDescription}" IsEnabled="{x:Bind ViewModel.Realtime.EnableLogs, Mode=OneWay}">
+                                <StackPanel>
+                                    <ToggleSwitch IsOn="{x:Bind ViewModel.Realtime.EnableDebugLogs}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                                    <StackPanel Orientation="Horizontal" Margin="2,4,0,0">
+                                        <FontIcon Glyph="&#xE7BA;" FontSize="12" Foreground="{ThemeResource TextHighlightBrush}" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{mk:L11n Key=UI.Settings.DebugLogsNote}" FontSize="12" Foreground="{ThemeResource TextHighlightBrush}" Margin="4,0,0,0"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ctrl:SettingsItem>
+                        </StackPanel>
+                    </NavigationViewItem.Tag>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="timesTab" Content="{mk:L11n Key=UI.Settings.Tabs.Times}">
+                    <NavigationViewItem.Tag>
+                        <ItemsControl x:Name="timesPanel" ItemsSource="{x:Bind ViewModel.PrayerConfigs, Mode=OneWay}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="cfg:PrayerConfig">
+                                    <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,8,0,0" Expanding="Expander_Expanding">
+                                        <Expander.Header>
+                                            <ctrl:LocalizedStringPresenter Value="{x:Bind Key, Mode=OneWay}" KeyFormat="Data.Salaat.{0}"/>
+                                        </Expander.Header>
+                                        <StackPanel>
+                                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.TimeAdjustment}" Description="{mk:L11n Key=UI.Settings.TimeAdjustmentDescription}" Margin="0">
+                                                <NumberBox Minimum="-10" Maximum="10" Value="{x:Bind Adjustment}" SpinButtonPlacementMode="Inline" HorizontalAlignment="Left"/>
+                                            </ctrl:SettingsItem>
+                                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ReminderOffset}" Description="{mk:L11n Key=UI.Settings.ReminderOffsetDescription}" Visibility="{x:Bind IsPrincipal, Mode=OneWay}">
+                                                <StackPanel>
+                                                    <ToggleSwitch IsOn="{x:Bind GlobalReminderOffset}" OnContent="{mk:L11n Key=UI.Settings.UseGlobal}" OffContent="{mk:L11n Key=UI.Settings.UseGlobal}"/>
+                                                    <NumberBox Value="{x:Bind ReminderOffset}" Minimum="0" Maximum="720" SpinButtonPlacementMode="Inline" HorizontalAlignment="Left" Margin="0,10,0,0" IsEnabled="{x:Bind GlobalReminderOffset, Converter={StaticResource BooleanInvertedConverter}, Mode=OneWay}"/>
+                                                </StackPanel>
+                                            </ctrl:SettingsItem>
+                                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ElapsedPeriod}" Description="{mk:L11n Key=UI.Settings.ElapsedPeriodDescription}" Visibility="{x:Bind IsPrincipal, Mode=OneWay}">
+                                                <StackPanel>
+                                                    <ToggleSwitch IsOn="{x:Bind GlobalElapsedTime, Mode=TwoWay}" OnContent="{mk:L11n Key=UI.Settings.UseGlobal}" OffContent="{mk:L11n Key=UI.Settings.UseGlobal}"/>
+                                                    <NumberBox Value="{x:Bind ElapsedTime}" Minimum="0" Maximum="30" SpinButtonPlacementMode="Inline" HorizontalAlignment="Left" Margin="0,10,0,0" IsEnabled="{x:Bind GlobalElapsedTime, Converter={StaticResource BooleanInvertedConverter}, Mode=OneWay}"/>
+                                                </StackPanel>
+                                            </ctrl:SettingsItem>
+                                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.TimeVisibility}" Description="{mk:L11n Key=UI.Settings.TimeVisibilityDescription}" Visibility="{x:Bind IsPrincipal, Converter={StaticResource BooleanToVisibilityInvertedConverter}, Mode=OneWay}">
+                                                <ToggleSwitch IsOn="{x:Bind IsVisible}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                                            </ctrl:SettingsItem>
                                         </StackPanel>
-                                    </AutoSuggestBox.Description>
-                                    <interactivity:Interaction.Behaviors>
-                                        <behaviors:AutoSuggestBoxExtended SuggestionsSource="{x:Bind ViewModel.Locator.Places, Mode=OneWay}"
-                                                                      ShowCustomContent="{x:Bind ViewModel.Locator.HasQuery, Mode=OneWay}"
-                                                                      HasError="{x:Bind ViewModel.Locator.HasError, Mode=OneWay}"
-                                                                      IsSearching="{x:Bind ViewModel.Locator.IsBusy, Mode=OneWay}">
-                                            <behaviors:AutoSuggestBoxExtended.SearchingContent>
-                                                <Grid>
-                                                    <TextBlock Text="{mk:L11n Key=UI.Settings.Searching}"
-                                                           VerticalAlignment="Center"
-                                                           HorizontalAlignment="Center"/>
+                                    </Expander>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </NavigationViewItem.Tag>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="serviceTab" Content="{mk:L11n Key=UI.Settings.Tabs.Service}">
+                    <NavigationViewItem.Tag>
+                        <StackPanel>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ServiceProvider}" Description="{mk:L11n Key=UI.Settings.ServiceProviderDescription}">
+                                <StackPanel>
+                                    <ComboBox PlaceholderText="Pick a service"
+                                              ItemsSource="{mk:Enums Type=dt:PrayerTimesService}"
+                                              SelectedItem="{Binding Realtime.Service, Mode=TwoWay}"
+                                              Width="200">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <ctrl:LocalizedStringPresenter Value="{Binding}" KeyFormat="Data.PrayerTimesService.{0}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <StackPanel Orientation="Horizontal" Margin="2,2,0,0" Visibility="{x:Bind ViewModel.Realtime.Service, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter='Local', Mode=OneWay}">
+                                        <FontIcon Glyph="&#xE7BA;" FontSize="12" Foreground="{ThemeResource TextHighlightBrush}" VerticalAlignment="Center"/>
+                                        <TextBlock x:Name="localServiceNote" Text="{mk:L11n Key=UI.Settings.LocalServiceNote}" FontSize="12" Foreground="{ThemeResource TextHighlightBrush}" Margin="4,0,0,0"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ctrl:SettingsItem>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.JuristicSchool}" Description="{mk:L11n Key=UI.Settings.JuristicSchoolDescription}">
+                                <ComboBox ItemsSource="{mk:Enums Type=dt:School}" SelectedItem="{Binding Realtime.School, Mode=TwoWay}" Width="300">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <ctrl:LocalizedStringPresenter Value="{Binding}" KeyFormat="Data.JuristicSchool.{0}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </ctrl:SettingsItem>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Method}" Description="{mk:L11n Key=UI.Settings.MethodDescription}">
+                                <ComboBox PlaceholderText="Pick a method"
+                                          ItemsSource="{x:Bind methods:CalculationMethod.AvailableMethods, Mode=OneTime}"
+                                          SelectedItem="{Binding Realtime.CalculationMethod, Mode=TwoWay}"
+                                          HorizontalAlignment="Stretch">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <ctrl:ComboBoxItemPresenter PopupItemTemplate="{StaticResource CalculationMethodTemplate}"
+                                                                        SelectedItemTemplate="{StaticResource CalculationMethodDisplayTemplate}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </ctrl:SettingsItem>
+                        </StackPanel>
+                    </NavigationViewItem.Tag>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="locationTab" Content="{mk:L11n Key=UI.Settings.Tabs.Location}">
+                    <NavigationViewItem.Tag>
+                        <StackPanel>
+                            <RadioButton IsChecked="{x:Bind ViewModel.Locator.DetectByCountryCode}" GroupName="LocationMode" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                                <ctrl:SettingsItem Margin="0" Header="{mk:L11n Key=UI.Settings.LocationByCountryCode}" Description="{mk:L11n Key=UI.Settings.LocationByCountryCodeDescription}" IsEnabled="{x:Bind ViewModel.Locator.DetectByCountryCode, Mode=OneWay}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="8"/>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="8"/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="{mk:L11n Key=UI.Settings.CountryCode}"/>
+                                        <ComboBox x:Name="countryComboBox"
+                                                  ItemsSource="{x:Bind vm:WidgetSettingsViewModel.AvailableCountries, Mode=OneTime}"
+                                                  SelectedValuePath="Code"
+                                                  SelectedValue="{x:Bind ViewModel.Realtime.CountryCode, Mode=TwoWay}"
+                                                  HorizontalAlignment="Stretch"
+                                                  FlowDirection="LeftToRight"
+                                                  Grid.Column="1">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Code}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Width="24"/>
+                                                        <TextBlock Text="{Binding Name}" Margin="8,0,0,0"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <TextBlock Text="{mk:L11n Key=UI.Settings.City}" Grid.Row="2"/>
+                                        <TextBox Text="{x:Bind ViewModel.Realtime.City, UpdateSourceTrigger=PropertyChanged}" Width="200" HorizontalAlignment="Left" Grid.Row="2" Grid.Column="1"/>
+                                        <TextBlock Text="{mk:L11n Key=UI.Settings.ZipCode}" Grid.Row="4"/>
+                                        <TextBox Text="{x:Bind ViewModel.Realtime.ZipCode, UpdateSourceTrigger=PropertyChanged}" Width="100" HorizontalAlignment="Left" Grid.Row="4" Grid.Column="1"/>
+                                    </Grid>
+                                </ctrl:SettingsItem>
+                            </RadioButton>
+                            <RadioButton IsChecked="{x:Bind ViewModel.Locator.DetectByQuery}" GroupName="LocationMode" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="0,16,0,0">
+                                <ctrl:SettingsItem Margin="0" Header="{mk:L11n Key=UI.Settings.LocationByQuery}" Description="{mk:L11n Key=UI.Settings.LocationByQueryDescription}" IsEnabled="{x:Bind ViewModel.Locator.DetectByQuery, Mode=OneWay}">
+                                    <AutoSuggestBox PlaceholderText="{mk:L11n Key=UI.Settings.LocationByQueryHint}"
+                                                    Text="{x:Bind ViewModel.Locator.SearchQuery}"
+                                                    DisplayMemberPath="DisplayName"
+                                                    AutoMaximizeSuggestionArea="True"
+                                                    UpdateTextOnSelect="False"
+                                                    SuggestionChosen="AutoSuggestBox_SuggestionChosen">
+                                        <AutoSuggestBox.Description>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{mk:L11n Key=UI.Settings.PoweredBy}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" FontSize="12"/>
+                                                <TextBlock Margin="4,0,0,0" FontSize="12">
+                                                    <Hyperlink NavigateUri="https://nominatim.org/" ToolTipService.ToolTip="https://nominatim.org/">Nominatim</Hyperlink>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </AutoSuggestBox.Description>
+                                        <interactivity:Interaction.Behaviors>
+                                            <behaviors:AutoSuggestBoxExtended SuggestionsSource="{x:Bind ViewModel.Locator.Places, Mode=OneWay}"
+                                                                              ShowCustomContent="{x:Bind ViewModel.Locator.HasQuery, Mode=OneWay}"
+                                                                              HasError="{x:Bind ViewModel.Locator.HasError, Mode=OneWay}"
+                                                                              IsSearching="{x:Bind ViewModel.Locator.IsBusy, Mode=OneWay}">
+                                                <behaviors:AutoSuggestBoxExtended.SearchingContent>
+                                                    <Grid>
+                                                        <TextBlock Text="{mk:L11n Key=UI.Settings.Searching}"
+                                                                   VerticalAlignment="Center"
+                                                                   HorizontalAlignment="Center"/>
+                                                        <ProgressBar IsIndeterminate="True" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Bottom"/>
+                                                    </Grid>
+                                                </behaviors:AutoSuggestBoxExtended.SearchingContent>
+                                                <behaviors:AutoSuggestBoxExtended.NoResultContent>
+                                                    <TextBlock Text="{mk:L11n Key=UI.Settings.NoResult}"
+                                                               Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                                               VerticalAlignment="Center"
+                                                               HorizontalAlignment="Center"/>
+                                                </behaviors:AutoSuggestBoxExtended.NoResultContent>
+                                                <behaviors:AutoSuggestBoxExtended.ErrorContent>
+                                                    <StackPanel>
+                                                        <TextBlock Text="{mk:L11n Key=UI.Panel.Error}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
+                                                        <TextBlock Text="{x:Bind ViewModel.Locator.Error, Mode=OneWay}" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </behaviors:AutoSuggestBoxExtended.ErrorContent>
+                                            </behaviors:AutoSuggestBoxExtended>
+                                        </interactivity:Interaction.Behaviors>
+                                    </AutoSuggestBox>
+                                </ctrl:SettingsItem>
+                            </RadioButton>
+                            <RadioButton IsChecked="{x:Bind ViewModel.Locator.DetectByCoordinates}" GroupName="LocationMode" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="0,16,0,0">
+                                <ctrl:SettingsItem Margin="0" Header="{mk:L11n Key=UI.Settings.LocationByCoordinates}" Description="{mk:L11n Key=UI.Settings.LocationByCoordinatesDescription}" IsEnabled="{x:Bind ViewModel.Locator.DetectByCoordinates, Mode=OneWay}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="8"/>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="8"/>
+                                            <RowDefinition MinHeight="48"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="{mk:L11n Key=UI.Settings.Latitude}"/>
+                                        <TextBox Text="{x:Bind ViewModel.Realtime.Latitude, Converter={StaticResource DecimalConverter}}" Grid.Column="1"/>
+                                        <TextBlock Text="{mk:L11n Key=UI.Settings.Longitude}" Grid.Row="2"/>
+                                        <TextBox Text="{x:Bind ViewModel.Realtime.Longitude, Converter={StaticResource DecimalConverter}}" Grid.Column="1" Grid.Row="2"/>
+                                        <Button Content="{mk:L11n Key=UI.Settings.Check}" Command="{x:Bind ViewModel.Locator.Check, Mode=OneWay}" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Grid x:DefaultBindMode="OneWay" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Visibility="{x:Bind ViewModel.Locator.PendingCheck}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <CommandBar OverflowButtonVisibility="Collapsed" Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
+                                                <AppBarButton Icon="Cancel" Width="32" IsCompact="True" Margin="0" Command="{x:Bind ViewModel.Locator.CancelCheck}" ToolTipService.ToolTip="{mk:L11n Key=UI.Settings.Cancel}" Visibility="{x:Bind ViewModel.Locator.PendingCheck}"/>
+                                                <AppBarButton Icon="Accept" Width="32" IsCompact="True" Margin="0" Command="{x:Bind ViewModel.Locator.ConfirmCheck}" ToolTipService.ToolTip="{mk:L11n Key=UI.Settings.Confirm}" Visibility="{x:Bind ViewModel.Locator.HasCheckResult}"/>
+                                            </CommandBar>
+                                            <Grid>
+                                                <TextBlock Text="{Binding Locator.PendingPlace.DisplayName}" VerticalAlignment="Center" MaxWidth="400" TextWrapping="Wrap" FlowDirection="LeftToRight"/>
+                                                <Grid Visibility="{x:Bind ViewModel.Locator.IsChecking, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
+                                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{x:Bind ViewModel.Locator.HasCheckResult, Converter={StaticResource BooleanToVisibilityInvertedConverter}, Mode=OneWay}">
+                                                        <TextBlock Text="{mk:L11n Key=UI.Panel.Error}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" Visibility="{x:Bind ViewModel.Locator.HasError}"/>
+                                                        <TextBlock x:Name="checkStatusTextBlock" Text="{mk:L11n Key=UI.Settings.NoResult}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                                <Grid Visibility="{x:Bind ViewModel.Locator.IsChecking}">
+                                                    <TextBlock Text="{mk:L11n Key=UI.Settings.Checking}" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                     <ProgressBar IsIndeterminate="True" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Bottom"/>
                                                 </Grid>
-                                            </behaviors:AutoSuggestBoxExtended.SearchingContent>
-                                            <behaviors:AutoSuggestBoxExtended.NoResultContent>
-                                                <TextBlock Text="{mk:L11n Key=UI.Settings.NoResult}"
-                                                       Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Center"/>
-                                            </behaviors:AutoSuggestBoxExtended.NoResultContent>
-                                            <behaviors:AutoSuggestBoxExtended.ErrorContent>
-                                                <StackPanel>
-                                                    <TextBlock Text="{mk:L11n Key=UI.Panel.Error}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
-                                                    <TextBlock Text="{x:Bind ViewModel.Locator.Error, Mode=OneWay}" HorizontalAlignment="Center"/>
-                                                </StackPanel>
-                                            </behaviors:AutoSuggestBoxExtended.ErrorContent>
-                                        </behaviors:AutoSuggestBoxExtended>
-                                    </interactivity:Interaction.Behaviors>
-                                </AutoSuggestBox>
-                            </ctrl:SettingsItem>
-                        </RadioButton>
-                        <RadioButton IsChecked="{x:Bind ViewModel.Locator.DetectByCoordinates}" GroupName="LocationMode" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Margin="0,16,0,0">
-                            <ctrl:SettingsItem Margin="0" Header="{mk:L11n Key=UI.Settings.LocationByCoordinates}" Description="{mk:L11n Key=UI.Settings.LocationByCoordinatesDescription}" IsEnabled="{x:Bind ViewModel.Locator.DetectByCoordinates, Mode=OneWay}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="150"/>
-                                        <ColumnDefinition Width="150"/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition Height="8"/>
-                                        <RowDefinition/>
-                                        <RowDefinition Height="8"/>
-                                        <RowDefinition MinHeight="48"/>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Text="{mk:L11n Key=UI.Settings.Latitude}"/>
-                                    <TextBox Text="{x:Bind ViewModel.Settings.Latitude, Converter={StaticResource DecimalConverter}}" Grid.Column="1"/>
-                                    <TextBlock Text="{mk:L11n Key=UI.Settings.Longitude}" Grid.Row="2"/>
-                                    <TextBox Text="{x:Bind ViewModel.Settings.Longitude, Converter={StaticResource DecimalConverter}}" Grid.Column="1" Grid.Row="2"/>
-                                    <Button Content="{mk:L11n Key=UI.Settings.Check}" Command="{x:Bind ViewModel.Locator.Check, Mode=OneWay}" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                    <Grid ColumnDefinitions="*,Auto"  Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Visibility="{x:Bind ViewModel.Locator.PendingCheck}" x:DefaultBindMode="OneWay">
-                                        <CommandBar OverflowButtonVisibility="Collapsed" Grid.Column="1" Margin="8,0,0,0" VerticalAlignment="Center">
-                                            <AppBarButton Icon="Cancel" Width="32" IsCompact="True" Margin="0" Command="{x:Bind ViewModel.Locator.CancelCheck}" ToolTipService.ToolTip="{mk:L11n Key=UI.Settings.Cancel}" Visibility="{x:Bind ViewModel.Locator.PendingCheck}"/>
-                                            <AppBarButton Icon="Accept" Width="32" IsCompact="True" Margin="0" Command="{x:Bind ViewModel.Locator.ConfirmCheck}" ToolTipService.ToolTip="{mk:L11n Key=UI.Settings.Confirm}" Visibility="{x:Bind ViewModel.Locator.HasCheckResult}"/>
-                                        </CommandBar>
-                                        <Grid>
-                                            <TextBlock Text="{Binding Locator.PendingPlace.DisplayName}" VerticalAlignment="Center" MaxWidth="400" TextWrapping="Wrap"/>
-                                            <Grid Visibility="{x:Bind ViewModel.Locator.IsChecking, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
-                                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{x:Bind ViewModel.Locator.HasCheckResult, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
-                                                    <TextBlock Text="{mk:L11n Key=UI.Panel.Error}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" Visibility="{x:Bind ViewModel.Locator.HasError}"/>
-                                                    <TextBlock x:Name="checkStatusTextBlock" Text="{mk:L11n Key=UI.Settings.NoResult}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
-                                                </StackPanel>
-                                            </Grid>
-                                            <Grid Visibility="{x:Bind ViewModel.Locator.IsChecking}">
-                                                <TextBlock Text="{mk:L11n Key=UI.Settings.Checking}" Foreground="{ThemeResource TextFillColorPrimaryBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                <ProgressBar IsIndeterminate="True" Foreground="{ThemeResource TextFillColorPrimaryBrush}" VerticalAlignment="Bottom"/>
                                             </Grid>
                                         </Grid>
                                     </Grid>
-                                </Grid>
-                            </ctrl:SettingsItem>
-                        </RadioButton>
-                    </StackPanel>
-                    <StackPanel Margin="16,8,16,16" MaxWidth="300" Visibility="{x:Bind aboutTab.IsSelected, Mode=OneWay}">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Image x:Name="icon" Margin="0,0,8,0"/>
-                            <TextBlock Text="{mk:L11n Key=Data.AppName}" FontSize="18" FontWeight="Medium" VerticalAlignment="Center"/>
-                            <TextBlock Text="WinUI" FontSize="18" FontWeight="Medium" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                </ctrl:SettingsItem>
+                            </RadioButton>
                         </StackPanel>
-                        <TextBlock x:Name="version" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
-                        <TextBlock x:Name="architecture" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" FlowDirection="LeftToRight"/>
-                        <TextBlock Text="{mk:L11n Key=Data.AppDescription}" TextWrapping="Wrap" TextAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,16,0,0"/>
-                        <Grid Margin="0,16,0,0" Height="19">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{x:Bind ViewModel.IsCheckingNewVersion, Converter={StaticResource BooleanToVisibilityInvertedConverter}, Mode=OneWay}">
-                                <TextBlock>
-                                    <Hyperlink NavigateUri="https://github.com/Khiro95/Awqat-Salaat">
-                                        <Run Text="{mk:L11n Key=UI.About.VisitProject}"/>
-                                        <ToolTipService.ToolTip>
-                                            <ToolTip Content="https://github.com/Khiro95/Awqat-Salaat"/>
-                                        </ToolTipService.ToolTip>
-                                    </Hyperlink>
-                                </TextBlock>
-                                <TextBlock Margin="32,0">
-                                    <Hyperlink Click="ContactHyperlink_Click">
-                                        <Run Text="{mk:L11n Key=UI.About.Contact}"/>
-                                        <ToolTipService.ToolTip>
-                                            <ToolTip Content="khiro95.gh@gmail.com"/>
-                                        </ToolTipService.ToolTip>
-                                    </Hyperlink>
-                                </TextBlock>
-                                <TextBlock>
-                                    <Hyperlink Click="CheckForUpdatesHyperlink_Click">
-                                        <Run Text="{mk:L11n Key=UI.About.CheckForUpdates}"/>
-                                    </Hyperlink>
-                                </TextBlock>
+                    </NavigationViewItem.Tag>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="aboutTab" Content="{mk:L11n Key=UI.Settings.Tabs.About}">
+                    <NavigationViewItem.Tag>
+                        <StackPanel Margin="16,8,16,16" MaxWidth="300">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Image x:Name="icon" Margin="0,0,8,0"/>
+                                <TextBlock Text="{mk:L11n Key=Data.AppName}" FontSize="18" FontWeight="Medium" VerticalAlignment="Center"/>
+                                <TextBlock Text="WinUI" FontSize="18" FontWeight="Medium" VerticalAlignment="Center" Margin="5,0,0,0"/>
                             </StackPanel>
-                            <ProgressBar
-                                IsIndeterminate="True"
-                                Foreground="{ThemeResource TextFillColorPrimaryBrush}"
-                                VerticalAlignment="Center"
-                                Visibility="{x:Bind ViewModel.IsCheckingNewVersion, Mode=OneWay}"/>
-                        </Grid>
-                        <Path Data="{StaticResource Ayah2}" Fill="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,24,0,0" FlowDirection="LeftToRight"/>
-                    </StackPanel>
-                </Grid>
+                            <TextBlock x:Name="version" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="architecture" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center" FlowDirection="LeftToRight"/>
+                            <TextBlock Text="{mk:L11n Key=Data.AppDescription}" TextWrapping="Wrap" TextAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,16,0,0"/>
+                            <Grid Margin="0,16,0,0" Height="19">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{x:Bind ViewModel.IsCheckingNewVersion, Converter={StaticResource BooleanToVisibilityInvertedConverter}, Mode=OneWay}">
+                                    <TextBlock>
+                                        <Hyperlink NavigateUri="https://github.com/Khiro95/Awqat-Salaat">
+                                            <Run Text="{mk:L11n Key=UI.About.VisitProject}"/>
+                                            <ToolTipService.ToolTip>
+                                                <ToolTip Content="https://github.com/Khiro95/Awqat-Salaat"/>
+                                            </ToolTipService.ToolTip>
+                                        </Hyperlink>
+                                    </TextBlock>
+                                    <TextBlock Margin="32,0">
+                                        <Hyperlink Click="ContactHyperlink_Click">
+                                            <Run Text="{mk:L11n Key=UI.About.Contact}"/>
+                                            <ToolTipService.ToolTip>
+                                                <ToolTip Content="khiro95.gh@gmail.com"/>
+                                            </ToolTipService.ToolTip>
+                                        </Hyperlink>
+                                    </TextBlock>
+                                    <TextBlock>
+                                        <Hyperlink Click="CheckForUpdatesHyperlink_Click">
+                                            <Run Text="{mk:L11n Key=UI.About.CheckForUpdates}"/>
+                                        </Hyperlink>
+                                    </TextBlock>
+                                </StackPanel>
+                                <ProgressBar
+                                    IsIndeterminate="True"
+                                    Foreground="{ThemeResource TextFillColorPrimaryBrush}"
+                                    VerticalAlignment="Center"
+                                    Visibility="{x:Bind ViewModel.IsCheckingNewVersion, Mode=OneWay}"/>
+                            </Grid>
+                            <Path Data="{StaticResource Ayah2}" Fill="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" Margin="0,24,0,0" FlowDirection="LeftToRight"/>
+                        </StackPanel>
+                    </NavigationViewItem.Tag>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ContentControl x:Name="contentContainer" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="8">
+                    <ContentControl.ContentTransitions>
+                        <EntranceThemeTransition/>
+                    </ContentControl.ContentTransitions>
+                </ContentControl>
             </ScrollViewer>
         </NavigationView>
     </Grid>

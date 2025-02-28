@@ -108,6 +108,7 @@
     <Content Include="Images\MedTile.scale-200.png" />
     <Content Include="Images\AppList.scale-200.png" />
     <Content Include="Images\AppList.targetsize-16.png" />
+    <Content Include="Images\AppList.targetsize-20.png" />
     <Content Include="Images\AppList.targetsize-24.png" />
     <Content Include="Images\AppList.targetsize-32.png" />
     <Content Include="Images\AppList.targetsize-40.png" />
@@ -117,6 +118,7 @@
     <Content Include="Images\AppList.targetsize-96.png" />
     <Content Include="Images\AppList.targetsize-256.png" />
     <Content Include="Images\AppList.targetsize-16_altform-unplated.png" />
+    <Content Include="Images\AppList.targetsize-20_altform-unplated.png" />
     <Content Include="Images\AppList.targetsize-24_altform-unplated.png" />
     <Content Include="Images\AppList.targetsize-32_altform-unplated.png" />
     <Content Include="Images\AppList.targetsize-40_altform-unplated.png" />
@@ -126,6 +128,7 @@
     <Content Include="Images\AppList.targetsize-96_altform-unplated.png" />
     <Content Include="Images\AppList.targetsize-256_altform-unplated.png" />
     <Content Include="Images\AppList.targetsize-16_altform-lightunplated.png" />
+    <Content Include="Images\AppList.targetsize-20_altform-lightunplated.png" />
     <Content Include="Images\AppList.targetsize-24_altform-lightunplated.png" />
     <Content Include="Images\AppList.targetsize-32_altform-lightunplated.png" />
     <Content Include="Images\AppList.targetsize-40_altform-lightunplated.png" />

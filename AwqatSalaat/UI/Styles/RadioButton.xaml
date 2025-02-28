@@ -5,7 +5,7 @@
         <Setter Property="Foreground" Value="{DynamicResource ThemeColors.ControlForegroundBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource ThemeColors.ControlBorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="FocusVisualStyle" Value="{DynamicResource DefaultVisualStyle}"/>
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource DefaultFocusVisual}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
@@ -48,7 +48,6 @@
                                 <Condition Property="IsChecked" Value="False"/>
                             </MultiTrigger.Conditions>
                             <Setter Property="BorderBrush" Value="{DynamicResource ThemeColors.ControlHoverBorderBrush}"/>
-                            <Setter TargetName="thumb" Property="Fill" Value="{DynamicResource ThemeColors.ControlForegroundBrush}"/>
                         </MultiTrigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
@@ -56,6 +55,21 @@
                                 <Condition Property="IsChecked" Value="True"/>
                             </MultiTrigger.Conditions>
                             <Setter Property="Background" Value="{DynamicResource ThemeColors.AccentLightBrush}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsEnabled" Value="False"/>
+                                <Condition Property="IsChecked" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{DynamicResource ThemeColors.ControlDisabledBackgroundBrush}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsEnabled" Value="False"/>
+                                <Condition Property="IsChecked" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="{DynamicResource ThemeColors.ControlDisabledBackgroundBrush}"/>
+                            <Setter TargetName="thumb" Property="Fill" Value="{DynamicResource ThemeColors.ControlDisabledForegroundBrush}"/>
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

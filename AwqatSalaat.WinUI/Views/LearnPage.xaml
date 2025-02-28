@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="AwqatSalaat.WinUI.Views.LearnPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AwqatSalaat.WinUI.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <FontFamily x:Key="UthmanicHafs">ms-appx:///Fonts/UthmanicHafs_v2-1.ttf#KFGQPC HAFS Uthmanic Script</FontFamily>
+        <FontFamily x:Key="UthmanTahaNaskh">ms-appx:///Fonts/UthmanTN_v2-0.ttf#KFGQPC Uthman Taha Naskh</FontFamily>
+        <SolidColorBrush x:Key="AyahBrush" Color="{ThemeResource TextHighlightColor}"/>
+        <SolidColorBrush x:Key="HadithBrush" Color="{ThemeResource TextFillColorSecondary}"/>
+    </Page.Resources>
+    <Grid>
+        <ScrollViewer>
+            <RichTextBlock x:Name="richBlock" Margin="40,16"/>
+        </ScrollViewer>
+    </Grid>
+</Page>
