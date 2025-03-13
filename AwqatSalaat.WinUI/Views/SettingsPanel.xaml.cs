@@ -12,6 +12,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -39,6 +40,7 @@ namespace AwqatSalaat.WinUI.Views
 
         private bool keepFlyoutOpen;
         private bool loadedFirstTime;
+        private CancellationTokenSource checkingUpdatesCancellationTokenSource;
 
         private WidgetSettingsViewModel ViewModel => DataContext as WidgetSettingsViewModel;
 
@@ -134,6 +136,11 @@ namespace AwqatSalaat.WinUI.Views
                 FixToggleSwitchVisualBug(compactModeToggle);
 
                 CollapseExpanders(null);
+
+                // cancel updates checking if it's going on
+                checkingUpdatesCancellationTokenSource?.Cancel();
+                checkingUpdatesCancellationTokenSource?.Dispose();
+                checkingUpdatesCancellationTokenSource = null;
             }
         }
 
@@ -171,6 +178,7 @@ namespace AwqatSalaat.WinUI.Views
             {
                 Log.Information("Clicked on Check for updates");
                 keepFlyoutOpen = true;
+                checkingUpdatesCancellationTokenSource = new CancellationTokenSource();
                 var current = System.Version.Parse(Version);
 #if DEBUG
                 current = System.Version.Parse("1.0");
@@ -201,7 +209,7 @@ namespace AwqatSalaat.WinUI.Views
                     MessageBox.Info(Properties.Resources.Dialog_WidgetUpToDate);
                 }
 #else
-                var latest = await ViewModel.CheckForNewVersion(current);
+                var latest = await ViewModel.CheckForNewVersion(current, checkingUpdatesCancellationTokenSource.Token);
 
                 if (latest is null)
                 {
@@ -218,6 +226,10 @@ namespace AwqatSalaat.WinUI.Views
                 }
 #endif
             }
+            catch (OperationCanceledException)
+            {
+                Log.Debug("Checking updates has been canceled");
+            }
             catch (Exception ex)
             {
                 Log.Error(ex, $"Checking for updates failed: {ex.Message}");
@@ -226,6 +238,8 @@ namespace AwqatSalaat.WinUI.Views
             finally
             {
                 keepFlyoutOpen = false;
+                checkingUpdatesCancellationTokenSource?.Dispose();
+                checkingUpdatesCancellationTokenSource = null;
 #if PACKAGED
                 // Just in case
                 ViewModel.IsCheckingNewVersion = false;

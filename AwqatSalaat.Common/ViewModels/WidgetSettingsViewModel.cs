@@ -7,6 +7,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Settings = AwqatSalaat.Properties.Settings;
 
@@ -98,22 +99,22 @@ namespace AwqatSalaat.ViewModels
             };
         }
 
-        public async Task<Release> CheckForNewVersion(Version currentVersion)
+        public async Task<Release> CheckForNewVersion(Version currentVersion, CancellationToken cancellationToken)
         {
             try
             {
                 IsCheckingNewVersion = true;
 
-                var latest = await GitHubClient.GetLatestRelease();
+                var latest = await GitHubClient.GetLatestRelease(cancellationToken);
 
-                if (latest is null)
+                if (cancellationToken.IsCancellationRequested || latest is null)
                 {
                     return null;
                 }
 
                 if (latest.IsDraft || latest.IsPreRelease)
                 {
-                    var allReleases = await GitHubClient.GetReleases();
+                    var allReleases = await GitHubClient.GetReleases(cancellationToken);
 
                     if (allReleases?.Length > 1)
                     {
