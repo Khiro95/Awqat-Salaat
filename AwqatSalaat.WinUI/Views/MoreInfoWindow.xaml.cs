@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WinRT.Interop;
 
@@ -28,8 +29,9 @@ namespace AwqatSalaat.WinUI.Views
             current.Activate();
         }
 
+        private readonly HashSet<Page> frameCache = new HashSet<Page>();
+        private readonly long tokenOnHeaderChanged;
         private bool rtlLayoutFixed;
-        private long tokenOnHeaderChanged;
 
         public MoreInfoWindow()
         {
@@ -55,6 +57,15 @@ namespace AwqatSalaat.WinUI.Views
             }
 #endif
             Closed += MoreInfoWindow_Closed;
+            contentFrame.Navigated += ContentFrame_Navigated;
+        }
+
+        private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            if (e.Content is Page page && page.NavigationCacheMode != NavigationCacheMode.Disabled)
+            {
+                frameCache.Add(page);
+            }
         }
 
         private void OnHeaderChanged(DependencyObject sender, DependencyProperty dp)
@@ -137,10 +148,15 @@ namespace AwqatSalaat.WinUI.Views
             LocaleManager.Default.CurrentChanged -= LocaleManager_CurrentChanged;
             nav.UnregisterPropertyChangedCallback(NavigationView.HeaderProperty, tokenOnHeaderChanged);
 
-            if (contentFrame.Content is IDisposable disposable)
+            foreach (var page in frameCache)
             {
-                disposable.Dispose();
+                if (page is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
             }
+
+            frameCache.Clear();
         }
 
         private void FixWindowRtlLayout()

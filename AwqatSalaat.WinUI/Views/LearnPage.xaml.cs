@@ -49,13 +49,6 @@ namespace AwqatSalaat.WinUI.Views
             LoadRtf();
         }
 
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            base.OnNavigatedFrom(e);
-
-            Dispose();
-        }
-
         private void LoadRtf()
         {
             Log.Information("Loading rtf file");
