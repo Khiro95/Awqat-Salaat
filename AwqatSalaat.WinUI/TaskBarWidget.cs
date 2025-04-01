@@ -529,8 +529,9 @@ namespace AwqatSalaat.WinUI
             {
                 StringBuilder builder = new StringBuilder(256);
                 User32.GetClassName(hWnd, builder, builder.MaxCapacity);
+                string className = builder.ToString();
 
-                if (!IsSystemWindow(builder.ToString()))
+                if (!IsSystemWindow(className) && className != "#32770")
                 {
                     GCHandle gcChildhandlesList = GCHandle.FromIntPtr(lParam);
                     List<IntPtr> childHandles = gcChildhandlesList.Target as List<IntPtr>;
