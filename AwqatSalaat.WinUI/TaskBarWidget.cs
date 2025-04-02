@@ -18,7 +18,6 @@ namespace AwqatSalaat.WinUI
 {
     internal class TaskBarWidget : IDisposable
     {
-        private const string WidgetClassName = "AwqatSalaatWidgetWinRT";
         private const string TaskBarClassName = "Shell_TrayWnd";
         private const string ReBarWindow32ClassName = "ReBarWindow32";
         private const string NotificationAreaClassName = "TrayNotifyWnd";
@@ -33,6 +32,7 @@ namespace AwqatSalaat.WinUI
         private readonly IntPtr hwndShell;
         private readonly IntPtr hwndTrayNotify;
         private readonly IntPtr hwndReBar;
+        private readonly string WidgetClassName = "AwqatSalaatWidgetWinRT";
 
         private readonly TaskbarStructureWatcher taskbarWatcher;
 
@@ -69,6 +69,14 @@ namespace AwqatSalaat.WinUI
             taskbarWatcher = new TaskbarStructureWatcher(hwndShell, hwndReBar);
             taskbarWatcher.TaskbarChangedNotificationStarted += TaskbarWatcher_TaskbarChangedNotificationStarted;
             taskbarWatcher.TaskbarChangedNotificationCompleted += TaskbarWatcher_TaskbarChangedNotificationCompleted;
+
+            // Workaround for issues caused by Start11 v2
+            var hwndStart11Taskbar = User32.FindWindowEx(hwndShell, IntPtr.Zero, "#32770", "SDTaskbar");
+
+            if (hwndStart11Taskbar != IntPtr.Zero)
+            {
+                WidgetClassName = "#32770";
+            }
         }
 
         public void Initialize()
