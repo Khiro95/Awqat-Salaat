@@ -1,3 +1,11 @@
+### v4.0.1
+
+- Cancel updates checking when closing Settings panel.
+- Fix crashing due to negative prayer time adjustment.
+- Fix volume decrease after playing an audio the first time. (Deskband only)
+- Enable caching the content of the pages in **More info** window. (WinUI only)
+- Implement workarounds to the issues caused by Start11 v2. (WinUI only)
+
 ### v4.0
 
 - Add an offline service to calculate prayer times.

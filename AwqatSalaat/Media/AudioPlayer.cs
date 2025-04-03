@@ -7,7 +7,7 @@ namespace AwqatSalaat.Media
 {
     internal static class AudioPlayer
     {
-        private static readonly MediaPlayer s_mediaPlayer = new MediaPlayer() { Volume = 1 };
+        private static readonly MediaPlayer s_mediaPlayer = new MediaPlayer();
         private static AudioPlayerSession s_currentSession;
 
         public static AudioPlayerSession CurrentSession => s_currentSession;
@@ -28,6 +28,7 @@ namespace AwqatSalaat.Media
                 s_mediaPlayer.MediaFailed += MediaPlayer_MediaFailed;
                 s_mediaPlayer.Open(new Uri(session.File));
                 s_mediaPlayer.Position = TimeSpan.Zero;
+                s_mediaPlayer.Volume = 1;
                 s_mediaPlayer.Play();
                 s_currentSession = session;
                 s_currentSession.Ended += Session_Ended;

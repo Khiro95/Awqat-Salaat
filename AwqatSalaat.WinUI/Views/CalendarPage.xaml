@@ -15,6 +15,7 @@
     Background="Transparent"
     Margin="24,0,24,16"
     IsEnabled="{x:Bind ViewModel.IsBusy, Converter={StaticResource BooleanInvertedConverter}}"
+    NavigationCacheMode="Enabled"
     x:DefaultBindMode="OneWay">
     <Page.Resources>
         <Style x:Key="StandardRecordContainerStyle" TargetType="ListBoxItem">

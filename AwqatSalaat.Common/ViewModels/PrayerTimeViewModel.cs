@@ -72,7 +72,11 @@ namespace AwqatSalaat.ViewModels
 
         public void InvalidateConfig()
         {
-            Time = apiTime.AddMinutes(config.Adjustment);
+            if (apiTime != DateTime.MinValue)
+            {
+                Time = apiTime.AddMinutes(config.Adjustment);
+            }
+
             Distance = config.EffectiveReminderOffset();
             DistanceElapsed = config.EffectiveElapsedTime();
             IsVisible = config.IsVisible;

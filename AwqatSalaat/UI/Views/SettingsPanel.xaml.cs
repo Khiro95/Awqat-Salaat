@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -25,6 +26,7 @@ namespace AwqatSalaat.UI.Views
         public static readonly string Architecture = Environment.Is64BitProcess ? "64-bit" : "32-bit";
 
         private OpenFileDialog openFileDialog;
+        private CancellationTokenSource checkingUpdatesCancellationTokenSource;
 
         private WidgetSettingsViewModel ViewModel => DataContext as WidgetSettingsViewModel;
 
@@ -57,6 +59,11 @@ namespace AwqatSalaat.UI.Views
             if (!isVisible)
             {
                 CollapseExpanders(null);
+
+                // cancel updates checking if it's going on
+                checkingUpdatesCancellationTokenSource?.Cancel();
+                checkingUpdatesCancellationTokenSource?.Dispose();
+                checkingUpdatesCancellationTokenSource = null;
             }
         }
 
@@ -81,11 +88,12 @@ namespace AwqatSalaat.UI.Views
 
             try
             {
+                checkingUpdatesCancellationTokenSource = new CancellationTokenSource();
                 var current = System.Version.Parse(Version);
 #if DEBUG
                 current = System.Version.Parse("1.0");
 #endif
-                var latest = await ViewModel.CheckForNewVersion(current);
+                var latest = await ViewModel.CheckForNewVersion(current, checkingUpdatesCancellationTokenSource.Token);
 
                 if (latest is null)
                 {
@@ -101,6 +109,10 @@ namespace AwqatSalaat.UI.Views
                     }
                 }
             }
+            catch (OperationCanceledException)
+            {
+                Log.Debug("Checking updates has been canceled");
+            }
             catch (Exception ex)
             {
                 Log.Error(ex, $"Checking for updates failed: {ex.Message}");
@@ -108,6 +120,9 @@ namespace AwqatSalaat.UI.Views
             }
             finally
             {
+                checkingUpdatesCancellationTokenSource?.Dispose();
+                checkingUpdatesCancellationTokenSource = null;
+
                 if (alteredPopup)
                 {
                     popup.StaysOpen = false;
