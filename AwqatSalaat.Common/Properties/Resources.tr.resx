@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Data.Salaat.Fajr" xml:space="preserve">
+    <value>İmsak</value>
+  </data>
+  <data name="Data.Salaat.Dhuhr" xml:space="preserve">
+    <value>Öğle</value>
+  </data>
+  <data name="Data.Salaat.Asr" xml:space="preserve">
+    <value>İkindi</value>
+  </data>
+  <data name="Data.Salaat.Maghrib" xml:space="preserve">
+    <value>Akşam</value>
+  </data>
+  <data name="Data.Salaat.Isha" xml:space="preserve">
+    <value>Yatsı</value>
+  </data>
+  <data name="UI.Summary.TapToStart" xml:space="preserve">
+    <value>Başlamak için tıklayın</value>
+  </data>
+  <data name="UI.Summary.Refreshing" xml:space="preserve">
+    <value>Yenileniyor...</value>
+  </data>
+  <data name="UI.Summary.ErrorOccured" xml:space="preserve">
+    <value>Bir hata oluştu</value>
+  </data>
+  <data name="UI.Summary.After" xml:space="preserve">
+    <value>Sonra</value>
+  </data>
+  <data name="UI.Panel.Refresh" xml:space="preserve">
+    <value>Yenile</value>
+  </data>
+  <data name="UI.Panel.Settings" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+  <data name="UI.Panel.CorrespondTo" xml:space="preserve">
+    <value>Karşılık gelir</value>
+  </data>
+  <data name="UI.Settings.Confirm" xml:space="preserve">
+    <value>Onayla</value>
+  </data>
+  <data name="UI.Settings.Cancel" xml:space="preserve">
+    <value>İptal</value>
+  </data>
+  <data name="UI.Settings.ShowCountdown" xml:space="preserve">
+    <value>Geri sayımı göster</value>
+  </data>
+  <data name="UI.Settings.ShowCountdownDescription" xml:space="preserve">
+    <value>Geri sayımın görev çubuğunda bir sonraki namaz vaktinin yanında gösterilip gösterilmeyeceğini belirler</value>
+  </data>
+  <data name="UI.Settings.ReminderOffset" xml:space="preserve">
+    <value>Hatırlatma zamanı</value>
+  </data>
+  <data name="UI.Settings.ReminderOffsetDescription" xml:space="preserve">
+    <value>Vaktin başlamasından önce bildirimin başlayacağı dakika sayısı. 0 değeri bildirimi devre dışı bırakır</value>
+  </data>
+  <data name="UI.Settings.CountryCode" xml:space="preserve">
+    <value>Ülke kodu</value>
+  </data>
+  <data name="UI.Settings.CountryCodeDescription" xml:space="preserve">
+    <value>Kod iki Latin harfinden oluşur. (Örnek: DZ kodu Cezayir'i gösterir)</value>
+  </data>
+  <data name="UI.Settings.ZipCode" xml:space="preserve">
+    <value>Posta kodu</value>
+  </data>
+  <data name="UI.Settings.ZipCodeDescription" xml:space="preserve">
+    <value>Bu kod şehir belirlemek için kullanılır ve her ülkede farklıdır</value>
+  </data>
+  <data name="UI.Settings.Method" xml:space="preserve">
+    <value>Hesaplama yöntemi</value>
+  </data>
+  <data name="UI.Settings.MethodDescription" xml:space="preserve">
+    <value>Vakitlerin hesaplanması için enlem, boylam, güneş eğimi ve diğer veriler kullanılır</value>
+  </data>
+  <data name="Data.AppName" xml:space="preserve">
+    <value>Namaz Vakitleri</value>
+  </data>
+  <data name="UI.Controls.Toggle.On" xml:space="preserve">
+    <value>Açık</value>
+  </data>
+  <data name="UI.Controls.Toggle.Off" xml:space="preserve">
+    <value>Kapalı</value>
+  </data>
+  <data name="UI.Panel.Dismiss" xml:space="preserve">
+    <value>Yoksay</value>
+  </data>
+  <data name="UI.Panel.Refreshing" xml:space="preserve">
+    <value>Yenileniyor...</value>
+  </data>
+  <data name="UI.Panel.Error" xml:space="preserve">
+    <value>Hata</value>
+  </data>
+  <data name="UI.Settings.Language" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="UI.Settings.LanguageDescription" xml:space="preserve">
+    <value>Görüntüleme için kullanılan dil</value>
+  </data>
+  <data name="UI.Settings.ServiceProvider" xml:space="preserve">
+    <value>Servis sağlayıcı</value>
+  </data>
+  <data name="UI.Settings.ServiceProviderDescription" xml:space="preserve">
+    <value>Namaz vakitleri verilerini sağlayan hizmet</value>
+  </data>
+  <data name="UI.Settings.City" xml:space="preserve">
+    <value>Şehir</value>
+  </data>
+  <data name="UI.Settings.CityDescription" xml:space="preserve">
+    <value>Şehir adı</value>
+  </data>
+  <data name="UI.Settings.Tabs.General" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="UI.ContextMenu.Show" xml:space="preserve">
+    <value>Göster</value>
+  </data>
+  <data name="UI.ContextMenu.Hide" xml:space="preserve">
+    <value>Gizle</value>
+  </data>
+  <data name="UI.ContextMenu.Reposition" xml:space="preserve">
+    <value>Yeniden konumlandır</value>
+  </data>
+  <data name="UI.ContextMenu.Quit" xml:space="preserve">
+    <value>Çıkış</value>
+  </data>
+  <data name="UI.Settings.LaunchOnWindowsStartup" xml:space="preserve">
+    <value>Windows başlatıldığında başlat</value>
+  </data>
+  <data name="UI.Settings.LaunchOnWindowsStartupDescription" xml:space="preserve">
+    <value>Araç sistem başlatıldığında başlasın</value>
+  </data>
+  <data name="UI.Settings.MinutesShort" xml:space="preserve">
+    <value>d</value>
+  </data>
+  <data name="UI.Settings.JuristicSchool" xml:space="preserve">
+    <value>Mezhep</value>
+  </data>
+  <data name="UI.Settings.JuristicSchoolDescription" xml:space="preserve">
+    <value>İkindi vakti için takip edilen fıkhi yöntem</value>
+  </data>
+  <data name="Data.JuristicSchool.Standard" xml:space="preserve">
+    <value>Standart (Şafii, Hanbeli, Maliki)</value>
+  </data>
+  <data name="Data.JuristicSchool.Hanafi" xml:space="preserve">
+    <value>Hanefi</value>
+  </data>
+  <data name="UI.Settings.Tabs.Service" xml:space="preserve">
+    <value>Hizmet</value>
+  </data>
+  <data name="UI.Settings.Tabs.Location" xml:space="preserve">
+    <value>Konum</value>
+  </data>
+  <data name="UI.Settings.Latitude" xml:space="preserve">
+    <value>Enlem</value>
+  </data>
+  <data name="UI.Settings.LatitudeDescription" xml:space="preserve">
+    <value>Şehrin bulunduğu enlem</value>
+  </data>
+  <data name="UI.Settings.Longitude" xml:space="preserve">
+    <value>Boylam</value>
+  </data>
+  <data name="UI.Settings.LongitudeDescription" xml:space="preserve">
+    <value>Şehrin bulunduğu boylam</value>
+  </data>
+  <data name="UI.Settings.LocationByCountryCode" xml:space="preserve">
+    <value>Verileri kullan</value>
+  </data>
+  <data name="UI.Settings.LocationByCountryCodeDescription" xml:space="preserve">
+    <value>Hizmetlerin konumu belirlemesi için gerekli minimum verileri ayarla</value>
+  </data>
+  <data name="UI.Settings.LocationByQuery" xml:space="preserve">
+    <value>Arama kullan</value>
+  </data>
+  <data name="UI.Settings.LocationByQueryDescription" xml:space="preserve">
+    <value>Şehir adı veya adres ile konum arama</value>
+  </data>
+  <data name="UI.Settings.LocationByCoordinates" xml:space="preserve">
+    <value>Belirli koordinatlar</value>
+  </data>
+  <data name="UI.Settings.LocationByCoordinatesDescription" xml:space="preserve">
+    <value>Konumu manuel olarak girilen koordinatlarla belirle</value>
+  </data>
+  <data name="UI.Settings.PoweredBy" xml:space="preserve">
+    <value>Tarafından desteklenmektedir</value>
+  </data>
+  <data name="UI.Settings.NoResult" xml:space="preserve">
+    <value>Sonuç yok</value>
+  </data>
+  <data name="UI.Settings.LocationByQueryHint" xml:space="preserve">
+    <value>Bir şehir adı veya adres yazın (İngilizce)</value>
+  </data>
+  <data name="UI.Settings.Searching" xml:space="preserve">
+    <value>Aranıyor...</value>
+  </data>
+  <data name="UI.Settings.Checking" xml:space="preserve">
+    <value>Kontrol ediliyor...</value>
+  </data>
+  <data name="UI.Settings.Check" xml:space="preserve">
+    <value>Kontrol et</value>
+  </data>
+  <data name="UI.Settings.ShowSeconds" xml:space="preserve">
+    <value>Saniyeleri göster</value>
+  </data>
+  <data name="UI.Settings.ShowSecondsDescription" xml:space="preserve">
+    <value>Geri sayımda saniyelerin gösterilip gösterilmeyeceğini belirler</value>
+  </data>
+  <data name="Data.AppDescription" xml:space="preserve">
+    <value>Windows için basit bir İslami araç, bir sonraki namaz vaktini ve görev çubuğunda geri sayımı gösterir</value>
+  </data>
+  <data name="UI.Settings.Tabs.About" xml:space="preserve">
+    <value>Hakkında</value>
+  </data>
+  <data name="UI.About.VisitProject" xml:space="preserve">
+    <value>Projeyi ziyaret et</value>
+  </data>
+  <data name="UI.About.Contact" xml:space="preserve">
+    <value>İletişim</value>
+  </data>
+  <data name="UI.Settings.EnableCompactMode" xml:space="preserve">
+    <value>Kompakt mod</value>
+  </data>
+  <data name="UI.Settings.EnableCompactModeDescription" xml:space="preserve">
+    <value>Aracı daha küçük yapar ve daha az yer kaplar</value>
+  </data>
+  <data name="UI.Summary.Since" xml:space="preserve">
+    <value>Beriden</value>
+  </data>
+  <data name="UI.Settings.ElapsedPeriod" xml:space="preserve">
+    <value>Geçen süre</value>
+  </data>
+  <data name="UI.Settings.ElapsedPeriodDescription" xml:space="preserve">
+    <value>Vakit girdikten sonra bildirimin çalışacağı dakika sayısı. 0 değeri bildirimi devre dışı bırakır</value>
+  </data>
+  <data name="Data.Salaat.Shuruq" xml:space="preserve">
+    <value>Güneş</value>
+  </data>
+  <data name="UI.Settings.NotificationSound" xml:space="preserve">
+    <value>Bildirim sesi</value>
+  </data>
+  <data name="UI.Settings.NotificationSoundDescription" xml:space="preserve">
+    <value>Bildirim aktifken ses çal</value>
+  </data>
+  <data name="UI.Settings.File" xml:space="preserve">
+    <value>Dosya</value>
+  </data>
+  <data name="UI.Settings.Browse" xml:space="preserve">
+    <value>Gözat...</value>
+  </data>
+  <data name="Data.CalendarType.Hijri" xml:space="preserve">
+    <value>Hicri</value>
+  </data>
+  <data name="Data.CalendarType.UmAlQura" xml:space="preserve">
+    <value>Ummü'l-Kura</value>
+  </data>
+  <data name="UI.Settings.Calendar" xml:space="preserve">
+    <value>Takvim türü</value>
+  </data>
+  <data name="UI.Settings.CalendarDescription" xml:space="preserve">
+    <value>Hicri tarihi öğrenmek için kullanılan takvim</value>
+  </data>
+  <data name="UI.Settings.HijriCalendarAdjustment" xml:space="preserve">
+    <value>(Gün) ile ayarla</value>
+  </data>
+  <data name="UI.ContextMenu.ManualPosition" xml:space="preserve">
+    <value>Manuel konumlandırma</value>
+  </data>
+  <data name="UI.About.CheckForUpdates" xml:space="preserve">
+    <value>Güncellemeleri kontrol et</value>
+  </data>
+  <data name="Dialog.AppAlreadyRunning" xml:space="preserve">
+    <value>Uygulama zaten çalışıyor.</value>
+  </data>
+  <data name="Dialog.WidgetUpToDate" xml:space="preserve">
+    <value>Araç zaten güncel.</value>
+  </data>
+  <data name="Dialog.NewUpdateAvailableFormat" xml:space="preserve">
+    <value>Yeni bir sürüm mevcut!
+Sürüm: {0}
+
+İndirme sayfasını ziyaret etmek ister misiniz?</value>
+  </data>
+  <data name="Dialog.CheckingUpdatesFailed" xml:space="preserve">
+    <value>Güncellemeler kontrol edilemedi.</value>
+  </data>
+  <data name="UI.Panel.ServiceDownHint" xml:space="preserve">
+    <value>Hizmet kapalı mı?
+Başka bir hizmete geçmek için şuraya gidin</value>
+  </data>
+  <data name="UI.Settings.LocalServiceNote" xml:space="preserve">
+    <value>Yerel hizmet koordinatlara ihtiyaç duyar. Lütfen konum ayarlarına girin</value>
+  </data>
+  <data name="Data.PrayerTimesService.Local" xml:space="preserve">
+    <value>Yerel (Çevrimdışı)</value>
+  </data>
+  <data name="UI.Settings.AdhanSound" xml:space="preserve">
+    <value>Ezan sesi</value>
+  </data>
+  <data name="UI.Settings.AdhanSoundDescription" xml:space="preserve">
+    <value>Namaz vakti girdiğinde kullanılacak ezan sesi</value>
+  </data>
+  <data name="UI.Settings.AdhanFileStandard" xml:space="preserve">
+    <value>Standart ezan dosyası</value>
+  </data>
+  <data name="UI.Settings.AdhanFileFajr" xml:space="preserve">
+    <value>İmsak ezan dosyası</value>
+  </data>
+  <data name="Data.AdhanSound.None" xml:space="preserve">
+    <value>Hiçbiri</value>
+  </data>
+  <data name="Data.AdhanSound.Custom" xml:space="preserve">
+    <value>Özel</value>
+  </data>
+  <data name="Data.AdhanSound.Adhan1" xml:space="preserve">
+    <value>Ezan 1</value>
+  </data>
+  <data name="UI.Controls.SoundPreview.ToolTipIdle" xml:space="preserve">
+    <value>Önizlemeyi oynat</value>
+  </data>
+  <data name="UI.Controls.SoundPreview.ToolTipPlaying" xml:space="preserve">
+    <value>Durdur</value>
+  </data>
+  <data name="UI.Panel.StopSound" xml:space="preserve">
+    <value>Sesi durdur</value>
+  </data>
+  <data name="Data.AdhanSound.Adhan2" xml:space="preserve">
+    <value>Ezan 2</value>
+  </data>
+  <data name="UI.Calendar.Hijri" xml:space="preserve">
+    <value>Hicri</value>
+  </data>
+  <data name="UI.Calendar.Gregorian" xml:space="preserve">
+    <value>Miladi</value>
+  </data>
+  <data name="UI.Calendar.NoData" xml:space="preserve">
+    <value>Veri yok.
+Takvimi seçin, yıl ve ayı girin, ardından güncelle'ye tıklayın</value>
+  </data>
+  <data name="UI.Panel.MoreInfo" xml:space="preserve">
+    <value>Daha fazla bilgi</value>
+  </data>
+  <data name="UI.Window.Close" xml:space="preserve">
+    <value>Kapat</value>
+  </data>
+  <data name="UI.Window.Minimize" xml:space="preserve">
+    <value>Küçült</value>
+  </data>
+  <data name="UI.Window.Maximize" xml:space="preserve">
+    <value>Büyüt</value>
+  </data>
+  <data name="UI.Window.Restore" xml:space="preserve">
+    <value>Geri yükle</value>
+  </data>
+  <data name="UI.Calendar.Title" xml:space="preserve">
+    <value>Takvim</value>
+  </data>
+  <data name="UI.Learn.Title" xml:space="preserve">
+    <value>Namaz vakitlerini öğren</value>
+  </data>
+  <data name="UI.Settings.Tabs.Times" xml:space="preserve">
+    <value>Vakitler</value>
+  </data>
+  <data name="UI.Settings.TimeAdjustment" xml:space="preserve">
+    <value>Ayarlama</value>
+  </data>
+  <data name="UI.Settings.TimeAdjustmentDescription" xml:space="preserve">
+    <value>Namaz vaktini belirtilen dakika kadar ayarla</value>
+  </data>
+  <data name="UI.Settings.UseGlobal" xml:space="preserve">
+    <value>Genel değeri kullan</value>
+  </data>
+  <data name="UI.Settings.TimeVisibility" xml:space="preserve">
+    <value>Görünürlük</value>
+  </data>
+  <data name="UI.Settings.TimeVisibilityDescription" xml:space="preserve">
+    <value>Araç panelinde vakti göster</value>
+  </data>
+  <data name="UI.Calendar.DocumentTitle" xml:space="preserve">
+    <value>Namaz Vakitleri Takvimi</value>
+  </data>
+  <data name="UI.Calendar.GeneratedBy" xml:space="preserve">
+    <value>Oluşturan</value>
+  </data>
+  <data name="UI.Calendar.Export" xml:space="preserve">
+    <value>Dışa aktar</value>
+  </data>
+  <data name="UI.Calendar.Preview" xml:space="preserve">
+    <value>Önizleme</value>
+  </data>
+  <data name="UI.Calendar.Theme" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="UI.Calendar.ExportPNG" xml:space="preserve">
+    <value>PNG olarak dışa aktar</value>
+  </data>
+  <data name="UI.Calendar.Print" xml:space="preserve">
+    <value>Yazdır</value>
+  </data>
+  <data name="UI.Settings.EnableLogs" xml:space="preserve">
+    <value>Loglamayı etkinleştir</value>
+  </data>
+  <data name="UI.Settings.EnableLogsDescription" xml:space="preserve">
+    <value>Araç davranışı hakkında bilgi kaydetmeye izin ver. (Sorunları teşhis etmek için faydalı)</value>
+  </data>
+  <data name="UI.Settings.EnableDebugLogs" xml:space="preserve">
+    <value>Hata ayıklama Loglamayı etkinleştir</value>
+  </data>
+  <data name="UI.Settings.EnableDebugLogsDescription" xml:space="preserve">
+    <value>Loglarda ayrıntılı bilgi içerir.</value>
+  </data>
+  <data name="UI.Settings.DebugLogsNote" xml:space="preserve">
+    <value>Hata ayıklama logları, girilen konum gibi kişisel bilgiler içerebilir.</value>
+  </data>
+  <data name="UI.Settings.ShowLogsFile" xml:space="preserve">
+    <value>Log dosyasını göster</value>
+  </data>
+  <data name="Dialog.LogsFileNotFound" xml:space="preserve">
+    <value>Log dosyası bulunamadı. Henüz oluşturulmamış olabilir.</value>
+  </data>
+</root>
