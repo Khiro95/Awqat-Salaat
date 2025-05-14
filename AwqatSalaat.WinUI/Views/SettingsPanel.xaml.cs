@@ -84,6 +84,11 @@ namespace AwqatSalaat.WinUI.Views
                 {
                     ParentFlyout.Closing += (s, a) => a.Cancel = keepFlyoutOpen;
                 }
+
+                if (!ViewModel.Settings.IsConfigured)
+                {
+                    nav.SelectedItem = locationTab;
+                }
             }
 
 #if PACKAGED

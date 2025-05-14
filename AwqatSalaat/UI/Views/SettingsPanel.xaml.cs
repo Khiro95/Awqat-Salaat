@@ -54,7 +54,7 @@ namespace AwqatSalaat.UI.Views
         {
             bool isVisible = (bool)e.NewValue;
             Log.Information("Settings panel became " + (isVisible ? "visible" : "invisible"));
-            tabControl.SelectedIndex = isVisible ? 0 : -1;
+            tabControl.SelectedIndex = isVisible ? ViewModel.Settings.IsConfigured ? 0 : 3 : -1;
 
             if (!isVisible)
             {
