@@ -522,4 +522,10 @@ Choose the calendar and set the desired year and month then click on Refresh</va
   <data name="Dialog.LogsFileNotFound" xml:space="preserve">
     <value>The logs file does not exist. It may not be created yet.</value>
   </data>
+  <data name="UI.Settings.AutoAlignment" xml:space="preserve">
+    <value>Auto-alignment</value>
+  </data>
+  <data name="UI.Settings.AutoAlignmentDescription" xml:space="preserve">
+    <value>Adapt the alignment of the elements if the widget is near the left or the right edge of the screen.</value>
+  </data>
 </root>

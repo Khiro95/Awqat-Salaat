@@ -615,6 +615,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auto-alignment.
+        /// </summary>
+        public static string UI_Settings_AutoAlignment {
+            get {
+                return ResourceManager.GetString("UI.Settings.AutoAlignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adapt the alignment of the elements if the widget is near the left or the right edge of the screen..
+        /// </summary>
+        public static string UI_Settings_AutoAlignmentDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.AutoAlignmentDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Browse....
         /// </summary>
         public static string UI_Settings_Browse {

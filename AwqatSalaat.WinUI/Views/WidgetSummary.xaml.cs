@@ -26,6 +26,18 @@ namespace AwqatSalaat.WinUI.Views
         public static WidgetSummary Current { get; private set; }
 #endif
 
+        public static readonly DependencyProperty ElementsAlignmentProperty = DependencyProperty.Register(
+            "ElementsAlignment",
+            typeof(HorizontalAlignment),
+            typeof(WidgetSummary),
+            new PropertyMetadata(HorizontalAlignment.Center));
+
+        public HorizontalAlignment ElementsAlignment
+        {
+            get => (HorizontalAlignment)GetValue(ElementsAlignmentProperty);
+            set => SetValue(ElementsAlignmentProperty, value);
+        }
+
         private bool shouldBeCompactHorizontally;
         private DisplayMode currentDisplayMode = DisplayMode.Default;
         private AudioPlayerSession currentAudioSession;
@@ -115,6 +127,10 @@ namespace AwqatSalaat.WinUI.Views
             {
                 flyout?.DisableLightDismissTemporarily();
                 UpdateDisplayMode();
+            }
+            else if (e.PropertyName is nameof(Properties.Settings.AutoAlignment) or nameof(Properties.Settings.DisplayLanguage))
+            {
+                TaskBarManager.InvalidateWidgetElementsAlignment(ViewModel.WidgetSettings.Realtime.AutoAlignment);
             }
         }
 

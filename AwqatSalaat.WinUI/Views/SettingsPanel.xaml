@@ -150,6 +150,9 @@
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.EnableCompactMode}" Description="{mk:L11n Key=UI.Settings.EnableCompactModeDescription}" IsEnabled="{x:Bind ViewModel.Realtime.ShowCountdown, Mode=OneWay}">
                                 <ToggleSwitch x:Name="compactModeToggle" IsOn="{x:Bind ViewModel.Realtime.UseCompactMode}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
                             </ctrl:SettingsItem>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.AutoAlignment}" Description="{mk:L11n Key=UI.Settings.AutoAlignmentDescription}">
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.Realtime.AutoAlignment}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                            </ctrl:SettingsItem>
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ReminderOffset}" Description="{mk:L11n Key=UI.Settings.ReminderOffsetDescription}">
                                 <NumberBox SpinButtonPlacementMode="Inline"
                                            Value="{x:Bind ViewModel.Realtime.NotificationDistance}"

@@ -533,4 +533,10 @@
   <data name="Dialog.LogsFileNotFound" xml:space="preserve">
     <value>ملف السجلات غير موجود. قد لا يكون تم إنشاءه بعد.</value>
   </data>
+  <data name="UI.Settings.AutoAlignment" xml:space="preserve">
+    <value>محاذاة تلقائية</value>
+  </data>
+  <data name="UI.Settings.AutoAlignmentDescription" xml:space="preserve">
+    <value>تكييف محاذاة العناصر إذا كانت الأداة قريبة من الحافة اليمنى أو اليسرى للشاشة.</value>
+  </data>
 </root>

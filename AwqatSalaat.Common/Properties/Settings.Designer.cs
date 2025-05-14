@@ -694,5 +694,17 @@ namespace AwqatSalaat.Properties {
                 this["EnableDebugLogs"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoAlignment {
+            get {
+                return ((bool)(this["AutoAlignment"]));
+            }
+            set {
+                this["AutoAlignment"] = value;
+            }
+        }
     }
 }

@@ -117,6 +117,8 @@ namespace AwqatSalaat.WinUI
             ShowWidgetExecute();
         }
 
+        public static void InvalidateWidgetElementsAlignment(bool autoAlign) => taskBarWidget?.InvalidateElementsAlignment(autoAlign);
+
         private static void TrayIcon_Created(object sender, EventArgs e)
         {
             //Unfortunately, we can't handle WM_QUERYENDSESSION and WM_ENDSESSION messages in widget's window procedure because it has a parent.

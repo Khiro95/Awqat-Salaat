@@ -298,15 +298,15 @@
                                 <RowDefinition x:Name="row2"/>
                             </Grid.RowDefinitions>
 
-                            <TextBlock Text="{x:Bind ViewModel.DisplayedTime.Name, FallbackValue=NAME}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock x:Name="timeTB" Text="{x:Bind converters:CustomDateTimeConverter.FormatShortTime(ViewModel.DisplayedTime.Time, ash:LocaleManager.Default.CurrentCulture), FallbackValue=TIME}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
+                            <TextBlock Text="{x:Bind ViewModel.DisplayedTime.Name, FallbackValue=NAME}" HorizontalAlignment="{x:Bind ElementsAlignment}" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="timeTB" Text="{x:Bind converters:CustomDateTimeConverter.FormatShortTime(ViewModel.DisplayedTime.Time, ash:LocaleManager.Default.CurrentCulture), FallbackValue=TIME}" HorizontalAlignment="{x:Bind ElementsAlignment}" VerticalAlignment="Center" Grid.Row="1"/>
 
-                            <TextBlock x:Name="afterTB" Text="{mk:L11n Key=UI.Summary.After}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2"/>
+                            <TextBlock x:Name="afterTB" Text="{mk:L11n Key=UI.Summary.After}" HorizontalAlignment="{x:Bind ElementsAlignment}" VerticalAlignment="Center" Grid.Column="2"/>
                             <!--We can't update "After" text because L11n extension uses Binding
                                 which is neither supported in VisualState setters nor in animations.
                                 So we have to use a separate element for "Since"-->
-                            <TextBlock x:Name="sinceTB" Text="{mk:L11n Key=UI.Summary.Since}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Visibility="Collapsed"/>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" FlowDirection="LeftToRight">
+                            <TextBlock x:Name="sinceTB" Text="{mk:L11n Key=UI.Summary.Since}" HorizontalAlignment="{x:Bind ElementsAlignment}" VerticalAlignment="Center" Grid.Column="2" Visibility="Collapsed"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="{x:Bind ElementsAlignment}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" FlowDirection="LeftToRight">
                                 <TextBlock x:Name="sign" Text="+" Visibility="Collapsed"/>
                                 <TextBlock Text="{x:Bind sys:String.Format(ViewModel.WidgetSettings.CountdownFormat, ViewModel.DisplayedTime.Countdown), FallbackValue=COUNTDOWN}" FlowDirection="{x:Bind timeTB.FlowDirection}"/>
                             </StackPanel>
