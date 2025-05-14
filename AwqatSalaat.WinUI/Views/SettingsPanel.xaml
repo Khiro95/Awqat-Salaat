@@ -261,7 +261,7 @@
                                         </Expander.Header>
                                         <StackPanel>
                                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.TimeAdjustment}" Description="{mk:L11n Key=UI.Settings.TimeAdjustmentDescription}" Margin="0">
-                                                <NumberBox Minimum="-10" Maximum="10" Value="{x:Bind Adjustment}" SpinButtonPlacementMode="Inline" HorizontalAlignment="Left"/>
+                                                <NumberBox Minimum="-60" Maximum="60" Value="{x:Bind Adjustment}" SpinButtonPlacementMode="Inline" HorizontalAlignment="Left"/>
                                             </ctrl:SettingsItem>
                                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ReminderOffset}" Description="{mk:L11n Key=UI.Settings.ReminderOffsetDescription}" Visibility="{x:Bind IsPrincipal, Mode=OneWay}">
                                                 <StackPanel>

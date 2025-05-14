@@ -241,7 +241,7 @@
                                 <Expander Header="{Binding Key, Converter={StaticResource LocalizedStringConverter}, ConverterParameter='Data.Salaat.{0}'}" Margin="0,4" Expanded="Expander_Expanded" d:IsExpanded="True">
                                     <StackPanel Margin="8">
                                         <controls:SettingsItem Header="{mk:L11n UI.Settings.TimeAdjustment}" Description="{mk:L11n UI.Settings.TimeAdjustmentDescription}" Margin="0">
-                                            <controls:NumericUpDown Minimum="-10" Maximum="10" Value="{Binding Adjustment}" Width="100" HorizontalAlignment="Left"/>
+                                            <controls:NumericUpDown Minimum="-60" Maximum="60" Value="{Binding Adjustment}" Width="100" HorizontalAlignment="Left"/>
                                         </controls:SettingsItem>
                                         <controls:SettingsItem Header="{mk:L11n UI.Settings.ReminderOffset}" Description="{mk:L11n UI.Settings.ReminderOffsetDescription}" Visibility="{Binding IsPrincipal, Converter={StaticResource BooleanToVisibilityConverter}}">
                                             <StackPanel>
