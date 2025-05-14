@@ -132,10 +132,11 @@
                     <NavigationViewItem.Tag>
                         <StackPanel>
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.Language}" Description="{mk:L11n Key=UI.Settings.LanguageDescription}" Margin="0,8,0,0">
-                                <RadioButtons MaxColumns="2" Margin="0,-8,0,0" FlowDirection="LeftToRight" HorizontalAlignment="Left">
-                                    <RadioButton Content="English" GroupName="Language" IsChecked="{x:Bind ViewModel.UseEnglish}"/>
-                                    <RadioButton Content="العربية" GroupName="Language" IsChecked="{x:Bind ViewModel.UseArabic}" FlowDirection="RightToLeft"/>
-                                </RadioButtons>
+                                <ComboBox SelectedValue="{Binding Realtime.DisplayLanguage, Mode=TwoWay}" SelectedValuePath="Tag" Width="150">
+                                    <ComboBoxItem Content="العربية" Tag="ar" FlowDirection="RightToLeft"/>
+                                    <ComboBoxItem Content="English" Tag="en" FlowDirection="LeftToRight"/>
+                                    <ComboBoxItem Content="Türkçe" Tag="tr" FlowDirection="LeftToRight"/>
+                                </ComboBox>
                             </ctrl:SettingsItem>
                             <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartup}" Description="{mk:L11n Key=UI.Settings.LaunchOnWindowsStartupDescription}" IsEnabled="{x:Bind StartupSettings.CanSetLaunchOnStartup, Mode=OneWay}">
                                 <ToggleSwitch IsOn="{x:Bind StartupSettings.LaunchOnStartup}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>

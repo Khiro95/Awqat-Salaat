@@ -9,7 +9,7 @@ namespace AwqatSalaat.Helpers
 {
     public class LocaleManager : INotifyPropertyChanged
     {
-        private static readonly List<string> AvailableLocales = new List<string>() { "ar", "en" };
+        private static readonly List<string> AvailableLocales = new List<string>() { "ar", "en", "tr" };
 
         public static LocaleManager Default { get; } = new LocaleManager();
 
@@ -32,6 +32,8 @@ namespace AwqatSalaat.Helpers
             }
 
             SetLocale(lang);
+
+            Properties.Settings.Realtime.PropertyChanged += Settings_PropertyChanged;
         }
 
         public string Get(string key) => Properties.Resources.ResourceManager.GetString(key, Properties.Resources.Culture);
@@ -73,6 +75,16 @@ namespace AwqatSalaat.Helpers
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Current)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentCulture)));
             CurrentChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Properties.Settings.DisplayLanguage))
+            {
+                var lang = Properties.Settings.Realtime.DisplayLanguage;
+
+                SetLocale(lang);
+            }
         }
     }
 }

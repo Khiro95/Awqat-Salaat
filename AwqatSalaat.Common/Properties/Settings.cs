@@ -23,6 +23,8 @@ namespace AwqatSalaat.Properties
         private bool _ignorePropertyChanged;
         private readonly Dictionary<string, PrayerConfig> _prayerConfigs = new Dictionary<string, PrayerConfig>();
 
+        public static readonly Settings Realtime = new Settings();
+
         static Settings()
         {
             var assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;

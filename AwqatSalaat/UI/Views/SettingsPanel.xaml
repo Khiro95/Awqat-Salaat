@@ -114,10 +114,15 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel DataContext="{Binding Realtime}" Margin="8,16,8,8">
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.Language}" Description="{mk:L11n UI.Settings.LanguageDescription}" Margin="0">
-                            <StackPanel Orientation="Horizontal" DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext}" FlowDirection="LeftToRight" HorizontalAlignment="Left">
+                            <ComboBox SelectedValuePath="Tag" SelectedValue="{Binding DisplayLanguage}" Width="150" HorizontalAlignment="Left">
+                                <ComboBoxItem Content="العربية" Tag="ar" FlowDirection="RightToLeft"/>
+                                <ComboBoxItem Content="English" Tag="en" FlowDirection="LeftToRight"/>
+                                <ComboBoxItem Content="Türkçe" Tag="tr" FlowDirection="LeftToRight"/>
+                            </ComboBox>
+                            <!--<StackPanel Orientation="Horizontal" DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext}" FlowDirection="LeftToRight" HorizontalAlignment="Left">
                                 <RadioButton Content="English" IsChecked="{Binding UseEnglish}" d:IsChecked="True" Margin="0,0,64,0"/>
                                 <RadioButton Content="العربية" IsChecked="{Binding UseArabic}" FlowDirection="RightToLeft"/>
-                            </StackPanel>
+                            </StackPanel>-->
                         </controls:SettingsItem>
                         <controls:SettingsItem Header="{mk:L11n UI.Settings.ShowCountdown}" Description="{mk:L11n UI.Settings.ShowCountdownDescription}">
                             <CheckBox IsChecked="{Binding ShowCountdown}"/>

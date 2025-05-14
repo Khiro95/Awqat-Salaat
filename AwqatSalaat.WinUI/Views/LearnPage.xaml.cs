@@ -5,7 +5,6 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Imaging;
-using Microsoft.UI.Xaml.Navigation;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -24,6 +23,8 @@ namespace AwqatSalaat.WinUI.Views
     public sealed partial class LearnPage : Page, IDisposable
     {
         private static readonly Dictionary<string, FontFamily> FontsCache = new Dictionary<string, FontFamily>();
+
+        private static readonly IReadOnlyList<string> SupportedLocales = new List<string> { "ar", "en" }.AsReadOnly();
 
         private const string ImageToken = "!!IMG";
         private const string QuranToken = "!!QURAN";
@@ -55,7 +56,7 @@ namespace AwqatSalaat.WinUI.Views
             richBlock.Blocks.Clear();
             var richTB = new RichEditBox();
 
-            using (var stream = CommonResources.Get($"prayers_times_{LocaleManager.Default.Current}.rtf"))
+            using (var stream = CommonResources.Get($"prayers_times_{CoerceLocale()}.rtf"))
             {
                 using (var memStream = new MemoryStream())
                 {
@@ -71,6 +72,19 @@ namespace AwqatSalaat.WinUI.Views
 
             MoveRtfToRichTextBlock(richTB.Document, richBlock);
             TransformParagraphs(richBlock.Blocks);
+        }
+
+        private static string CoerceLocale()
+        {
+            string locale = LocaleManager.Default.Current;
+
+            if (SupportedLocales.Contains(locale))
+            {
+                return locale;
+            }
+
+            // We have unsupported locale, so we fallback to either English or Arabic
+            return LocaleManager.Default.CurrentCulture.TextInfo.IsRightToLeft ? "ar" : "en";
         }
 
         private void MoveRtfToRichTextBlock(RichEditTextDocument doc, RichTextBlock textBlock)

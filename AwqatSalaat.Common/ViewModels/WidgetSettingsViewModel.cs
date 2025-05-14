@@ -22,33 +22,11 @@ namespace AwqatSalaat.ViewModels
 
         public bool IsOpen { get => isOpen; set => SetProperty(ref isOpen, value); }
         public bool IsCheckingNewVersion { get => isCheckingNewVersion; set => SetProperty(ref isCheckingNewVersion, value); }
-        public bool UseArabic
-        {
-            get => Realtime.DisplayLanguage == "ar";
-            set
-            {
-                if (value)
-                {
-                    SetLanguage("ar");
-                }
-            }
-        }
-        public bool UseEnglish
-        {
-            get => Realtime.DisplayLanguage == "en";
-            set
-            {
-                if (value)
-                {
-                    SetLanguage("en");
-                }
-            }
-        }
         public string CountdownFormat => Realtime.ShowSeconds ? "{0:hh\\:mm\\:ss}" : "{0:hh\\:mm}";
         public Settings Settings => Settings.Default;
 
         // realtime settings are binded to settings UI so changes are reflected immediately
-        public Settings Realtime { get; } = new Settings();
+        public Settings Realtime { get; } = Settings.Realtime;
         public RelayCommand Save { get; }
         public RelayCommand Cancel { get; }
         public LocatorViewModel Locator { get; }
@@ -77,12 +55,7 @@ namespace AwqatSalaat.ViewModels
 
             Realtime.PropertyChanged += (s, e) =>
             {
-                if (e.PropertyName == nameof(Realtime.DisplayLanguage))
-                {
-                    OnPropertyChanged(nameof(UseArabic));
-                    OnPropertyChanged(nameof(UseEnglish));
-                }
-                else if (e.PropertyName == nameof(Realtime.ShowSeconds))
+                if (e.PropertyName == nameof(Realtime.ShowSeconds))
                 {
                     OnPropertyChanged(nameof(CountdownFormat));
                 }
@@ -195,15 +168,8 @@ namespace AwqatSalaat.ViewModels
             Log.Information("[Settings] Cancel invoked");
             CopySettings(fromOriginal: true);
             Locator.SearchQuery = null;
-            SetLanguage(Settings.DisplayLanguage);
             IsOpen = false;
             Cancel.RaiseCanExecuteChanged();
-        }
-
-        private void SetLanguage(string lang)
-        {
-            LocaleManager.Default.Current = lang;
-            Realtime.DisplayLanguage = lang;
         }
     }
 }

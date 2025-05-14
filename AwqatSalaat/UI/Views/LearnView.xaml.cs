@@ -3,6 +3,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -18,6 +19,8 @@ namespace AwqatSalaat.UI.Views
         private static readonly FontFamily UthmanicHafs;
         private static readonly FontFamily UthmanTahaNaskh;
         private static readonly FontFamily TimesNewRoman;
+
+        private static readonly IReadOnlyList<string> SupportedLocales = new List<string> { "ar", "en" }.AsReadOnly();
 
         private const string ImageToken = "!!IMG";
         private const string QuranToken = "!!QURAN";
@@ -71,13 +74,26 @@ namespace AwqatSalaat.UI.Views
             lastLocale = LocaleManager.Default.Current;
             flowDoc.Blocks.Clear();
 
-            using (var stream = CommonResources.Get($"prayers_times_{LocaleManager.Default.Current}.rtf"))
+            using (var stream = CommonResources.Get($"prayers_times_{CoerceLocale()}.rtf"))
             {
                 var range = new TextRange(flowDoc.ContentStart, flowDoc.ContentStart);
                 range.Load(stream, DataFormats.Rtf);
             }
 
             TransformParagraphs();
+        }
+
+        private static string CoerceLocale()
+        {
+            string locale = LocaleManager.Default.Current;
+
+            if (SupportedLocales.Contains(locale))
+            {
+                return locale;
+            }
+
+            // We have unsupported locale, so we fallback to either English or Arabic
+            return LocaleManager.Default.CurrentCulture.TextInfo.IsRightToLeft ? "ar" : "en";
         }
 
         private void TransformParagraphs()
