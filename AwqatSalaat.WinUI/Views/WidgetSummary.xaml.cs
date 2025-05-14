@@ -113,6 +113,7 @@ namespace AwqatSalaat.WinUI.Views
         {
             if (e.PropertyName is nameof(Properties.Settings.ShowCountdown) or nameof(Properties.Settings.UseCompactMode))
             {
+                flyout?.DisableLightDismissTemporarily();
                 UpdateDisplayMode();
             }
         }
@@ -190,16 +191,12 @@ namespace AwqatSalaat.WinUI.Views
         private void Flyout_Closed(object sender, object e)
         {
             Log.Information("Flyout closed");
-            var customFlyout = (CustomizedFlyout)sender;
 
-            if (!customFlyout.ClosedBecauseOfResize)
+            toggle.IsChecked = false;
+
+            if (ViewModel.WidgetSettings.IsOpen && ViewModel.WidgetSettings.Settings.IsConfigured)
             {
-                toggle.IsChecked = false;
-
-                if (ViewModel.WidgetSettings.IsOpen && ViewModel.WidgetSettings.Settings.IsConfigured)
-                {
-                    ViewModel.WidgetSettings.Cancel.Execute(null);
-                }
+                ViewModel.WidgetSettings.Cancel.Execute(null);
             }
         }
 
