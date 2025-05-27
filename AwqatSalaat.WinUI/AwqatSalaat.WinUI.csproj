@@ -38,8 +38,10 @@
         <None Remove="Views\CalendarDocument.xaml" />
         <None Remove="Views\CalendarExportWindow.xaml" />
         <None Remove="Views\CalendarPage.xaml" />
+        <None Remove="Views\DefaultPanel.xaml" />
         <None Remove="Views\LearnPage.xaml" />
         <None Remove="Views\MoreInfoWindow.xaml" />
+        <None Remove="Views\PanelAlt.xaml" />
     </ItemGroup>
     <ItemGroup>
       <COMReference Include="UIAutomationClient">
@@ -81,6 +83,16 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\AwqatSalaat.Common\AwqatSalaat.Common.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Page Update="Views\PanelAlt.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Page>
+    </ItemGroup>
+    <ItemGroup>
+      <Page Update="Views\DefaultPanel.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Page>
     </ItemGroup>
     <ItemGroup>
       <Page Update="Views\CalendarDocument.xaml">

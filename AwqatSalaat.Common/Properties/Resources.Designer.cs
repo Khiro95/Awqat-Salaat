@@ -61,6 +61,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Alternative.
+        /// </summary>
+        public static string Config_WidgetPanelStyle_Alt {
+            get {
+                return ResourceManager.GetString("Config.WidgetPanelStyle.Alt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string Config_WidgetPanelStyle_Default {
+            get {
+                return ResourceManager.GetString("Config.WidgetPanelStyle.Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adhan 1.
         /// </summary>
         public static string Data_AdhanSound_Adhan1 {
@@ -1047,6 +1065,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Panel style.
+        /// </summary>
+        public static string UI_Settings_PanelStyle {
+            get {
+                return ResourceManager.GetString("UI.Settings.PanelStyle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Style and layout to be applied to the panel which shows prayer times and date.
+        /// </summary>
+        public static string UI_Settings_PanelStyleDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.PanelStyleDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Powered by.
         /// </summary>
         public static string UI_Settings_PoweredBy {
@@ -1151,6 +1187,15 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_Tabs_About {
             get {
                 return ResourceManager.GetString("UI.Settings.Tabs.About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Appearance.
+        /// </summary>
+        public static string UI_Settings_Tabs_Appearance {
+            get {
+                return ResourceManager.GetString("UI.Settings.Tabs.Appearance", resourceCulture);
             }
         }
         

@@ -36,10 +36,21 @@ namespace AwqatSalaat.ViewModels
                 SetProperty(ref isRefreshing, value);
                 Refresh.RaiseCanExecuteChanged();
                 OpenSettings.RaiseCanExecuteChanged();
+                OnPropertyChanged(nameof(IsShowingTimes));
             }
         }
-        public string ErrorMessage { get => error; private set { SetProperty(ref error, value); OnPropertyChanged(nameof(HasError)); } }
+        public string ErrorMessage
+        {
+            get => error;
+            private set
+            {
+                SetProperty(ref error, value);
+                OnPropertyChanged(nameof(HasError));
+                OnPropertyChanged(nameof(IsShowingTimes));
+            }
+        }
         public bool HasError => !string.IsNullOrEmpty(error);
+        public bool IsShowingTimes => !isRefreshing && !HasError;
         public DateTime DisplayedDate { get => displayedDate; private set => SetProperty(ref displayedDate, value); }
         public string Country { get => country; private set => SetProperty(ref country, value); }
         public string City { get => city; private set => SetProperty(ref city, value); }

@@ -32,6 +32,22 @@ namespace AwqatSalaat.WinUI.Controls
             typeof(PrayerTimeItem),
             new PropertyMetadata(""));
 
+        public static readonly DependencyProperty AMPMStringProperty = DependencyProperty.Register(
+            "AMPMString",
+            typeof(string),
+            typeof(PrayerTimeItem),
+            new PropertyMetadata("", OnAMPMStringChanged));
+
+        private static void OnAMPMStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            PrayerTimeItem prayerTimeItem = (PrayerTimeItem)d;
+
+            if (prayerTimeItem.ampmTextBlock is not null)
+            {
+                prayerTimeItem.UpdateAMPMVisibility();
+            }
+        }
+
         public static readonly DependencyProperty DismissCommandProperty = DependencyProperty.Register(
             "DismissCommand",
             typeof(ICommand),
@@ -45,10 +61,13 @@ namespace AwqatSalaat.WinUI.Controls
             VisualStateManager.GoToState(prayerTimeItem, e.NewValue.ToString(), false);
         }
 
+        private TextBlock ampmTextBlock;
+
         public PrayerTimeState State { get => (PrayerTimeState)GetValue(StateProperty); set => SetValue(StateProperty, value); }
         public string PrayerName { get => (string)GetValue(PrayerNameProperty); set => SetValue(PrayerNameProperty, value); }
         public DateTime Time { get => (DateTime)GetValue(TimeProperty); set => SetValue(TimeProperty, value); }
         public string TimeString { get => (string)GetValue(TimeStringProperty); set => SetValue(TimeStringProperty, value); }
+        public string AMPMString { get => (string)GetValue(AMPMStringProperty); set => SetValue(AMPMStringProperty, value); }
         public ICommand DismissCommand { get => (ICommand)GetValue(DismissCommandProperty); set => SetValue(DismissCommandProperty, value); }
 
         public PrayerTimeItem()
@@ -59,7 +78,14 @@ namespace AwqatSalaat.WinUI.Controls
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
+            ampmTextBlock = GetTemplateChild("ampm") as TextBlock;
+            UpdateAMPMVisibility();
             VisualStateManager.GoToState(this, State.ToString(), false);
+        }
+
+        private void UpdateAMPMVisibility()
+        {
+            ampmTextBlock.Visibility = string.IsNullOrEmpty(AMPMString) ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

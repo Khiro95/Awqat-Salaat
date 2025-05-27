@@ -471,6 +471,21 @@
                         </StackPanel>
                     </NavigationViewItem.Tag>
                 </NavigationViewItem>
+                <NavigationViewItem x:Name="appearanceTab" Content="{mk:L11n Key=UI.Settings.Tabs.Appearance}">
+                    <NavigationViewItem.Tag>
+                        <StackPanel>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.PanelStyle}" Description="{mk:L11n Key=UI.Settings.PanelStyleDescription}">
+                                <ComboBox ItemsSource="{mk:Enums Type=cfg:WidgetPanelStyle}" SelectedItem="{Binding Realtime.TimesPanelStyle, Mode=TwoWay}" Width="300">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <ctrl:LocalizedStringPresenter Value="{Binding}" KeyFormat="Config.WidgetPanelStyle.{0}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </ctrl:SettingsItem>
+                        </StackPanel>
+                    </NavigationViewItem.Tag>
+                </NavigationViewItem>
                 <NavigationViewItem x:Name="aboutTab" Content="{mk:L11n Key=UI.Settings.Tabs.About}">
                     <NavigationViewItem.Tag>
                         <StackPanel Margin="16,8,16,16" MaxWidth="300">

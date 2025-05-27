@@ -528,4 +528,19 @@ Choose the calendar and set the desired year and month then click on Refresh</va
   <data name="UI.Settings.AutoAlignmentDescription" xml:space="preserve">
     <value>Adapt the alignment of the elements if the widget is near the left or the right edge of the screen.</value>
   </data>
+  <data name="Config.WidgetPanelStyle.Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Config.WidgetPanelStyle.Alt" xml:space="preserve">
+    <value>Alternative</value>
+  </data>
+  <data name="UI.Settings.PanelStyle" xml:space="preserve">
+    <value>Panel style</value>
+  </data>
+  <data name="UI.Settings.PanelStyleDescription" xml:space="preserve">
+    <value>Style and layout to be applied to the panel which shows prayer times and date</value>
+  </data>
+  <data name="UI.Settings.Tabs.Appearance" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
 </root>

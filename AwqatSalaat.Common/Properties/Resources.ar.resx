@@ -539,4 +539,19 @@
   <data name="UI.Settings.AutoAlignmentDescription" xml:space="preserve">
     <value>تكييف محاذاة العناصر إذا كانت الأداة قريبة من الحافة اليمنى أو اليسرى للشاشة.</value>
   </data>
+  <data name="Config.WidgetPanelStyle.Default" xml:space="preserve">
+    <value>افتراضي</value>
+  </data>
+  <data name="Config.WidgetPanelStyle.Alt" xml:space="preserve">
+    <value>بديل</value>
+  </data>
+  <data name="UI.Settings.PanelStyle" xml:space="preserve">
+    <value>نمط اللوحة</value>
+  </data>
+  <data name="UI.Settings.PanelStyleDescription" xml:space="preserve">
+    <value>نمط وتنسيق اللوحة التي تعرض أوقات الصلوات والتاريخ</value>
+  </data>
+  <data name="UI.Settings.Tabs.Appearance" xml:space="preserve">
+    <value>المظهر</value>
+  </data>
 </root>

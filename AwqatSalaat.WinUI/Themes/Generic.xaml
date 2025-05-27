@@ -57,6 +57,18 @@
         </Setter>
     </Style>
 
+    <Style TargetType="controls:PrayersPanelContainer">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:PrayersPanelContainer">
+                    <StackPanel Visibility="{TemplateBinding PanelVisibility}">
+                        <ContentPresenter Content="{TemplateBinding Panel}"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style TargetType="controls:PrayerTimeItem">
         <Setter Property="Foreground" Value="{ThemeResource TextFillColorPrimaryBrush}"/>
         <Setter Property="Template">
@@ -76,6 +88,9 @@
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="glyph" Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextHighlightColor}" />
                                         </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ampm" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextHighlightColor}" />
+                                        </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                     <VisualState.Setters>
                                         <Setter Target="glyph.Glyph" Value="&#xE751;"/>
@@ -93,6 +108,9 @@
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource AccentFillColorDefaultBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="glyph" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextOnAccentFillColorDefaultBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ampm" Storyboard.TargetProperty="Foreground">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextOnAccentFillColorDefaultBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
@@ -127,13 +145,14 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <Grid Margin="4" ColumnDefinitions="24,*,Auto,Auto">
+                        <Grid Margin="4" ColumnDefinitions="24,*,Auto,Auto,Auto">
                             <Border x:Name="glyphcontainer" Margin="0,0,8,0" VerticalAlignment="Center" RenderTransformOrigin=".5,.5">
                                 <FontIcon x:Name="glyph" Glyph="&#xE823;" Foreground="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" FontSize="16"/>
                             </Border>
                             <TextBlock Text="{TemplateBinding PrayerName}" Grid.Column="1" VerticalAlignment="Center"/>
                             <Button x:Name="dismissBtn" Style="{StaticResource TextBlockButtonStyle}" Padding="0" Content="{mk:L11n Key=UI.Panel.Dismiss}" Command="{Binding DismissCommand, RelativeSource={RelativeSource TemplatedParent}}" Margin="16,0" Grid.Column="2" Visibility="Collapsed"/>
                             <TextBlock Text="{Binding TimeString, RelativeSource={RelativeSource TemplatedParent}}" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding AMPMString, RelativeSource={RelativeSource TemplatedParent}}" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="ampm" Foreground="{ThemeResource TextFillColorTertiaryBrush}" Margin="4,0,0,0" MinWidth="22"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<controls:PrayersPanel
+    x:Class="AwqatSalaat.WinUI.Views.DefaultPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AwqatSalaat.WinUI.Views"
+    xmlns:converters="using:AwqatSalaat.WinUI.Converters"
+    xmlns:controls="using:AwqatSalaat.WinUI.Controls"
+    xmlns:mk="using:AwqatSalaat.WinUI.Markup"
+    xmlns:vm="using:AwqatSalaat.ViewModels"
+    xmlns:ash="using:AwqatSalaat.Helpers"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" x:DefaultBindMode="OneWay">
+
+    <controls:PrayersPanel.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Assets/Vectors.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </controls:PrayersPanel.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="{x:Bind converters:CustomDateTimeConverter.Format(ViewModel.DisplayedDate, 'dddd', ash:LocaleManager.Default.Current)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" Margin="0,4" HorizontalAlignment="Center"/>
+            <TextBlock Text="{x:Bind ash:HijriDateHelper.Format(ViewModel.DisplayedDate, 'dd MMMM yyyy', ash:LocaleManager.Default.Current)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" FlowDirection="RightToLeft" Margin="0,4" HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center" Visibility="Collapsed">
+                <TextBlock Text="{mk:L11n Key=UI.Panel.CorrespondTo}" Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                <TextBlock Text="{x:Bind ViewModel.DisplayedDate.ToString('dd/MM/yyyy', x:Null)}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" Margin="4,0,0,0"/>
+            </StackPanel>
+        </StackPanel>
+        <controls:StackPanelEx Orientation="Horizontal" MaxWidth="200" Margin="0,4" HorizontalAlignment="Center" Grid.Row="1" FlowDirection="LeftToRight">
+            <TextBlock Text="{x:Bind ViewModel.City}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
+            <Rectangle Height="1" Width="8" Fill="{ThemeResource ControlElevationBorderBrush}" Margin="8,5,8,3"/>
+            <TextBlock Text="{x:Bind ViewModel.Country}" Foreground="{ThemeResource TextFillColorTertiaryBrush}" HorizontalAlignment="Center"/>
+        </controls:StackPanelEx>
+        <ItemsControl ItemsSource="{x:Bind ViewModel.Items}" Grid.Row="2">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:PrayerTimeViewModel">
+                    <controls:PrayerTimeItem
+                        State="{x:Bind State}"
+                        Time="{x:Bind Time}"
+                        TimeString="{x:Bind converters:CustomDateTimeConverter.FormatShortTimeWithoutAMPM(Time, ash:LocaleManager.Default.CurrentCulture)}"
+                        AMPMString="{x:Bind converters:CustomDateTimeConverter.FormatShortTimeAMPM(Time, ash:LocaleManager.Default.CurrentCulture)}"
+                        PrayerName="{x:Bind Name}"
+                        DismissCommand="{x:Bind DismissNotification}"
+                        Visibility="{x:Bind IsVisible}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</controls:PrayersPanel>
