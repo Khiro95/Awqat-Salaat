@@ -1,0 +1,151 @@
+﻿<UserControl x:Class="AwqatSalaat.UI.Views.PrayersPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AwqatSalaat.UI.Views"
+             xmlns:ui="clr-namespace:AwqatSalaat.UI"
+             xmlns:vm="clr-namespace:AwqatSalaat.ViewModels;assembly=AwqatSalaat.Common"
+             xmlns:converters="clr-namespace:AwqatSalaat.UI.Converters"
+             xmlns:mk="clr-namespace:AwqatSalaat.Markup"
+             mc:Ignorable="d"
+             d:Background="#444" d:TextElement.Foreground="White" d:TextElement.FontSize="14"
+             d:DesignHeight="240" d:DesignWidth="200">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemeDictionary>
+                    <!-- Just to make IntelliSense work :) -->
+                    <d:ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="../Themes/Dark.xaml" />
+                        <ResourceDictionary Source="../Themes/Styles.xaml" />
+                    </d:ResourceDictionary.MergedDictionaries>
+                </ui:ThemeDictionary>
+                <ResourceDictionary Source="../Assets/Vectors.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <BooleanToVisibilityConverter x:Key="BoolVisConverter"/>
+            <converters:HijriDateConverter x:Key="HijriDateConverter"/>
+            <converters:ShortTimeConverter x:Key="ShortTimeConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <d:UserControl.DataContext>
+        <vm:WidgetViewModel />
+    </d:UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" Grid.Row="0">
+            <TextBlock Text="{Binding DisplayedDate, StringFormat='dddd'}" Margin="0,4" HorizontalAlignment="Center"/>
+            <TextBlock Text="{Binding DisplayedDate, Converter={StaticResource HijriDateConverter}, ConverterParameter='dd MMMM yyyy'}" d:Text="28 صفر 1445" d:FlowDirection="RightToLeft" Margin="0,4" HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center" Visibility="Collapsed">
+                <TextBlock Text="{mk:L11n UI.Panel.CorrespondTo}"/>
+                <TextBlock Text="{Binding DisplayedDate, StringFormat=dd/MM/yyyy}" Language="en" Margin="4,0,0,0"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel x:Name="locationPanel" Orientation="Horizontal" TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" Margin="0,4" MaxWidth="200" HorizontalAlignment="Center" Grid.Row="1" FlowDirection="LeftToRight" SizeChanged="LocationPanel_SizeChanged">
+            <TextBlock d:Text="City" Text="{Binding City}" HorizontalAlignment="Center"/>
+            <Rectangle Height="1" Width="8" Fill="{DynamicResource ThemeColors.ControlBorderBrush}" HorizontalAlignment="Center" Margin="8,5,8,3"/>
+            <TextBlock d:Text="Country" Text="{Binding Country}" HorizontalAlignment="Center"/>
+        </StackPanel>
+        <ItemsControl ItemsSource="{Binding Items}" Grid.Row="2" Grid.IsSharedSizeScope="True">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Visibility="{Binding IsVisible, Converter={StaticResource BoolVisConverter}}">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding State}" Value="Entered">
+                                        <Setter Property="TextElement.Foreground" Value="{DynamicResource ThemeColors.TextSecondaryBrush}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding State}" Value="Next">
+                                        <Setter Property="TextElement.Foreground" Value="{DynamicResource ThemeColors.TextHighlightBrush}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding State}" Value="Near">
+                                        <Setter Property="Background" Value="{DynamicResource ThemeColors.AccentBrush}"/>
+                                        <Setter Property="TextElement.Foreground" Value="{DynamicResource ThemeColors.TextOnAccentBrush}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding State}" Value="EnteredRecently">
+                                        <Setter Property="Background" Value="{DynamicResource ThemeColors.FillCriticalBrush}"/>
+                                        <Setter Property="TextElement.Foreground" Value="{DynamicResource ThemeColors.TextOnAccentBrush}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid Margin="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="24" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="TimeCol"/>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="AMPMCol"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Margin="0,0,8,0" FontSize="16" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding State}" Value="Coming">
+                                                <Setter Property="Text" Value="&#xE823;"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="ShuruqComing">
+                                                <Setter Property="Text" Value="&#xE706;"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="Next">
+                                                <Setter Property="Text" Value="&#xE751;"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="Near">
+                                                <Setter Property="Text" Value="&#xE7BA;"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="EnteredRecently">
+                                                <Setter Property="Text" Value="&#xE7BA;"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="Entered">
+                                                <Setter Property="Text" Value="&#xE73E;"/>
+                                            </DataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding State}" Value="Next"/>
+                                                    <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=FlowDirection}" Value="LeftToRight"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="RenderTransform">
+                                                    <Setter.Value>
+                                                        <ScaleTransform ScaleX="-1"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Setter Property="RenderTransformOrigin" Value=".5,.5"/>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBlock Text="{Binding Name}" Grid.Column="1"/>
+                            <Button Style="{DynamicResource ButtonAltStyle}" Content="{mk:L11n UI.Panel.Dismiss}" Command="{Binding DismissNotification}" Foreground="{DynamicResource ThemeColors.TextOnAccentBrush}" Margin="16,0" Grid.Column="2" d:Visibility="Visible" Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BoolVisConverter}}"/>
+                            <TextBlock Text="{Binding Time, Converter={StaticResource ShortTimeConverter}, ConverterParameter='WithoutAMPM'}" Grid.Column="3" HorizontalAlignment="Right"/>
+                            <TextBlock Text="{Binding Time, Converter={StaticResource ShortTimeConverter}, ConverterParameter='AMPMOnly'}" Grid.Column="4" HorizontalAlignment="Left" d:Text="AM">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="{DynamicResource ThemeColors.TextTertiaryBrush}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding State}" Value="EnteredRecently">
+                                                <Setter Property="Foreground" Value="{DynamicResource ThemeColors.TextOnAccentBrush}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="Near">
+                                                <Setter Property="Foreground" Value="{DynamicResource ThemeColors.TextOnAccentBrush}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="Next">
+                                                <Setter Property="Foreground" Value="{DynamicResource ThemeColors.TextHighlightBrush}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>

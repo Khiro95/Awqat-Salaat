@@ -2,7 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:views="clr-namespace:AwqatSalaat.UI.Views"
              xmlns:ui="clr-namespace:AwqatSalaat.UI"
              xmlns:vm="clr-namespace:AwqatSalaat.ViewModels;assembly=AwqatSalaat.Common"
              xmlns:converters="clr-namespace:AwqatSalaat.UI.Converters"
@@ -23,18 +24,17 @@
             </ResourceDictionary.MergedDictionaries>
 
             <BooleanToVisibilityConverter x:Key="BoolVisConverter"/>
-            <converters:BoolToVisibilityInvertedConverter x:Key="BoolVisInvConverter"/>
-            <converters:HijriDateConverter x:Key="HijriDateConverter"/>
-            <converters:ShortTimeConverter x:Key="ShortTimeConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <d:UserControl.DataContext>
         <vm:WidgetViewModel />
     </d:UserControl.DataContext>
-    <Grid d:Width="200" Margin="8">
+    <Grid d:Width="220" Margin="8">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition MinHeight="295"/>
+            <!--<RowDefinition MinHeight="295"/>-->
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -48,118 +48,22 @@
             <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE793;" x:Name="themeBtn"/>
             <Button Style="{DynamicResource IconButtonStyle}" Content="&#xE74F;" Foreground="{DynamicResource ThemeColors.TextHighlightBrush}" ToolTip="{mk:L11n UI.Panel.StopSound}" x:Name="stopSoundButton" Click="StopSound_Click"/>
         </StackPanel>
-        <Grid Grid.Row="1" Grid.ColumnSpan="2" Visibility="{Binding HasError, Converter={StaticResource BoolVisInvConverter}}">
-            <Grid Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisInvConverter}}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <StackPanel TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" Grid.Row="0">
-                    <TextBlock Text="{Binding DisplayedDate, StringFormat='dddd'}" Margin="0,4" HorizontalAlignment="Center"/>
-                    <TextBlock Text="{Binding DisplayedDate, Converter={StaticResource HijriDateConverter}, ConverterParameter='dd MMMM yyyy'}" d:Text="28 صفر 1445" d:FlowDirection="RightToLeft" Margin="0,4" HorizontalAlignment="Center"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,4" HorizontalAlignment="Center" Visibility="Collapsed">
-                        <TextBlock Text="{mk:L11n UI.Panel.CorrespondTo}"/>
-                        <TextBlock Text="{Binding DisplayedDate, StringFormat=dd/MM/yyyy}" Language="en" Margin="4,0,0,0"/>
-                    </StackPanel>
-                </StackPanel>
-                <StackPanel x:Name="locationPanel" Orientation="Horizontal" TextBlock.Foreground="{DynamicResource ThemeColors.TextTertiaryBrush}" Margin="0,4" HorizontalAlignment="Center" Grid.Row="1" FlowDirection="LeftToRight" SizeChanged="LocationPanel_SizeChanged">
-                    <TextBlock d:Text="City" Text="{Binding City}" HorizontalAlignment="Center"/>
-                    <Rectangle Height="1" Width="8" Fill="{DynamicResource ThemeColors.ControlBorderBrush}" HorizontalAlignment="Center" Margin="8,5,8,3"/>
-                    <TextBlock d:Text="Country" Text="{Binding Country}" HorizontalAlignment="Center"/>
-                </StackPanel>
-                <ItemsControl ItemsSource="{Binding Items}" Grid.Row="2" Grid.IsSharedSizeScope="True">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Visibility="{Binding IsVisible, Converter={StaticResource BoolVisConverter}}">
-                                <Border.Style>
-                                    <Style TargetType="Border">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding State}" Value="Entered">
-                                                <Setter Property="TextElement.Foreground" Value="{DynamicResource ThemeColors.TextSecondaryBrush}"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding State}" Value="Next">
-                                                <Setter Property="TextElement.Foreground" Value="{DynamicResource ThemeColors.TextHighlightBrush}"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding State}" Value="Near">
-                                                <Setter Property="Background" Value="{DynamicResource ThemeColors.AccentBrush}"/>
-                                                <Setter Property="TextElement.Foreground" Value="{DynamicResource ThemeColors.TextOnAccentBrush}"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding State}" Value="EnteredRecently">
-                                                <Setter Property="Background" Value="{DynamicResource ThemeColors.FillCriticalBrush}"/>
-                                                <Setter Property="TextElement.Foreground" Value="{DynamicResource ThemeColors.TextOnAccentBrush}"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Border.Style>
-                                <Grid Margin="4">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="24" />
-                                        <ColumnDefinition />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" SharedSizeGroup="TimeCol"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Margin="0,0,8,0" FontSize="16" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center">
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding State}" Value="Coming">
-                                                        <Setter Property="Text" Value="&#xE823;"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding State}" Value="ShuruqComing">
-                                                        <Setter Property="Text" Value="&#xE706;"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding State}" Value="Next">
-                                                        <Setter Property="Text" Value="&#xE751;"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding State}" Value="Near">
-                                                        <Setter Property="Text" Value="&#xE7BA;"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding State}" Value="EnteredRecently">
-                                                        <Setter Property="Text" Value="&#xE7BA;"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding State}" Value="Entered">
-                                                        <Setter Property="Text" Value="&#xE73E;"/>
-                                                    </DataTrigger>
-                                                    <MultiDataTrigger>
-                                                        <MultiDataTrigger.Conditions>
-                                                            <Condition Binding="{Binding State}" Value="Next"/>
-                                                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=FlowDirection}" Value="LeftToRight"/>
-                                                        </MultiDataTrigger.Conditions>
-                                                        <Setter Property="RenderTransform">
-                                                            <Setter.Value>
-                                                                <ScaleTransform ScaleX="-1"/>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                        <Setter Property="RenderTransformOrigin" Value=".5,.5"/>
-                                                    </MultiDataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-                                    </TextBlock>
-                                    <TextBlock Text="{Binding Name}" Grid.Column="1"/>
-                                    <Button Style="{DynamicResource ButtonAltStyle}" Content="{mk:L11n UI.Panel.Dismiss}" Command="{Binding DismissNotification}" Foreground="{DynamicResource ThemeColors.TextOnAccentBrush}" Margin="16,0" Grid.Column="2" d:Visibility="Visible" Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource BoolVisConverter}}"/>
-                                    <TextBlock Text="{Binding Time, Converter={StaticResource ShortTimeConverter}}" Grid.Column="3" HorizontalAlignment="Center"/>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <Path Data="{StaticResource Ayah}" Fill="{DynamicResource ThemeColors.TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,4,0,0" Grid.Row="3" FlowDirection="LeftToRight"/>
-            </Grid>
-        </Grid>
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Height="{Binding ElementName=timesPanel, Path=DesiredHeight}">
+            <views:PrayersPanel x:Name="timesPanel" Visibility="{Binding IsShowingTimes, Converter={StaticResource BoolVisConverter}}"/>
+        </StackPanel>
         <TextBlock
             Text="{mk:L11n UI.Panel.Refreshing}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Grid.Row="1"
+            Grid.RowSpan="2"
             Grid.ColumnSpan="2"
             Visibility="{Binding IsRefreshing, Converter={StaticResource BoolVisConverter}}"/>
         <Grid
             Width="180"
             HorizontalAlignment="Center"
             Grid.Row="1"
+            Grid.RowSpan="2"
             Grid.ColumnSpan="2"
             Visibility="{Binding HasError, Converter={StaticResource BoolVisConverter}}"
             d:Visibility="Hidden">
@@ -201,6 +105,9 @@
                     <TextBlock Text="{mk:L11n UI.Settings.Tabs.Service}" VerticalAlignment="Center"/>
                 </StackPanel>
             </StackPanel>
+        </Grid>
+        <Grid Margin="0,4,0,0" Grid.Row="2" Grid.ColumnSpan="2" Height="47">
+            <Path Data="{StaticResource Ayah}" Fill="{DynamicResource ThemeColors.TextSecondaryBrush}" HorizontalAlignment="Center" FlowDirection="LeftToRight" Visibility="{Binding IsShowingTimes, Converter={StaticResource BoolVisConverter}}"/>
         </Grid>
     </Grid>
 </UserControl>
