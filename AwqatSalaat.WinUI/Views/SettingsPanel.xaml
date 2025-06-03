@@ -483,6 +483,9 @@
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
                             </ctrl:SettingsItem>
+                            <ctrl:SettingsItem Header="{mk:L11n Key=UI.Settings.ShowAyah}" Description="{mk:L11n Key=UI.Settings.ShowAyahDescription}">
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.Realtime.ShowAyah}" OnContent="{mk:L11n Key=UI.Controls.Toggle.On}" OffContent="{mk:L11n Key=UI.Controls.Toggle.Off}"/>
+                            </ctrl:SettingsItem>
                         </StackPanel>
                     </NavigationViewItem.Tag>
                 </NavigationViewItem>

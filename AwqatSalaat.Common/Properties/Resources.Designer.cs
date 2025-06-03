@@ -1137,6 +1137,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show ayah.
+        /// </summary>
+        public static string UI_Settings_ShowAyah {
+            get {
+                return ResourceManager.GetString("UI.Settings.ShowAyah", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable or disable the visibility of the ayah in prayers panel.
+        /// </summary>
+        public static string UI_Settings_ShowAyahDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.ShowAyahDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show countdown.
         /// </summary>
         public static string UI_Settings_ShowCountdown {

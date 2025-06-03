@@ -106,7 +106,7 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-        <Grid Margin="0,4,0,0" Grid.Row="2" Grid.ColumnSpan="2" Height="47">
+        <Grid Margin="0,4,0,0" Grid.Row="2" Grid.ColumnSpan="2" Height="47" Visibility="{Binding WidgetSettings.Settings.ShowAyah, Converter={StaticResource BoolVisConverter}}">
             <Path Data="{StaticResource Ayah}" Fill="{DynamicResource ThemeColors.TextSecondaryBrush}" HorizontalAlignment="Center" FlowDirection="LeftToRight" Visibility="{Binding IsShowingTimes, Converter={StaticResource BoolVisConverter}}"/>
         </Grid>
     </Grid>

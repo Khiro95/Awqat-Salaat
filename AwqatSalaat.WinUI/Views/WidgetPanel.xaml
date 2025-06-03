@@ -89,7 +89,7 @@
                     </StackPanel>
                 </StackPanel>
             </Grid>
-            <Grid Margin="0,4,0,0" Grid.Row="2" Grid.ColumnSpan="2" Height="47">
+            <Grid Margin="0,4,0,0" Grid.Row="2" Grid.ColumnSpan="2" Height="47" Visibility="{x:Bind ViewModel.WidgetSettings.Settings.ShowAyah}">
                 <Path Data="{StaticResource Ayah}" Fill="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center" FlowDirection="LeftToRight" Visibility="{x:Bind ViewModel.IsShowingTimes}"/>
             </Grid>
         </Grid>

@@ -479,6 +479,15 @@
                     </StackPanel>
                 </ScrollViewer>
             </controls:TabItemEx>
+            <controls:TabItemEx Header="{mk:L11n UI.Settings.Tabs.Appearance}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel DataContext="{Binding Realtime}" Margin="8,16,8,8">
+                        <controls:SettingsItem Header="{mk:L11n UI.Settings.ShowAyah}" Description="{mk:L11n UI.Settings.ShowAyahDescription}" Margin="0">
+                            <CheckBox IsChecked="{Binding ShowAyah}"/>
+                        </controls:SettingsItem>
+                    </StackPanel>
+                </ScrollViewer>
+            </controls:TabItemEx>
             <controls:TabItemEx Header="{mk:L11n UI.Settings.Tabs.About}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="16" MaxWidth="300">

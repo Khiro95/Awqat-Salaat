@@ -718,5 +718,17 @@ namespace AwqatSalaat.Properties {
                 this["TimesPanelStyle"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowAyah {
+            get {
+                return ((bool)(this["ShowAyah"]));
+            }
+            set {
+                this["ShowAyah"] = value;
+            }
+        }
     }
 }

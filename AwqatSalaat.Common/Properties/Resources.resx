@@ -543,4 +543,10 @@ Choose the calendar and set the desired year and month then click on Refresh</va
   <data name="UI.Settings.Tabs.Appearance" xml:space="preserve">
     <value>Appearance</value>
   </data>
+  <data name="UI.Settings.ShowAyah" xml:space="preserve">
+    <value>Show ayah</value>
+  </data>
+  <data name="UI.Settings.ShowAyahDescription" xml:space="preserve">
+    <value>Enable or disable the visibility of the ayah in prayers panel</value>
+  </data>
 </root>

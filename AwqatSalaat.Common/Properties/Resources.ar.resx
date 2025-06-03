@@ -554,4 +554,10 @@
   <data name="UI.Settings.Tabs.Appearance" xml:space="preserve">
     <value>المظهر</value>
   </data>
+  <data name="UI.Settings.ShowAyah" xml:space="preserve">
+    <value>إظهار الآية</value>
+  </data>
+  <data name="UI.Settings.ShowAyahDescription" xml:space="preserve">
+    <value>تمكين أو تعطيل ظهور الآية في لوحة الصلوات</value>
+  </data>
 </root>

@@ -176,5 +176,8 @@
     <Setting Name="TimesPanelStyle" Type="AwqatSalaat.Configurations.WidgetPanelStyle" Scope="User">
       <Value Profile="(Default)">Default</Value>
     </Setting>
+    <Setting Name="ShowAyah" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
