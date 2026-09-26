@@ -5,6 +5,7 @@ using H.NotifyIcon.Core;
 using Microsoft.UI.Dispatching;
 using Serilog;
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -30,6 +31,7 @@ namespace AwqatSalaat.WinUI
 
         private static string latestDisplay;
         private static bool isPurposelyHidden;
+        private static bool isQuitting;
 
         public static IntPtr CurrentWidgetHandle => taskBarWidget?.Handle ?? throw new InvalidOperationException("The taskbar widget is missing.");
         public static ICommand ShowWidget { get; }
@@ -73,6 +75,7 @@ namespace AwqatSalaat.WinUI
             DisplayHelper.DisplayChanged += DisplayHelper_DisplayChanged;
             TaskbarSettingsWatcher.SettingChanged += TaskbarSettingsWatcher_SettingChanged;
             Notification.NotificationManager.ShowWidgetRequested += NotificationManager_ShowWidgetRequested;
+            Properties.Settings.Realtime.PropertyChanged += Settings_PropertyChanged;
 
             AppIcon = System.Drawing.Icon.ExtractAssociatedIcon(Environment.ProcessPath);
         }
@@ -128,6 +131,7 @@ namespace AwqatSalaat.WinUI
             }
 
             UpdateDisplayTrayMenus();
+            dispatcher?.TryEnqueue(UpdateTrayIconVisibility);
         }
 
         private static void HideThenShow()
@@ -327,6 +331,9 @@ namespace AwqatSalaat.WinUI
 
         private static void App_Quitting()
         {
+            isQuitting = true;
+            Properties.Settings.Realtime.PropertyChanged -= Settings_PropertyChanged;
+
             using (trayIcon)
             {
                 Log.Information("Removing tray icon");
@@ -345,6 +352,12 @@ namespace AwqatSalaat.WinUI
                 Log.Information("Creating widget");
 
                 var display = DisplayHelper.FindProperDisplay(Properties.Settings.Default.Display);
+                if (display is null)
+                {
+                    UpdateTrayMenuItemsStates(false);
+                    UpdateTrayIconVisibility();
+                    return;
+                }
 
                 var widget = new TaskBarWidget(display);
 
@@ -359,6 +372,7 @@ namespace AwqatSalaat.WinUI
                 latestDisplay = display.Display.DevicePath;
 
                 UpdateTrayMenuItemsStates(true);
+                UpdateTrayIconVisibility();
             }
         }
 
@@ -388,6 +402,7 @@ namespace AwqatSalaat.WinUI
             UpdateTrayMenuItemsStates(false);
 
             taskBarWidget = null;
+            UpdateTrayIconVisibility();
             Log.Information("Widget destroyed");
         }
 
@@ -408,6 +423,39 @@ namespace AwqatSalaat.WinUI
             }
 
             HideThenShow();
+            UpdateTrayIconVisibility();
+        }
+
+        private static void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Properties.Settings.ShowTrayIcon))
+            {
+                dispatcher?.TryEnqueue(UpdateTrayIconVisibility);
+            }
+        }
+
+        private static void UpdateTrayIconVisibility()
+        {
+            if (isQuitting || trayIcon is null)
+                return;
+
+            // Keep the tray accessible when the widget has no usable window or display.
+            bool widgetAvailable = taskBarWidget?.Display is not null
+                && User32.GetWindowRect(taskBarWidget.Handle, out _);
+            var visibility = Properties.Settings.Realtime.ShowTrayIcon || !widgetAvailable
+                ? IconVisibility.Visible
+                : IconVisibility.Hidden;
+
+            try
+            {
+                // Preserve the message window used for Explorer and session events.
+                trayIcon.UpdateVisibility(visibility);
+            }
+            catch (InvalidOperationException ex)
+            {
+                trayIcon.Visibility = visibility;
+                Log.Warning(ex, "Could not update tray icon visibility");
+            }
         }
 
         private static void OnDisplayMenuItemClick(PopupMenuItem item, string targetDisplay)

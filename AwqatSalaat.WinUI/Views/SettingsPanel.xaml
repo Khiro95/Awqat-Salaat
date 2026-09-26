@@ -211,6 +211,9 @@
                                     </StackPanel>
                                 </StackPanel>
                             </ctrl:SettingsItem>
+                            <ctrl:SettingsItem Header="{mk:I18n Key=UI.Settings.ShowTrayIcon}" Description="{mk:I18n Key=UI.Settings.ShowTrayIconDescription}">
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.Realtime.ShowTrayIcon}" OnContent="{mk:I18n Key=UI.Controls.Toggle.On}" OffContent="{mk:I18n Key=UI.Controls.Toggle.Off}"/>
+                            </ctrl:SettingsItem>
                             <ctrl:SettingsItem x:Name="lockScreenSetting" Header="{mk:I18n Key=UI.Settings.ShowContentOnLockScreen}" Description="{mk:I18n Key=UI.Settings.ShowContentOnLockScreenDescription}">
                                 <StackPanel>
                                     <ToggleSwitch IsOn="{x:Bind ViewModel.Realtime.ShowContentOnLockScreen}" OnContent="{mk:I18n Key=UI.Controls.Toggle.On}" OffContent="{mk:I18n Key=UI.Controls.Toggle.Off}"/>

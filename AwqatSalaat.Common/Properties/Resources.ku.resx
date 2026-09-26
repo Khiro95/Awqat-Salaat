@@ -773,4 +773,10 @@
     <value>نەتوانرا ئاگانامەی ویندۆز دەست پێبکرێت .
  دڵنیابە لەوەی کە Windows App Runtime Singleton v1.5 دامەزراوە.</value>
   </data>
+  <data name="UI.Settings.ShowTrayIcon" xml:space="preserve">
+    <value>پیشاندانی ئایکۆنی ناوچەی ئاگادارکردنەوەکان</value>
+  </data>
+  <data name="UI.Settings.ShowTrayIconDescription" xml:space="preserve">
+    <value>کاتێک ویجێتەکە شاراوەیە، ئایکۆنەکە دەردەکەوێت بۆ ئەوەی بتوانیت ویجێتەکە دووبارە پیشان بدەیتەوە یان لە بەرنامەکە بچیتە دەرەوە.</value>
+  </data>
 </root>
