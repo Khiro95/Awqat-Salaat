@@ -25,9 +25,10 @@ namespace AwqatSalaat.Services.WaktuSolat
         [JsonProperty("hijri")]
         public string Hijri { get; set; }
 
-        // All times are Unix timestamps (seconds, UTC)
+        // All times are Unix timestamps (seconds, UTC).
+        // Imsak and Dhuha are null in older data (e.g. 2023 and 2024), so they are nullable.
         [JsonProperty("imsak")]
-        public long Imsak { get; set; }
+        public long? Imsak { get; set; }
 
         [JsonProperty("fajr")]
         public long Fajr { get; set; }
@@ -36,7 +37,7 @@ namespace AwqatSalaat.Services.WaktuSolat
         public long Syuruk { get; set; }
 
         [JsonProperty("dhuha")]
-        public long Dhuha { get; set; }
+        public long? Dhuha { get; set; }
 
         [JsonProperty("dhuhr")]
         public long Dhuhr { get; set; }
