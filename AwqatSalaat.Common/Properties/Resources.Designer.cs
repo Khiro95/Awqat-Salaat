@@ -376,6 +376,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Waktu Solat (JAKIM, Malaysia).
+        /// </summary>
+        public static string Data_PrayerTimesService_WaktuSolat {
+            get {
+                return ResourceManager.GetString("Data.PrayerTimesService.WaktuSolat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Official JAKIM times for Malaysia only. Requires coordinates, make sure to set them in Location settings.
+        /// </summary>
+        public static string UI_Settings_WaktuSolatServiceNote {
+            get {
+                return ResourceManager.GetString("UI.Settings.WaktuSolatServiceNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Qatar Calendar House.
         /// </summary>
         public static string Data_PrayerTimesService_QCH {

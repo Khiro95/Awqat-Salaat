@@ -129,6 +129,7 @@ namespace AwqatSalaat.ViewModels
                     }
                     break;
                 case PrayerTimesService.Local:
+                case PrayerTimesService.WaktuSolat:
                     if (locationMode == LocationDetectionMode.ByCountryCode)
                     {
                         error = ServiceValdiationError.MissingCoordinates;

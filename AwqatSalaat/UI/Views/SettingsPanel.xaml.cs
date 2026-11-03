@@ -110,6 +110,10 @@ namespace AwqatSalaat.UI.Views
             qchCitySetting.Visibility = isQch ? Visibility.Visible : Visibility.Collapsed;
             locationTab.Visibility = isQch || isCSV ? Visibility.Collapsed : Visibility.Visible;
             csvSettings.Visibility = isCSV ? Visibility.Visible : Visibility.Collapsed;
+
+            // Waktu Solat serves official JAKIM times, so the school and calculation method don't apply
+            bool isWaktuSolat = ViewModel.Realtime.Service == Data.PrayerTimesService.WaktuSolat;
+            calculationSettings.Visibility = isQch || isCSV || isWaktuSolat ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void TrySetGeolocation(bool notifyIfNotAllowed)

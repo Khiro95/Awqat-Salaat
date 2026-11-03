@@ -389,6 +389,10 @@
                                         <FontIcon Glyph="&#xE7BA;" FontSize="12" Foreground="{ThemeResource TextHighlightBrush}" VerticalAlignment="Center"/>
                                         <TextBlock x:Name="localServiceNote" Text="{mk:I18n Key=UI.Settings.LocalServiceNote}" FontSize="12" Foreground="{ThemeResource TextHighlightBrush}" Margin="4,0,0,0"/>
                                     </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="2,2,0,0" Visibility="{x:Bind ViewModel.Realtime.Service, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter='WaktuSolat', Mode=OneWay}">
+                                        <FontIcon Glyph="&#xE7BA;" FontSize="12" Foreground="{ThemeResource TextHighlightBrush}" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{mk:I18n Key=UI.Settings.WaktuSolatServiceNote}" FontSize="12" Foreground="{ThemeResource TextHighlightBrush}" Margin="4,0,0,0"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </ctrl:SettingsItem>
                             <ctrl:SettingsItem x:Name="qchCitySetting" Header="{mk:I18n Key=UI.Settings.QchCity}" Description="{mk:I18n Key=UI.Settings.QchCityDescription}">
@@ -406,7 +410,7 @@
                                     </ctrl:ComboBoxEx.ItemTemplate>
                                 </ctrl:ComboBoxEx>
                             </ctrl:SettingsItem>
-                            <StackPanel Visibility="{x:Bind locationTab.Visibility, Mode=OneWay}">
+                            <StackPanel x:Name="calculationSettings">
                                 <ctrl:SettingsItem Header="{mk:I18n Key=UI.Settings.JuristicSchool}" Description="{mk:I18n Key=UI.Settings.JuristicSchoolDescription}">
                                     <ComboBox ItemsSource="{mk:Enums Type=dt:School}" SelectedItem="{Binding Realtime.School, Mode=TwoWay}" Width="300">
                                         <ComboBox.ItemTemplate>

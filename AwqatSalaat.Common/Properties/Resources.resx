@@ -648,6 +648,12 @@ Choose the calendar and set the desired year and month then click on Refresh</va
   <data name="UI.Settings.QchCityDescription" xml:space="preserve">
     <value>Select a city supported by Qatar Calendar House</value>
   </data>
+  <data name="Data.PrayerTimesService.WaktuSolat" xml:space="preserve">
+    <value>Waktu Solat (JAKIM, Malaysia)</value>
+  </data>
+  <data name="UI.Settings.WaktuSolatServiceNote" xml:space="preserve">
+    <value>Official JAKIM times for Malaysia only. Requires coordinates, make sure to set them in Location settings</value>
+  </data>
   <data name="Data.PrayerTimesService.CSV" xml:space="preserve">
     <value>CSV File</value>
   </data>
