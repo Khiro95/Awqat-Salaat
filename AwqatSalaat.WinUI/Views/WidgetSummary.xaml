@@ -15,9 +15,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d" x:DefaultBindMode="OneWay">
-    <UserControl.DataContext>
+    <!-- DataContext is set in code-behind because the view model is shared between all the instances (one per display) -->
+    <d:UserControl.DataContext>
         <vm:WidgetViewModel />
-    </UserControl.DataContext>
+    </d:UserControl.DataContext>
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>

@@ -774,6 +774,9 @@
   <data name="UI.ContextMenu.AlwaysPrimary" xml:space="preserve">
     <value>الرئيسية دائما</value>
   </data>
+  <data name="UI.ContextMenu.AllDisplays" xml:space="preserve">
+    <value>جميع الشاشات</value>
+  </data>
   <data name="UI.Settings.Color" xml:space="preserve">
     <value>اللون</value>
   </data>

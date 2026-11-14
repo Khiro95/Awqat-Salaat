@@ -45,12 +45,26 @@ namespace AwqatSalaat.WinUI.Views
         private DispatcherTimer lockScreenTimer;
 #endif
 
+        // The view model is shared between all the instances, so they all show the same data
+        // and settings changes made through one instance are reflected in the others.
+        private static WidgetViewModel sharedViewModel;
+
+        // When the widget is shown on many displays, only the main instance plays sounds and sends toast notifications
+        private readonly bool isMain;
+        private bool subscribed;
+
         private WidgetViewModel ViewModel => DataContext as WidgetViewModel;
 
         public event Action<DisplayMode> DisplayModeChanged;
 
-        public WidgetSummary()
+        public WidgetSummary() : this(true)
         {
+        }
+
+        public WidgetSummary(bool isMain)
+        {
+            this.isMain = isMain;
+            this.DataContext = sharedViewModel ??= new WidgetViewModel();
             this.InitializeComponent();
 #if DEBUG
             Current = this;
@@ -58,21 +72,65 @@ namespace AwqatSalaat.WinUI.Views
 #endif
             this.Loaded += WidgetSummary_Loaded;
             this.Unloaded += WidgetSummary_Unloaded;
-            ViewModel.WidgetSettings.Updated += WidgetSettings_Updated;
-            ViewModel.WidgetSettings.Realtime.PropertyChanged += Settings_PropertyChanged;
-            ViewModel.NearNotificationStarted += ViewModel_NearNotificationStarted;
-            ViewModel.NearNotificationStopped += ViewModel_NearNotificationStopped;
-            ViewModel.PrayerTimeEntered += ViewModel_PrayerTimeEntered;
-            LocaleManager.Default.CurrentChanged += LocaleManager_CurrentChanged;
-            ThemeHelper.ThemeChanged += ThemeHelper_ThemeChanged;
-            Notification.NotificationManager.ShowWidgetRequested += NotificationManager_ShowWidgetRequested;
-            Notification.NotificationManager.DismissReminderRequested += NotificationManager_DismissReminderRequested;
-            Notification.NotificationManager.StopReminderSoundRequested += NotificationManager_StopReminderSoundRequested;
-            Notification.NotificationManager.StopAdhanRequested += NotificationManager_StopAdhanRequested;
-            DisplayHelper.DisplayChanged += DisplayHelper_DisplayChanged;
+            SubscribeToEvents();
 
             UpdateDirection();
             UpdateNotificationSound();
+        }
+
+        // The view model outlives this control, so the subscriptions must be released explicitly when the widget is destroyed
+        public void Detach()
+        {
+            UnsubscribeFromEvents();
+            currentAudioSession?.End();
+        }
+
+        private void SubscribeToEvents()
+        {
+            if (subscribed)
+            {
+                return;
+            }
+
+            subscribed = true;
+            ViewModel.WidgetSettings.Updated += WidgetSettings_Updated;
+            ViewModel.WidgetSettings.Realtime.PropertyChanged += Settings_PropertyChanged;
+            LocaleManager.Default.CurrentChanged += LocaleManager_CurrentChanged;
+            ThemeHelper.ThemeChanged += ThemeHelper_ThemeChanged;
+            DisplayHelper.DisplayChanged += DisplayHelper_DisplayChanged;
+
+            if (isMain)
+            {
+                ViewModel.NearNotificationStarted += ViewModel_NearNotificationStarted;
+                ViewModel.NearNotificationStopped += ViewModel_NearNotificationStopped;
+                ViewModel.PrayerTimeEntered += ViewModel_PrayerTimeEntered;
+                Notification.NotificationManager.ShowWidgetRequested += NotificationManager_ShowWidgetRequested;
+                Notification.NotificationManager.DismissReminderRequested += NotificationManager_DismissReminderRequested;
+                Notification.NotificationManager.StopReminderSoundRequested += NotificationManager_StopReminderSoundRequested;
+                Notification.NotificationManager.StopAdhanRequested += NotificationManager_StopAdhanRequested;
+            }
+        }
+
+        private void UnsubscribeFromEvents()
+        {
+            if (!subscribed)
+            {
+                return;
+            }
+
+            subscribed = false;
+            ViewModel.WidgetSettings.Realtime.PropertyChanged -= Settings_PropertyChanged;
+            ViewModel.WidgetSettings.Updated -= WidgetSettings_Updated;
+            ViewModel.NearNotificationStarted -= ViewModel_NearNotificationStarted;
+            ViewModel.NearNotificationStopped -= ViewModel_NearNotificationStopped;
+            ViewModel.PrayerTimeEntered -= ViewModel_PrayerTimeEntered;
+            LocaleManager.Default.CurrentChanged -= LocaleManager_CurrentChanged;
+            ThemeHelper.ThemeChanged -= ThemeHelper_ThemeChanged;
+            Notification.NotificationManager.ShowWidgetRequested -= NotificationManager_ShowWidgetRequested;
+            Notification.NotificationManager.DismissReminderRequested -= NotificationManager_DismissReminderRequested;
+            Notification.NotificationManager.StopReminderSoundRequested -= NotificationManager_StopReminderSoundRequested;
+            Notification.NotificationManager.StopAdhanRequested -= NotificationManager_StopAdhanRequested;
+            DisplayHelper.DisplayChanged -= DisplayHelper_DisplayChanged;
         }
 
         private void DisplayHelper_DisplayChanged(object sender, DisplayChangedEventArgs e)
@@ -154,29 +212,23 @@ namespace AwqatSalaat.WinUI.Views
         private void WidgetSummary_Loaded(object sender, RoutedEventArgs e)
         {
             Log.Information("Widget summary loaded");
+            // The control can be unloaded then loaded again (e.g. when the taskbar alignment changes)
+            SubscribeToEvents();
             UpdateTheme();
             UpdateDisplayMode();
             UpdateDisplayMenu();
 #if PACKAGED
-            DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, InvalidateLockScreenTimer);
+            if (isMain)
+            {
+                DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, InvalidateLockScreenTimer);
+            }
 #endif
         }
 
         private void WidgetSummary_Unloaded(object sender, RoutedEventArgs e)
         {
             Log.Information("Widget summary unloaded");
-            ViewModel.WidgetSettings.Realtime.PropertyChanged -= Settings_PropertyChanged;
-            ViewModel.WidgetSettings.Updated -= WidgetSettings_Updated;
-            ViewModel.NearNotificationStarted -= ViewModel_NearNotificationStarted;
-            ViewModel.NearNotificationStopped -= ViewModel_NearNotificationStopped;
-            ViewModel.PrayerTimeEntered -= ViewModel_PrayerTimeEntered;
-            LocaleManager.Default.CurrentChanged -= LocaleManager_CurrentChanged;
-            ThemeHelper.ThemeChanged -= ThemeHelper_ThemeChanged;
-            Notification.NotificationManager.ShowWidgetRequested -= NotificationManager_ShowWidgetRequested;
-            Notification.NotificationManager.DismissReminderRequested -= NotificationManager_DismissReminderRequested;
-            Notification.NotificationManager.StopReminderSoundRequested -= NotificationManager_StopReminderSoundRequested;
-            Notification.NotificationManager.StopAdhanRequested -= NotificationManager_StopAdhanRequested;
-            DisplayHelper.DisplayChanged -= DisplayHelper_DisplayChanged;
+            UnsubscribeFromEvents();
 
             currentAudioSession?.End();
 
@@ -289,7 +341,10 @@ namespace AwqatSalaat.WinUI.Views
         {
             UpdateNotificationSound();
 #if PACKAGED
-            DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, InvalidateLockScreenTimer);
+            if (isMain)
+            {
+                DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, InvalidateLockScreenTimer);
+            }
 #endif
         }
 
@@ -369,6 +424,11 @@ namespace AwqatSalaat.WinUI.Views
 
         private void UpdateNotificationSound()
         {
+            if (!isMain)
+            {
+                return;
+            }
+
             var filePath = ViewModel.WidgetSettings.Settings.NotificationSoundFilePath;
 
             // Do we have a running notification sound?
@@ -421,6 +481,15 @@ namespace AwqatSalaat.WinUI.Views
             }
 
             primaryItem.IsChecked = ViewModel.WidgetSettings.Settings.Display == "PRIMARY";
+
+            displayFlyoutSubItem.Items.Add(new RadioMenuFlyoutItem()
+            {
+                Text = LocaleManager.Default.Get("UI.ContextMenu.AllDisplays"),
+                GroupName = "DisplayGroup",
+                Command = TaskBarManager.SetDisplay,
+                CommandParameter = TaskBarManager.AllDisplaysOption,
+                IsChecked = ViewModel.WidgetSettings.Settings.Display == TaskBarManager.AllDisplaysOption,
+            });
 
             foreach (var display in DisplayHelper.AvailableDisplays)
             {
