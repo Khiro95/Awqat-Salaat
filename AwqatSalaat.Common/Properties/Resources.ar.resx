@@ -822,4 +822,10 @@
   <data name="Dialog.LocationAccessDenied" xml:space="preserve">
     <value>لم يتم السماح بالوصول إلى الموقع.</value>
   </data>
+  <data name="UI.Settings.ShowTrayIcon" xml:space="preserve">
+    <value>إظهار أيقونة درج النظام</value>
+  </data>
+  <data name="UI.Settings.ShowTrayIconDescription" xml:space="preserve">
+    <value>تبقى الأيقونة ظاهرة عند إخفاء الأداة لتتمكن من إظهارها مجددًا أو إغلاق التطبيق.</value>
+  </data>
 </root>

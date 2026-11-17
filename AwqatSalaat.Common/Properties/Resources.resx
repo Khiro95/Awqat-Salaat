@@ -811,4 +811,10 @@ Make sure that Windows App Runtime Singleton v1.5 is installed.</value>
   <data name="Dialog.LocationAccessDenied" xml:space="preserve">
     <value>Not allowed to access location.</value>
   </data>
+  <data name="UI.Settings.ShowTrayIcon" xml:space="preserve">
+    <value>Show system tray icon</value>
+  </data>
+  <data name="UI.Settings.ShowTrayIconDescription" xml:space="preserve">
+    <value>The icon stays visible while the widget is hidden so you can show it again or quit.</value>
+  </data>
 </root>

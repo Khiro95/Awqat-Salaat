@@ -1847,6 +1847,24 @@ namespace AwqatSalaat.Properties {
                 return ResourceManager.GetString("UI.Settings.ShowCountdown", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show system tray icon.
+        /// </summary>
+        public static string UI_Settings_ShowTrayIcon {
+            get {
+                return ResourceManager.GetString("UI.Settings.ShowTrayIcon", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The icon stays visible while the widget is hidden so you can show it again or quit..
+        /// </summary>
+        public static string UI_Settings_ShowTrayIconDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.ShowTrayIconDescription", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Select whether to show the countdown near the time of the next salaat on the taskbar.

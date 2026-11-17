@@ -74,6 +74,18 @@ namespace AwqatSalaat.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowTrayIcon {
+            get {
+                return ((bool)(this["ShowTrayIcon"]));
+            }
+            set {
+                this["ShowTrayIcon"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ShowCountdown {
             get {
                 return ((bool)(this["ShowCountdown"]));
