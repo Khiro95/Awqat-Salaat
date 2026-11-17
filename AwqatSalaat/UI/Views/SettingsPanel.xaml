@@ -359,6 +359,20 @@
                                     <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
                                     <TextBlock Text="{mk:I18n UI.Settings.LocalServiceNote}" Margin="4,0,0,0"/>
                                 </StackPanel>
+                                <StackPanel Orientation="Horizontal" TextBlock.FontSize="12" TextBlock.Foreground="{DynamicResource ThemeColors.TextHighlightBrush}" Margin="2,2,0,0">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Realtime.Service}" Value="WaktuSolat">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </StackPanel.Style>
+                                    <TextBlock Text="&#xE7BA;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{mk:I18n UI.Settings.WaktuSolatServiceNote}" Margin="4,0,0,0"/>
+                                </StackPanel>
                             </StackPanel>
                         </controls:SettingsItem>
                         <controls:SettingsItem x:Name="qchCitySetting" Header="{mk:I18n UI.Settings.QchCity}" Description="{mk:I18n UI.Settings.QchCityDescription}">
@@ -374,7 +388,7 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </controls:SettingsItem>
-                        <StackPanel x:Name="calculationSettings" Visibility="{Binding ElementName=locationTab, Path=Visibility}">
+                        <StackPanel x:Name="calculationSettings">
                             <controls:SettingsItem Header="{mk:I18n UI.Settings.JuristicSchool}" Description="{mk:I18n UI.Settings.JuristicSchoolDescription}">
                                 <ComboBox ItemsSource="{Binding Source={StaticResource SchoolEnum}}" SelectedItem="{Binding Realtime.School}" Width="300" HorizontalAlignment="Left">
                                     <ComboBox.ItemTemplate>

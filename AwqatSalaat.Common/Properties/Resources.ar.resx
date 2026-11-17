@@ -659,6 +659,12 @@
   <data name="UI.Settings.QchCityDescription" xml:space="preserve">
     <value>قم بتحديد المدينة المدعومة من طرف دار التقويم القطري</value>
   </data>
+  <data name="Data.PrayerTimesService.WaktuSolat" xml:space="preserve">
+    <value>Waktu Solat (جاكيم، ماليزيا)</value>
+  </data>
+  <data name="UI.Settings.WaktuSolatServiceNote" xml:space="preserve">
+    <value>المواقيت الرسمية لجاكيم في ماليزيا فقط. تتطلب الإحداثيات، تأكد من ضبطها في إعدادات الموقع</value>
+  </data>
   <data name="Data.PrayerTimesService.CSV" xml:space="preserve">
     <value>ملف CSV</value>
   </data>
