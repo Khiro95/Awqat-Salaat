@@ -45,15 +45,13 @@ namespace AwqatSalaat.WinUI.Views
         private DispatcherTimer lockScreenTimer;
 #endif
 
-        // The view model is shared between all the instances, so they all show the same data
-        // and settings changes made through one instance are reflected in the others.
-        private static WidgetViewModel sharedViewModel;
-
         // When the widget is shown on many displays, only the main instance plays sounds and sends toast notifications
         private readonly bool isMain;
         private bool subscribed;
 
-        private WidgetViewModel ViewModel => DataContext as WidgetViewModel;
+        // The view model is shared between all the instances, so they all show the same data
+        // and settings changes made through one instance are reflected in the others.
+        private WidgetViewModel ViewModel => WidgetViewModel.Instance;
 
         public event Action<DisplayMode> DisplayModeChanged;
 
@@ -64,7 +62,7 @@ namespace AwqatSalaat.WinUI.Views
         public WidgetSummary(bool isMain)
         {
             this.isMain = isMain;
-            this.DataContext = sharedViewModel ??= new WidgetViewModel();
+            this.DataContext = ViewModel;
             this.InitializeComponent();
 #if DEBUG
             Current = this;
@@ -469,27 +467,20 @@ namespace AwqatSalaat.WinUI.Views
             Log.Information("Updating Display context-menu");
             int count = 0;
             var primaryItem = displayFlyoutSubItem.Items[0] as RadioMenuFlyoutItem;
+            var allDisplaysItem = displayFlyoutSubItem.Items[1] as RadioMenuFlyoutItem;
 
             // Using displayFlyoutSubItem.Items.Clear() then calling displayFlyoutSubItem.Items.Add(primaryItem) causes crash
-            // So primaryItem need to stay in the list all the time
+            // So primaryItem and allDisplaysItem need to stay in the list all the time
             foreach (var item in displayFlyoutSubItem.Items.ToArray())
             {
-                if (ReferenceEquals(item, primaryItem))
+                if (ReferenceEquals(item, primaryItem) || ReferenceEquals(item, allDisplaysItem))
                     continue;
 
                 displayFlyoutSubItem.Items.Remove(item);
             }
 
             primaryItem.IsChecked = ViewModel.WidgetSettings.Settings.Display == "PRIMARY";
-
-            displayFlyoutSubItem.Items.Add(new RadioMenuFlyoutItem()
-            {
-                Text = LocaleManager.Default.Get("UI.ContextMenu.AllDisplays"),
-                GroupName = "DisplayGroup",
-                Command = TaskBarManager.SetDisplay,
-                CommandParameter = TaskBarManager.AllDisplaysOption,
-                IsChecked = ViewModel.WidgetSettings.Settings.Display == TaskBarManager.AllDisplaysOption,
-            });
+            allDisplaysItem.IsChecked = ViewModel.WidgetSettings.Settings.Display == TaskBarManager.AllDisplaysOption;
 
             foreach (var display in DisplayHelper.AvailableDisplays)
             {

@@ -284,6 +284,7 @@
                         <MenuFlyoutSeparator Visibility="{x:Bind displayFlyoutSubItem.Visibility, Mode=OneWay}"/>
                         <MenuFlyoutSubItem x:Name="displayFlyoutSubItem" Text="{mk:I18n Key=UI.ContextMenu.Display}" IsEnabled="{x:Bind ViewModel.WidgetSettings.Settings.IsConfigured}">
                             <RadioMenuFlyoutItem Text="{mk:I18n Key=UI.ContextMenu.AlwaysPrimary}" GroupName="DisplayGroup" Command="{x:Bind app:TaskBarManager.SetDisplay, Mode=OneTime}" CommandParameter="PRIMARY"/>
+                            <RadioMenuFlyoutItem Text="{mk:I18n Key=UI.ContextMenu.AllDisplays}" GroupName="DisplayGroup" Command="{x:Bind app:TaskBarManager.SetDisplay, Mode=OneTime}" CommandParameter="ALL"/>
                         </MenuFlyoutSubItem>
                         <MenuFlyoutSeparator/>
                         <MenuFlyoutItem Text="{mk:I18n Key=UI.ContextMenu.Quit}" Command="{x:Bind app:App.Quit, Mode=OneTime}"/>
