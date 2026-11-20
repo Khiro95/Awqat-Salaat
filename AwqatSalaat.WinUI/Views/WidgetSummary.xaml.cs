@@ -49,6 +49,12 @@ namespace AwqatSalaat.WinUI.Views
         private readonly bool isMain;
         private bool subscribed;
 
+        private static int instancesCount;
+
+        // The group of RadioMenuFlyoutItem is shared by the whole app, so each instance needs its own group,
+        // otherwise checking an item in one instance unchecks the same item in the others
+        private readonly string displayGroupName = "DisplayGroup_" + System.Threading.Interlocked.Increment(ref instancesCount);
+
         // The view model is shared between all the instances, so they all show the same data
         // and settings changes made through one instance are reflected in the others.
         private WidgetViewModel ViewModel => WidgetViewModel.Instance;
@@ -64,6 +70,11 @@ namespace AwqatSalaat.WinUI.Views
             this.isMain = isMain;
             this.DataContext = ViewModel;
             this.InitializeComponent();
+
+            foreach (var item in displayFlyoutSubItem.Items.OfType<RadioMenuFlyoutItem>())
+            {
+                item.GroupName = displayGroupName;
+            }
 #if DEBUG
             Current = this;
             Properties.Settings.Default.IsConfigured = false;
@@ -487,7 +498,7 @@ namespace AwqatSalaat.WinUI.Views
                 var item = new RadioMenuFlyoutItem()
                 {
                     Text = display.Summary,
-                    GroupName = "DisplayGroup",
+                    GroupName = displayGroupName,
                     Command = TaskBarManager.SetDisplay,
                     CommandParameter = display.Display.DevicePath,
                     IsChecked = ViewModel.WidgetSettings.Settings.Display == display.Display.DevicePath,
