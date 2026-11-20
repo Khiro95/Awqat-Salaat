@@ -12,11 +12,12 @@
 
 الأداة تدعم أيضا الإشعار المرئي عندما يقترب وقت الصلاة القادمة من حد قابل للضبط.
 
-حاليا الأداة تدعم خمس خدمات للحصول على أوقات الصلوات إعتمادا على إعدادات المستخدم:
+حاليا الأداة تدعم ست خدمات للحصول على أوقات الصلوات إعتمادا على إعدادات المستخدم:
 - [واجهة برمجة التطبيقات (Prayer Times API)  من طرف منصة مواقيت الصلاة](http://www.salahhour.com/index.php/api)
 - [واجهة برمجة التطبيقات (Prayer Times API)  من طرف منصة الأذان](https://aladhan.com/prayer-times-api)
 - [خدمة بدون اتصال مبنية على مكتبة Adhan من طرف Batoul Apps](https://github.com/davidpet86/Adhan-csharp)
 - [دار التقويم القطري (جمع بيانات من الموقع)](https://www.qatarch.com/cal)
+- [واجهة برمجة التطبيقات Waktu Solat (الأوقات الرسمية من JAKIM لماليزيا)](https://api.waktusolat.app/docs)
 - خدمة تستورد البيانات من ملف CSV. المزيد من المعلومات [هنا](https://github.com/Khiro95/Awqat-Salaat/wiki/CSV-Import).
 
 > [!note]
@@ -178,6 +179,7 @@
 - [مكتبة H.NotifyIcon:](https://github.com/HavenDV/H.NotifyIcon) مكتبة تبسط إنشاء أيقونات علبة النظام.
 - [مواقيت الصلاة:](https://www.salahhour.com/index.php/api) توفر هذه المنصة خدمة واجهة برمجة تطبيقات بسيطة للحصول على أوقات الصلوات.
 - [الأذان:](https://aladhan.com/prayer-times-api) توفر هذه المنصة خدمة واجهة برمجة تطبيقات مرنة للحصول على أوقات الصلوات.
+- [Waktu Solat:](https://api.waktusolat.app/docs) توفر هذه المنصة واجهة برمجة تطبيقات للحصول على أوقات الصلاة الرسمية من JAKIM في ماليزيا.
 - [مكتبة Adhan-csharp:](https://github.com/davidpet86/Adhan-csharp) توفر ترجمة بلغة C# لمكتبة [Adhan](https://github.com/batoulapps/Adhan) التي توفر خدمة حساب وقت الصلاة بدقة عالية.
 - [خدمة Nominatim:](https://nominatim.org/) خدمة ترميز جغرافي مفتوحة المصدر.
 - [مكتبة CsvHelper:](https://github.com/JoshClose/CsvHelper) مكتبة تساعد على قراءة وكتابة ملفات CSV.
