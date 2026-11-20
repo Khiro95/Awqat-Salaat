@@ -261,6 +261,24 @@
   <data name="Data.JuristicSchool.Hanafi" xml:space="preserve">
     <value>Hanefi</value>
   </data>
+  <data name="UI.Settings.HighLatitude" xml:space="preserve">
+    <value>Yüksek enlem düzeltmesi</value>
+  </data>
+  <data name="UI.Settings.HighLatitudeDescription" xml:space="preserve">
+    <value>Yazın alacakaranlığın bütün gece sürebildiği yaklaşık 48° enlemin üzerinde İmsak ve Yatsı vakitlerinin nasıl belirleneceği</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.Default" xml:space="preserve">
+    <value>Hizmetin varsayılanı</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.MiddleOfTheNight" xml:space="preserve">
+    <value>Gecenin yarısı</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.OneSeventh" xml:space="preserve">
+    <value>Gecenin yedide biri</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.AngleBased" xml:space="preserve">
+    <value>Açıya göre</value>
+  </data>
   <data name="UI.Settings.Tabs.Service" xml:space="preserve">
     <value>Hizmet</value>
   </data>

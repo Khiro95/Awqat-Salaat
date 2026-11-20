@@ -17,6 +17,11 @@ namespace AwqatSalaat.Services.AlAdhan
             var query = HttpUtility.ParseQueryString("");
             query["school"] = JuristicSchool.ToString("D");
 
+            if (HighLatitudeMethod != Data.HighLatitudeMethod.Default)
+            {
+                query["latitudeAdjustmentMethod"] = HighLatitudeMethod.ToString("D");
+            }
+
             if (UseCoordinates)
             {
                 query["latitude"] = Latitude.ToString(CultureInfo.InvariantCulture);
