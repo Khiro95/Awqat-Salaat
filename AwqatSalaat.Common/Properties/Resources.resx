@@ -244,6 +244,24 @@
   <data name="Data.JuristicSchool.Hanafi" xml:space="preserve">
     <value>Hanafi</value>
   </data>
+  <data name="UI.Settings.HighLatitude" xml:space="preserve">
+    <value>High latitude adjustment</value>
+  </data>
+  <data name="UI.Settings.HighLatitudeDescription" xml:space="preserve">
+    <value>How Fajr and Isha are estimated above about 48° latitude, where twilight can last all night in summer</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.Default" xml:space="preserve">
+    <value>Service default</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.MiddleOfTheNight" xml:space="preserve">
+    <value>Middle of the night</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.OneSeventh" xml:space="preserve">
+    <value>One seventh of the night</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.AngleBased" xml:space="preserve">
+    <value>Angle based</value>
+  </data>
   <data name="UI.Settings.Tabs.Service" xml:space="preserve">
     <value>Service</value>
   </data>

@@ -261,6 +261,24 @@
   <data name="Data.JuristicSchool.Hanafi" xml:space="preserve">
     <value>الحنفي</value>
   </data>
+  <data name="UI.Settings.HighLatitude" xml:space="preserve">
+    <value>تعديل خطوط العرض العليا</value>
+  </data>
+  <data name="UI.Settings.HighLatitudeDescription" xml:space="preserve">
+    <value>طريقة تقدير وقتي الفجر والعشاء فوق خط العرض 48° تقريبا، حيث قد يستمر الشفق طوال الليل في الصيف</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.Default" xml:space="preserve">
+    <value>افتراضي الخدمة</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.MiddleOfTheNight" xml:space="preserve">
+    <value>منتصف الليل</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.OneSeventh" xml:space="preserve">
+    <value>سُبع الليل</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.AngleBased" xml:space="preserve">
+    <value>حسب الزاوية</value>
+  </data>
   <data name="UI.Settings.Tabs.Service" xml:space="preserve">
     <value>الخدمة</value>
   </data>

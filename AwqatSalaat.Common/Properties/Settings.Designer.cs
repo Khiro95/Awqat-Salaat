@@ -217,6 +217,18 @@ namespace AwqatSalaat.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Default")]
+        public global::AwqatSalaat.Data.HighLatitudeMethod HighLatitudeMethod {
+            get {
+                return ((global::AwqatSalaat.Data.HighLatitudeMethod)(this["HighLatitudeMethod"]));
+            }
+            set {
+                this["HighLatitudeMethod"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("ByCountryCode")]
         public global::AwqatSalaat.Data.LocationDetectionMode LocationDetection {
             get {

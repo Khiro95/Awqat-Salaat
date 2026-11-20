@@ -1433,6 +1433,60 @@ namespace AwqatSalaat.Properties {
                 return ResourceManager.GetString("UI.Settings.JuristicSchoolDescription", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to High latitude adjustment.
+        /// </summary>
+        public static string UI_Settings_HighLatitude {
+            get {
+                return ResourceManager.GetString("UI.Settings.HighLatitude", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to How Fajr and Isha are estimated above about 48° latitude, where twilight can last all night in summer.
+        /// </summary>
+        public static string UI_Settings_HighLatitudeDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.HighLatitudeDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Service default.
+        /// </summary>
+        public static string Data_HighLatitudeMethod_Default {
+            get {
+                return ResourceManager.GetString("Data.HighLatitudeMethod.Default", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Middle of the night.
+        /// </summary>
+        public static string Data_HighLatitudeMethod_MiddleOfTheNight {
+            get {
+                return ResourceManager.GetString("Data.HighLatitudeMethod.MiddleOfTheNight", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to One seventh of the night.
+        /// </summary>
+        public static string Data_HighLatitudeMethod_OneSeventh {
+            get {
+                return ResourceManager.GetString("Data.HighLatitudeMethod.OneSeventh", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Angle based.
+        /// </summary>
+        public static string Data_HighLatitudeMethod_AngleBased {
+            get {
+                return ResourceManager.GetString("Data.HighLatitudeMethod.AngleBased", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Language.

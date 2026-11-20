@@ -210,6 +210,7 @@ namespace AwqatSalaat.ViewModels
             request.HijriMonth = HijriMonth + hijriMonthOffset;
             request.Method = Settings.CalculationMethod;
             request.JuristicSchool = Settings.School;
+            request.HighLatitudeMethod = Settings.HighLatitudeMethod;
 
             if (Settings.LocationDetection != LocationDetectionMode.ByCountryCode)
             {

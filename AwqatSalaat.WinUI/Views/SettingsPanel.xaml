@@ -436,6 +436,15 @@
                                         </ComboBox.ItemTemplate>
                                     </ComboBox>
                                 </ctrl:SettingsItem>
+                                <ctrl:SettingsItem x:Name="highLatitudeSetting" Header="{mk:I18n Key=UI.Settings.HighLatitude}" Description="{mk:I18n Key=UI.Settings.HighLatitudeDescription}">
+                                    <ComboBox ItemsSource="{mk:Enums Type=dt:HighLatitudeMethod}" SelectedItem="{Binding Realtime.HighLatitudeMethod, Mode=TwoWay}" Width="300">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <ctrl:LocalizedStringPresenter Value="{Binding}" KeyFormat="Data.HighLatitudeMethod.{0}"/>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                </ctrl:SettingsItem>
                             </StackPanel>
                             <Grid x:Name="csvSettings" Margin="0,16,0,0">
                                 <Grid.RowDefinitions>

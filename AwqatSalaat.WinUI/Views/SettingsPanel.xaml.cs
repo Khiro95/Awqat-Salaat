@@ -163,6 +163,10 @@ namespace AwqatSalaat.WinUI.Views
             // Waktu Solat serves official JAKIM times, so the school and calculation method don't apply
             bool isWaktuSolat = ViewModel.Realtime.Service == Data.PrayerTimesService.WaktuSolat;
             calculationSettings.Visibility = isQch || isCSV || isWaktuSolat ? Visibility.Collapsed : Visibility.Visible;
+
+            // Only Al-Adhan and the offline service let the high latitude rule be chosen
+            bool supportsHighLatitude = ViewModel.Realtime.Service == Data.PrayerTimesService.AlAdhan || ViewModel.Realtime.Service == Data.PrayerTimesService.Local;
+            highLatitudeSetting.Visibility = supportsHighLatitude ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private async Task TrySetGeolocation(bool notifyIfNotAllowed)
