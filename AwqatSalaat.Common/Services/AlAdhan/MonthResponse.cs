@@ -24,6 +24,7 @@ namespace AwqatSalaat.Services.AlAdhan
                     dayTimes.Add(time.Key, ParseTimeToLocal(time.Value, date));
                 }
 
+                PrayerTimes.MoveIshaAfterMidnight(dayTimes);
                 Times.Add(date, new PrayerTimes(dayTimes));
             }
         }

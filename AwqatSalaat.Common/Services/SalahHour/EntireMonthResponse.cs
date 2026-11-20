@@ -30,6 +30,7 @@ namespace AwqatSalaat.Services.SalahHour
                     }
                 }
 
+                PrayerTimes.MoveIshaAfterMidnight(dayTimes);
                 Times.Add(date, new PrayerTimes(dayTimes));
             }
         }

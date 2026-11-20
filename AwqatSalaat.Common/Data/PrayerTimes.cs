@@ -22,6 +22,20 @@ namespace AwqatSalaat.Data
         public PrayerTimes(IEnumerable<KeyValuePair<string, DateTime>> times) => this.times = times.ToDictionary(kv => kv.Key, kv => kv.Value);
         public PrayerTimes(Dictionary<string, DateTime> times) => this.times = times;
 
+        /// <summary>
+        /// For services that give clock times only: at high latitudes in summer, Isha can be after midnight
+        /// (e.g. 00:50 in Stockholm in June). Such a time belongs to the next day, not to the morning of this one.
+        /// </summary>
+        internal static void MoveIshaAfterMidnight(Dictionary<string, DateTime> times)
+        {
+            if (times.TryGetValue(nameof(Maghrib), out var maghrib)
+                && times.TryGetValue(nameof(Isha), out var isha)
+                && isha < maghrib)
+            {
+                times[nameof(Isha)] = isha.AddDays(1);
+            }
+        }
+
         public void Adjust(DateTime day)
         {
             foreach (var time in times.ToList())

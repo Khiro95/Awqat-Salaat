@@ -1,4 +1,5 @@
 ﻿using AwqatSalaat.Configurations;
+using AwqatSalaat.Helpers;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Serilog;
@@ -51,7 +52,8 @@ namespace AwqatSalaat.Services.CSV
                                 {
                                     if (string.IsNullOrEmpty(record.Date))
                                     {
-                                        date = new DateTime(DateTime.Today.Year, int.Parse(record.Month), int.Parse(record.Day));
+                                        // No year in the file: use the requested one (e.g. 1 January asked on 31 December)
+                                        date = new DateTime(req.Date.Year, int.Parse(record.Month, CultureInfo.InvariantCulture), int.Parse(record.Day, CultureInfo.InvariantCulture));
                                     }
                                     else
                                     {
@@ -83,7 +85,7 @@ namespace AwqatSalaat.Services.CSV
                         }
                         else
                         {
-                            var dates = req.Range == CsvImportRange.Year ? GetYearDates() : GetMonthDates();
+                            var dates = req.Range == CsvImportRange.Year ? GetYearDates(req.Date.Year) : GetMonthDates();
 
                             foreach (var date in dates)
                             {
@@ -121,7 +123,7 @@ namespace AwqatSalaat.Services.CSV
 
         private static Data.PrayerTimes GetPrayerTimes(CsvTimes csvTimes, DateTime date)
         {
-            var times = new Data.PrayerTimes(new Dictionary<string, DateTime>
+            var dayTimes = new Dictionary<string, DateTime>
             {
                 [nameof(Data.PrayerTimes.Fajr)] = ParseTimeToLocal(csvTimes.Fajr, date),
                 [nameof(Data.PrayerTimes.Shuruq)] = ParseTimeToLocal(csvTimes.Shuruq, date),
@@ -129,9 +131,10 @@ namespace AwqatSalaat.Services.CSV
                 [nameof(Data.PrayerTimes.Asr)] = ParseTimeToLocal(csvTimes.Asr, date),
                 [nameof(Data.PrayerTimes.Maghrib)] = ParseTimeToLocal(csvTimes.Maghrib, date),
                 [nameof(Data.PrayerTimes.Isha)] = ParseTimeToLocal(csvTimes.Isha, date),
-            });
+            };
 
-            return times;
+            Data.PrayerTimes.MoveIshaAfterMidnight(dayTimes);
+            return new Data.PrayerTimes(dayTimes);
         }
 
         private static DateTime ParseTimeToLocal(string time, DateTime baseDate)
@@ -141,9 +144,9 @@ namespace AwqatSalaat.Services.CSV
             return TimeZoneInfo.ConvertTime(dt, TimeZoneInfo.Local);
         }
 
-        private static IEnumerable<DateTime> GetYearDates()
+        // A year file is used for the requested year, so it keeps working after 31 December
+        private static IEnumerable<DateTime> GetYearDates(int year)
         {
-            int year = DateTime.Today.Year;
             var date = new DateTime(year, 1, 1);
 
             while (date.Year == year)
@@ -155,8 +158,8 @@ namespace AwqatSalaat.Services.CSV
 
         private static IEnumerable<DateTime> GetMonthDates()
         {
-            int year = DateTime.Today.Year;
-            int month = DateTime.Today.Month;
+            int year = TimeStamp.Date.Year;
+            int month = TimeStamp.Date.Month;
             var date = new DateTime(year, month, 1);
 
             while (date.Month == month)
