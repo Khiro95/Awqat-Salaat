@@ -43,5 +43,15 @@ namespace AwqatSalaat.Helpers
 
             return TimeZoneInfo.ConvertTimeFromUtc(dateTime, TimeZoneInfo.Local);
         }
+
+        public static DateTime ConvertDateTimeOffsetToLocal(DateTimeOffset dateTimeOffset)
+            => ConvertDateTimeOffsetToLocal(dateTimeOffset, TimeZoneInfo.Local);
+
+        internal static DateTime ConvertDateTimeOffsetToLocal(DateTimeOffset dateTimeOffset, TimeZoneInfo localTimeZone)
+        {
+            var local = TimeZoneInfo.ConvertTime(dateTimeOffset, localTimeZone);
+
+            return DateTime.SpecifyKind(local.DateTime, DateTimeKind.Unspecified);
+        }
     }
 }
