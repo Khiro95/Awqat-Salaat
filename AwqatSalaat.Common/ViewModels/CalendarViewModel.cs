@@ -98,6 +98,8 @@ namespace AwqatSalaat.ViewModels
             }
             catch (Exception ex)
             {
+                // The calendar shows "no data"; keep the reason in the log
+                Log.Error(ex, $"Refreshing calendar failed: {ex.Message}");
 #if DEBUG
                 throw;
 #endif
@@ -331,7 +333,7 @@ namespace AwqatSalaat.ViewModels
                 PrayerTimes.Clear();
                 FirstDate = null;
                 LastDate = null;
-                location = null;
+                Location = null;
             }
 
             if (data?.Count > 0)

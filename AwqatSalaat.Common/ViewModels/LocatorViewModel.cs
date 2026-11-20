@@ -205,7 +205,7 @@ namespace AwqatSalaat.ViewModels
                 return;
             }
 
-            settings.CountryCode = place.Address.CountryCode.ToUpper();
+            settings.CountryCode = place.Address.CountryCode.ToUpperInvariant();
             settings.City = place.Address.City;
             settings.ZipCode = null;
             settings.Latitude = place.Latitude;
