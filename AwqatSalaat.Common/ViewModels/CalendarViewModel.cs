@@ -5,6 +5,7 @@ using AwqatSalaat.Services.AlAdhan;
 using AwqatSalaat.Services.SalahHour;
 using AwqatSalaat.Services.Local;
 using AwqatSalaat.Services.CSV;
+using AwqatSalaat.Services.WaktuSolat;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -157,6 +158,8 @@ namespace AwqatSalaat.ViewModels
                     return new LocalClient();
                 case PrayerTimesService.CSV:
                     return new CsvClient();
+                case PrayerTimesService.WaktuSolat:
+                    return new WaktuSolatClient();
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -192,6 +195,9 @@ namespace AwqatSalaat.ViewModels
                     break;
                 case PrayerTimesService.CSV:
                     request = BuildCsvRequest();
+                    break;
+                case PrayerTimesService.WaktuSolat:
+                    request = new WaktuSolatRequest();
                     break;
                 default:
                     return null;
@@ -256,7 +262,9 @@ namespace AwqatSalaat.ViewModels
             string country = null;
             string city = null;
 
-            if (Settings.Service == PrayerTimesService.SalahHour || Settings.Service == PrayerTimesService.QCH)
+            if (Settings.Service == PrayerTimesService.SalahHour
+                || Settings.Service == PrayerTimesService.QCH
+                || Settings.Service == PrayerTimesService.WaktuSolat)
             {
                 country = responseLocation?.Country;
                 city = responseLocation?.City;

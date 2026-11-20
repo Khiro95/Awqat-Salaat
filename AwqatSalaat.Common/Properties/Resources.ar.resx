@@ -659,6 +659,12 @@
   <data name="UI.Settings.QchCityDescription" xml:space="preserve">
     <value>قم بتحديد المدينة المدعومة من طرف دار التقويم القطري</value>
   </data>
+  <data name="Data.PrayerTimesService.WaktuSolat" xml:space="preserve">
+    <value>Waktu Solat (جاكيم، ماليزيا)</value>
+  </data>
+  <data name="UI.Settings.WaktuSolatServiceNote" xml:space="preserve">
+    <value>المواقيت الرسمية لجاكيم في ماليزيا فقط. تتطلب الإحداثيات، تأكد من ضبطها في إعدادات الموقع</value>
+  </data>
   <data name="Data.PrayerTimesService.CSV" xml:space="preserve">
     <value>ملف CSV</value>
   </data>
@@ -824,5 +830,11 @@
   </data>
   <data name="Dialog.LocationAccessDenied" xml:space="preserve">
     <value>لم يتم السماح بالوصول إلى الموقع.</value>
+  </data>
+  <data name="UI.Settings.ShowTrayIcon" xml:space="preserve">
+    <value>إظهار أيقونة درج النظام</value>
+  </data>
+  <data name="UI.Settings.ShowTrayIconDescription" xml:space="preserve">
+    <value>تبقى الأيقونة ظاهرة عند إخفاء الأداة لتتمكن من إظهارها مجددًا أو إغلاق التطبيق.</value>
   </data>
 </root>

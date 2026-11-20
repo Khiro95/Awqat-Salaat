@@ -536,4 +536,10 @@ Takvimi seçin, yıl ve ayı girin, ardından güncelle'ye tıklayın</value>
   <data name="Notification.Dismiss" xml:space="preserve">
     <value>Yoksay</value>
   </data>
+  <data name="UI.Settings.ShowTrayIcon" xml:space="preserve">
+    <value>Sistem tepsisi simgesini göster</value>
+  </data>
+  <data name="UI.Settings.ShowTrayIconDescription" xml:space="preserve">
+    <value>Widget gizliyken yeniden gösterebilmeniz veya uygulamadan çıkabilmeniz için simge görünür kalır.</value>
+  </data>
 </root>

@@ -6,6 +6,7 @@ using Microsoft.UI.Dispatching;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -45,6 +46,7 @@ namespace AwqatSalaat.WinUI
 
         private static string latestDisplay;
         private static bool isPurposelyHidden;
+        private static bool isQuitting;
 
         private static bool IsWidgetVisible => taskBarWidgets.Count > 0;
         private static TaskBarWidget MainWidget => taskBarWidgets.FirstOrDefault(w => w.IsMain) ?? taskBarWidgets.FirstOrDefault();
@@ -92,6 +94,7 @@ namespace AwqatSalaat.WinUI
             DisplayHelper.DisplayChanged += DisplayHelper_DisplayChanged;
             TaskbarSettingsWatcher.SettingChanged += TaskbarSettingsWatcher_SettingChanged;
             Notification.NotificationManager.ShowWidgetRequested += NotificationManager_ShowWidgetRequested;
+            Properties.Settings.Realtime.PropertyChanged += Settings_PropertyChanged;
 
             AppIcon = System.Drawing.Icon.ExtractAssociatedIcon(Environment.ProcessPath);
         }
@@ -164,6 +167,7 @@ namespace AwqatSalaat.WinUI
             }
 
             UpdateDisplayTrayMenus();
+            dispatcher?.TryEnqueue(UpdateTrayIconVisibility);
         }
 
         private static void HideThenShow()
@@ -443,6 +447,9 @@ namespace AwqatSalaat.WinUI
 
         private static void App_Quitting()
         {
+            isQuitting = true;
+            Properties.Settings.Realtime.PropertyChanged -= Settings_PropertyChanged;
+
             using (trayIcon)
             {
                 Log.Information("Removing tray icon");
@@ -460,6 +467,13 @@ namespace AwqatSalaat.WinUI
             {
                 missingTaskbarRetries = 0;
                 CreateWidgets();
+
+                if (!IsWidgetVisible)
+                {
+                    UpdateTrayMenuItemsStates(false);
+                }
+
+                UpdateTrayIconVisibility();
             }
         }
 
@@ -529,7 +543,13 @@ namespace AwqatSalaat.WinUI
 
             if (!IsAllDisplaysMode)
             {
-                displays.Add(DisplayHelper.FindProperDisplay(Properties.Settings.Default.Display));
+                var display = DisplayHelper.FindProperDisplay(Properties.Settings.Default.Display);
+
+                if (display is not null)
+                {
+                    displays.Add(display);
+                }
+
                 return displays;
             }
 
@@ -631,6 +651,7 @@ namespace AwqatSalaat.WinUI
                 UpdateTrayMenuItemsStates(false);
             }
 
+            UpdateTrayIconVisibility();
             Log.Information("Widget destroyed");
         }
 
@@ -664,6 +685,40 @@ namespace AwqatSalaat.WinUI
 
             // The previous widgets may have been destroyed along with the previous taskbars
             RecreateWidgets();
+            UpdateTrayIconVisibility();
+        }
+
+        private static void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Properties.Settings.ShowTrayIcon))
+            {
+                dispatcher?.TryEnqueue(UpdateTrayIconVisibility);
+            }
+        }
+
+        private static void UpdateTrayIconVisibility()
+        {
+            if (isQuitting || trayIcon is null)
+                return;
+
+            // Keep the tray accessible when the widget has no usable window or display.
+            var mainWidget = MainWidget;
+            bool widgetAvailable = mainWidget?.Display is not null
+                && User32.GetWindowRect(mainWidget.Handle, out _);
+            var visibility = Properties.Settings.Realtime.ShowTrayIcon || !widgetAvailable
+                ? IconVisibility.Visible
+                : IconVisibility.Hidden;
+
+            try
+            {
+                // Preserve the message window used for Explorer and session events.
+                trayIcon.UpdateVisibility(visibility);
+            }
+            catch (InvalidOperationException ex)
+            {
+                trayIcon.Visibility = visibility;
+                Log.Warning(ex, "Could not update tray icon visibility");
+            }
         }
 
         private static void OnDisplayMenuItemClick(PopupMenuItem item, string targetDisplay)

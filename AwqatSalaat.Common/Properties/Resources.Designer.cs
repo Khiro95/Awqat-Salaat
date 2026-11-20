@@ -376,6 +376,24 @@ namespace AwqatSalaat.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Waktu Solat (JAKIM, Malaysia).
+        /// </summary>
+        public static string Data_PrayerTimesService_WaktuSolat {
+            get {
+                return ResourceManager.GetString("Data.PrayerTimesService.WaktuSolat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Official JAKIM times for Malaysia only. Requires coordinates, make sure to set them in Location settings.
+        /// </summary>
+        public static string UI_Settings_WaktuSolatServiceNote {
+            get {
+                return ResourceManager.GetString("UI.Settings.WaktuSolatServiceNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Qatar Calendar House.
         /// </summary>
         public static string Data_PrayerTimesService_QCH {
@@ -1845,6 +1863,24 @@ namespace AwqatSalaat.Properties {
         public static string UI_Settings_ShowCountdown {
             get {
                 return ResourceManager.GetString("UI.Settings.ShowCountdown", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show system tray icon.
+        /// </summary>
+        public static string UI_Settings_ShowTrayIcon {
+            get {
+                return ResourceManager.GetString("UI.Settings.ShowTrayIcon", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The icon stays visible while the widget is hidden so you can show it again or quit..
+        /// </summary>
+        public static string UI_Settings_ShowTrayIconDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.ShowTrayIconDescription", resourceCulture);
             }
         }
         
