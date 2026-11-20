@@ -8,5 +8,6 @@
         QCH = 3,
         CSV = 4,
         WaktuSolat = 5,
+        Diyanet = 6,
     }
 }

@@ -542,4 +542,22 @@ Takvimi seçin, yıl ve ayı girin, ardından güncelle'ye tıklayın</value>
   <data name="UI.Settings.ShowTrayIconDescription" xml:space="preserve">
     <value>Widget gizliyken yeniden gösterebilmeniz veya uygulamadan çıkabilmeniz için simge görünür kalır.</value>
   </data>
+  <data name="Data.PrayerTimesService.Diyanet" xml:space="preserve">
+    <value>Diyanet (Türkiye)</value>
+  </data>
+  <data name="UI.Settings.DiyanetCountry" xml:space="preserve">
+    <value>Ülke</value>
+  </data>
+  <data name="UI.Settings.DiyanetCity" xml:space="preserve">
+    <value>Şehir</value>
+  </data>
+  <data name="UI.Settings.DiyanetDistrict" xml:space="preserve">
+    <value>İlçe</value>
+  </data>
+  <data name="UI.Settings.DiyanetLocationDescription" xml:space="preserve">
+    <value>Konumunuzu Diyanet&apos;in yer listesinden seçin</value>
+  </data>
+  <data name="Dialog.MissingDiyanetDistrict" xml:space="preserve">
+    <value>İlçe seçilmedi.</value>
+  </data>
 </root>

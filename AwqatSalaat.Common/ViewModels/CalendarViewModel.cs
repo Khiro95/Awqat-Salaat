@@ -5,6 +5,7 @@ using AwqatSalaat.Services.AlAdhan;
 using AwqatSalaat.Services.SalahHour;
 using AwqatSalaat.Services.Local;
 using AwqatSalaat.Services.CSV;
+using AwqatSalaat.Services.Diyanet;
 using AwqatSalaat.Services.WaktuSolat;
 using System;
 using System.Collections.Generic;
@@ -160,6 +161,8 @@ namespace AwqatSalaat.ViewModels
                     return new CsvClient();
                 case PrayerTimesService.WaktuSolat:
                     return new WaktuSolatClient();
+                case PrayerTimesService.Diyanet:
+                    return new DiyanetClient();
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -198,6 +201,14 @@ namespace AwqatSalaat.ViewModels
                     break;
                 case PrayerTimesService.WaktuSolat:
                     request = new WaktuSolatRequest();
+                    break;
+                case PrayerTimesService.Diyanet:
+                    request = new DiyanetRequest
+                    {
+                        DistrictId = Settings.DiyanetDistrict,
+                        CountryName = Settings.DiyanetCountryName,
+                        DistrictName = Settings.DiyanetDistrictName,
+                    };
                     break;
                 default:
                     return null;
@@ -264,7 +275,8 @@ namespace AwqatSalaat.ViewModels
 
             if (Settings.Service == PrayerTimesService.SalahHour
                 || Settings.Service == PrayerTimesService.QCH
-                || Settings.Service == PrayerTimesService.WaktuSolat)
+                || Settings.Service == PrayerTimesService.WaktuSolat
+                || Settings.Service == PrayerTimesService.Diyanet)
             {
                 country = responseLocation?.Country;
                 city = responseLocation?.City;

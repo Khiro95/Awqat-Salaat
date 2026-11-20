@@ -837,4 +837,22 @@
   <data name="UI.Settings.ShowTrayIconDescription" xml:space="preserve">
     <value>تبقى الأيقونة ظاهرة عند إخفاء الأداة لتتمكن من إظهارها مجددًا أو إغلاق التطبيق.</value>
   </data>
+  <data name="Data.PrayerTimesService.Diyanet" xml:space="preserve">
+    <value>ديانت (تركيا)</value>
+  </data>
+  <data name="UI.Settings.DiyanetCountry" xml:space="preserve">
+    <value>الدولة</value>
+  </data>
+  <data name="UI.Settings.DiyanetCity" xml:space="preserve">
+    <value>المدينة</value>
+  </data>
+  <data name="UI.Settings.DiyanetDistrict" xml:space="preserve">
+    <value>المنطقة</value>
+  </data>
+  <data name="UI.Settings.DiyanetLocationDescription" xml:space="preserve">
+    <value>اختر مكانك من قائمة مواقع ديانت</value>
+  </data>
+  <data name="Dialog.MissingDiyanetDistrict" xml:space="preserve">
+    <value>لم يتم اختيار المنطقة.</value>
+  </data>
 </root>
