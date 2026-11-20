@@ -373,8 +373,7 @@ namespace AwqatSalaat.WinUI
             }
 
             User32.GetWindowRect(hwndReBar, out RECT barRect);
-            // taskbarRect is in local coords (relative to the display) while barRect is in screen coords
-            int offsetY = barRect.top - Display.CachedSettings.Position.Y - taskbarRect.top;
+            int offsetY = barRect.top - taskbarRect.top;
             Log.Debug($"Final OffsetY: {offsetY} (previous={currentOffsetY})");
 
             if (currentOffsetY != offsetY)
