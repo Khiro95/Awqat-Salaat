@@ -27,6 +27,8 @@ namespace AwqatSalaat.WinUI
         private static readonly bool IsRtlUI = System.Globalization.CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
         private static readonly string SecondaryClockClassName = SystemInfos.IsWindows10 ? "ClockButton" : "SystemTray.OmniButton";
 
+        private static int instancesCount;
+
         private readonly double dpiScale;
 
         private readonly IntPtr hwndShell;
@@ -34,6 +36,7 @@ namespace AwqatSalaat.WinUI
         private readonly IntPtr hwndReBar;
         private readonly string WidgetClassName = "AwqatSalaatWidgetWinRT";
         private readonly string displayPath;
+        private readonly bool isMain;
 
         private readonly TaskbarStructureWatcher taskbarWatcher;
 
@@ -54,12 +57,26 @@ namespace AwqatSalaat.WinUI
 
         public IntPtr Handle => hwnd != IntPtr.Zero ? hwnd : throw new InvalidOperationException("The widget is not initialized.");
         public DisplayEntity Display => DisplayHelper.AvailableDisplays.SingleOrDefault(d => d.Display.DevicePath == displayPath);
+        public string DisplayPath => displayPath;
+        // When the widget is shown on many displays, only the main one is responsible for sounds and toast notifications
+        public bool IsMain => isMain;
 
         public event EventHandler Destroying;
+        public event EventHandler ManualPositionChanged;
 
-        public TaskBarWidget(DisplayEntity display)
+        public TaskBarWidget(DisplayEntity display, bool isMain = true)
         {
+            this.isMain = isMain;
             displayPath = display.Display.DevicePath;
+
+            // Each instance needs its own window class because the class is bound to the instance's window procedure
+            int instanceNumber = System.Threading.Interlocked.Increment(ref instancesCount);
+
+            if (instanceNumber > 1)
+            {
+                WidgetClassName += "_" + instanceNumber;
+            }
+
             (hwndShell, hwndReBar, hwndTrayNotify) = DisplayHelper.GetTaskbarFromDisplay(display);
 
             dpiScale = display.Dpi / 96d;
@@ -98,7 +115,7 @@ namespace AwqatSalaat.WinUI
 
             host.Initialize(id);
             host.SiteBridge.ResizePolicy = Microsoft.UI.Content.ContentSizePolicy.ResizeContentToParentWindow;
-            widgetSummary = new WidgetSummary() { Margin = new Microsoft.UI.Xaml.Thickness(4, 0, 4, 0), MaxHeight = 40 };
+            widgetSummary = new WidgetSummary(isMain) { Margin = new Microsoft.UI.Xaml.Thickness(4, 0, 4, 0), MaxHeight = 40 };
             widgetSummary.DisplayModeChanged += WidgetSummary_DisplayModeChanged;
             host.Content = new GridEx
             {
@@ -196,6 +213,7 @@ namespace AwqatSalaat.WinUI
         {
             Log.Information("Widget host is being destroyed");
             appWindow.Destroying -= AppWindow_Destroying;
+            widgetSummary?.Detach();
             Destroying?.Invoke(this, EventArgs.Empty);
             destroyed = true;
         }
@@ -476,6 +494,8 @@ namespace AwqatSalaat.WinUI
                     {
                         Properties.Settings.Default.Save();
                     }
+
+                    ManualPositionChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
@@ -689,7 +709,12 @@ namespace AwqatSalaat.WinUI
                         appWindow?.Destroy();
                     }
 
-                    widgetSummary.DisplayModeChanged -= WidgetSummary_DisplayModeChanged;
+                    if (widgetSummary is not null)
+                    {
+                        widgetSummary.Detach();
+                        widgetSummary.DisplayModeChanged -= WidgetSummary_DisplayModeChanged;
+                    }
+
                     taskbarWatcher.TaskbarChangedNotificationStarted -= TaskbarWatcher_TaskbarChangedNotificationStarted;
                     taskbarWatcher.TaskbarChangedNotificationCompleted -= TaskbarWatcher_TaskbarChangedNotificationCompleted;
                     taskbarWatcher.Dispose();

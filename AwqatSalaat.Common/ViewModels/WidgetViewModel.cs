@@ -20,6 +20,12 @@ namespace AwqatSalaat.ViewModels
 {
     public class WidgetViewModel : ObservableObject
     {
+        private static readonly Lazy<WidgetViewModel> instance = new Lazy<WidgetViewModel>(() => new WidgetViewModel());
+
+        // The single instance shared by all the widgets (WinUI shows one widget per display).
+        // The public constructor is kept because the WPF views create their view model in XAML.
+        public static WidgetViewModel Instance => instance.Value;
+
         private PrayerTimeViewModel next;
         private PrayerTimeViewModel displayedTime;
         private bool isRefreshing;

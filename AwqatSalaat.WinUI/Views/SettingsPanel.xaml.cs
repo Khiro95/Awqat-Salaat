@@ -86,9 +86,6 @@ namespace AwqatSalaat.WinUI.Views
                 StartupSettings = new StartupSettings(ViewModel.Realtime);
                 Bindings.Update();
 
-                this.ViewModel.Updated += _ => StartupSettings.Commit();
-                this.ViewModel.SaveRejected += ViewModel_SaveRejected;
-
                 if (ParentFlyout is not null)
                 {
                     ParentFlyout.Closing += (s, a) => a.Cancel = keepFlyoutOpen;
@@ -109,7 +106,21 @@ namespace AwqatSalaat.WinUI.Views
             ViewModel.Realtime.PropertyChanged -= Realtime_PropertyChanged;
             ViewModel.Realtime.PropertyChanged += Realtime_PropertyChanged;
 
+            // The view model is shared between the widgets (one per display), so only the panel
+            // that is currently shown handles saving, otherwise each widget would commit the startup
+            // settings and show the error of a rejected save. This also avoids keeping the panels
+            // of destroyed widgets alive.
+            ViewModel.Updated -= ViewModel_Updated;
+            ViewModel.Updated += ViewModel_Updated;
+            ViewModel.SaveRejected -= ViewModel_SaveRejected;
+            ViewModel.SaveRejected += ViewModel_SaveRejected;
+
             OnServiceChanged();
+        }
+
+        private void ViewModel_Updated(bool serviceSettingsChanged)
+        {
+            _ = StartupSettings.Commit();
         }
 
         private void ViewModel_SaveRejected(string error)
@@ -123,6 +134,8 @@ namespace AwqatSalaat.WinUI.Views
         private void SettingsPanel_Unloaded(object sender, RoutedEventArgs e)
         {
             ViewModel.Realtime.PropertyChanged -= Realtime_PropertyChanged;
+            ViewModel.Updated -= ViewModel_Updated;
+            ViewModel.SaveRejected -= ViewModel_SaveRejected;
         }
 
         private void Realtime_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

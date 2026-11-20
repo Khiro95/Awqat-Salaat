@@ -5,9 +5,11 @@ using H.NotifyIcon.Core;
 using Microsoft.UI.Dispatching;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -15,10 +17,22 @@ namespace AwqatSalaat.WinUI
 {
     internal static class TaskBarManager
     {
+        public const string PrimaryDisplayOption = "PRIMARY";
+        // Show a widget in the taskbar of every display
+        public const string AllDisplaysOption = "ALL";
+
+        // The taskbar of a secondary display may be created a little after the display itself (or after the primary taskbar)
+        private const int MissingTaskbarRetryDelay = 2000;
+        private const int MissingTaskbarMaxRetries = 6;
+
         private static readonly System.Drawing.Icon AppIcon;
+        // One widget per display. There is more than one only when the user choose to show the widget on all displays
+        private static readonly List<TaskBarWidget> taskBarWidgets = new List<TaskBarWidget>();
+        private static readonly object recreateSyncRoot = new object();
         private static TrayIconWithContextMenu trayIcon;
-        private static TaskBarWidget taskBarWidget;
         private static DispatcherQueue dispatcher;
+        private static CancellationTokenSource recreateCancellation;
+        private static int missingTaskbarRetries;
 
         private static PopupMenuItem showItem;
         private static PopupMenuItem hideItem;
@@ -26,6 +40,7 @@ namespace AwqatSalaat.WinUI
         private static PopupMenuItem manualPositionItem;
         private static PopupMenuItem quitItem;
         private static PopupMenuItem primaryItem;
+        private static PopupMenuItem allDisplaysItem;
         private static PopupSubMenu displaySubMenu;
         private static PopupMenuSeparator displaySeparator = new PopupMenuSeparator();
 
@@ -33,7 +48,11 @@ namespace AwqatSalaat.WinUI
         private static bool isPurposelyHidden;
         private static bool isQuitting;
 
-        public static IntPtr CurrentWidgetHandle => taskBarWidget?.Handle ?? throw new InvalidOperationException("The taskbar widget is missing.");
+        private static bool IsWidgetVisible => taskBarWidgets.Count > 0;
+        private static TaskBarWidget MainWidget => taskBarWidgets.FirstOrDefault(w => w.IsMain) ?? taskBarWidgets.FirstOrDefault();
+        private static bool IsAllDisplaysMode => Properties.Settings.Default.Display == AllDisplaysOption && SystemInfos.ShowTaskbarOnAllDisplays();
+
+        public static IntPtr CurrentWidgetHandle => MainWidget?.Handle ?? throw new InvalidOperationException("The taskbar widget is missing.");
         public static ICommand ShowWidget { get; }
         public static ICommand HideWidget { get; }
         public static ICommand RepositionWidget { get; }
@@ -55,12 +74,12 @@ namespace AwqatSalaat.WinUI
             RepositionWidget = new RelayCommand(static o =>
             {
                 Log.Information("Clicked on Re-position");
-                taskBarWidget?.UpdatePosition(true);
+                RepositionWidgetExecute();
             });
             ManuallyPositionWidget = new RelayCommand(static o =>
             {
                 Log.Information("Clicked on Manual position");
-                taskBarWidget?.StartDragging();
+                GetWidgetNearCursor()?.StartDragging();
             });
             SetDisplay = new RelayCommand(static o =>
             {
@@ -68,7 +87,7 @@ namespace AwqatSalaat.WinUI
                 Log.Information("Clicked on a Display option: " + option);
                 SwitchDisplay(option);
             },
-            static o => (o as string) == "PRIMARY" || SystemInfos.ShowTaskbarOnAllDisplays());
+            static o => (o as string) == PrimaryDisplayOption || SystemInfos.ShowTaskbarOnAllDisplays());
 
             App.Quitting += App_Quitting;
             LocaleManager.Default.CurrentChanged += (_, _) => UpdateTrayIconLocalization();
@@ -90,6 +109,13 @@ namespace AwqatSalaat.WinUI
                 {
                     item.Enabled = ReferenceEquals(item, primaryItem) || enabled;
                 }
+
+                if (Properties.Settings.Default.Display == AllDisplaysOption)
+                {
+                    // The secondary taskbars are being created/destroyed
+                    Log.Information("Re-creating the widgets because showing taskbar on all displays was turned " + (enabled ? "on" : "off"));
+                    ScheduleWidgetsRecreation(1000);
+                }
             }
         }
 
@@ -98,13 +124,23 @@ namespace AwqatSalaat.WinUI
             var affectedDisplay = e.DisplayEntity?.Display?.DevicePath;
             var displaySetting = Properties.Settings.Default.Display;
 
-            if (e.Reason == DisplayChangedReason.PrimaryDisplay && displaySetting == "PRIMARY")
+            if (IsAllDisplaysMode)
+            {
+                if (e.Reason != DisplayChangedReason.Unknown)
+                {
+                    // Taskbars are created/destroyed/moved along with their displays, so we start over.
+                    // We wait a little to let the shell finish its work.
+                    Log.Information($"Re-creating the widgets on all displays after a display change: {e.Reason}");
+                    ScheduleWidgetsRecreation(e.Reason == DisplayChangedReason.Disconnected ? 300 : 1000);
+                }
+            }
+            else if (e.Reason == DisplayChangedReason.PrimaryDisplay && displaySetting == PrimaryDisplayOption)
             {
                 Log.Information("Moving the widget to the new primary display");
                 dispatcher.TryEnqueue(HideThenShow);
             }
             else if (e.Reason is DisplayChangedReason.PrimaryDuplicated or DisplayChangedReason.PrimaryDeduplicated
-                && displaySetting != "PRIMARY"
+                && displaySetting != PrimaryDisplayOption
                 && latestDisplay == affectedDisplay)
             {
                 Log.Information("Re-showing the widget because the primary display was (de)duplicated to/from the current display");
@@ -136,11 +172,84 @@ namespace AwqatSalaat.WinUI
 
         private static void HideThenShow()
         {
-            if (taskBarWidget is not null)
+            if (IsWidgetVisible)
             {
                 HideWidgetExecute();
                 ShowWidgetExecute();
             }
+        }
+
+        // Unlike HideThenShow, this also brings back the widgets that were destroyed along with their taskbars
+        private static void RecreateWidgets()
+        {
+            if (isPurposelyHidden)
+            {
+                return;
+            }
+
+            try
+            {
+                HideWidgetExecute();
+                ShowWidgetExecute();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"An error occured while re-creating the widgets: {ex.Message}");
+#if DEBUG
+                throw;
+#endif
+            }
+        }
+
+        private static void ScheduleWidgetsRecreation(int delay)
+        {
+            CancellationToken token;
+
+            // Display changes usually come in bursts, only the last one matters
+            lock (recreateSyncRoot)
+            {
+                recreateCancellation?.Cancel();
+                recreateCancellation?.Dispose();
+                recreateCancellation = new CancellationTokenSource();
+                token = recreateCancellation.Token;
+            }
+
+            Task.Delay(delay, token).ContinueWith(t =>
+            {
+                if (t.IsCompletedSuccessfully)
+                {
+                    dispatcher.TryEnqueue(RecreateWidgets);
+                }
+            });
+        }
+
+        private static void RepositionWidgetExecute()
+        {
+            foreach (var widget in taskBarWidgets.ToArray())
+            {
+                widget.UpdatePosition(true);
+            }
+        }
+
+        // When there are many widgets, the manual positioning starts on the one that is in the same display as the cursor
+        private static TaskBarWidget GetWidgetNearCursor()
+        {
+            if (taskBarWidgets.Count > 1 && User32.GetCursorPos(out var cursor))
+            {
+                foreach (var widget in taskBarWidgets)
+                {
+                    var settings = widget.Display?.CachedSettings;
+
+                    if (settings is not null
+                        && cursor.x >= settings.Position.X && cursor.x < settings.Position.X + settings.Resolution.Width
+                        && cursor.y >= settings.Position.Y && cursor.y < settings.Position.Y + settings.Resolution.Height)
+                    {
+                        return widget;
+                    }
+                }
+            }
+
+            return MainWidget;
         }
 
         private static void SwitchDisplay(string target)
@@ -148,7 +257,7 @@ namespace AwqatSalaat.WinUI
             try
             {
                 Log.Information($"Switching display to: {target}");
-                bool widgetVisible = taskBarWidget is not null;
+                bool widgetVisible = IsWidgetVisible;
 
                 if (widgetVisible)
                 {
@@ -181,7 +290,7 @@ namespace AwqatSalaat.WinUI
 
         private static void NotificationManager_ShowWidgetRequested()
         {
-            if (taskBarWidget is null)
+            if (!IsWidgetVisible)
             {
                 Log.Information("Showing widget after clicking on toast notification");
                 dispatcher.TryEnqueue(ShowWidgetExecute);
@@ -208,18 +317,19 @@ namespace AwqatSalaat.WinUI
                 repositionItem = new PopupMenuItem("Re-position", (_, _) =>
                 {
                     Log.Information("Clicked on Re-position from tray icon");
-                    taskBarWidget?.UpdatePosition(true);
+                    dispatcher.TryEnqueue(RepositionWidgetExecute);
                 });
                 manualPositionItem = new PopupMenuItem("Manual position", (_, _) =>
                 {
                     Log.Information("Clicked on Manual position from tray icon");
-                    dispatcher.TryEnqueue(() => taskBarWidget?.StartDragging());
+                    dispatcher.TryEnqueue(() => GetWidgetNearCursor()?.StartDragging());
                 });
                 displaySubMenu = new PopupSubMenu("Display")
                 {
                     Items =
                     {
-                        (primaryItem = new PopupMenuItem("Always Primary", (s, _) => OnDisplayMenuItemClick((PopupMenuItem)s, "PRIMARY")))
+                        (primaryItem = new PopupMenuItem("Always Primary", (s, _) => OnDisplayMenuItemClick((PopupMenuItem)s, PrimaryDisplayOption))),
+                        (allDisplaysItem = new PopupMenuItem("All Displays", (s, _) => OnDisplayMenuItemClick((PopupMenuItem)s, AllDisplaysOption)))
                     }
                 };
                 quitItem = new PopupMenuItem("Quit", (_, _) =>
@@ -257,7 +367,13 @@ namespace AwqatSalaat.WinUI
             ShowWidgetExecute();
         }
 
-        public static void InvalidateWidgetElementsAlignment(bool autoAlign) => taskBarWidget?.InvalidateElementsAlignment(autoAlign);
+        public static void InvalidateWidgetElementsAlignment(bool autoAlign)
+        {
+            foreach (var widget in taskBarWidgets.ToArray())
+            {
+                widget.InvalidateElementsAlignment(autoAlign);
+            }
+        }
 
         private static void TrayIcon_Created(object sender, EventArgs e)
         {
@@ -347,47 +463,174 @@ namespace AwqatSalaat.WinUI
         {
             Log.Information("Showing widget");
 
-            if (taskBarWidget is null)
+            if (!IsWidgetVisible)
             {
-                Log.Information("Creating widget");
+                missingTaskbarRetries = 0;
+                CreateWidgets();
 
-                var display = DisplayHelper.FindProperDisplay(Properties.Settings.Default.Display);
-                if (display is null)
+                if (!IsWidgetVisible)
                 {
                     UpdateTrayMenuItemsStates(false);
-                    UpdateTrayIconVisibility();
-                    return;
                 }
 
-                var widget = new TaskBarWidget(display);
-
-                widget.Initialize();
-
-                widget.Destroying += Widget_Destroying;
-
-                widget.Show();
-
-                taskBarWidget = widget;
-                isPurposelyHidden = false;
-                latestDisplay = display.Display.DevicePath;
-
-                UpdateTrayMenuItemsStates(true);
                 UpdateTrayIconVisibility();
             }
+        }
+
+        // Create a widget for every targeted display that doesn't have one yet
+        private static void CreateWidgets()
+        {
+            var displays = GetTargetDisplays(out bool incomplete);
+
+            foreach (var display in displays)
+            {
+                string displayPath = display.Display.DevicePath;
+
+                if (taskBarWidgets.Any(w => w.DisplayPath == displayPath))
+                {
+                    continue;
+                }
+
+                // The first targeted display is the preferred one, so it hosts the main widget
+                bool isMain = !taskBarWidgets.Any(w => w.IsMain);
+
+                Log.Information($"Creating widget (main: {isMain}) for display: {display.Summary}");
+
+                try
+                {
+                    var widget = new TaskBarWidget(display, isMain);
+
+                    widget.Initialize();
+
+                    widget.Destroying += Widget_Destroying;
+                    widget.ManualPositionChanged += Widget_ManualPositionChanged;
+
+                    widget.Show();
+
+                    taskBarWidgets.Add(widget);
+                }
+                catch (Exception ex) when (!isMain)
+                {
+                    // A failure in a secondary display should not take down the widget of the main one
+                    Log.Error(ex, $"Could not create the widget for display {display.Summary}: {ex.Message}");
+                    incomplete = true;
+                    continue;
+                }
+
+                if (isMain)
+                {
+                    isPurposelyHidden = false;
+                    latestDisplay = displayPath;
+
+                    UpdateTrayMenuItemsStates(true);
+                }
+            }
+
+            if (incomplete)
+            {
+                ScheduleMissingTaskbarRetry();
+            }
+            else
+            {
+                missingTaskbarRetries = 0;
+            }
+        }
+
+        private static List<DisplayEntity> GetTargetDisplays(out bool incomplete)
+        {
+            incomplete = false;
+            var displays = new List<DisplayEntity>();
+
+            if (!IsAllDisplaysMode)
+            {
+                var display = DisplayHelper.FindProperDisplay(Properties.Settings.Default.Display);
+
+                if (display is not null)
+                {
+                    displays.Add(display);
+                }
+
+                return displays;
+            }
+
+            Log.Information("Looking for the taskbars of all displays");
+            var taskbars = new HashSet<IntPtr>();
+            var primary = DisplayHelper.PrimaryDisplay;
+
+            displays.Add(primary);
+            taskbars.Add(DisplayHelper.GetTaskbarFromDisplay(primary).Item1);
+
+            foreach (var display in DisplayHelper.AvailableDisplays)
+            {
+                // Displays that duplicate the primary one share its taskbar
+                if (display.IsPrimary)
+                {
+                    continue;
+                }
+
+                var hwndTaskbar = DisplayHelper.GetTaskbarFromDisplay(display).Item1;
+
+                if (hwndTaskbar == IntPtr.Zero)
+                {
+                    Log.Information($"No taskbar was found (yet) for display: {display.Summary}");
+                    incomplete = true;
+                }
+                // Displays that duplicate each other share the same taskbar
+                else if (taskbars.Add(hwndTaskbar))
+                {
+                    displays.Add(display);
+                }
+            }
+
+            return displays;
+        }
+
+        private static void ScheduleMissingTaskbarRetry()
+        {
+            if (missingTaskbarRetries >= MissingTaskbarMaxRetries)
+            {
+                Log.Warning("Giving up on the displays that have no taskbar");
+                return;
+            }
+
+            missingTaskbarRetries++;
+            Log.Information($"Some displays have no widget yet. Retry #{missingTaskbarRetries} is scheduled");
+
+            Task.Delay(MissingTaskbarRetryDelay).ContinueWith(_ => dispatcher.TryEnqueue(() =>
+            {
+                // Make sure nothing changed while waiting
+                if (IsWidgetVisible && IsAllDisplaysMode)
+                {
+                    try
+                    {
+                        CreateWidgets();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, $"An error occured while creating the missing widgets: {ex.Message}");
+                    }
+                }
+            }));
         }
 
         private static void HideWidgetExecute(bool showNotification = false)
         {
             Log.Information("Hiding widget");
 
-            if (taskBarWidget is not null)
+            if (IsWidgetVisible)
             {
-                using (taskBarWidget)
+                foreach (var widget in taskBarWidgets.ToArray())
                 {
-                    Log.Information("Destroying widget");
-                    taskBarWidget.Destroy();
-                    isPurposelyHidden = true;
+                    using (widget)
+                    {
+                        Log.Information("Destroying widget");
+                        widget.Destroy();
+                    }
                 }
+
+                // Normally the widgets remove themselves from the list when they get destroyed
+                taskBarWidgets.Clear();
+                isPurposelyHidden = true;
 
                 if (showNotification)
                 {
@@ -398,12 +641,30 @@ namespace AwqatSalaat.WinUI
 
         private static void Widget_Destroying(object sender, EventArgs e)
         {
-            (sender as TaskBarWidget).Destroying -= Widget_Destroying;
-            UpdateTrayMenuItemsStates(false);
+            var widget = sender as TaskBarWidget;
+            widget.Destroying -= Widget_Destroying;
+            widget.ManualPositionChanged -= Widget_ManualPositionChanged;
+            taskBarWidgets.Remove(widget);
 
-            taskBarWidget = null;
+            if (!IsWidgetVisible)
+            {
+                UpdateTrayMenuItemsStates(false);
+            }
+
             UpdateTrayIconVisibility();
             Log.Information("Widget destroyed");
+        }
+
+        private static void Widget_ManualPositionChanged(object sender, EventArgs e)
+        {
+            // The custom position is shared, so the other widgets have to follow
+            foreach (var widget in taskBarWidgets.ToArray())
+            {
+                if (!ReferenceEquals(widget, sender))
+                {
+                    widget.UpdatePosition();
+                }
+            }
         }
 
         private static void OnTaskbarCreated()
@@ -422,7 +683,8 @@ namespace AwqatSalaat.WinUI
 #endif
             }
 
-            HideThenShow();
+            // The previous widgets may have been destroyed along with the previous taskbars
+            RecreateWidgets();
             UpdateTrayIconVisibility();
         }
 
@@ -440,8 +702,9 @@ namespace AwqatSalaat.WinUI
                 return;
 
             // Keep the tray accessible when the widget has no usable window or display.
-            bool widgetAvailable = taskBarWidget?.Display is not null
-                && User32.GetWindowRect(taskBarWidget.Handle, out _);
+            var mainWidget = MainWidget;
+            bool widgetAvailable = mainWidget?.Display is not null
+                && User32.GetWindowRect(mainWidget.Handle, out _);
             var visibility = Properties.Settings.Realtime.ShowTrayIcon || !widgetAvailable
                 ? IconVisibility.Visible
                 : IconVisibility.Hidden;
@@ -474,7 +737,10 @@ namespace AwqatSalaat.WinUI
             int count = 0;
             displaySubMenu.Items.Clear();
             displaySubMenu.Items.Add(primaryItem);
-            primaryItem.Checked = "PRIMARY" == Properties.Settings.Default.Display;
+            displaySubMenu.Items.Add(allDisplaysItem);
+            primaryItem.Checked = PrimaryDisplayOption == Properties.Settings.Default.Display;
+            allDisplaysItem.Checked = AllDisplaysOption == Properties.Settings.Default.Display;
+            allDisplaysItem.Enabled = enabled;
 
             foreach (var display in DisplayHelper.AvailableDisplays)
             {
@@ -510,6 +776,7 @@ namespace AwqatSalaat.WinUI
             manualPositionItem.Text = LocaleManager.Default.Get("UI.ContextMenu.ManualPosition");
             displaySubMenu.Text = LocaleManager.Default.Get("UI.ContextMenu.Display");
             primaryItem.Text = LocaleManager.Default.Get("UI.ContextMenu.AlwaysPrimary");
+            allDisplaysItem.Text = LocaleManager.Default.Get("UI.ContextMenu.AllDisplays");
             quitItem.Text = LocaleManager.Default.Get("UI.ContextMenu.Quit");
 
             trayIcon.ContextMenu.RightToLeft = LocaleManager.Default.CurrentCulture.TextInfo.IsRightToLeft;

@@ -292,7 +292,9 @@ namespace AwqatSalaat.WinUI
 
             if (taskbarElement is not null)
             {
-                pUIAutomation.RemoveAllEventHandlers();
+                // Remove only our own handlers; other widgets (on other displays) may still be watching their taskbars
+                pUIAutomation.RemoveStructureChangedEventHandler(taskbarElement, this);
+                pUIAutomation.RemovePropertyChangedEventHandler(taskbarElement, this);
             }
         }
 
