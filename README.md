@@ -11,11 +11,12 @@ The widget can show the prayer times of the whole day and update automatically, 
 
 This widget support visual notification when the time of the next prayer becomes close to a certain configurable limit.
 
-Actually, the widget supports five services to get the prayer times based on user settings:
+Actually, the widget supports six services to get the prayer times based on user settings:
 - [Salah Hour's Prayer Times API](http://www.salahhour.com/index.php/api)
 - [Al-Adhan's Prayer Times API](https://aladhan.com/prayer-times-api)
 - [Offline service based on Batoul Apps' Adhan library](https://github.com/davidpet86/Adhan-csharp)
 - [Qatar Calendar House (scraping)](https://www.qatarch.com/cal)
+- [Waktu Solat API (official JAKIM prayer times for Malaysia)](https://api.waktusolat.app/docs)
 - A service that imports data from a CSV file. More info [here](https://github.com/Khiro95/Awqat-Salaat/wiki/CSV-Import).
 
 > [!note]
@@ -180,6 +181,7 @@ For a list of changes, check the changelog [here](CHANGELOG.md).
 - [H.NotifyIcon:](https://github.com/HavenDV/H.NotifyIcon) A library that simplifies the creation of system tray icons.
 - [Salah Hour:](https://www.salahhour.com/index.php/api) They provide a simple API for getting the prayers times.
 - [Al-Adhan:](https://aladhan.com/prayer-times-api) They provide a flexible API for getting the prayers times.
+- [Waktu Solat:](https://api.waktusolat.app/docs) They provide an API for the official JAKIM prayer times in Malaysia.
 - [Adhan-csharp:](https://github.com/davidpet86/Adhan-csharp) A C# implementation of [Adhan](https://github.com/batoulapps/Adhan) which is a high precision prayer time library.
 - [Nominatim:](https://nominatim.org/) An open-source geocoding service.
 - [CsvHelper:](https://github.com/JoshClose/CsvHelper) Library to help reading and writing CSV files.
