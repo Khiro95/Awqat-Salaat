@@ -58,6 +58,23 @@ namespace AwqatSalaat.Settings.Tests
             Assert.Equal(middle, byDefault);
         }
 
+        [Theory]
+        [InlineData("en")]
+        [InlineData("ar")]
+        [InlineData("tr")]
+        [InlineData("ku")]
+        public void SettingHasLocalizedTexts(string language)
+        {
+            var resources = Properties.Resources.ResourceManager.GetResourceSet(new System.Globalization.CultureInfo(language), true, true);
+            var keys = new[] { "UI.Settings.HighLatitude", "UI.Settings.HighLatitudeDescription" }
+                .Concat(Enum.GetNames(typeof(HighLatitudeMethod)).Select(n => $"Data.HighLatitudeMethod.{n}"));
+
+            foreach (var key in keys)
+            {
+                Assert.False(string.IsNullOrWhiteSpace(resources.GetString(key)), $"{language}: {key}");
+            }
+        }
+
         private static AlAdhanRequest BuildAlAdhanRequest(HighLatitudeMethod method) => new AlAdhanRequest
         {
             Date = SummerSolstice,
