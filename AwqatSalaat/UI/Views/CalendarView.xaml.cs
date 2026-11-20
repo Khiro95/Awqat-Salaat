@@ -55,7 +55,8 @@ namespace AwqatSalaat.UI.Views
 
         private void InvalidateService()
         {
-            if (Properties.Settings.Default.Service == Data.PrayerTimesService.QCH)
+            if (Properties.Settings.Default.Service == Data.PrayerTimesService.QCH
+                || Properties.Settings.Default.Service == Data.PrayerTimesService.Diyanet)
             {
                 Log.Information("Hiding content in Calendar view");
 

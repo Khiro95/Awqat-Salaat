@@ -779,4 +779,22 @@
   <data name="UI.Settings.ShowTrayIconDescription" xml:space="preserve">
     <value>کاتێک ویجێتەکە شاراوەیە، ئایکۆنەکە دەردەکەوێت بۆ ئەوەی بتوانیت ویجێتەکە دووبارە پیشان بدەیتەوە یان لە بەرنامەکە بچیتە دەرەوە.</value>
   </data>
+  <data name="Data.PrayerTimesService.Diyanet" xml:space="preserve">
+    <value>دیانەت (تورکیا)</value>
+  </data>
+  <data name="UI.Settings.DiyanetCountry" xml:space="preserve">
+    <value>وڵات</value>
+  </data>
+  <data name="UI.Settings.DiyanetCity" xml:space="preserve">
+    <value>شار</value>
+  </data>
+  <data name="UI.Settings.DiyanetDistrict" xml:space="preserve">
+    <value>ناوچە</value>
+  </data>
+  <data name="UI.Settings.DiyanetLocationDescription" xml:space="preserve">
+    <value>شوێنەکەت لە لیستی شوێنەکانی دیانەت هەڵبژێرە</value>
+  </data>
+  <data name="Dialog.MissingDiyanetDistrict" xml:space="preserve">
+    <value>ناوچە هەڵنەبژێردراوە.</value>
+  </data>
 </root>

@@ -388,6 +388,17 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </controls:SettingsItem>
+                        <controls:SettingsItem x:Name="diyanetSettings" Header="{mk:I18n UI.Settings.DiyanetDistrict}" Description="{mk:I18n UI.Settings.DiyanetLocationDescription}">
+                            <StackPanel DataContext="{Binding DiyanetLocator}" HorizontalAlignment="Left" MinWidth="300">
+                                <TextBlock Text="{mk:I18n UI.Settings.DiyanetCountry}" Foreground="{DynamicResource ThemeColors.TextSecondaryBrush}"/>
+                                <ComboBox ItemsSource="{Binding Countries}" SelectedItem="{Binding SelectedCountry}" DisplayMemberPath="Name" IsEnabled="{Binding IsBusy, Converter={StaticResource BoolInverterConverter}}" FlowDirection="LeftToRight" Margin="0,2,0,6"/>
+                                <TextBlock Text="{mk:I18n UI.Settings.DiyanetCity}" Foreground="{DynamicResource ThemeColors.TextSecondaryBrush}"/>
+                                <ComboBox ItemsSource="{Binding Cities}" SelectedItem="{Binding SelectedCity}" DisplayMemberPath="Name" IsEnabled="{Binding IsBusy, Converter={StaticResource BoolInverterConverter}}" FlowDirection="LeftToRight" Margin="0,2,0,6"/>
+                                <TextBlock Text="{mk:I18n UI.Settings.DiyanetDistrict}" Foreground="{DynamicResource ThemeColors.TextSecondaryBrush}"/>
+                                <ComboBox ItemsSource="{Binding Districts}" SelectedItem="{Binding SelectedDistrict}" DisplayMemberPath="Name" IsEnabled="{Binding IsBusy, Converter={StaticResource BoolInverterConverter}}" FlowDirection="LeftToRight" Margin="0,2,0,0"/>
+                                <TextBlock Text="{Binding Error}" Foreground="{DynamicResource ThemeColors.TextSecondaryBrush}" TextWrapping="Wrap" Margin="0,4,0,0" Visibility="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            </StackPanel>
+                        </controls:SettingsItem>
                         <StackPanel x:Name="calculationSettings">
                             <controls:SettingsItem Header="{mk:I18n UI.Settings.JuristicSchool}" Description="{mk:I18n UI.Settings.JuristicSchoolDescription}">
                                 <ComboBox ItemsSource="{Binding Source={StaticResource SchoolEnum}}" SelectedItem="{Binding Realtime.School}" Width="300" HorizontalAlignment="Left">

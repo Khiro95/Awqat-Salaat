@@ -6,6 +6,7 @@ using AwqatSalaat.Services.AlAdhan;
 using AwqatSalaat.Services.SalahHour;
 using AwqatSalaat.Services.Local;
 using AwqatSalaat.Services.QCH;
+using AwqatSalaat.Services.Diyanet;
 using AwqatSalaat.Services.WaktuSolat;
 using AwqatSalaat.Services.CSV;
 using Newtonsoft.Json;
@@ -500,7 +501,8 @@ namespace AwqatSalaat.ViewModels
 
             if (WidgetSettings.Settings.Service == PrayerTimesService.SalahHour
                 || WidgetSettings.Settings.Service == PrayerTimesService.QCH
-                || WidgetSettings.Settings.Service == PrayerTimesService.WaktuSolat)
+                || WidgetSettings.Settings.Service == PrayerTimesService.WaktuSolat
+                || WidgetSettings.Settings.Service == PrayerTimesService.Diyanet)
             {
                 country = responseLocation?.Country;
                 city = responseLocation?.City;
@@ -538,6 +540,9 @@ namespace AwqatSalaat.ViewModels
                     break;
                 case PrayerTimesService.WaktuSolat:
                     serviceClient = new WaktuSolatClient();
+                    break;
+                case PrayerTimesService.Diyanet:
+                    serviceClient = new DiyanetClient();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -581,6 +586,14 @@ namespace AwqatSalaat.ViewModels
                     break;
                 case PrayerTimesService.WaktuSolat:
                     request = new WaktuSolatRequest();
+                    break;
+                case PrayerTimesService.Diyanet:
+                    request = new DiyanetRequest
+                    {
+                        DistrictId = settings.DiyanetDistrict,
+                        CountryName = settings.DiyanetCountryName,
+                        DistrictName = settings.DiyanetDistrictName,
+                    };
                     break;
                 default:
                     return null;

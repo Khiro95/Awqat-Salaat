@@ -413,6 +413,17 @@
                                     </ctrl:ComboBoxEx.ItemTemplate>
                                 </ctrl:ComboBoxEx>
                             </ctrl:SettingsItem>
+                            <ctrl:SettingsItem x:Name="diyanetSettings" Header="{mk:I18n Key=UI.Settings.DiyanetDistrict}" Description="{mk:I18n Key=UI.Settings.DiyanetLocationDescription}">
+                                <StackPanel DataContext="{Binding DiyanetLocator}" HorizontalAlignment="Left" MinWidth="300" Spacing="2">
+                                    <TextBlock Text="{mk:I18n Key=UI.Settings.DiyanetCountry}" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                    <ComboBox ItemsSource="{Binding Countries}" SelectedItem="{Binding SelectedCountry, Mode=TwoWay}" DisplayMemberPath="Name" HorizontalAlignment="Stretch" FlowDirection="LeftToRight" Margin="0,0,0,6"/>
+                                    <TextBlock Text="{mk:I18n Key=UI.Settings.DiyanetCity}" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                    <ComboBox ItemsSource="{Binding Cities}" SelectedItem="{Binding SelectedCity, Mode=TwoWay}" DisplayMemberPath="Name" HorizontalAlignment="Stretch" FlowDirection="LeftToRight" Margin="0,0,0,6"/>
+                                    <TextBlock Text="{mk:I18n Key=UI.Settings.DiyanetDistrict}" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                    <ComboBox ItemsSource="{Binding Districts}" SelectedItem="{Binding SelectedDistrict, Mode=TwoWay}" DisplayMemberPath="Name" HorizontalAlignment="Stretch" FlowDirection="LeftToRight"/>
+                                    <TextBlock Text="{Binding Error}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                                </StackPanel>
+                            </ctrl:SettingsItem>
                             <StackPanel x:Name="calculationSettings">
                                 <ctrl:SettingsItem Header="{mk:I18n Key=UI.Settings.JuristicSchool}" Description="{mk:I18n Key=UI.Settings.JuristicSchoolDescription}">
                                     <ComboBox ItemsSource="{mk:Enums Type=dt:School}" SelectedItem="{Binding Realtime.School, Mode=TwoWay}" Width="300">
