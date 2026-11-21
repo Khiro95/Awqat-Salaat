@@ -24,6 +24,8 @@ namespace AwqatSalaat.WinUI
         private const int DefaultWidgetHostWidth = 126; // 118 for the button (2 for borders) + 4 for left margin + 4 for right margin
         private const int CompactWidgetHostWidth = 70; // 62 for the button (2 for borders) + 4 for left margin + 4 for right margin
 
+        private const int VerticalWidgetHostHeight = 44; // two lines of text (time + countdown) when the taskbar is on a side
+
         private static readonly bool IsRtlUI = System.Globalization.CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
         private static readonly string SecondaryClockClassName = SystemInfos.IsWindows10 ? "ClockButton" : "SystemTray.OmniButton";
 
@@ -43,6 +45,11 @@ namespace AwqatSalaat.WinUI
         private DesktopWindowXamlSource host;
         private WndProc wndProc;
         private int WidgetHostWidth;
+        private int WidgetHostHeight;
+        private bool isVertical;
+        private bool isOnRightEdge;
+        private int draggingInnerOffsetY;
+        private int lastCursorPositionY;
         private int currentOffsetX = int.MinValue;
         private int currentOffsetY = 0;
         private bool isDragging;
@@ -92,13 +99,25 @@ namespace AwqatSalaat.WinUI
             appWindow.IsShownInSwitchers = false;
             appWindow.Destroying += AppWindow_Destroying;
 
-            User32.GetWindowRect(hwndShell, out RECT taskbarRect);
-            appWindow.ResizeClient(new SizeInt32(WidgetHostWidth, taskbarRect.bottom - taskbarRect.top));
-            Log.Debug("Taskbar rect: {@rect}", taskbarRect);
+            isVertical = IsTaskbarVertical(out RECT taskbarRect);
+            isOnRightEdge = IsTaskbarOnRightEdge(taskbarRect);
+            Log.Debug("Taskbar rect: {@rect}, vertical={vertical}", taskbarRect, isVertical);
+
+            if (isVertical)
+            {
+                WidgetHostWidth = taskbarRect.right - taskbarRect.left;
+                WidgetHostHeight = (int)Math.Ceiling(dpiScale * VerticalWidgetHostHeight);
+                appWindow.ResizeClient(new SizeInt32(WidgetHostWidth, WidgetHostHeight));
+            }
+            else
+            {
+                appWindow.ResizeClient(new SizeInt32(WidgetHostWidth, taskbarRect.bottom - taskbarRect.top));
+            }
 
             host.Initialize(id);
             host.SiteBridge.ResizePolicy = Microsoft.UI.Content.ContentSizePolicy.ResizeContentToParentWindow;
-            widgetSummary = new WidgetSummary() { Margin = new Microsoft.UI.Xaml.Thickness(4, 0, 4, 0), MaxHeight = 40 };
+            widgetSummary = new WidgetSummary() { Margin = isVertical ? new Microsoft.UI.Xaml.Thickness(0) : new Microsoft.UI.Xaml.Thickness(4, 0, 4, 0), MaxHeight = 40 };
+            widgetSummary.SetTaskbarOrientation(isVertical, isOnRightEdge);
             widgetSummary.DisplayModeChanged += WidgetSummary_DisplayModeChanged;
             host.Content = new GridEx
             {
@@ -131,7 +150,7 @@ namespace AwqatSalaat.WinUI
                 // This only to make the widget show an animation :)
                 widgetSummary.DispatcherQueue.TryEnqueue(() => (host.Content as GridEx).Children.Clear());
             }
-            else if (savedOffsetX > -1 && e.Reason != TaskbarChangeReason.TabletMode)
+            else if (savedOffsetX > -1 && e.Reason != TaskbarChangeReason.TabletMode && !HasOrientationChanged())
             {
                 e.Canceled = true;
             }
@@ -172,6 +191,13 @@ namespace AwqatSalaat.WinUI
         private void WidgetSummary_DisplayModeChanged(DisplayMode displayMode)
         {
             Log.Information($"Display mode changed: {displayMode}");
+
+            if (isVertical)
+            {
+                // In a vertical taskbar the widget always spans the taskbar's width, see UpdatePositionVerticalAsync
+                return;
+            }
+
             int width = DefaultWidgetHostWidth;
 
             if (displayMode is DisplayMode.Compact or DisplayMode.CompactNoCountdown)
@@ -239,6 +265,30 @@ namespace AwqatSalaat.WinUI
         private async Task UpdatePositionImpl(TaskbarChangeReason changeReason, bool isCentered, bool isWidgetsEnabled)
         {
             Log.Information($"Updating widget position. Reason={changeReason}, Taskbar centered={isCentered}, Widgets enabled={isWidgetsEnabled}");
+
+            bool vertical = IsTaskbarVertical(out RECT shellRect);
+
+            if (vertical != isVertical)
+            {
+                Log.Information($"Taskbar orientation changed. Vertical={vertical}");
+                isVertical = vertical;
+                currentOffsetX = int.MinValue;
+                currentOffsetY = int.MinValue;
+
+                if (!vertical)
+                {
+                    WidgetHostWidth = (int)Math.Ceiling(dpiScale * DefaultWidgetHostWidth);
+                }
+            }
+
+            isOnRightEdge = IsTaskbarOnRightEdge(shellRect);
+
+            if (vertical)
+            {
+                await UpdatePositionVerticalAsync(changeReason, shellRect);
+                return;
+            }
+
             int offsetX = Properties.Settings.Default.CustomPosition;
 
             RECT taskbarRect = GetTaskbarRect();
@@ -370,8 +420,15 @@ namespace AwqatSalaat.WinUI
                 currentOffsetX = offsetX;
             }
 
+            RefreshWidgetAfterMove(changeReason);
+        }
+
+        private void RefreshWidgetAfterMove(TaskbarChangeReason changeReason)
+        {
             widgetSummary.DispatcherQueue.TryEnqueue(() =>
             {
+                widgetSummary.Margin = isVertical ? new Microsoft.UI.Xaml.Thickness(0) : new Microsoft.UI.Xaml.Thickness(4, 0, 4, 0);
+                widgetSummary.SetTaskbarOrientation(isVertical, isOnRightEdge);
                 InvalidateElementsAlignment(Properties.Settings.Default.AutoAlignment);
 
                 // This only to make the widget show an animation :)
@@ -383,6 +440,134 @@ namespace AwqatSalaat.WinUI
                     grid.Children.Add(widgetSummary);
                 }
             });
+        }
+
+        // ---- Vertical taskbar (taskbar docked to the left or right edge) ----
+
+        private bool IsTaskbarVertical(out RECT shellRect)
+        {
+            User32.GetWindowRect(hwndShell, out shellRect);
+            return (shellRect.bottom - shellRect.top) > (shellRect.right - shellRect.left);
+        }
+
+        private bool HasOrientationChanged() => IsTaskbarVertical(out _) != isVertical;
+
+        private bool IsTaskbarOnRightEdge(RECT shellRect)
+        {
+            var settings = Display.CachedSettings;
+            int centerX = (shellRect.left + shellRect.right) / 2 - settings.Position.X;
+
+            return centerX > settings.Resolution.Width / 2;
+        }
+
+        // Allowed range for the widget's top edge, relative to the top of the taskbar.
+        // The widget stays clear of the system tray area, wherever the taskbar puts it.
+        private (int min, int max) GetVerticalRange(RECT shellRect)
+        {
+            int taskbarHeight = shellRect.bottom - shellRect.top;
+            int min = 0;
+            int max = Math.Max(0, taskbarHeight - WidgetHostHeight);
+
+            if (hwndTrayNotify != IntPtr.Zero)
+            {
+                User32.GetWindowRect(hwndTrayNotify, out RECT tray);
+
+                if (tray.bottom > tray.top)
+                {
+                    Log.Debug("System tray rect: {@trayRect}", tray);
+                    int trayCenter = (tray.top + tray.bottom) / 2 - shellRect.top;
+
+                    if (trayCenter > taskbarHeight / 2)
+                    {
+                        // tray at the bottom
+                        max = Math.Clamp(tray.top - shellRect.top - WidgetHostHeight, 0, max);
+                    }
+                    else
+                    {
+                        // tray at the top
+                        min = Math.Clamp(tray.bottom - shellRect.top, 0, max);
+                    }
+                }
+            }
+
+            return (min, Math.Max(min, max));
+        }
+
+        private async Task UpdatePositionVerticalAsync(TaskbarChangeReason changeReason, RECT shellRect)
+        {
+            Log.Information("Updating widget position for a vertical taskbar");
+
+            // A child window is positioned relatively to its parent (the taskbar)
+            int taskbarHeight = shellRect.bottom - shellRect.top;
+            WidgetHostWidth = shellRect.right - shellRect.left;
+            WidgetHostHeight = (int)Math.Ceiling(dpiScale * VerticalWidgetHostHeight);
+
+            var (min, max) = GetVerticalRange(shellRect);
+            int offsetY = Properties.Settings.Default.CustomPosition;
+
+            // -1 means the user didn't set manual position, so we put the widget next to the system tray area
+            if (offsetY == -1)
+            {
+                offsetY = max;
+
+                try
+                {
+                    // Avoid overlapping other injected widgets
+                    foreach (var wnd in GetOtherInjectedWindows())
+                    {
+                        User32.GetWindowRect(wnd, out var bounds);
+                        int top = bounds.top - shellRect.top;
+                        int bottom = bounds.bottom - shellRect.top;
+
+                        if (bottom <= offsetY || top >= offsetY + WidgetHostHeight)
+                        {
+                            continue;
+                        }
+
+                        Log.Debug("Found an overlapping injected widget: {@bounds}", bounds);
+                        offsetY = top - WidgetHostHeight;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, $"Error occured while looking for other injected widgets: {ex.Message}");
+#if DEBUG
+                    throw;
+#endif
+                }
+            }
+
+            offsetY = Math.Clamp(offsetY, min, max);
+            Log.Debug($"Final OffsetY: {offsetY} (previous={currentOffsetY}); taskbar height={taskbarHeight}, host={WidgetHostWidth}x{WidgetHostHeight}");
+
+            appWindow.MoveAndResize(new RectInt32(0, offsetY, WidgetHostWidth, WidgetHostHeight));
+            currentOffsetX = 0;
+            currentOffsetY = offsetY;
+
+            RefreshWidgetAfterMove(changeReason);
+
+            await Task.CompletedTask;
+        }
+
+        private void DragVertically()
+        {
+            IsTaskbarVertical(out RECT shellRect);
+            var (min, max) = GetVerticalRange(shellRect);
+
+            User32.GetCursorPos(out var lpPoint);
+
+            int minCursorY = shellRect.top + min + draggingInnerOffsetY;
+            int maxCursorY = shellRect.top + max + draggingInnerOffsetY;
+            lpPoint.y = Math.Clamp(lpPoint.y, minCursorY, maxCursorY);
+
+            int delta = lpPoint.y - lastCursorPositionY;
+            int newY = delta + appWindow.Position.Y - shellRect.top;
+
+            appWindow.Move(new PointInt32(0, newY));
+            lastCursorPositionY = lpPoint.y;
+
+            // This is necessary to make sure the content can raise keyboard events
+            host.Content.Focus(Microsoft.UI.Xaml.FocusState.Programmatic);
         }
 
         private RECT GetTaskbarRect()
@@ -436,7 +621,7 @@ namespace AwqatSalaat.WinUI
                 host.Content.KeyUp += Content_KeyUp;
                 host.Content.PointerPressed += Content_PointerPressed;
                 host.Content.PointerReleased += Content_PointerReleased;
-                (host.Content as GridEx).SetCursor(Microsoft.UI.Input.InputSystemCursorShape.SizeWestEast);
+                (host.Content as GridEx).SetCursor(isVertical ? Microsoft.UI.Input.InputSystemCursorShape.SizeNorthSouth : Microsoft.UI.Input.InputSystemCursorShape.SizeWestEast);
                 isDragging = true;
 
                 // If the command is triggered from tray menu then we need to make the window focused to receive keyboard events
@@ -464,6 +649,19 @@ namespace AwqatSalaat.WinUI
                 if (revert)
                 {
                     appWindow.Move(new PointInt32(currentOffsetX, currentOffsetY));
+                }
+                else if (isVertical)
+                {
+                    IsTaskbarVertical(out RECT shellRect);
+                    int newY = appWindow.Position.Y - shellRect.top;
+                    Log.Information($"New vertical offset={newY}; Old position={currentOffsetY}");
+                    currentOffsetY = newY;
+                    Properties.Settings.Default.CustomPosition = currentOffsetY;
+
+                    if (Properties.Settings.Default.IsConfigured)
+                    {
+                        Properties.Settings.Default.Save();
+                    }
                 }
                 else
                 {
@@ -500,6 +698,8 @@ namespace AwqatSalaat.WinUI
             host.Content.PointerMoved += Content_PointerMoved;
             host.Content.CapturePointer(e.Pointer);
             User32.GetCursorPos(out var lpPoint);
+            draggingInnerOffsetY = lpPoint.y - appWindow.Position.Y;
+            lastCursorPositionY = lpPoint.y;
             // The order is VERY IMPORTANT!
             draggingInnerOffsetX = lpPoint.x - appWindow.Position.X;
             lpPoint.x -= Display.CachedSettings.Position.X;
@@ -508,6 +708,16 @@ namespace AwqatSalaat.WinUI
 
         private async void Content_PointerMoved(object sender, PointerRoutedEventArgs e)
         {
+            if (isVertical)
+            {
+                if (isDragging)
+                {
+                    DragVertically();
+                }
+
+                return;
+            }
+
             RECT taskbarRect = GetTaskbarRect();
             RECT trayNotifyRect = await GetTrayAreaRectAsync();
 
@@ -548,6 +758,12 @@ namespace AwqatSalaat.WinUI
 
         public void InvalidateElementsAlignment(bool autoAlign)
         {
+            if (isVertical)
+            {
+                widgetSummary.ElementsAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Center;
+                return;
+            }
+
             if (autoAlign)
             {
                 User32.GetWindowRect(hwndShell, out RECT taskbarRect);

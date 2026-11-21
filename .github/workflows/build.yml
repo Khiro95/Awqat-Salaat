@@ -1,0 +1,29 @@
+name: Build widget (x64)
+
+# Run manually: Actions tab -> "Build widget (x64)" -> Run workflow
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # the project uses Nerdbank.GitVersioning, which needs the git history
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            6.0.x
+            8.0.x
+
+      - uses: microsoft/setup-msbuild@v2
+
+      # MSBuild (not "dotnet build") is required because the project uses COM references
+      - name: Build
+        run: msbuild AwqatSalaat.WinUI\AwqatSalaat.WinUI.csproj /restore /p:Configuration=Release /p:Platform=x64
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: awqat-salaat-vertical-x64
+          path: AwqatSalaat.WinUI\bin\x64\Release\
