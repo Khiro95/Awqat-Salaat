@@ -177,6 +177,17 @@
                     </Storyboard>
                 </VisualState>
                 <VisualState x:Name="Compact">
+                    <VisualState.Setters>
+                        <Setter Target="prayerTB.Opacity" Value="0"/>
+                        <Setter Target="prayerTB.MaxWidth" Value="0"/>
+                        <Setter Target="prayerTB.MaxHeight" Value="0"/>
+                        <Setter Target="afterTB.Opacity" Value="0"/>
+                        <Setter Target="afterTB.MaxWidth" Value="0"/>
+                        <Setter Target="afterTB.MaxHeight" Value="0"/>
+                        <Setter Target="sinceTB.Opacity" Value="0"/>
+                        <Setter Target="sinceTB.MaxWidth" Value="0"/>
+                        <Setter Target="sinceTB.MaxHeight" Value="0"/>
+                    </VisualState.Setters>
                     <Storyboard>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startPanel" Storyboard.TargetProperty="Margin" Duration="0">
                             <DiscreteObjectKeyFrame>
@@ -201,44 +212,50 @@
                             <DiscreteObjectKeyFrame Value="{StaticResource ZeroThickness}"/>
                         </ObjectAnimationUsingKeyFrames>
                         <DoubleAnimation Storyboard.TargetName="errorGlyph" Storyboard.TargetProperty="FontSize" To="16" Duration="0"/>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="gap" Storyboard.TargetProperty="Width" Duration="0">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="row2" Storyboard.TargetProperty="Height" Duration="0">
                             <DiscreteObjectKeyFrame Value="{StaticResource ZeroGridLength}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="col1" Storyboard.TargetProperty="Width" Duration="0:0:8" RepeatBehavior="Forever">
-                            <DiscreteObjectKeyFrame KeyTime="0:0:5" Value="{StaticResource ZeroGridLength}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="col2" Storyboard.TargetProperty="Width" Duration="0:0:8" RepeatBehavior="Forever">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ZeroGridLength}"/>
-                            <DiscreteObjectKeyFrame KeyTime="0:0:5" Value="{StaticResource MaxGridLength}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
-                <VisualState x:Name="CompactHorizontal">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
-                            <DiscreteObjectKeyFrame Value="2"/>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
                             <DiscreteObjectKeyFrame Value="0"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="afterTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
                             <DiscreteObjectKeyFrame Value="0"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="afterTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
-                            <DiscreteObjectKeyFrame Value="1"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="sinceTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="countdownPanel" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
                             <DiscreteObjectKeyFrame Value="0"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="sinceTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
-                            <DiscreteObjectKeyFrame Value="1"/>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="countdownPanel" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="2"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="row1" Storyboard.TargetProperty="Height" Duration="0:0:9" RepeatBehavior="Forever">
-                            <DiscreteObjectKeyFrame KeyTime="0:0:5" Value="{StaticResource ZeroGridLength}"/>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="CompactHorizontal">
+                    <VisualState.Setters>
+                        <Setter Target="prayerTB.Opacity" Value="0"/>
+                        <Setter Target="prayerTB.MaxWidth" Value="0"/>
+                        <Setter Target="prayerTB.MaxHeight" Value="0"/>
+                        <Setter Target="afterTB.Opacity" Value="0"/>
+                        <Setter Target="afterTB.MaxWidth" Value="0"/>
+                        <Setter Target="afterTB.MaxHeight" Value="0"/>
+                        <Setter Target="sinceTB.Opacity" Value="0"/>
+                        <Setter Target="sinceTB.MaxWidth" Value="0"/>
+                        <Setter Target="sinceTB.MaxHeight" Value="0"/>
+                    </VisualState.Setters>
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="row2" Storyboard.TargetProperty="Height" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroGridLength}"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="row2" Storyboard.TargetProperty="Height" Duration="0:0:9" RepeatBehavior="Forever">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ZeroGridLength}"/>
-                            <DiscreteObjectKeyFrame KeyTime="0:0:5" Value="{StaticResource StarGridLength}"/>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="countdownPanel" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="countdownPanel" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="2"/>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
