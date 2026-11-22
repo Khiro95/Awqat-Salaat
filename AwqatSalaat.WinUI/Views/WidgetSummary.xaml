@@ -76,7 +76,7 @@
             </ResourceDictionary.ThemeDictionaries>
 
             <GridLength x:Key="ZeroGridLength">0</GridLength>
-            <GridLength x:Key="MaxGridLength">64</GridLength>
+            <GridLength x:Key="MaxGridLength">58</GridLength>
             <GridLength x:Key="StarGridLength">*</GridLength>
             <GridLength x:Key="AutoGridLength">Auto</GridLength>
             <Thickness x:Key="ZeroThickness">0</Thickness>
@@ -128,7 +128,7 @@
                         <StateTrigger IsActive="{x:Bind ViewModel.WidgetSettings.Realtime.ShowSeconds}"/>
                     </VisualState.StateTriggers>
                     <Storyboard>
-                        <DoubleAnimation EnableDependentAnimation="True" Storyboard.TargetName="gap" Storyboard.TargetProperty="MaxWidth" From="0" To="8" Duration="0:0:.1"/>
+                        <DoubleAnimation EnableDependentAnimation="True" Storyboard.TargetName="gap" Storyboard.TargetProperty="MaxWidth" From="0" To="4" Duration="0:0:.1"/>
                     </Storyboard>
                 </VisualState>
                 <VisualState x:Name="WithoutSeconds">
@@ -136,7 +136,7 @@
                         <StateTrigger IsActive="{x:Bind ViewModel.WidgetSettings.Realtime.ShowSeconds, Converter={StaticResource BooleanInvertedConverter}}"/>
                     </VisualState.StateTriggers>
                     <Storyboard>
-                        <DoubleAnimation EnableDependentAnimation="True" Storyboard.TargetName="gap" Storyboard.TargetProperty="MaxWidth" To="8" Duration="0:0:.1"/>
+                        <DoubleAnimation EnableDependentAnimation="True" Storyboard.TargetName="gap" Storyboard.TargetProperty="MaxWidth" To="4" Duration="0:0:.1"/>
                     </Storyboard>
                 </VisualState>
             </VisualStateGroup>
@@ -177,7 +177,7 @@
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
-                <!-- Shrunk/Small Horizontal Taskbar: Left = Countdown (top) + Prayer Time (bottom), Right = Wed 05/11 (centered) -->
+                <!-- Shrunk/Small Horizontal Taskbar: Left = Countdown (top) + Prayer Time (bottom), Right = Wed 05/11 (centered in col2) -->
                 <VisualState x:Name="Compact">
                     <Storyboard>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startPanel" Storyboard.TargetProperty="Margin" Duration="0">
@@ -224,7 +224,9 @@
                         <Setter Target="grid.Margin" Value="0"/>
                         <Setter Target="grid.MaxHeight" Value="54"/>
                         <Setter Target="dateTB.HorizontalAlignment" Value="Center"/>
-                        <Setter Target="dateTB.FontSize" Value="11"/>
+                        <Setter Target="dateTB.FontSize" Value="10"/>
+                        <Setter Target="countdownTB.FontSize" Value="10"/>
+                        <Setter Target="timeTB.FontSize" Value="10"/>
                     </VisualState.Setters>
                     <Storyboard>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="countdownPanel" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
@@ -290,7 +292,8 @@
                         <Setter Target="countdownPanel.MaxWidth" Value="0"/>
                         <Setter Target="countdownPanel.MaxHeight" Value="0"/>
                         <Setter Target="dateTB.HorizontalAlignment" Value="Center"/>
-                        <Setter Target="dateTB.FontSize" Value="11"/>
+                        <Setter Target="dateTB.FontSize" Value="10"/>
+                        <Setter Target="timeTB.FontSize" Value="10"/>
                     </VisualState.Setters>
                     <Storyboard>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
@@ -344,7 +347,7 @@
         <Border Background="{x:Bind ViewModel.WidgetSettings.Realtime.TaskbarButtonBackgroundSolidColor, Converter={StaticResource ColorHexConverter}}"
                 Visibility="{x:Bind ViewModel.WidgetSettings.Realtime.TaskbarButtonBackgroundType, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=SolidColor, Mode=OneWay}"
                 CornerRadius="{ThemeResource ControlCornerRadius}"/>
-        <controls:ToggleButtonEx x:Name="toggle" IsChecked="{x:Bind flyout.IsOpen}" IsThreeState="False" Checked="ToggleButton_Checked" Padding="0" FontSize="12" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" IsTextScaleFactorEnabled="False">
+        <controls:ToggleButtonEx x:Name="toggle" IsChecked="{x:Bind flyout.IsOpen}" IsThreeState="False" Checked="ToggleButton_Checked" Padding="0" FontSize="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" IsTextScaleFactorEnabled="False">
             <Grid x:Name="btngrid">
                 <Grid.ContextFlyout>
                     <controls:MenuFlyoutEx ShouldConstrainToRootBounds="False" SystemBackdrop="{StaticResource DesktopAcrylicSystemBackdrop}">
@@ -363,13 +366,13 @@
                 <Grid x:Name="notificationIndicator" Opacity="{x:Bind ViewModel.WidgetSettings.Realtime.NotificationIndicatorOpacity}">
                     <Border x:Name="alert" Background="{ThemeResource AccentFillColorDefaultBrush}" CornerRadius="{ThemeResource ControlCornerRadius}" Opacity="0"/>
                 </Grid>
-                <Grid x:Name="grid" MaxHeight="40" Margin="3" Visibility="{x:Bind ViewModel.WidgetSettings.Settings.IsConfigured}">
+                <Grid x:Name="grid" MaxHeight="40" Margin="2" Visibility="{x:Bind ViewModel.WidgetSettings.Settings.IsConfigured}">
                     <Grid Visibility="{x:Bind ViewModel.IsRefreshing, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
                         <Grid HorizontalAlignment="Center" Visibility="{x:Bind ViewModel.HasError, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition x:Name="col1" Width="54" MaxWidth="54"/>
-                                <ColumnDefinition x:Name="gap" Width="8" MaxWidth="8"/>
-                                <ColumnDefinition x:Name="col2" Width="64" MaxWidth="64"/>
+                                <ColumnDefinition x:Name="col1" Width="48" MaxWidth="48"/>
+                                <ColumnDefinition x:Name="gap" Width="4" MaxWidth="4"/>
+                                <ColumnDefinition x:Name="col2" Width="58" MaxWidth="58"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition x:Name="row1"/>
@@ -377,15 +380,15 @@
                                 <RowDefinition x:Name="row3" Height="0"/>
                             </Grid.RowDefinitions>
 
-                            <!-- Left column: Countdown on top (Row 0), Upcoming Prayer Time below (Row 1) -->
+                            <!-- Left compartment: Countdown on top (Row 0), Upcoming Prayer Time below (Row 1) -->
                             <StackPanel x:Name="countdownPanel" Orientation="Horizontal" HorizontalAlignment="{x:Bind ElementsAlignment}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FlowDirection="LeftToRight">
-                                <TextBlock x:Name="sign" Text="+" Visibility="Collapsed"/>
-                                <TextBlock x:Name="countdownTB" Text="{x:Bind local:WidgetSummary.FormatCountdown(ViewModel.WidgetSettings.CountdownFormat, ViewModel.DisplayedTime.Countdown, IsVerticalTaskbar), FallbackValue=COUNTDOWN}" FlowDirection="{x:Bind timeTB.FlowDirection}"/>
+                                <TextBlock x:Name="sign" Text="+" FontSize="11" Visibility="Collapsed"/>
+                                <TextBlock x:Name="countdownTB" FontSize="11" Text="{x:Bind local:WidgetSummary.FormatCountdown(ViewModel.WidgetSettings.CountdownFormat, ViewModel.DisplayedTime.Countdown, IsVerticalTaskbar), FallbackValue=COUNTDOWN}" FlowDirection="{x:Bind timeTB.FlowDirection}"/>
                             </StackPanel>
-                            <TextBlock x:Name="timeTB" Text="{x:Bind converters:CustomDateTimeConverter.FormatShortTime(ViewModel.DisplayedTime.Time, ash:LocaleManager.Default.CurrentCulture), FallbackValue=TIME}" HorizontalAlignment="{x:Bind ElementsAlignment}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
+                            <TextBlock x:Name="timeTB" FontSize="11" Text="{x:Bind converters:CustomDateTimeConverter.FormatShortTime(ViewModel.DisplayedTime.Time, ash:LocaleManager.Default.CurrentCulture), FallbackValue=TIME}" HorizontalAlignment="{x:Bind ElementsAlignment}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
 
-                            <!-- Right column: "Wed 05/11" vertically centered across both rows -->
-                            <TextBlock x:Name="dateTB" Text="{x:Bind ViewModel.ShortDateText, FallbackValue='Wed 05/11'}" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2"/>
+                            <!-- Right compartment: "Wed 05/11" centered inside col2 -->
+                            <TextBlock x:Name="dateTB" FontSize="11" Text="{x:Bind ViewModel.ShortDateText, FallbackValue='Wed 05/11'}" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2"/>
 
                             <!-- Hidden legacy elements kept so code-behind x:Name references still compile -->
                             <TextBlock x:Name="prayerTB" Text="{x:Bind ViewModel.DisplayedTime.Name, FallbackValue=NAME}" Visibility="Collapsed" MaxWidth="0" MaxHeight="0"/>
