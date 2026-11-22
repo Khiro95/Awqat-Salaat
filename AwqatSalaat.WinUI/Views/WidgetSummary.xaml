@@ -76,8 +76,9 @@
             </ResourceDictionary.ThemeDictionaries>
 
             <GridLength x:Key="ZeroGridLength">0</GridLength>
-            <GridLength x:Key="MaxGridLength">54</GridLength>
+            <GridLength x:Key="MaxGridLength">58</GridLength>
             <GridLength x:Key="StarGridLength">*</GridLength>
+            <GridLength x:Key="AutoGridLength">Auto</GridLength>
             <Thickness x:Key="ZeroThickness">0</Thickness>
             <HorizontalAlignment x:Key="StretchAlignment">Stretch</HorizontalAlignment>
 
@@ -117,8 +118,6 @@
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                     <VisualState.Setters>
-                        <Setter Target="afterTB.Visibility" Value="Collapsed"/>
-                        <Setter Target="sinceTB.Visibility" Value="Visible"/>
                         <Setter Target="sign.Visibility" Value="Visible"/>
                     </VisualState.Setters>
                 </VisualState>
@@ -129,7 +128,7 @@
                         <StateTrigger IsActive="{x:Bind ViewModel.WidgetSettings.Realtime.ShowSeconds}"/>
                     </VisualState.StateTriggers>
                     <Storyboard>
-                        <DoubleAnimation EnableDependentAnimation="True" Storyboard.TargetName="gap" Storyboard.TargetProperty="MaxWidth" From="0" To="6" Duration="0:0:.1"/>
+                        <DoubleAnimation EnableDependentAnimation="True" Storyboard.TargetName="gap" Storyboard.TargetProperty="MaxWidth" From="0" To="4" Duration="0:0:.1"/>
                     </Storyboard>
                 </VisualState>
                 <VisualState x:Name="WithoutSeconds">
@@ -137,13 +136,18 @@
                         <StateTrigger IsActive="{x:Bind ViewModel.WidgetSettings.Realtime.ShowSeconds, Converter={StaticResource BooleanInvertedConverter}}"/>
                     </VisualState.StateTriggers>
                     <Storyboard>
-                        <DoubleAnimation EnableDependentAnimation="True" Storyboard.TargetName="gap" Storyboard.TargetProperty="MaxWidth" To="0" Duration="0:0:.1"/>
+                        <DoubleAnimation EnableDependentAnimation="True" Storyboard.TargetName="gap" Storyboard.TargetProperty="MaxWidth" To="4" Duration="0:0:.1"/>
                     </Storyboard>
                 </VisualState>
             </VisualStateGroup>
             <VisualStateGroup x:Name="DisplayModes">
                 <VisualState x:Name="Default" />
                 <VisualState x:Name="CompactNoCountdown">
+                    <VisualState.Setters>
+                        <Setter Target="countdownPanel.Opacity" Value="0"/>
+                        <Setter Target="countdownPanel.MaxWidth" Value="0"/>
+                        <Setter Target="countdownPanel.MaxHeight" Value="0"/>
+                    </VisualState.Setters>
                     <Storyboard>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startPanel" Storyboard.TargetProperty="Margin" Duration="0">
                             <DiscreteObjectKeyFrame>
@@ -168,14 +172,12 @@
                             <DiscreteObjectKeyFrame Value="{StaticResource ZeroThickness}"/>
                         </ObjectAnimationUsingKeyFrames>
                         <DoubleAnimation Storyboard.TargetName="errorGlyph" Storyboard.TargetProperty="FontSize" To="16" Duration="0"/>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="gap" Storyboard.TargetProperty="Width" Duration="0">
-                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroGridLength}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="col2" Storyboard.TargetProperty="Width" Duration="0">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="row1" Storyboard.TargetProperty="Height" Duration="0">
                             <DiscreteObjectKeyFrame Value="{StaticResource ZeroGridLength}"/>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
+                <!-- Shrunk/Small Horizontal Taskbar: Left = Countdown (top) + Prayer Time (bottom), Right = Wed 05/11 (centered in col2) -->
                 <VisualState x:Name="Compact">
                     <Storyboard>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startPanel" Storyboard.TargetProperty="Margin" Duration="0">
@@ -201,70 +203,143 @@
                             <DiscreteObjectKeyFrame Value="{StaticResource ZeroThickness}"/>
                         </ObjectAnimationUsingKeyFrames>
                         <DoubleAnimation Storyboard.TargetName="errorGlyph" Storyboard.TargetProperty="FontSize" To="16" Duration="0"/>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="CompactHorizontal" />
+                <VisualState x:Name="CompactHorizontalNoCountdown">
+                    <VisualState.Setters>
+                        <Setter Target="countdownPanel.Opacity" Value="0"/>
+                        <Setter Target="countdownPanel.MaxWidth" Value="0"/>
+                        <Setter Target="countdownPanel.MaxHeight" Value="0"/>
+                    </VisualState.Setters>
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="row1" Storyboard.TargetProperty="Height" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroGridLength}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <!-- Vertical Taskbar: Countdown (top), Prayer Time (middle), Wed 05/11 (bottom) -->
+                <VisualState x:Name="Vertical">
+                    <VisualState.Setters>
+                        <Setter Target="grid.Margin" Value="0"/>
+                        <Setter Target="grid.MaxHeight" Value="54"/>
+                        <Setter Target="dateTB.HorizontalAlignment" Value="Center"/>
+                        <Setter Target="dateTB.FontSize" Value="10"/>
+                        <Setter Target="countdownTB.FontSize" Value="10"/>
+                        <Setter Target="timeTB.FontSize" Value="10"/>
+                    </VisualState.Setters>
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="countdownPanel" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="countdownPanel" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="1"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="dateTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="dateTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="2"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="dateTB" Storyboard.TargetProperty="(Grid.RowSpan)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="1"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="row3" Storyboard.TargetProperty="Height" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource AutoGridLength}"/>
+                        </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="gap" Storyboard.TargetProperty="Width" Duration="0">
                             <DiscreteObjectKeyFrame Value="{StaticResource ZeroGridLength}"/>
                         </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="col1" Storyboard.TargetProperty="Width" Duration="0:0:8" RepeatBehavior="Forever">
-                            <DiscreteObjectKeyFrame KeyTime="0:0:5" Value="{StaticResource ZeroGridLength}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="col2" Storyboard.TargetProperty="Width" Duration="0:0:8" RepeatBehavior="Forever">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ZeroGridLength}"/>
-                            <DiscreteObjectKeyFrame KeyTime="0:0:5" Value="{StaticResource MaxGridLength}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
-                <VisualState x:Name="CompactHorizontal">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
-                            <DiscreteObjectKeyFrame Value="2"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
-                            <DiscreteObjectKeyFrame Value="0"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="afterTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
-                            <DiscreteObjectKeyFrame Value="0"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="afterTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
-                            <DiscreteObjectKeyFrame Value="1"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="sinceTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
-                            <DiscreteObjectKeyFrame Value="0"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="sinceTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
-                            <DiscreteObjectKeyFrame Value="1"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="row1" Storyboard.TargetProperty="Height" Duration="0:0:9" RepeatBehavior="Forever">
-                            <DiscreteObjectKeyFrame KeyTime="0:0:5" Value="{StaticResource ZeroGridLength}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="row2" Storyboard.TargetProperty="Height" Duration="0:0:9" RepeatBehavior="Forever">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ZeroGridLength}"/>
-                            <DiscreteObjectKeyFrame KeyTime="0:0:5" Value="{StaticResource StarGridLength}"/>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
-                <VisualState x:Name="CompactHorizontalNoCountdown">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
-                            <DiscreteObjectKeyFrame Value="2"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
-                            <DiscreteObjectKeyFrame Value="0"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="afterTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
-                            <DiscreteObjectKeyFrame Value="0"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="afterTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
-                            <DiscreteObjectKeyFrame Value="1"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="sinceTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
-                            <DiscreteObjectKeyFrame Value="0"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="sinceTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
-                            <DiscreteObjectKeyFrame Value="1"/>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="row2" Storyboard.TargetProperty="Height" Duration="0">
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="col2" Storyboard.TargetProperty="Width" Duration="0">
                             <DiscreteObjectKeyFrame Value="{StaticResource ZeroGridLength}"/>
                         </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startPanel" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame>
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Thickness>2,0</Thickness>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startPanel" Storyboard.TargetProperty="HorizontalAlignment" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource StretchAlignment}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startText" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroThickness}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="errorPanel" Storyboard.TargetProperty="HorizontalAlignment" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource StretchAlignment}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="errorPanel" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroThickness}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="errorText" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroThickness}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <DoubleAnimation Storyboard.TargetName="errorGlyph" Storyboard.TargetProperty="FontSize" To="16" Duration="0"/>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="VerticalNoCountdown">
+                    <VisualState.Setters>
+                        <Setter Target="grid.Margin" Value="0"/>
+                        <Setter Target="grid.MaxHeight" Value="54"/>
+                        <Setter Target="countdownPanel.Opacity" Value="0"/>
+                        <Setter Target="countdownPanel.MaxWidth" Value="0"/>
+                        <Setter Target="countdownPanel.MaxHeight" Value="0"/>
+                        <Setter Target="dateTB.HorizontalAlignment" Value="Center"/>
+                        <Setter Target="dateTB.FontSize" Value="10"/>
+                        <Setter Target="timeTB.FontSize" Value="10"/>
+                    </VisualState.Setters>
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="timeTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="dateTB" Storyboard.TargetProperty="(Grid.Column)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="0"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="dateTB" Storyboard.TargetProperty="(Grid.Row)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="1"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="dateTB" Storyboard.TargetProperty="(Grid.RowSpan)" Duration="0">
+                            <DiscreteObjectKeyFrame Value="1"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="gap" Storyboard.TargetProperty="Width" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroGridLength}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="col2" Storyboard.TargetProperty="Width" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroGridLength}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startPanel" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame>
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Thickness>2,0</Thickness>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startPanel" Storyboard.TargetProperty="HorizontalAlignment" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource StretchAlignment}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="startText" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroThickness}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="errorPanel" Storyboard.TargetProperty="HorizontalAlignment" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource StretchAlignment}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="errorPanel" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroThickness}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="errorText" Storyboard.TargetProperty="Margin" Duration="0">
+                            <DiscreteObjectKeyFrame Value="{StaticResource ZeroThickness}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <DoubleAnimation Storyboard.TargetName="errorGlyph" Storyboard.TargetProperty="FontSize" To="16" Duration="0"/>
                     </Storyboard>
                 </VisualState>
             </VisualStateGroup>
@@ -272,7 +347,7 @@
         <Border Background="{x:Bind ViewModel.WidgetSettings.Realtime.TaskbarButtonBackgroundSolidColor, Converter={StaticResource ColorHexConverter}}"
                 Visibility="{x:Bind ViewModel.WidgetSettings.Realtime.TaskbarButtonBackgroundType, Converter={StaticResource EnumEqualityToVisibilityConverter}, ConverterParameter=SolidColor, Mode=OneWay}"
                 CornerRadius="{ThemeResource ControlCornerRadius}"/>
-        <controls:ToggleButtonEx x:Name="toggle" IsChecked="{x:Bind flyout.IsOpen}" IsThreeState="False" Checked="ToggleButton_Checked" Padding="0" FontSize="12" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" IsTextScaleFactorEnabled="False">
+        <controls:ToggleButtonEx x:Name="toggle" IsChecked="{x:Bind flyout.IsOpen}" IsThreeState="False" Checked="ToggleButton_Checked" Padding="0" FontSize="11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" IsTextScaleFactorEnabled="False">
             <Grid x:Name="btngrid">
                 <Grid.ContextFlyout>
                     <controls:MenuFlyoutEx ShouldConstrainToRootBounds="False" SystemBackdrop="{StaticResource DesktopAcrylicSystemBackdrop}">
@@ -291,31 +366,34 @@
                 <Grid x:Name="notificationIndicator" Opacity="{x:Bind ViewModel.WidgetSettings.Realtime.NotificationIndicatorOpacity}">
                     <Border x:Name="alert" Background="{ThemeResource AccentFillColorDefaultBrush}" CornerRadius="{ThemeResource ControlCornerRadius}" Opacity="0"/>
                 </Grid>
-                <Grid x:Name="grid" MaxHeight="40" Margin="3" Visibility="{x:Bind ViewModel.WidgetSettings.Settings.IsConfigured}">
+                <Grid x:Name="grid" MaxHeight="40" Margin="2" Visibility="{x:Bind ViewModel.WidgetSettings.Settings.IsConfigured}">
                     <Grid Visibility="{x:Bind ViewModel.IsRefreshing, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
                         <Grid HorizontalAlignment="Center" Visibility="{x:Bind ViewModel.HasError, Converter={StaticResource BooleanToVisibilityInvertedConverter}}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition x:Name="col1" Width="50" MaxWidth="50"/>
-                                <ColumnDefinition x:Name="gap" Width="6" MaxWidth="6"/>
-                                <ColumnDefinition x:Name="col2" Width="54" MaxWidth="54"/>
+                                <ColumnDefinition x:Name="col1" Width="48" MaxWidth="48"/>
+                                <ColumnDefinition x:Name="gap" Width="4" MaxWidth="4"/>
+                                <ColumnDefinition x:Name="col2" Width="58" MaxWidth="58"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition x:Name="row1"/>
                                 <RowDefinition x:Name="row2"/>
+                                <RowDefinition x:Name="row3" Height="0"/>
                             </Grid.RowDefinitions>
 
-                            <TextBlock x:Name="prayerTB" Text="{x:Bind ViewModel.DisplayedTime.Name, FallbackValue=NAME}" HorizontalAlignment="{x:Bind ElementsAlignment}" VerticalAlignment="Center"/>
-                            <TextBlock x:Name="timeTB" Text="{x:Bind converters:CustomDateTimeConverter.FormatShortTime(ViewModel.DisplayedTime.Time, ash:LocaleManager.Default.CurrentCulture), FallbackValue=TIME}" HorizontalAlignment="{x:Bind ElementsAlignment}" VerticalAlignment="Center" Grid.Row="1"/>
-
-                            <TextBlock x:Name="afterTB" Text="{mk:I18n Key=UI.Summary.After}" HorizontalAlignment="{x:Bind ElementsAlignment}" VerticalAlignment="Center" Grid.Column="2"/>
-                            <!--We can't update "After" text because I18n extension uses Binding
-                                which is neither supported in VisualState setters nor in animations.
-                                So we have to use a separate element for "Since"-->
-                            <TextBlock x:Name="sinceTB" Text="{mk:I18n Key=UI.Summary.Since}" HorizontalAlignment="{x:Bind ElementsAlignment}" VerticalAlignment="Center" Grid.Column="2" Visibility="Collapsed"/>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="{x:Bind ElementsAlignment}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" FlowDirection="LeftToRight">
-                                <TextBlock x:Name="sign" Text="+" Visibility="Collapsed"/>
-                                <TextBlock x:Name="countdownTB" Text="{x:Bind sys:String.Format(ViewModel.WidgetSettings.CountdownFormat, ViewModel.DisplayedTime.Countdown), FallbackValue=COUNTDOWN}" FlowDirection="{x:Bind timeTB.FlowDirection}"/>
+                            <!-- Left compartment: Countdown on top (Row 0), Upcoming Prayer Time below (Row 1) -->
+                            <StackPanel x:Name="countdownPanel" Orientation="Horizontal" HorizontalAlignment="{x:Bind ElementsAlignment}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FlowDirection="LeftToRight">
+                                <TextBlock x:Name="sign" Text="+" FontSize="11" Visibility="Collapsed"/>
+                                <TextBlock x:Name="countdownTB" FontSize="11" Text="{x:Bind local:WidgetSummary.FormatCountdown(ViewModel.WidgetSettings.CountdownFormat, ViewModel.DisplayedTime.Countdown, IsVerticalTaskbar), FallbackValue=COUNTDOWN}" FlowDirection="{x:Bind timeTB.FlowDirection}"/>
                             </StackPanel>
+                            <TextBlock x:Name="timeTB" FontSize="11" Text="{x:Bind converters:CustomDateTimeConverter.FormatShortTime(ViewModel.DisplayedTime.Time, ash:LocaleManager.Default.CurrentCulture), FallbackValue=TIME}" HorizontalAlignment="{x:Bind ElementsAlignment}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
+
+                            <!-- Right compartment: "Wed 05/11" centered inside col2 -->
+                            <TextBlock x:Name="dateTB" FontSize="11" Text="{x:Bind ViewModel.ShortDateText, FallbackValue='Wed 05/11'}" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2"/>
+
+                            <!-- Hidden legacy elements kept so code-behind x:Name references still compile -->
+                            <TextBlock x:Name="prayerTB" Text="{x:Bind ViewModel.DisplayedTime.Name, FallbackValue=NAME}" Visibility="Collapsed" MaxWidth="0" MaxHeight="0"/>
+                            <TextBlock x:Name="afterTB" Text="{mk:I18n Key=UI.Summary.After}" Visibility="Collapsed" MaxWidth="0" MaxHeight="0"/>
+                            <TextBlock x:Name="sinceTB" Text="{mk:I18n Key=UI.Summary.Since}" Visibility="Collapsed" MaxWidth="0" MaxHeight="0"/>
                         </Grid>
                     </Grid>
                 </Grid>

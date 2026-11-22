@@ -1,4 +1,4 @@
-﻿using AwqatSalaat.Data;
+using AwqatSalaat.Data;
 using AwqatSalaat.Extensions;
 using AwqatSalaat.Helpers;
 using AwqatSalaat.Services;
@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Serilog;
@@ -54,6 +55,7 @@ namespace AwqatSalaat.ViewModels
         public bool HasError => !string.IsNullOrEmpty(error);
         public bool IsShowingTimes => !isRefreshing && !HasError;
         public DateTime DisplayedDate { get => displayedDate; private set => SetProperty(ref displayedDate, value); }
+        public string ShortDateText => TimeStamp.Date.ToString("ddd dd/MM", CultureInfo.InvariantCulture);
         public string Country { get => country; private set => SetProperty(ref country, value); }
         public string City { get => city; private set => SetProperty(ref city, value); }
         public WidgetSettingsViewModel WidgetSettings { get; } = new WidgetSettingsViewModel();
@@ -111,6 +113,8 @@ namespace AwqatSalaat.ViewModels
 
         private void TimeStamp_DateChanged()
         {
+            OnPropertyChanged(nameof(ShortDateText));
+
             if (WidgetSettings.Settings.IsConfigured && WidgetSettings.Settings.Service == PrayerTimesService.QCH)
             {
                 RefreshData();
@@ -145,6 +149,7 @@ namespace AwqatSalaat.ViewModels
             }
 
             OnPropertyChanged(nameof(DisplayedDate));
+            OnPropertyChanged(nameof(ShortDateText));
         }
 
         private void TimeEntered(object sender, EventArgs e)

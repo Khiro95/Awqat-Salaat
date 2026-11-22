@@ -38,6 +38,20 @@ namespace AwqatSalaat.WinUI.Views
             set => SetValue(ElementsAlignmentProperty, value);
         }
 
+        public static readonly DependencyProperty IsVerticalTaskbarProperty = DependencyProperty.Register(
+            "IsVerticalTaskbar",
+            typeof(bool),
+            typeof(WidgetSummary),
+            new PropertyMetadata(false, (d, e) => (d as WidgetSummary)?.UpdateDisplayMode()));
+
+        /// <summary>True when the taskbar is docked to the left/right edge: the widget then shows only the prayer time over the countdown.</summary>
+        public bool IsVerticalTaskbar
+        {
+            get => (bool)GetValue(IsVerticalTaskbarProperty);
+            private set => SetValue(IsVerticalTaskbarProperty, value);
+        }
+
+        private FlyoutPlacementMode defaultFlyoutPlacement;
         private bool shouldBeCompactHorizontally;
         private DisplayMode currentDisplayMode = DisplayMode.Default;
         private AudioPlayerSession currentAudioSession;
@@ -71,8 +85,32 @@ namespace AwqatSalaat.WinUI.Views
             Notification.NotificationManager.StopAdhanRequested += NotificationManager_StopAdhanRequested;
             DisplayHelper.DisplayChanged += DisplayHelper_DisplayChanged;
 
+            defaultFlyoutPlacement = flyout.Placement;
+
             UpdateDirection();
             UpdateNotificationSound();
+        }
+
+        public void SetTaskbarOrientation(bool vertical, bool onRightEdge)
+        {
+            // Open the panel towards the inside of the screen when the taskbar is on a side
+            flyout.Placement = !vertical
+                ? defaultFlyoutPlacement
+                : onRightEdge ? FlyoutPlacementMode.Left : FlyoutPlacementMode.Right;
+            IsVerticalTaskbar = vertical;
+        }
+
+        public static string FormatCountdown(string format, TimeSpan countdown, bool vertical)
+        {
+            // Vertical taskbar: 52:34 (or 1:52:34 when an hour or more is left) instead of 00:52:34
+            if (vertical && format is not null && format.Contains("ss"))
+            {
+                return countdown.Duration().TotalHours >= 1
+                    ? countdown.ToString(@"h\:mm\:ss")
+                    : countdown.ToString(@"mm\:ss");
+            }
+
+            return string.Format(format, countdown);
         }
 
         private void DisplayHelper_DisplayChanged(object sender, DisplayChangedEventArgs e)
@@ -338,7 +376,13 @@ namespace AwqatSalaat.WinUI.Views
 
             DisplayMode displayMode = DisplayMode.Default;
 
-            if (shouldBeCompactHorizontally)
+            if (IsVerticalTaskbar)
+            {
+                displayMode = ViewModel.WidgetSettings.Realtime.ShowCountdown
+                    ? DisplayMode.Vertical
+                    : DisplayMode.VerticalNoCountdown;
+            }
+            else if (shouldBeCompactHorizontally)
             {
                 displayMode = ViewModel.WidgetSettings.Realtime.ShowCountdown
                     ? DisplayMode.CompactHorizontal
@@ -543,6 +587,8 @@ namespace AwqatSalaat.WinUI.Views
         Compact,
         CompactNoCountdown,
         CompactHorizontal,
-        CompactHorizontalNoCountdown
+        CompactHorizontalNoCountdown,
+        Vertical,
+        VerticalNoCountdown
     }
 }
