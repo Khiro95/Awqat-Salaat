@@ -4,6 +4,7 @@ using AwqatSalaat.Data;
 using AwqatSalaat.Services.AlAdhan;
 using AwqatSalaat.Services.Local;
 using AwqatSalaat.Services.Methods;
+using AwqatSalaat.Services.SalahHour;
 using Xunit;
 using CalculationMethod = AwqatSalaat.Services.Methods.CalculationMethod;
 using HighLatitudeRule = Batoulapps.Adhan.HighLatitudeRule;
@@ -31,6 +32,25 @@ namespace AwqatSalaat.Settings.Tests
         public void AlAdhan_ChosenMethod_IsSent(HighLatitudeMethod method, string expected)
         {
             var url = BuildAlAdhanRequest(method).GetUrl();
+
+            Assert.Contains(expected, url);
+        }
+
+        [Fact]
+        public void SalahHour_Default_DoesNotSendHighLatitude()
+        {
+            var url = BuildSalahHourRequest(HighLatitudeMethod.Default).GetUrl();
+
+            Assert.DoesNotContain("high_latitude", url);
+        }
+
+        [Theory]
+        [InlineData(HighLatitudeMethod.MiddleOfTheNight, "high_latitude=1")]
+        [InlineData(HighLatitudeMethod.OneSeventh, "high_latitude=2")]
+        [InlineData(HighLatitudeMethod.AngleBased, "high_latitude=3")]
+        public void SalahHour_ChosenMethod_IsSent(HighLatitudeMethod method, string expected)
+        {
+            var url = BuildSalahHourRequest(method).GetUrl();
 
             Assert.Contains(expected, url);
         }
@@ -82,6 +102,18 @@ namespace AwqatSalaat.Settings.Tests
             Method = Mwl,
             Latitude = 51.5074m,
             Longitude = -0.1278m,
+            UseCoordinates = true,
+            HighLatitudeMethod = method,
+        };
+
+        private static SalahHourRequest BuildSalahHourRequest(HighLatitudeMethod method) => new SalahHourRequest
+        {
+            Date = SummerSolstice,
+            GetEntireMonth = true,
+            Method = Mwl,
+            Latitude = 51.5074m,
+            Longitude = -0.1278m,
+            TimeZone = "Europe/London",
             UseCoordinates = true,
             HighLatitudeMethod = method,
         };

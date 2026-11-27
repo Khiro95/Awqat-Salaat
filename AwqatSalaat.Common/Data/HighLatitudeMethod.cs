@@ -2,7 +2,7 @@ namespace AwqatSalaat.Data
 {
     /// <summary>
     /// How Fajr and Isha are estimated at high latitudes, where twilight may last all night in summer.
-    /// Values match Al-Adhan's latitudeAdjustmentMethod parameter.
+    /// Values match Al-Adhan's latitudeAdjustmentMethod and Salah Hour's high_latitude parameters.
     /// </summary>
     public enum HighLatitudeMethod
     {
