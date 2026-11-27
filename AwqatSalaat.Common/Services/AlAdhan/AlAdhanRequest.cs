@@ -20,6 +20,11 @@ namespace AwqatSalaat.Services.AlAdhan
             // on mapping the response time zone to a Windows time zone (see issue #56)
             query["iso8601"] = "true";
 
+            if (HighLatitudeMethod != Data.HighLatitudeMethod.Default)
+            {
+                query["latitudeAdjustmentMethod"] = HighLatitudeMethod.ToString("D");
+            }
+
             if (UseCoordinates)
             {
                 query["latitude"] = Latitude.ToString(CultureInfo.InvariantCulture);

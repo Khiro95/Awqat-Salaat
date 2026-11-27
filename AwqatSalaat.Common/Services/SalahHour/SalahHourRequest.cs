@@ -19,6 +19,12 @@ namespace AwqatSalaat.Services.SalahHour
             query["time_format"] = "0";
             query["juristic"] = JuristicSchool.ToString("D");
 
+            if (HighLatitudeMethod != Data.HighLatitudeMethod.Default)
+            {
+                // Salah Hour's high_latitude values match the enum (1 midnight, 2 one seventh, 3 angle)
+                query["high_latitude"] = HighLatitudeMethod.ToString("D");
+            }
+
             if (UseCoordinates)
             {
                 query["latitude"] = Latitude.ToString(CultureInfo.InvariantCulture);

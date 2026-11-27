@@ -202,6 +202,7 @@ namespace AwqatSalaat.ViewModels
             var currentServiceSettings = (
                     Realtime.Service,
                     Realtime.School,
+                    Realtime.HighLatitudeMethod,
                     Realtime.MethodString,
                     Realtime.CountryCode,
                     Realtime.City,
@@ -228,6 +229,7 @@ namespace AwqatSalaat.ViewModels
             var previousServiceSettings = (
                     Settings.Service,
                     Settings.School,
+                    Settings.HighLatitudeMethod,
                     Settings.MethodString,
                     Settings.CountryCode,
                     Settings.City,

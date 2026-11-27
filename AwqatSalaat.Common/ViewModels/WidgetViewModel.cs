@@ -597,6 +597,7 @@ namespace AwqatSalaat.ViewModels
             request.GetEntireMonth = getEntireMonth && settings.Service != PrayerTimesService.QCH;
             request.Method = settings.CalculationMethod;
             request.JuristicSchool = settings.School;
+            request.HighLatitudeMethod = settings.HighLatitudeMethod;
 
             if (settings.LocationDetection != LocationDetectionMode.ByCountryCode)
             {

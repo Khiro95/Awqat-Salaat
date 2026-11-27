@@ -8,6 +8,7 @@ namespace AwqatSalaat.Services
     {
         CalculationMethod Method { get; }
         School JuristicSchool { get; }
+        HighLatitudeMethod HighLatitudeMethod { get; }
         DateTime Date { get; }
         decimal Latitude { get; }
         decimal Longitude { get; }

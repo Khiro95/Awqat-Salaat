@@ -55,6 +55,11 @@
                     <x:Type Type="{x:Type data:School}"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
+            <ObjectDataProvider x:Key="HighLatitudeMethodEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type Type="{x:Type data:HighLatitudeMethod}"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
             <ObjectDataProvider x:Key="CalendarTypeEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type Type="{x:Type data:CalendarType}"/>
@@ -408,6 +413,15 @@
                                                     <Setter TargetName="presenter" Property="ContentTemplate" Value="{StaticResource CalculationMethodDisplayTemplate}" />
                                                 </DataTrigger>
                                             </DataTemplate.Triggers>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </controls:SettingsItem>
+                            <controls:SettingsItem x:Name="highLatitudeSetting" Header="{mk:I18n UI.Settings.HighLatitude}" Description="{mk:I18n UI.Settings.HighLatitudeDescription}">
+                                <ComboBox ItemsSource="{Binding Source={StaticResource HighLatitudeMethodEnum}}" SelectedItem="{Binding Realtime.HighLatitudeMethod}" Width="300" HorizontalAlignment="Left">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Converter={StaticResource LocalizedStringConverter}, ConverterParameter='Data.HighLatitudeMethod.{0}'}"/>
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>

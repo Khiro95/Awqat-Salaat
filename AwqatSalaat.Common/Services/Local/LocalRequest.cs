@@ -30,6 +30,19 @@ namespace AwqatSalaat.Services.Local
 
             parameters.Madhab = JuristicSchool == School.Standard ? Madhab.SHAFI : Madhab.HANAFI;
 
+            switch (HighLatitudeMethod)
+            {
+                case HighLatitudeMethod.MiddleOfTheNight:
+                    parameters.HighLatitudeRule = HighLatitudeRule.MIDDLE_OF_THE_NIGHT;
+                    break;
+                case HighLatitudeMethod.OneSeventh:
+                    parameters.HighLatitudeRule = HighLatitudeRule.SEVENTH_OF_THE_NIGHT;
+                    break;
+                case HighLatitudeMethod.AngleBased:
+                    parameters.HighLatitudeRule = HighLatitudeRule.TWILIGHT_ANGLE;
+                    break;
+            }
+
             return parameters;
         }
 

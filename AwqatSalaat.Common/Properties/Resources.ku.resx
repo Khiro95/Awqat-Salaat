@@ -261,6 +261,24 @@
   <data name="Data.JuristicSchool.Hanafi" xml:space="preserve">
     <value>حەنەفی</value>
   </data>
+  <data name="UI.Settings.HighLatitude" xml:space="preserve">
+    <value>ڕێکخستنی هێڵە پانییە بەرزەکان</value>
+  </data>
+  <data name="UI.Settings.HighLatitudeDescription" xml:space="preserve">
+    <value>چۆنیەتی دیاریکردنی کاتی بەیانی و عیشا لە سەرووی هێڵی پانی نزیکەی 48°، کە لە هاویندا شەفەق ڕەنگە هەموو شەو بمێنێت</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.Default" xml:space="preserve">
+    <value>بنەڕەتی خزمەتگوزارییەکە</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.MiddleOfTheNight" xml:space="preserve">
+    <value>نیوەی شەو</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.OneSeventh" xml:space="preserve">
+    <value>حەوتیەکی شەو</value>
+  </data>
+  <data name="Data.HighLatitudeMethod.AngleBased" xml:space="preserve">
+    <value>بەپێی گۆشە</value>
+  </data>
   <data name="UI.Settings.Tabs.Service" xml:space="preserve">
     <value>خزمەتگوزاری </value>
   </data>
