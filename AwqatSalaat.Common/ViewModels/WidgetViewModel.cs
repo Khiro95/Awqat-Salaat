@@ -188,6 +188,13 @@ namespace AwqatSalaat.ViewModels
             {
                 DisplayedDate = nextDate;
 
+                // After a long sleep, today's Isha may have passed too (e.g. waking up the next evening),
+                // otherwise all the times are shown as entered and nothing is displayed until a refresh (#55)
+                if (timeJumped && latestData != null)
+                {
+                    SwitchToNextDay(latestData);
+                }
+
                 if (!Update())
                 {
                     RefreshData();
