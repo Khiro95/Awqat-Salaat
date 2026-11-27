@@ -51,6 +51,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="AwqatSalaat.Settings.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Fonts\Symbols1_Ver02.otf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

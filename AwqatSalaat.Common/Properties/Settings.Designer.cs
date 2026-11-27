@@ -838,6 +838,66 @@ namespace AwqatSalaat.Properties {
                 this["QchCity"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int DiyanetCountry {
+            get {
+                return ((int)(this["DiyanetCountry"]));
+            }
+            set {
+                this["DiyanetCountry"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int DiyanetCity {
+            get {
+                return ((int)(this["DiyanetCity"]));
+            }
+            set {
+                this["DiyanetCity"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int DiyanetDistrict {
+            get {
+                return ((int)(this["DiyanetDistrict"]));
+            }
+            set {
+                this["DiyanetDistrict"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DiyanetCountryName {
+            get {
+                return ((string)(this["DiyanetCountryName"]));
+            }
+            set {
+                this["DiyanetCountryName"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DiyanetDistrictName {
+            get {
+                return ((string)(this["DiyanetDistrictName"]));
+            }
+            set {
+                this["DiyanetDistrictName"] = value;
+            }
+        }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

@@ -1433,6 +1433,60 @@ namespace AwqatSalaat.Properties {
                 return ResourceManager.GetString("UI.Settings.JuristicSchoolDescription", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Diyanet (Turkey).
+        /// </summary>
+        public static string Data_PrayerTimesService_Diyanet {
+            get {
+                return ResourceManager.GetString("Data.PrayerTimesService.Diyanet", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Country.
+        /// </summary>
+        public static string UI_Settings_DiyanetCountry {
+            get {
+                return ResourceManager.GetString("UI.Settings.DiyanetCountry", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to City.
+        /// </summary>
+        public static string UI_Settings_DiyanetCity {
+            get {
+                return ResourceManager.GetString("UI.Settings.DiyanetCity", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to District.
+        /// </summary>
+        public static string UI_Settings_DiyanetDistrict {
+            get {
+                return ResourceManager.GetString("UI.Settings.DiyanetDistrict", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Choose your place from Diyanet&apos;s list of locations.
+        /// </summary>
+        public static string UI_Settings_DiyanetLocationDescription {
+            get {
+                return ResourceManager.GetString("UI.Settings.DiyanetLocationDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Missing district..
+        /// </summary>
+        public static string Dialog_MissingDiyanetDistrict {
+            get {
+                return ResourceManager.GetString("Dialog.MissingDiyanetDistrict", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Language.

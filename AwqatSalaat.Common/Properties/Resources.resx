@@ -826,4 +826,22 @@ Make sure that Windows App Runtime Singleton v1.5 is installed.</value>
   <data name="UI.Settings.ShowTrayIconDescription" xml:space="preserve">
     <value>The icon stays visible while the widget is hidden so you can show it again or quit.</value>
   </data>
+  <data name="Data.PrayerTimesService.Diyanet" xml:space="preserve">
+    <value>Diyanet (Turkey)</value>
+  </data>
+  <data name="UI.Settings.DiyanetCountry" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="UI.Settings.DiyanetCity" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="UI.Settings.DiyanetDistrict" xml:space="preserve">
+    <value>District</value>
+  </data>
+  <data name="UI.Settings.DiyanetLocationDescription" xml:space="preserve">
+    <value>Choose your place from Diyanet&apos;s list of locations</value>
+  </data>
+  <data name="Dialog.MissingDiyanetDistrict" xml:space="preserve">
+    <value>Missing district.</value>
+  </data>
 </root>

@@ -162,7 +162,17 @@ namespace AwqatSalaat.WinUI.Views
 
             // Waktu Solat serves official JAKIM times, so the school and calculation method don't apply
             bool isWaktuSolat = ViewModel.Realtime.Service == Data.PrayerTimesService.WaktuSolat;
-            calculationSettings.Visibility = isQch || isCSV || isWaktuSolat ? Visibility.Collapsed : Visibility.Visible;
+            // Diyanet serves official times for its own list of places: no location, school or calculation method
+            bool isDiyanet = ViewModel.Realtime.Service == Data.PrayerTimesService.Diyanet;
+            diyanetSettings.Visibility = isDiyanet ? Visibility.Visible : Visibility.Collapsed;
+
+            if (isDiyanet)
+            {
+                locationTab.Visibility = Visibility.Collapsed;
+                _ = ViewModel.DiyanetLocator.EnsureLoadedAsync();
+            }
+
+            calculationSettings.Visibility = isQch || isCSV || isWaktuSolat || isDiyanet ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private async Task TrySetGeolocation(bool notifyIfNotAllowed)

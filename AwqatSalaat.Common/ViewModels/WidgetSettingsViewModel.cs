@@ -31,6 +31,7 @@ namespace AwqatSalaat.ViewModels
         public RelayCommand Cancel { get; }
         public LocatorViewModel Locator { get; }
         public CsvImporterViewModel CsvImporter { get; }
+        public DiyanetLocationViewModel DiyanetLocator { get; }
         public ObservableCollection<PrayerConfig> PrayerConfigs { get; }
 
         public event Action<string> SaveRejected;
@@ -50,6 +51,7 @@ namespace AwqatSalaat.ViewModels
 
             Locator = new LocatorViewModel(Realtime);
             CsvImporter = new CsvImporterViewModel(Realtime);
+            DiyanetLocator = new DiyanetLocationViewModel(Realtime);
 
             Realtime.PropertyChanged += (s, e) =>
             {
@@ -135,6 +137,12 @@ namespace AwqatSalaat.ViewModels
                         error = ServiceValdiationError.MissingCoordinates;
                     }
                     break;
+                case PrayerTimesService.Diyanet:
+                    if (Realtime.DiyanetDistrict <= 0)
+                    {
+                        error = ServiceValdiationError.MissingDiyanetDistrict;
+                    }
+                    break;
                 case PrayerTimesService.CSV:
                     if (string.IsNullOrEmpty(Realtime.City))
                     {
@@ -210,6 +218,7 @@ namespace AwqatSalaat.ViewModels
                     Realtime.Longitude,
                     Realtime.LocationDetection,
                     Realtime.QchCity,
+                    Realtime.DiyanetDistrict,
                     Realtime.CSV_FilePath,
                     Realtime.CSV_Range,
                     Realtime.CSV_HasHeader,
@@ -236,6 +245,7 @@ namespace AwqatSalaat.ViewModels
                     Settings.Longitude,
                     Settings.LocationDetection,
                     Settings.QchCity,
+                    Settings.DiyanetDistrict,
                     Settings.CSV_FilePath,
                     Settings.CSV_Range,
                     Settings.CSV_HasHeader,
@@ -284,7 +294,8 @@ namespace AwqatSalaat.ViewModels
             MissingCsvDateColumn,
             MissingCsvDayOrMonthColumn,
             MissingCsvTimeColumn,
-            InvalidCsvFile
+            InvalidCsvFile,
+            MissingDiyanetDistrict
         }
     }
 }
