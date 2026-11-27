@@ -16,6 +16,9 @@ namespace AwqatSalaat.Services.AlAdhan
             // rather than a regular NameValueCollection
             var query = HttpUtility.ParseQueryString("");
             query["school"] = JuristicSchool.ToString("D");
+            // Times come with their UTC offset (e.g. 2026-11-20T05:12:00+05:00), so they don't depend
+            // on mapping the response time zone to a Windows time zone (see issue #56)
+            query["iso8601"] = "true";
 
             if (UseCoordinates)
             {

@@ -1,5 +1,6 @@
 ﻿using AwqatSalaat.Helpers;
 using System;
+using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace AwqatSalaat.Services.AlAdhan
@@ -21,6 +22,11 @@ namespace AwqatSalaat.Services.AlAdhan
 
         protected DateTime ParseTimeToLocal(string time, DateTime baseDate)
         {
+            if (DateTimeOffset.TryParseExact(time, "yyyy-MM-dd'T'HH:mm:sszzz", CultureInfo.InvariantCulture, DateTimeStyles.None, out var dateTimeOffset))
+            {
+                return TimeZoneHelper.ConvertDateTimeOffsetToLocal(dateTimeOffset);
+            }
+
             time = time.Split(' ')[0];
             var dt = baseDate + DateTime.Parse(time, System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
 
