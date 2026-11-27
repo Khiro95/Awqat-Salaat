@@ -146,7 +146,8 @@ namespace AwqatSalaat.Properties
             // Countries codes preset is added in v3.1, so we have to make sure the old value is uppercase to avoid confusion
             if (!string.IsNullOrEmpty(CountryCode))
             {
-                CountryCode = CountryCode.ToUpper();
+                // Invariant: with a Turkish or Azerbaijani Windows, "iq".ToUpper() gives "İQ"
+                CountryCode = CountryCode.ToUpperInvariant();
             }
 
             InvalidateAdhanFiles();
