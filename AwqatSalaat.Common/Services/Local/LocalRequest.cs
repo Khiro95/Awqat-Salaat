@@ -46,6 +46,23 @@ namespace AwqatSalaat.Services.Local
             return parameters;
         }
 
+        /// <summary>
+        /// Umm Al-Qura puts Isha 120 minutes after Maghrib in Ramadan instead of 90, as Al-Adhan does.
+        /// Adhan leaves this to the caller.
+        /// </summary>
+        internal int GetIshaExtraMinutes(DateTime date)
+        {
+            if (Method?.Id == "MAKKAH" && Method.Isha.Type == Methods.CalculationMethodParameterType.FixedMinutes
+                && s_UmAlQura.GetMonth(date) == 9)
+            {
+                return 30;
+            }
+
+            return 0;
+        }
+
+        private static readonly UmAlQuraCalendar s_UmAlQura = new UmAlQuraCalendar();
+
         internal IEnumerable<DateTime> GetDates()
         {
             if (!GetEntireMonth)
