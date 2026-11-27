@@ -36,6 +36,28 @@ namespace AwqatSalaat.Settings.Tests
             Assert.Equal(Day.AddHours(12).AddMinutes(38), local);
         }
 
+        // Salah Hour by zip code answers in the place's zone. A PC in Lagos (UTC+1, no daylight saving) showing Berlin
+        // (UTC+1, UTC+2 in summer) got Berlin's summer times one hour late, because only the base offsets were compared.
+        [Fact]
+        public void ClockTime_SameBaseOffsetOtherDaylightSaving_IsConverted()
+        {
+            var lagos = TimeZoneInfo.FindSystemTimeZoneById("W. Central Africa Standard Time");
+            var berlinSummerDhuhr = new DateTime(2026, 6, 21, 13, 10, 0);
+            var berlinWinterDhuhr = new DateTime(2026, 12, 21, 12, 10, 0);
+
+            Assert.Equal(new DateTime(2026, 6, 21, 12, 10, 0), TimeZoneHelper.ConvertDateTimeToLocal(berlinSummerDhuhr, "Europe/Berlin", lagos));
+            Assert.Equal(berlinWinterDhuhr, TimeZoneHelper.ConvertDateTimeToLocal(berlinWinterDhuhr, "Europe/Berlin", lagos));
+        }
+
+        [Fact]
+        public void ClockTime_SameZone_IsKept()
+        {
+            var berlin = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+            var dhuhr = new DateTime(2026, 6, 21, 13, 10, 0);
+
+            Assert.Equal(dhuhr, TimeZoneHelper.ConvertDateTimeToLocal(dhuhr, "Europe/Berlin", berlin));
+        }
+
         [Fact]
         public void AlmatyMapsToZoneWithCurrentKazakhstanOffset()
         {

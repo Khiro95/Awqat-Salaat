@@ -21,6 +21,9 @@ namespace AwqatSalaat.Helpers
         }
 
         public static DateTime ConvertDateTimeToLocal(DateTime dateTime, string ianaTimeZone)
+            => ConvertDateTimeToLocal(dateTime, ianaTimeZone, TimeZoneInfo.Local);
+
+        internal static DateTime ConvertDateTimeToLocal(DateTime dateTime, string ianaTimeZone, TimeZoneInfo localTimeZone)
         {
             TimeZoneInfo timeZoneInfo = null;
 
@@ -34,14 +37,16 @@ namespace AwqatSalaat.Helpers
                 }
             }
 
-            if (timeZoneInfo is null || timeZoneInfo.BaseUtcOffset == TimeZoneInfo.Local.BaseUtcOffset)
+            // Zones with the same base offset can still differ in daylight saving (e.g. Berlin and Lagos are both
+            // UTC+1, but Berlin is UTC+2 in summer), so only skip the conversion when the rules are the same
+            if (timeZoneInfo is null || timeZoneInfo.HasSameRules(localTimeZone))
             {
                 return dateTime;
             }
 
             dateTime = TimeZoneInfo.ConvertTimeToUtc(dateTime, timeZoneInfo);
 
-            return TimeZoneInfo.ConvertTimeFromUtc(dateTime, TimeZoneInfo.Local);
+            return TimeZoneInfo.ConvertTimeFromUtc(dateTime, localTimeZone);
         }
 
         public static DateTime ConvertDateTimeOffsetToLocal(DateTimeOffset dateTimeOffset)
