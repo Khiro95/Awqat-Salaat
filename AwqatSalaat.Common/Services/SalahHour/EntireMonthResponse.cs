@@ -9,7 +9,7 @@ namespace AwqatSalaat.Services.SalahHour
         public Dictionary<string, Dictionary<string, string>> Results { get; set; }
         public Dictionary<DateTime, PrayerTimes> Times { get; set; }
 
-        protected sealed override void ParseImpl()
+        protected sealed override void ParseImpl(DateTime requestDate)
         {
             Times = new Dictionary<DateTime, PrayerTimes>(Results.Count);
 

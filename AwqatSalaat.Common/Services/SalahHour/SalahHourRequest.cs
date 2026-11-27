@@ -14,7 +14,12 @@ namespace AwqatSalaat.Services.SalahHour
             // HttpUtility.ParseQueryString method actually returns an internal HttpValueCollection object
             // rather than a regular NameValueCollection
             var query = HttpUtility.ParseQueryString("");
-            query["show_entire_month"] = GetEntireMonth.ToString();
+            // Salah Hour returns the whole month whenever show_entire_month is present, even when it is False
+            if (GetEntireMonth)
+            {
+                query["show_entire_month"] = "True";
+            }
+
             query["date"] = Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
             query["time_format"] = "0";
             query["juristic"] = JuristicSchool.ToString("D");
