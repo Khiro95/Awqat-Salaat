@@ -1,5 +1,4 @@
 ﻿using AwqatSalaat.Data;
-using AwqatSalaat.Helpers;
 using System;
 using System.Collections.Generic;
 
@@ -10,10 +9,9 @@ namespace AwqatSalaat.Services.SalahHour
         public Dictionary<string, string> Results { get; set; }
         public PrayerTimes Times { get; set; }
 
-        protected sealed override void ParseImpl()
+        protected sealed override void ParseImpl(DateTime requestDate)
         {
-            DateTime today = TimeStamp.Date;
-            DateTime date = new DateTime(today.Year, today.Month, today.Day, 0, 0, 0, DateTimeKind.Unspecified);
+            DateTime date = new DateTime(requestDate.Year, requestDate.Month, requestDate.Day, 0, 0, 0, DateTimeKind.Unspecified);
             Dictionary<string, DateTime> dayTimes = new Dictionary<string, DateTime>(5);
 
             foreach (var time in Results)

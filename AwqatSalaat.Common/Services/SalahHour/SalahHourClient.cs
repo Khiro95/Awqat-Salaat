@@ -4,6 +4,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace AwqatSalaat.Services.SalahHour
@@ -52,6 +53,16 @@ namespace AwqatSalaat.Services.SalahHour
             }
         }
 
+        internal static T Deserialize<T>(string json, DateTime requestDate) where T : Response
+        {
+            var settings = new JsonSerializerSettings
+            {
+                Context = new StreamingContext(StreamingContextStates.Other, requestDate),
+            };
+
+            return JsonConvert.DeserializeObject<T>(json, settings);
+        }
+
         private static async Task<T> GetDataAsync<T>(IWebRequest request) where T : Response
         {
             try
@@ -70,7 +81,7 @@ namespace AwqatSalaat.Services.SalahHour
                         throw new SalahHourApiException("Salah Hour service did not respond with data.");
                     }
 
-                    T apiResponse = JsonConvert.DeserializeObject<T>(responseBody);
+                    T apiResponse = Deserialize<T>(responseBody, request.Date);
 
                     if (!apiResponse.Success)
                     {

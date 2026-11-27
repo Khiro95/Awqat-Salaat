@@ -15,11 +15,12 @@ namespace AwqatSalaat.Services.SalahHour
         {
             if (Success)
             {
-                ParseImpl();
+                // The client passes the requested date in the context
+                ParseImpl(context.Context as DateTime? ?? TimeStamp.Date);
             }
         }
 
-        protected abstract void ParseImpl();
+        protected abstract void ParseImpl(DateTime requestDate);
 
         protected DateTime ParseTimeToLocal(string time, DateTime baseDate)
         {
