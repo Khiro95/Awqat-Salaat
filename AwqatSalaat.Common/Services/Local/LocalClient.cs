@@ -37,7 +37,7 @@ namespace AwqatSalaat.Services.Local
                 }
                 else
                 {
-                    var times = GetPrayerTimesForDate(req.Date, coordinates, parameters, tzinfo);
+                    var times = GetPrayerTimesForDate(req, req.Date, coordinates, parameters, tzinfo);
 
                     data.Times = new Dictionary<DateTime, Data.PrayerTimes> { [req.Date] = times };
                 }
@@ -56,13 +56,13 @@ namespace AwqatSalaat.Services.Local
 
             foreach (DateTime current in req.GetDates())
             {
-                dict.Add(current, GetPrayerTimesForDate(current, coordinates, parameters, timeZone));
+                dict.Add(current, GetPrayerTimesForDate(req, current, coordinates, parameters, timeZone));
             }
 
             return dict;
         }
 
-        private static Data.PrayerTimes GetPrayerTimesForDate(DateTime date, Coordinates coordinates, CalculationParameters parameters, TimeZoneInfo timeZone)
+        private static Data.PrayerTimes GetPrayerTimesForDate(LocalRequest req, DateTime date, Coordinates coordinates, CalculationParameters parameters, TimeZoneInfo timeZone)
         {
             var dateComponents = DateComponents.From(date);
             var prayerTimes = new PrayerTimes(coordinates, dateComponents, parameters);
@@ -73,7 +73,7 @@ namespace AwqatSalaat.Services.Local
                 [nameof(Data.PrayerTimes.Dhuhr)]   = TimeZoneInfo.ConvertTimeFromUtc(prayerTimes.Dhuhr, timeZone),
                 [nameof(Data.PrayerTimes.Asr)]     = TimeZoneInfo.ConvertTimeFromUtc(prayerTimes.Asr, timeZone),
                 [nameof(Data.PrayerTimes.Maghrib)] = TimeZoneInfo.ConvertTimeFromUtc(prayerTimes.Maghrib, timeZone),
-                [nameof(Data.PrayerTimes.Isha)]    = TimeZoneInfo.ConvertTimeFromUtc(prayerTimes.Isha, timeZone),
+                [nameof(Data.PrayerTimes.Isha)]    = TimeZoneInfo.ConvertTimeFromUtc(prayerTimes.Isha, timeZone).AddMinutes(req.GetIshaExtraMinutes(date)),
             });
 
             return times;
